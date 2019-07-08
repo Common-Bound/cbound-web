@@ -8,5 +8,5 @@ const pool = Pool({
 });
 
 module.exports = {
-  query: (text, params) => pool.query(text, params)
+  query: (text, params, callback) => pool.query(text, params, callback)
 };

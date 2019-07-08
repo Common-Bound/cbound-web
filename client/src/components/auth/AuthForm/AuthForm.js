@@ -4,18 +4,12 @@ class AuthForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      id: "",
-      setId: "",
+      name: "",
       password: "",
-      setPassword: "",
       passwordCheck: "",
-      setPasswordCheck: "",
-      gender: "",
-      setGender: "",
       passwordError: "",
-      setPasswordError: "",
-      genderError: "",
-      setGenderError: ""
+      gender: "",
+      genderError: ""
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -25,25 +19,24 @@ class AuthForm extends Component {
   handleSubmit = async e => {
     e.preventDefault();
 
-    console.log(this.state.id, this.state.password, this.state.passwordCheck);
+    console.log(this.state.name, this.state.password, this.state.passwordCheck);
 
     (await this.state.password) !== this.state.passwordCheck
-      ? this.setState({ setPasswordError: true })
-      : this.setState({ setPasswordError: false });
+      ? this.setState({ PasswordError: true })
+      : this.setState({ PasswordError: false });
 
-    if (this.state.setPasswordError) {
+    if (this.state.PasswordError) {
       return alert("비밀번호가 서로 다릅니다");
     } else {
-      const url = "/users";
+      const url = "/auth/signup";
       fetch(url, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          id: this.state.id,
-          password: this.state.password,
-          passwordCheck: this.state.passwordCheck
+          name: this.state.name,
+          password: this.state.password
         })
       })
         .then(res => res.json())
@@ -63,13 +56,12 @@ class AuthForm extends Component {
     return (
       <form onSubmit={this.handleSubmit}>
         <div>
-          <label htmlFor="user-id">아이디</label>
+          <label htmlFor="user-name">아이디</label>
           <br />
           <input
-            name="user-id"
             required
-            value={this.state.id}
-            name="id"
+            value={this.state.name}
+            name="name"
             onChange={this.handleChange}
           />
         </div>
@@ -77,7 +69,6 @@ class AuthForm extends Component {
           <label htmlFor="user-password">비밀번호</label>
           <br />
           <input
-            name="user-password"
             type="password"
             required
             value={this.state.password}
@@ -89,7 +80,6 @@ class AuthForm extends Component {
           <label htmlFor="user-password-check">비밀번호체크</label>
           <br />
           <input
-            name="user-password-check"
             type="password"
             required
             value={this.state.passwordCheck}
@@ -101,7 +91,7 @@ class AuthForm extends Component {
           )}
         </div>
         <div>
-          <input type="checkbox" name="user-gender-m" />남{" "}
+          <input type="checkbox" name="user-gender-m" />남
           <input type="checkbox" name="user-gender-fm" />녀
           {this.state.genderError && (
             <div style={{ color: "red" }}>성별 입력 필수</div>

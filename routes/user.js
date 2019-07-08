@@ -17,11 +17,4 @@ router.get("/:id", async (req, res, next) => {
   res.send(rows[0]);
 });
 
-/* 사용자 생성 요청 처리 */
-router.post("/", (req, res, next) => {
-  const body = req.body;
-  console.log(body);
-  res.json({ msg: "서버가 사용자 생성 요청을 정상 처리하였음" });
-});
-
 module.exports = router;
