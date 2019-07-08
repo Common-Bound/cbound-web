@@ -5,7 +5,7 @@ import FetchTest from './components/test/FetchTest/FetchTest';
 
 function App() {
   const handleClick = e => {
-    const url = "/hello";
+    const url = "/users/1";
     fetch(url)
       .then(res => res.json())
       .then(data => {
