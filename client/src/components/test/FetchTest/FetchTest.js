@@ -14,12 +14,13 @@ class FetchTest extends Component {
     }
 
     render() {
+        
         if (this.state.loading) {
-            return <div>loading...</div>;
+            return <div>로딩 중...</div>;
         }
 
         if (!this.state.person) {
-            return <div>didn't get a person</div>;
+            return <div>사람 못 불러옴</div>;
         }
         return (
             <div>
