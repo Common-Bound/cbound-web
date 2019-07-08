@@ -1,5 +1,7 @@
 import React from "react";
 import "./App.css";
+import AuthForm from './components/auth/AuthForm/AuthForm';
+import FetchTest from './components/test/FetchTest/FetchTest';
 
 function App() {
   const handleClick = e => {
@@ -12,8 +14,8 @@ function App() {
   };
 
   return (
-    <div className="App">
-      <button onClick={handleClick}>button</button>
+    <div>
+      <FetchTest />
     </div>
   );
 }
