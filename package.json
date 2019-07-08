@@ -1,0 +1,22 @@
+{
+  "name": "dala",
+  "version": "1.0.0",
+  "description": "sw_maestro project",
+  "main": "server.js",
+  "repository": "https://github.com/eunsukimme/DALA.git",
+  "author": "eunsukimme <eunsu.dev@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1",
+    "morgan": "^1.9.1"
+  },
+  "scripts": {
+    "client": "cd client && yarn start",
+    "server": "nodemon server.js",
+    "dev": "concurrently -k \"yarn server \" \"yarn client \""
+  },
+  "devDependencies": {
+    "concurrently": "^4.1.1",
+    "nodemon": "^1.19.1"
+  }
+}
