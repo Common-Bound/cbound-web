@@ -18,48 +18,84 @@ class AuthForm extends Component {
       setGenderError: ""
     };
 
-    this.onSubmit = this.onSubmit.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
 
-  onSubmit = e => {
+  handleSubmit = async e => {
     e.preventDefault();
 
     console.log(this.state.id, this.state.password, this.state.passwordCheck);
 
-    const url = "/users";
-    fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        id: this.state.id,
-        password: this.state.password,
-        passwordCheck: this.state.passwordCheck
+    (await this.state.password) !== this.state.passwordCheck
+      ? this.setState({ setPasswordError: true })
+      : this.setState({ setPasswordError: false });
+
+    if (this.state.setPasswordError) {
+      return alert("비밀번호가 서로 다릅니다");
+    } else {
+      const url = "/users";
+      fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          id: this.state.id,
+          password: this.state.password,
+          passwordCheck: this.state.passwordCheck
+        })
       })
-    })
-      .then(res => res.json())
-      .then(data => {
-        console.log(data);
-      });
+        .then(res => res.json())
+        .then(data => {
+          console.log(data);
+        });
+    }
   };
+
+  handleChange = e => {
+    this.setState({
+      [e.target.name]: e.target.value
+    });
+  };
+
   render() {
     return (
-      <form onSubmit={this.onSubmit}>
+      <form onSubmit={this.handleSubmit}>
         <div>
           <label htmlFor="user-id">아이디</label>
           <br />
-          <input name="user-id" required />
+          <input
+            name="user-id"
+            required
+            value={this.state.id}
+            name="id"
+            onChange={this.handleChange}
+          />
         </div>
         <div>
           <label htmlFor="user-password">비밀번호</label>
           <br />
-          <input name="user-password" type="password" required />
+          <input
+            name="user-password"
+            type="password"
+            required
+            value={this.state.password}
+            name="password"
+            onChange={this.handleChange}
+          />
         </div>
         <div>
           <label htmlFor="user-password-check">비밀번호체크</label>
           <br />
-          <input name="user-password-check" type="password" required />
+          <input
+            name="user-password-check"
+            type="password"
+            required
+            value={this.state.passwordCheck}
+            name="passwordCheck"
+            onChange={this.handleChange}
+          />
           {this.state.passwordError && (
             <div style={{ color: "red" }}>비밀번호가 일치하지 않습니다.</div>
           )}
