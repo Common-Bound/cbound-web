@@ -10,6 +10,7 @@ function Main() {
     <h1>
       <Link to="/auth/signin">로그인</Link>
       <Link to="/auth/signup">회원가입</Link>
+      <Link to="/test">마이페이지</Link>
     </h1>
   );
 }

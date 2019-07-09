@@ -76,7 +76,6 @@ passport.deserializeUser((user, done) => {
 router.post("/", passport.authenticate("signup-local"), (req, res) => {
   console.log("회원가입 성공!");
   const { user } = req;
-  console.log(user);
 
   res.json({ result: true });
 });

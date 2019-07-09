@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Redirect } from "react-router-dom";
 
 class AuthForm extends Component {
   constructor(props) {
@@ -9,7 +10,8 @@ class AuthForm extends Component {
       passwordCheck: "",
       passwordError: "",
       gender: "",
-      genderError: ""
+      genderError: "",
+      result: false
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -42,6 +44,14 @@ class AuthForm extends Component {
         .then(res => res.json())
         .then(data => {
           console.log(data);
+          if (data.result) {
+            data.result === true
+              ? this.setState({ result: true })
+              : this.setState({ result: false });
+          }
+        })
+        .catch(error => {
+          return alert("이미 존재하는 아이디 입니다"); // 임시
         });
     }
   };
@@ -53,6 +63,14 @@ class AuthForm extends Component {
   };
 
   render() {
+    const {
+      name,
+      password,
+      passwordCheck,
+      passwordError,
+      genderError,
+      result
+    } = this.state;
     return (
       <form onSubmit={this.handleSubmit}>
         <div>
@@ -60,7 +78,7 @@ class AuthForm extends Component {
           <br />
           <input
             required
-            value={this.state.name}
+            value={name}
             name="name"
             onChange={this.handleChange}
           />
@@ -71,7 +89,7 @@ class AuthForm extends Component {
           <input
             type="password"
             required
-            value={this.state.password}
+            value={password}
             name="password"
             onChange={this.handleChange}
           />
@@ -82,24 +100,23 @@ class AuthForm extends Component {
           <input
             type="password"
             required
-            value={this.state.passwordCheck}
+            value={passwordCheck}
             name="passwordCheck"
             onChange={this.handleChange}
           />
-          {this.state.passwordError && (
+          {passwordError && (
             <div style={{ color: "red" }}>비밀번호가 일치하지 않습니다.</div>
           )}
         </div>
         <div>
           <input type="checkbox" name="user-gender-m" />남
           <input type="checkbox" name="user-gender-fm" />녀
-          {this.state.genderError && (
-            <div style={{ color: "red" }}>성별 입력 필수</div>
-          )}
+          {genderError && <div style={{ color: "red" }}>성별 입력 필수</div>}
         </div>
         <div>
           <input type="submit" value="가입" />
         </div>
+        <div>{result === true ? <Redirect to="/auth/signin" /> : ""}</div>
       </form>
     );
   }

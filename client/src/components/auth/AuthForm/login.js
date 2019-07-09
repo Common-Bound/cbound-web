@@ -1,11 +1,13 @@
 import React, { Component } from "react";
+import { Redirect, Link } from "react-router-dom";
 
 class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
       name: "",
-      password: ""
+      password: "",
+      result: false
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -34,25 +36,34 @@ class Login extends Component {
     })
       .then(res => res.json())
       .then(data => {
+        if (data.result) {
+          data.result === true
+            ? this.setState({ result: true })
+            : this.setState({ result: false });
+        }
         console.log(data);
+      })
+      .catch(error => {
+        return alert("아이디 또는 비밀번호를 잘못 입력하셨습니다");
       });
   };
 
   render() {
+    const { name, password, result } = this.state;
     return (
       <div>
         <form onSubmit={this.handleSubmit}>
           <input
             type="text"
             name="name"
-            value={this.state.name}
+            value={name}
             onChange={this.handleChange}
             placeholder="name"
           />
           <input
             type="password"
             name="password"
-            value={this.state.password}
+            value={password}
             onChange={this.handleChange}
             placeholder="password"
           />
@@ -60,6 +71,13 @@ class Login extends Component {
             로그인
           </button>
         </form>
+        <p>
+          아직 회원이 아니신가요?
+          <Link to="/auth/signup">
+            <button>회원가입</button>
+          </Link>
+        </p>
+        <div>{result === true ? <Redirect to="/" /> : ""}</div>
       </div>
     );
   }

@@ -36,7 +36,6 @@ passport.use(
             // 주어진 password와 db에 저장된 password를 비교한다
             console.log(password, user.password);
             bcrypt.compare(password, user.password, function(err, res) {
-              console.log(res);
               // 결과 값이 참이라면, 로그인이 성공한다
               if (res) {
                 console.log("비밀번호 해쉬 결과 : 로그인 성공");
@@ -75,16 +74,11 @@ passport.deserializeUser((user, done) => {
 });
 
 // 로그인 요청 핸들링 라우트
-router.post(
-  "/",
-  passport.authenticate("signin-local", { failureRedirect: "/auth/signin" }),
-  (req, res) => {
-    console.log("로그인 성공!");
-    const { user } = req;
-    console.log(user);
+router.post("/", passport.authenticate("signin-local"), (req, res) => {
+  console.log("로그인 성공!");
+  const { user } = req;
 
-    res.json({ result: true });
-  }
-);
+  res.json({ result: true });
+});
 
 module.exports = router;
