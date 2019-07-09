@@ -34,24 +34,25 @@ passport.use(
             console.log(results.rows[0]);
             const user = results.rows[0]; // 그 row를 user 변수에 저장한다
             // 주어진 password와 db에 저장된 password를 비교한다
-            console.log(password, user.password);
             bcrypt.compare(password, user.password, function(err, res) {
+              if (err) {
+                console.log("Error when comparing password hash", err);
+                return done(err);
+              }
               // 결과 값이 참이라면, 로그인이 성공한다
               if (res) {
-                console.log("비밀번호 해쉬 결과 : 로그인 성공");
+                console.log("로그인 성공");
                 done(null, user);
               }
               // 결과 값이 거짓이라면, 즉 비밀번호가 서로 다르다면 로그인 실패
               else {
-                console.log("비밀번호 해쉬 결과 : 로그인 실패");
-                done(null, false);
+                done(null, false, { message: "비밀번호가 틀렸습니다" });
               }
             });
           }
           // 주어진 name과 일치하는 유저가 존재하지 않는다면 로그인 실패
           else {
-            console.log("주어진 name과 일치하는 유저 없음");
-            done(null, false);
+            done(null, false, { message: "존재하지 않는 아이디 입니다" });
           }
         }
       );
@@ -74,11 +75,29 @@ passport.deserializeUser((user, done) => {
 });
 
 // 로그인 요청 핸들링 라우트
-router.post("/", passport.authenticate("signin-local"), (req, res) => {
-  console.log("로그인 성공!");
-  const { user } = req;
-
-  res.json({ result: true });
+router.post("/", (req, res, next) => {
+  passport.authenticate("signin-local", (err, user, info) => {
+    // passport 인증 도중 에러 발생시 콘솔에 찍어준다
+    if (err) {
+      console.log(err);
+      return res.status(500).send(err);
+    }
+    // 인증 실패 메시지를 담은 info 메시지가 존재한다면 해당 메시지를 클라이언트로 전달한다
+    if (info !== undefined) {
+      console.log(info.message);
+      return res.status(401).json(info.message);
+    }
+    // 위 두 상황을 모두 통과하면 로그인 성공
+    else {
+      req.logIn(user, err => {
+        if (err) {
+          return res.send(err);
+        }
+        console.log("로그인 성공!");
+        return res.json({ result: true });
+      });
+    }
+  })(req, res, next);
 });
 
 module.exports = router;

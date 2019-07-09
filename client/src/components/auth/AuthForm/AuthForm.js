@@ -44,11 +44,11 @@ class AuthForm extends Component {
         .then(res => res.json())
         .then(data => {
           console.log(data);
-          if (data.result) {
-            data.result === true
-              ? this.setState({ result: true })
-              : this.setState({ result: false });
+          if (data.result === true) {
+            alert("회원가입에 성공하였습니다");
+            return this.setState({ result: true });
           }
+          return this.setState({ result: false });
         })
         .catch(error => {
           return alert("이미 존재하는 아이디 입니다"); // 임시

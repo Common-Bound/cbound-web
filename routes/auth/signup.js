@@ -33,7 +33,9 @@ passport.use(
           if (results.rows.length > 0) {
             // 이미 존재하는 name 이므로 회원가입 실패
             console.log("이미 존재하는 아이디 입니다");
-            return done(null, false);
+            return done(null, false, {
+              message: "이미 존재하는 아이디 입니다"
+            });
           }
           // 주어진 name과 일치하는 유저가 존재하지 않는다면 회원가입 가능
           else {
@@ -44,8 +46,8 @@ passport.use(
                 [name, hash],
                 function(err, rows) {
                   if (err) {
-                    console.log(err);
-                    return done(null, false);
+                    console.log("Error when hashing password", err);
+                    return done(err);
                   }
                   return done(null, rows);
                 }
@@ -73,10 +75,8 @@ passport.deserializeUser((user, done) => {
 });
 
 // 로그인 요청 핸들링 라우트
-router.post("/", passport.authenticate("signup-local"), (req, res) => {
+router.post("/", passport.authenticate("signup-local"), (req, res, next) => {
   console.log("회원가입 성공!");
-  const { user } = req;
-
   res.json({ result: true });
 });
 

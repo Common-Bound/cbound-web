@@ -36,12 +36,12 @@ class Login extends Component {
     })
       .then(res => res.json())
       .then(data => {
+        console.log(data);
         if (data.result) {
           data.result === true
             ? this.setState({ result: true })
             : this.setState({ result: false });
         }
-        console.log(data);
       })
       .catch(error => {
         return alert("아이디 또는 비밀번호를 잘못 입력하셨습니다");
