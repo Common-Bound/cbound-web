@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const signupRouter = require("./auth/signup");
 const signinRouter = require("./auth/signin");
+const signoutRouter = require("./auth/signout");
 
 // path: ~/auth
 router.use("/", (req, res, next) => {
@@ -10,5 +11,6 @@ router.use("/", (req, res, next) => {
 });
 router.use("/signup", signupRouter);
 router.use("/signin", signinRouter);
+router.use("/signout", signoutRouter);
 
 module.exports = router;
