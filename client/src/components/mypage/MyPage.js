@@ -8,7 +8,7 @@ class MyPage extends Component {
       loading: true,
       data: ""
     };
-    const url = "/mypage/main";
+    const url = this.props.match.path;
     fetch(url)
       .then(res => res.json())
       .then(data => {
@@ -26,7 +26,6 @@ class MyPage extends Component {
     }
 
     if (this.state.data === true) {
-      console.log("로그인 성공");
       return (
         <div>
           <h1>마이페이지</h1>
@@ -35,7 +34,6 @@ class MyPage extends Component {
       );
     }
     if (this.state.data === false) {
-      console.log("로그인 실패");
       return <Redirect to="/auth/signin" />;
     }
   }
