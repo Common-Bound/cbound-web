@@ -53,7 +53,7 @@ class SignUp extends Component {
           return this.setState({ result: false });
         })
         .catch(error => {
-          return alert("이미 존재하는 아이디 입니다"); // 임시
+          return alert(error); // 임시
         });
     }
   };
