@@ -9,8 +9,6 @@ class AuthForm extends Component {
       password: "",
       passwordCheck: "",
       passwordError: "",
-      gender: "",
-      genderError: "",
       result: false
     };
 
@@ -111,11 +109,6 @@ class AuthForm extends Component {
           {passwordError && (
             <div style={{ color: "red" }}>비밀번호가 일치하지 않습니다.</div>
           )}
-        </div>
-        <div>
-          <input type="checkbox" name="user-gender-m" />남
-          <input type="checkbox" name="user-gender-fm" />녀
-          {genderError && <div style={{ color: "red" }}>성별 입력 필수</div>}
         </div>
         <div>
           <input type="submit" value="가입" />

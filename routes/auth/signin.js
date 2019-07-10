@@ -11,23 +11,23 @@ passport.use(
   new LocalStrategy(
     {
       // local 전략을 세움
-      usernameField: "name",
+      usernameField: "email",
       passwordField: "password",
       session: true, // 세션에 저장 여부
       passReqToCallback: false
     },
-    (name, password, done) => {
-      // 먼저 주어진 name 과 일치하는 유저를 찾는다
-      // 이 떄, name은 유일한 식별자라고 가정한다
+    (email, password, done) => {
+      // 먼저 주어진 email 과 일치하는 유저를 찾는다
+      // 이 떄, email은 유일한 식별자라고 가정한다
       db.query(
-        "SELECT * FROM test_user WHERE name=$1",
-        [name],
+        "SELECT * FROM test_user WHERE email=$1",
+        [email],
         (err, results) => {
           if (err) {
             console.error("Error when selecting user on login", err);
             return done(err);
           }
-          // 주어진 name과 일치하는 유저가 존재한다면,
+          // 주어진 email과 일치하는 유저가 존재한다면,
           // 즉, 반환되는 rows 가 적어도 하나 존재한다면(0보다 크다면)
           if (results.rows.length > 0) {
             console.log("유저 정보 찾음: ");

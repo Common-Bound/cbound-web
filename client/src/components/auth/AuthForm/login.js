@@ -5,7 +5,7 @@ class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: "",
+      email: "",
       password: "",
       result: false
     };
@@ -30,7 +30,7 @@ class Login extends Component {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        name: this.state.name,
+        email: this.state.email,
         password: this.state.password
       })
     })
@@ -52,16 +52,16 @@ class Login extends Component {
   };
 
   render() {
-    const { name, password, result } = this.state;
+    const { email, password, result } = this.state;
     return (
       <div>
         <form onSubmit={this.handleSubmit}>
           <input
             type="text"
-            name="name"
-            value={name}
+            name="email"
+            value={email}
             onChange={this.handleChange}
-            placeholder="name"
+            placeholder="email"
           />
           <input
             type="password"
