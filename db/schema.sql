@@ -15,7 +15,7 @@ CREATE TYPE "type" AS ENUM (
 
 CREATE TABLE "data_requester" (
   "id" varchar PRIMARY KEY,
-  "email" varchar,
+  "email" varchar UNIQUE,
   "password" varchar,
   "phone_number" varchar,
   "created_at" varchar,
@@ -25,7 +25,7 @@ CREATE TABLE "data_requester" (
 
 CREATE TABLE "data_creator" (
   "id" varchar PRIMARY KEY,
-  "email" varchar,
+  "email" varchar UNIQUE,
   "password" varchar,
   "name" varchar,
   "phone_number" varchar,
