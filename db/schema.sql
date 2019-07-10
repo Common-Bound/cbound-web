@@ -1,12 +1,19 @@
-CREATE TYPE "Data_Status" AS ENUM (
+CREATE TYPE "data_status" AS ENUM (
   'created',
   'check1',
   'check2',
   'done',
   'failure'
 );
-CREATE TYPE "Type" AS ENUM ('image', 'context', 'voice', 'survey');
-CREATE TABLE "Data_Requester" (
+
+CREATE TYPE "type" AS ENUM (
+  'image',
+  'context',
+  'voice',
+  'survey'
+);
+
+CREATE TABLE "data_requester" (
   "id" varchar PRIMARY KEY,
   "email" varchar,
   "password" varchar,
@@ -15,7 +22,8 @@ CREATE TABLE "Data_Requester" (
   "point" int,
   "account" varchar
 );
-CREATE TABLE "Data_Creator" (
+
+CREATE TABLE "data_creator" (
   "id" varchar PRIMARY KEY,
   "email" varchar,
   "password" varchar,
@@ -28,9 +36,18 @@ CREATE TABLE "Data_Creator" (
   "point" int,
   "account" varchar
 );
-CREATE TABLE "Creator_Pool" ("project_id" int, "creator_id" int);
-CREATE TABLE "Requester_Pool" ("project_id" int, "requester_id" int);
-CREATE TABLE "Project" (
+
+CREATE TABLE "creator_pool" (
+  "project_id" varchar,
+  "creator_id" varchar
+);
+
+CREATE TABLE "requester_pool" (
+  "project_id" varchar,
+  "requester_id" varchar
+);
+
+CREATE TABLE "project" (
   "id" varchar PRIMARY KEY,
   "title" varchar,
   "title_image" varchar,
@@ -38,49 +55,34 @@ CREATE TABLE "Project" (
   "detail_description" varchar,
   "due_date" varchar,
   "created_at" varchar,
-  "type" "Type",
+  "type" Type,
   "guideline_url" varchar
 );
-CREATE TABLE "Data" (
+
+CREATE TABLE "data" (
   "id" varchar PRIMARY KEY,
-  "type" "Type",
+  "type" Type,
   "payload" varchar,
   "created_at" varchar,
-  "status" "Data_Status",
+  "status" "data_status",
   "creator_id" int,
   "checker1_id" int,
   "checker2_id" int,
   "project_id" int
 );
-ALTER TABLE
-  "Creator_Pool"
-ADD
-  FOREIGN KEY ("project_id") REFERENCES "Project" ("id");
-ALTER TABLE
-  "Creator_Pool"
-ADD
-  FOREIGN KEY ("creator_id") REFERENCES "Data_Creator" ("id");
-ALTER TABLE
-  "Requester_Pool"
-ADD
-  FOREIGN KEY ("project_id") REFERENCES "Project" ("id");
-ALTER TABLE
-  "Requester_Pool"
-ADD
-  FOREIGN KEY ("requester_id") REFERENCES "Data_Requester" ("id");
-ALTER TABLE
-  "Data"
-ADD
-  FOREIGN KEY ("creator_id") REFERENCES "Data_Creator" ("id");
-ALTER TABLE
-  "Data"
-ADD
-  FOREIGN KEY ("checker1_id") REFERENCES "Data_Creator" ("id");
-ALTER TABLE
-  "Data"
-ADD
-  FOREIGN KEY ("checker2_id") REFERENCES "Data_Creator" ("id");
-ALTER TABLE
-  "Data"
-ADD
-  FOREIGN KEY ("project_id") REFERENCES "Project" ("id");
+
+ALTER TABLE "creator_pool" ADD FOREIGN KEY ("project_id") REFERENCES "project" ("id");
+
+ALTER TABLE "creator_pool" ADD FOREIGN KEY ("creator_id") REFERENCES "data_creator" ("id");
+
+ALTER TABLE "requester_pool" ADD FOREIGN KEY ("project_id") REFERENCES "project" ("id");
+
+ALTER TABLE "requester_pool" ADD FOREIGN KEY ("requester_id") REFERENCES "data_requester" ("id");
+
+ALTER TABLE "data" ADD FOREIGN KEY ("creator_id") REFERENCES "data_creator" ("id");
+
+ALTER TABLE "data" ADD FOREIGN KEY ("checker1_id") REFERENCES "data_creator" ("id");
+
+ALTER TABLE "data" ADD FOREIGN KEY ("checker2_id") REFERENCES "data_creator" ("id");
+
+ALTER TABLE "data" ADD FOREIGN KEY ("project_id") REFERENCES "project" ("id");
