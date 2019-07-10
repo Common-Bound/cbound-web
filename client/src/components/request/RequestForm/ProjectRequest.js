@@ -6,7 +6,7 @@ import SetDescription from "./SetDescription";
 
 class ProjectRequest extends Component {
   state = {
-    title: "HELLO",
+    title: "",
     basicLang: "",
     simpleDesc: "",
     detailDesc: "",
@@ -23,15 +23,26 @@ class ProjectRequest extends Component {
     dataInspector: "",
     dueDate: ""
   };
+
+  handleSetDsc = data => {
+    this.state = data;
+  };
   render() {
-    const { information } = this.state;
     return (
       <Router>
         <div>
-          <Link to="./dsc">설명</Link>
-          <Link to="/img">이미지</Link>
-          <Link to="/gui">가이드</Link>
-          <Link to="/cst">단가</Link>
+          <Link to="./dsc">
+            <button>설명</button>
+          </Link>
+          <Link to="/img">
+            <button>이미지</button>
+          </Link>
+          <Link to="/gui">
+            <button>가이드</button>
+          </Link>
+          <Link to="/cst">
+            <button>단가</button>
+          </Link>
         </div>
         <div>
           <Route
@@ -45,6 +56,7 @@ class ProjectRequest extends Component {
                 simpleDesc={this.state.simpleDesc}
                 detailDesc={this.state.detailDesc}
                 type={this.state.type}
+                onSubmit={this.handleSetDsc}
               />
             )}
           />
@@ -52,7 +64,7 @@ class ProjectRequest extends Component {
         <div>
           <Route
             exact
-            path="img"
+            path="/img"
             render={props => (
               <SetDescription
                 {...props}
@@ -60,6 +72,7 @@ class ProjectRequest extends Component {
                 taskExample1={this.state.taskExample1}
                 taskExample2={this.state.taskExample2}
                 taskExample3={this.state.taskExample3}
+                onSubmit={this.handleSetImg}
               />
             )}
           />
@@ -69,7 +82,11 @@ class ProjectRequest extends Component {
             exact
             path="/gui"
             render={props => (
-              <SetDescription {...props} title={this.state.title} />
+              <SetDescription
+                {...props}
+                guideLine={this.state.guideLine}
+                onSubmit={this.handleSetGui}
+              />
             )}
           />
         </div>
@@ -78,7 +95,13 @@ class ProjectRequest extends Component {
             exact
             path="/cst"
             render={props => (
-              <SetDescription {...props} title={this.state.title} />
+              <SetDescription
+                {...props}
+                dataCost={this.state.dataCost}
+                totalData={this.state.totalData}
+                dataInspector={this.state.dataInspector}
+                onSubmit={this.handleSetCst}
+              />
             )}
           />
         </div>
