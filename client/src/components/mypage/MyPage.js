@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Link, Redirect } from "react-router-dom";
 
-class FetchTest extends Component {
+class MyPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -19,12 +19,6 @@ class FetchTest extends Component {
         console.log(err);
       });
   }
-  async componentDidMount() {
-    /*const url = "https://api.randomuser.me/";
-    const response = await fetch(url);
-    const data = await response.json();
-    this.setState({ person: data.results[0], loading: false });*/
-  }
 
   render() {
     if (this.state.loading) {
@@ -34,12 +28,6 @@ class FetchTest extends Component {
     if (this.state.data === true) {
       console.log("로그인 성공");
       return (
-        /*<div>
-          <div>{this.state.person.name.title}</div>
-          <div>{this.state.person.name.first}</div>
-          <div>{this.state.person.name.last}</div>
-          <img src={this.state.person.picture.large} />
-        </div>*/
         <div>
           <h1>마이페이지</h1>
           <Link to="/auth/signout">로그아웃</Link>
@@ -53,4 +41,4 @@ class FetchTest extends Component {
   }
 }
 
-export default FetchTest;
+export default MyPage;

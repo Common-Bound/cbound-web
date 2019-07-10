@@ -9,7 +9,6 @@ const PORT = process.env.PORT || 4000;
 const app = express();
 
 /* 라우터 */
-const userRouter = require("./routes/user");
 const authRouter = require("./routes/authRouter");
 const mypageRouter = require("./routes/mypageRouter");
 
@@ -23,7 +22,6 @@ app.use(session({ secret: "myKey" })); // 세션 활성화
 app.use(passport.initialize()); // passport 구동
 app.use(passport.session()); // 세션 연결
 /* 사용자 작성 라우터 사용 */
-app.use("/users", userRouter);
 app.use("/auth", authRouter);
 app.use("/mypage", mypageRouter);
 

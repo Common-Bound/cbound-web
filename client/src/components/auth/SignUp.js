@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
 
-class AuthForm extends Component {
+class SignUp extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -118,4 +118,4 @@ class AuthForm extends Component {
   }
 }
 
-export default AuthForm;
+export default SignUp;
