@@ -41,7 +41,6 @@ passport.use(
               }
               // 결과 값이 참이라면, 로그인이 성공한다
               if (res) {
-                console.log("로그인 성공");
                 done(null, user);
               }
               // 결과 값이 거짓이라면, 즉 비밀번호가 서로 다르다면 로그인 실패

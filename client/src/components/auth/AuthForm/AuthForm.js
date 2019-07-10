@@ -5,7 +5,7 @@ class AuthForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: "",
+      email: "",
       password: "",
       passwordCheck: "",
       passwordError: "",
@@ -21,7 +21,11 @@ class AuthForm extends Component {
   handleSubmit = async e => {
     e.preventDefault();
 
-    console.log(this.state.name, this.state.password, this.state.passwordCheck);
+    console.log(
+      this.state.email,
+      this.state.password,
+      this.state.passwordCheck
+    );
 
     (await this.state.password) !== this.state.passwordCheck
       ? this.setState({ PasswordError: true })
@@ -37,7 +41,7 @@ class AuthForm extends Component {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          name: this.state.name,
+          email: this.state.email,
           password: this.state.password
         })
       })
@@ -64,7 +68,7 @@ class AuthForm extends Component {
 
   render() {
     const {
-      name,
+      email,
       password,
       passwordCheck,
       passwordError,
@@ -74,12 +78,12 @@ class AuthForm extends Component {
     return (
       <form onSubmit={this.handleSubmit}>
         <div>
-          <label htmlFor="user-name">아이디</label>
+          <label htmlFor="user-email">아이디</label>
           <br />
           <input
             required
-            value={name}
-            name="name"
+            value={email}
+            name="email"
             onChange={this.handleChange}
           />
         </div>

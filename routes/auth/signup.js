@@ -11,39 +11,39 @@ passport.use(
   new LocalStrategy(
     {
       // local 전략을 세움
-      usernameField: "name",
+      usernameField: "email",
       passwordField: "password",
       session: true, // 세션에 저장 여부
       passReqToCallback: false
     },
-    (name, password, done) => {
-      console.log(name, password);
-      // 먼저 주어진 name 과 일치하는 유저를 찾는다
-      // 이 떄, name은 유일한 식별자라고 가정한다
+    (email, password, done) => {
+      console.log(email, password);
+      // 먼저 주어진 email 과 일치하는 유저를 찾는다
+      // 이 떄, email은 유일한 식별자라고 가정한다
       db.query(
-        "SELECT * FROM test_user WHERE name=$1",
-        [name],
+        "SELECT * FROM Data_Requester WHERE email=$1",
+        [email],
         (err, results) => {
           if (err) {
             console.error("Error when selecting user on login", err);
             return done(err);
           }
-          // 주어진 name과 일치하는 유저가 존재한다면,
+          // 주어진 email과 일치하는 유저가 존재한다면,
           // 즉, 반환되는 rows 가 적어도 하나 존재한다면(0보다 크다면)
           if (results.rows.length > 0) {
-            // 이미 존재하는 name 이므로 회원가입 실패
+            // 이미 존재하는 email 이므로 회원가입 실패
             console.log("이미 존재하는 아이디 입니다");
             return done(null, false, {
               message: "이미 존재하는 아이디 입니다"
             });
           }
-          // 주어진 name과 일치하는 유저가 존재하지 않는다면 회원가입 가능
+          // 주어진 email과 일치하는 유저가 존재하지 않는다면 회원가입 가능
           else {
             console.log("존재하지 않는 아이디 이므로 회원가입 가능합니다");
             bcrypt.hash(password, null, null, function(err, hash) {
               db.query(
                 "insert into test_user values ($1, $2)",
-                [name, hash],
+                [email, hash],
                 function(err, rows) {
                   if (err) {
                     console.log("Error when hashing password", err);
