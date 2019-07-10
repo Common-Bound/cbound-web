@@ -3,6 +3,7 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const bcrypt = require("bcrypt-nodejs");
 const db = require("../../db/index");
+const uuid = require("uuid/v4");
 const router = express.Router();
 
 // path: ~/auth/signup
@@ -21,7 +22,7 @@ passport.use(
       // 먼저 주어진 email 과 일치하는 유저를 찾는다
       // 이 떄, email은 유일한 식별자라고 가정한다
       db.query(
-        "SELECT * FROM Data_Requester WHERE email=$1",
+        "SELECT * FROM data_requester WHERE email=$1",
         [email],
         (err, results) => {
           if (err) {
@@ -31,6 +32,7 @@ passport.use(
           // 주어진 email과 일치하는 유저가 존재한다면,
           // 즉, 반환되는 rows 가 적어도 하나 존재한다면(0보다 크다면)
           if (results.rows.length > 0) {
+            console.log(results.rows);
             // 이미 존재하는 email 이므로 회원가입 실패
             console.log("이미 존재하는 아이디 입니다");
             return done(null, false, {
@@ -40,10 +42,12 @@ passport.use(
           // 주어진 email과 일치하는 유저가 존재하지 않는다면 회원가입 가능
           else {
             console.log("존재하지 않는 아이디 이므로 회원가입 가능합니다");
+            // uuid 생성하여 id 필드 부여
+            const uid = uuid();
             bcrypt.hash(password, null, null, function(err, hash) {
               db.query(
-                "insert into test_user values ($1, $2)",
-                [email, hash],
+                "insert into data_requester values ($1, $2, $3)",
+                [uid, email, hash],
                 function(err, rows) {
                   if (err) {
                     console.log("Error when hashing password", err);

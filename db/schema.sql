@@ -5,14 +5,7 @@ CREATE TYPE "data_status" AS ENUM (
   'done',
   'failure'
 );
-
-CREATE TYPE "type" AS ENUM (
-  'image',
-  'context',
-  'voice',
-  'survey'
-);
-
+CREATE TYPE "type" AS ENUM ('image', 'context', 'voice', 'survey');
 CREATE TABLE "data_requester" (
   "id" varchar PRIMARY KEY,
   "email" varchar UNIQUE,
@@ -22,7 +15,6 @@ CREATE TABLE "data_requester" (
   "point" int,
   "account" varchar
 );
-
 CREATE TABLE "data_creator" (
   "id" varchar PRIMARY KEY,
   "email" varchar UNIQUE,
@@ -36,17 +28,11 @@ CREATE TABLE "data_creator" (
   "point" int,
   "account" varchar
 );
-
-CREATE TABLE "creator_pool" (
-  "project_id" varchar,
-  "creator_id" varchar
-);
-
+CREATE TABLE "creator_pool" ("project_id" varchar, "creator_id" varchar);
 CREATE TABLE "requester_pool" (
   "project_id" varchar,
   "requester_id" varchar
 );
-
 CREATE TABLE "project" (
   "id" varchar PRIMARY KEY,
   "title" varchar,
@@ -58,31 +44,46 @@ CREATE TABLE "project" (
   "type" Type,
   "guideline_url" varchar
 );
-
 CREATE TABLE "data" (
   "id" varchar PRIMARY KEY,
   "type" Type,
   "payload" varchar,
   "created_at" varchar,
   "status" "data_status",
-  "creator_id" int,
-  "checker1_id" int,
-  "checker2_id" int,
-  "project_id" int
+  "creator_id" varchar,
+  "checker1_id" varchar,
+  "checker2_id" varchar,
+  "project_id" varchar
 );
-
-ALTER TABLE "creator_pool" ADD FOREIGN KEY ("project_id") REFERENCES "project" ("id");
-
-ALTER TABLE "creator_pool" ADD FOREIGN KEY ("creator_id") REFERENCES "data_creator" ("id");
-
-ALTER TABLE "requester_pool" ADD FOREIGN KEY ("project_id") REFERENCES "project" ("id");
-
-ALTER TABLE "requester_pool" ADD FOREIGN KEY ("requester_id") REFERENCES "data_requester" ("id");
-
-ALTER TABLE "data" ADD FOREIGN KEY ("creator_id") REFERENCES "data_creator" ("id");
-
-ALTER TABLE "data" ADD FOREIGN KEY ("checker1_id") REFERENCES "data_creator" ("id");
-
-ALTER TABLE "data" ADD FOREIGN KEY ("checker2_id") REFERENCES "data_creator" ("id");
-
-ALTER TABLE "data" ADD FOREIGN KEY ("project_id") REFERENCES "project" ("id");
+ALTER TABLE
+  "creator_pool"
+ADD
+  FOREIGN KEY ("project_id") REFERENCES "project" ("id");
+ALTER TABLE
+  "creator_pool"
+ADD
+  FOREIGN KEY ("creator_id") REFERENCES "data_creator" ("id");
+ALTER TABLE
+  "requester_pool"
+ADD
+  FOREIGN KEY ("project_id") REFERENCES "project" ("id");
+ALTER TABLE
+  "requester_pool"
+ADD
+  FOREIGN KEY ("requester_id") REFERENCES "data_requester" ("id");
+ALTER TABLE
+  "data"
+ADD
+  FOREIGN KEY ("creator_id") REFERENCES "data_creator" ("id");
+ALTER TABLE
+  "data"
+ADD
+  FOREIGN KEY ("checker1_id") REFERENCES "data_creator" ("id");
+ALTER TABLE
+  "data"
+ADD
+  FOREIGN KEY ("checker2_id") REFERENCES "data_creator" ("id");
+ALTER TABLE
+  "data"
+ADD
+  FOREIGN KEY ("project_id") REFERENCES "project" ("id");

@@ -32,7 +32,7 @@ class AuthForm extends Component {
     if (this.state.PasswordError) {
       return alert("비밀번호가 서로 다릅니다");
     } else {
-      const url = "/auth/signup";
+      const url = this.props.match.path; // /auth/signup
       fetch(url, {
         method: "POST",
         headers: {
@@ -70,13 +70,12 @@ class AuthForm extends Component {
       password,
       passwordCheck,
       passwordError,
-      genderError,
       result
     } = this.state;
     return (
       <form onSubmit={this.handleSubmit}>
         <div>
-          <label htmlFor="user-email">아이디</label>
+          <label htmlFor="user-email">이메일</label>
           <br />
           <input
             required

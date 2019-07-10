@@ -23,7 +23,7 @@ class Login extends Component {
   handleSubmit = e => {
     e.preventDefault();
 
-    const url = "/auth/signin";
+    const url = this.props.match.path; // /auth/signin
     fetch(url, {
       method: "POST",
       headers: {
@@ -41,13 +41,12 @@ class Login extends Component {
           return alert(data.message);
         }
         if (data.result === true) {
-          this.props.signIn();
           this.setState({ result: true });
         }
         this.setState({ result: false });
       })
       .catch(error => {
-        return alert("아이디 또는 비밀번호를 잘못 입력하셨습니다");
+        return alert(error);
       });
   };
 

@@ -16,45 +16,19 @@ class App extends React.Component {
     this.state = {
       auth: false
     };
-
-    this.signIn = this.signIn.bind(this);
-    this.signOut = this.signOut.bind(this);
   }
-
-  signIn = () => {
-    this.setState({
-      auth: true
-    });
-  };
-
-  signOut = () => {
-    this.setState({
-      auth: false
-    });
-  };
 
   render() {
     return (
       <Router>
         <header>
-          {this.state.auth ? (
-            <Link to="/auth/signout">로그아웃</Link>
-          ) : (
-            <Link to="/auth/signin">로그인</Link>
-          )}
-          <Link to="/mypage">마이페이지</Link>
+          <Link to="/mypage/main">마이페이지</Link>
         </header>
         <Route path="/" exact component={Main} />
         <Route path="/mypage" component={FetchTest} />
         <Route path="/auth/signup" component={AuthForm} />
-        <Route
-          path="/auth/signin"
-          render={props => <Login {...props} signIn={this.signIn} />}
-        />
-        <Route
-          path="/auth/signout"
-          render={props => <Logout {...props} signOut={this.signOut} />}
-        />
+        <Route path="/auth/signin" component={Login} />
+        <Route path="/auth/signout" component={Logout} />
       </Router>
     );
   }
