@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const projectRouter = require("./mypage/projects");
+const db = require("../db/index");
 
 // path: ~/mypage
 router.use("/projects", projectRouter);
