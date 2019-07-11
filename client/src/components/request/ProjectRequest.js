@@ -3,6 +3,7 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import SetDescription from "./SetDescription";
+import SetImages from "./SetImages";
 
 class ProjectRequest extends Component {
   state = {
@@ -66,7 +67,7 @@ class ProjectRequest extends Component {
             exact
             path="/img"
             render={props => (
-              <SetDescription
+              <SetImages
                 {...props}
                 mainImage={this.state.mainImage}
                 taskExample1={this.state.taskExample1}
