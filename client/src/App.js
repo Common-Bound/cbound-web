@@ -19,10 +19,9 @@ class App extends React.Component {
           <Link to="/mypage">마이페이지</Link>
           <Link to="/projects">프로젝트 목록</Link>
         </header>
-
         <Route path="/" exact component={Main} />
         <Route path="/mypage" component={MyPage} />
-        <Route path="/projects" component={Projects} />
+        <Route path="/projects" component={ProjectsPage} />
         <Route path="/auth/signup" component={SignUp} />
         <Route path="/auth/signin" component={SignIn} />
         <Route path="/auth/signout" component={SignOut} />

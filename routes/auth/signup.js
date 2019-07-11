@@ -22,7 +22,7 @@ passport.use(
       // 먼저 주어진 email 과 일치하는 유저를 찾는다
       // 이 떄, email은 유일한 식별자라고 가정한다
       db.query(
-        "SELECT * FROM data_requester WHERE email=$1",
+        "SELECT * FROM data_creator WHERE email=$1",
         [email],
         (err, results) => {
           if (err) {
@@ -46,7 +46,7 @@ passport.use(
             const uid = uuid();
             bcrypt.hash(password, null, null, function(err, hash) {
               db.query(
-                "insert into data_requester values ($1, $2, $3)",
+                "insert into data_creator values ($1, $2, $3)",
                 [uid, email, hash],
                 function(err, rows) {
                   if (err) {
