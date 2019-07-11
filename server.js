@@ -11,6 +11,7 @@ const app = express();
 /* 라우터 */
 const authRouter = require("./routes/authRouter");
 const mypageRouter = require("./routes/mypageRouter");
+const projectsRouter = require("./routes/projectsRouter");
 
 /* 외부 라이브러리 미들웨어 사용 */
 app.use("/public", express.static(__dirname + "/client/public"));
@@ -24,6 +25,7 @@ app.use(passport.session()); // 세션 연결
 /* 사용자 작성 라우터 사용 */
 app.use("/auth", authRouter);
 app.use("/mypage", mypageRouter);
+app.use("/projects", projectsRouter);
 
 /* 라우트 */
 app.get("/hello", (req, res, next) => {
