@@ -5,7 +5,6 @@ import SignUp from "./components/auth/SignUp";
 import MyPage from "./components/mypage/MyPage";
 import SignIn from "./components/auth/SignIn";
 import SignOut from "./components/auth/SignOut";
-import ProjectRequest from "./components/request/ProjectRequest";
 import Projects from "./components/projects/Projects";
 
 function Main() {
@@ -21,11 +20,6 @@ class App extends React.Component {
           <Link to="/projects">프로젝트 목록</Link>
         </header>
 
-        <body>
-          <div>
-            <ProjectRequest />
-          </div>
-        </body>
         <Route path="/" exact component={Main} />
         <Route path="/mypage" component={MyPage} />
         <Route path="/projects" component={Projects} />

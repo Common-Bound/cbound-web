@@ -26,7 +26,13 @@ class ProjectRequest extends Component {
   };
 
   handleSetDsc = data => {
-    this.state = data;
+    this.setState({
+      title: data.title,
+      basicLang: data.basicLang,
+      simpleDesc: data.simpleDesc,
+      detailDesc: data.detailDesc,
+      type: data.type
+    });
   };
   render() {
     return (
