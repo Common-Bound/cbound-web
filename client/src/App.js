@@ -5,8 +5,7 @@ import SignUp from "./components/auth/SignUp";
 import MyPage from "./components/mypage/MyPage";
 import SignIn from "./components/auth/SignIn";
 import SignOut from "./components/auth/SignOut";
-import ProjectRequest from "./components/request/ProjectRequest";
-import ProjectsPage from "./components/projectsPage/ProjectsPage";
+import Projects from "./components/projects/Projects";
 
 function Main() {
   return <h1>Welcome to DALA!</h1>;
@@ -20,10 +19,6 @@ class App extends React.Component {
           <Link to="/mypage">마이페이지</Link>
           <Link to="/projects">프로젝트 목록</Link>
         </header>
-
-        <div>
-          <ProjectRequest />
-        </div>
         <Route path="/" exact component={Main} />
         <Route path="/mypage" component={MyPage} />
         <Route path="/projects" component={ProjectsPage} />
