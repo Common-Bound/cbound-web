@@ -3,11 +3,6 @@ import { arrayTypeAnnotation } from "@babel/types";
 
 class SetDescription extends Component {
   constructor(props) {
-    if (window.performance) {
-      if (performance.navigation.type == 1) {
-        alert("This page is reloaded");
-      }
-    }
     super(props);
     this.state = this.props;
 
