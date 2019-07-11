@@ -5,7 +5,7 @@ import SignUp from "./components/auth/SignUp";
 import MyPage from "./components/mypage/MyPage";
 import SignIn from "./components/auth/SignIn";
 import SignOut from "./components/auth/SignOut";
-import ProjectRequest from "./components/request/RequestForm/ProjectRequest";
+import ProjectRequest from "./components/request/ProjectRequest";
 import ProjectsPage from "./components/projectsPage/ProjectsPage";
 
 function Main() {

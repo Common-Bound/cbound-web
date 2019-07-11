@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import Project from "../card/Project";
 
 class ProjectsPage extends Component {
   constructor(props) {
@@ -19,8 +20,11 @@ class ProjectsPage extends Component {
         }
         if (data.result) {
           console.log(data);
+          const new_projects = data.result.map(el => {
+            return <Project key={el.id} id={el.id} title={el.title} />;
+          });
           this.setState({
-            projects: data.result
+            projects: new_projects
           });
         }
       });
