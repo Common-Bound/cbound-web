@@ -5,7 +5,7 @@ import SignUp from "./components/auth/SignUp";
 import MyPage from "./components/mypage/MyPage";
 import SignIn from "./components/auth/SignIn";
 import SignOut from "./components/auth/SignOut";
-import Projects from "./components/projects/Projects";
+import ProjectsPage from "./components/projectsPage/ProjectsPage";
 
 function Main() {
   return <h1>Welcome to DALA!</h1>;

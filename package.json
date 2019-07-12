@@ -7,6 +7,8 @@
   "author": "eunsukimme <eunsu.dev@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "@material-ui/core": "^4.2.0",
+    "@material-ui/icons": "^4.2.1",
     "bcrypt-nodejs": "^0.0.3",
     "body-parser": "^1.19.0",
     "bootstrap": "^4.3.1",
