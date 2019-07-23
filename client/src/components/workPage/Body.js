@@ -1,64 +1,36 @@
 import React, { Component } from "react";
-import imageSrc from "./cropped/img/sight.jpg";
+import CropperJS from "react-cropperjs";
 
 class Body extends Component {
-  /*getInitialState() {
-    return {
-      file: []
-    };
+  _crop() {
+    // image in dataUrl
+    console.log(this.refs.cropper.getCroppedCanvas().toDataURL());
   }
 
-  state = { selectedFile: null };
-  _onChange = e => {
-    var file = e.target.files[0];
-    var reader = new FileReader();
-    var url = reader.readAsDataURL(file);
-
-    reader.onloadend = function(e) {
-      this.setState({
-        imgSrc: [reader.result]
-      });
-    }.bind(this);
-    console.log(url);
+  render() {
+    return (
+      <CropperJS
+        ref="cropper"
+        src="http://i.imgur.com/n483ZwJ.jpg"
+        style={{ height: 400, width: "100%" }}
+        // Cropper.js options
+        aspectRatio={16 / 9}
+        guides={false}
+        crop={this._crop.bind(this)}
+      />
+    );
+  } /*
+  state = {
+    orig_image: "a",
+    crop_image: []
   };
 
-  render() {
-    const workStyle = {
-      borderTop: "3px solid lightgrey"
-    };
+  onFileSelected = async e => {
+    await this.setState({
+      orig_image: URL.createObjectURL(e.target.files[0])
+    });
+  };
 
-    return (
-      <div>
-        <hr style={workStyle} />
-        <div>
-          <img id="image" src={imageSrc} alt="workImage" style="max-width:" />
-        </div>
-        <br />
-
-        <div>
-          <form>
-            <input type="file" onChange={this._onChange} />
-            <div>
-              <button
-                type="button"
-                onClick={this.state}
-                class="btn btn-outline-secondary"
-              >
-                링크
-              </button>
-              <button
-                type="button"
-                onClick="store()"
-                class="btn btn-outline-secondary"
-              >
-                저장
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
-    );
-  }*/
   fetchTest() {
     var bodyData = {
       orig_image: "url",
@@ -99,10 +71,44 @@ class Body extends Component {
         console.log("error occured" + ex);
       });
   }
-
   render() {
-    return <input type="button" onSubmit={this.fetchTest} />;
-  }
+    const workStyle = {
+      borderTop: "3px solid lightgrey"
+    };
+
+    return (
+      <div>
+        <hr style={workStyle} />
+        <div>
+          <img
+            id="workImg"
+            src={this.state.orig_image}
+            alt="workImg"
+            style={{ maxWidth: "100%" }}
+          />
+        </div>
+        <br />
+
+        <div>
+          <form>
+            <input type="file" onChange={this.onFileSelected} />
+            <div>
+              <input
+                type="button"
+                className="btn btn-outline-secondary"
+                value="링크"
+              />
+              <input
+                type="button"
+                className="btn btn-outline-secondary"
+                value="저장"
+              />
+            </div>
+          </form>
+        </div>
+      </div>
+    );
+  }*/
 }
 
 export default Body;
