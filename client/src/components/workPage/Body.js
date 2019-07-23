@@ -32,6 +32,7 @@ class Body extends Component {
   };
 
   fetchTest() {
+    console.log("submitted");
     var bodyData = {
       orig_image: "url",
       meta: {
@@ -62,7 +63,7 @@ class Body extends Component {
       body: JSON.stringify(bodyData)
     })
       .then(function(res) {
-        return Response.json();
+        return res.json();
       })
       .then(function(data) {
         console.log("Data received" + data);
