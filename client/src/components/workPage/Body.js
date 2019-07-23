@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import CropperJS from "react-cropperjs";
+import CropperJS from "react-cropper";
 
 class Body extends Component {
   _crop() {
