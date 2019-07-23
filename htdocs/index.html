@@ -175,44 +175,54 @@
             canvas.toBlob(function(blob) {
               var formData = new FormData();
               formData.append("avatar", blob, "avatar.jpg");
-              $.ajax("https://jsonplaceholder.typicode.com/posts", {
-                method: "POST",
-                data: formData,
-                processData: false,
-                contentType: false,
-                xhr: function() {
-                  var xhr = new XMLHttpRequest();
-                  xhr.upload.onprogress = function(e) {
-                    var percent = "0";
-                    var percentage = "0%";
-                    if (e.lengthComputable) {
-                      percent = Math.round((e.loaded / e.total) * 100);
-                      percentage = percent + "%";
-                      $progressBar
-                        .width(percentage)
-                        .attr("aria-valuenow", percent)
-                        .text(percentage);
-                    }
-                  };
-                  return xhr;
-                },
-                success: function() {
-                  $alert
-                    .show()
-                    .addClass("alert-success")
-                    .text("와 성공");
-                },
-                error: function() {
-                  avatar.src = initialAvatarURL;
-                  $alert
-                    .show()
-                    .addClass("alert-warning")
-                    .text("와 오류");
-                },
-                complete: function() {
-                  $progress.hide();
+              $.ajax(
+                "https://cors-anywhere.herokuapp.com/ec2-13-209-99-40.ap-northeast-2.compute.amazonaws.com:8080/ocr/api/",
+                {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json"
+                  },
+                  data: JSON.stringify({
+                    imageSrc: canvas.toDataURL()
+                  }),
+                  processData: false,
+                  contentType: false,
+                  xhr: function() {
+                    var xhr = new XMLHttpRequest();
+                    xhr.upload.onprogress = function(e) {
+                      var percent = "0";
+                      var percentage = "0%";
+                      if (e.lengthComputable) {
+                        percent = Math.round((e.loaded / e.total) * 100);
+                        percentage = percent + "%";
+                        $progressBar
+                          .width(percentage)
+                          .attr("aria-valuenow", percent)
+                          .text(percentage);
+                      }
+                    };
+                    return xhr;
+                  },
+                  success: function(res) {
+                    console.log(res);
+                    $alert
+                      .show()
+                      .addClass("alert-success")
+                      .text("와 성공");
+                  },
+                  error: function(error) {
+                    avatar.src = initialAvatarURL;
+                    console.log(error);
+                    $alert
+                      .show()
+                      .addClass("alert-warning")
+                      .text("와 오류");
+                  },
+                  complete: function() {
+                    $progress.hide();
+                  }
                 }
-              });
+              );
             });
           }
         });
