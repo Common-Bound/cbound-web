@@ -17,8 +17,13 @@ const taskRouter = require("./routes/taskRouter");
 /* 외부 라이브러리 미들웨어 사용 */
 app.use("/public", express.static(__dirname + "/client/public"));
 app.use(morgan("dev"));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(
+  bodyParser.json({
+    limit: "10mb",
+    extended: true
+  })
+);
+app.use(bodyParser.urlencoded({ limit: "10mb", extended: false }));
 app.use(session({ secret: "myKey" })); // 세션 활성화
 // passport.js 모듈 사용
 app.use(passport.initialize()); // passport 구동
