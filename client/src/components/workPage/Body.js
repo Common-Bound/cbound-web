@@ -5,12 +5,16 @@ import "./Body.css";
 import CropInfoList from "./CropInfoList.js";
 
 class Body extends Component {
-  state = {
-    orig_image: "",
-    crop_image: [],
-    crop: {},
-    label: ""
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      orig_image: "",
+      crop_image: [],
+      crop: {},
+      label: ""
+    };
+    this.handleSendAll = this.handleSendAll.bind(this);
+  }
 
   sendData = (bodyData, sendTo) => {
     console.log("submitted");
@@ -141,7 +145,7 @@ class Body extends Component {
               <div>
                 <button
                   type="button"
-                  class="btn btn-outline-secondary"
+                  className="btn btn-outline-secondary"
                   onClick={this.handleSendAll}
                 >
                   완전 다 보내기
