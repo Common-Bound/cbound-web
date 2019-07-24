@@ -37,16 +37,24 @@ class Body extends Component {
       });
   };
 
+  getBase64(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = error => reject(error);
+    });
+  }
+
   onFileSelected = async e => {
     // 파일 보내주면 됨
-    await this.setState(
-      {
-        orig_image: URL.createObjectURL(e.target.files[0])
-      },
-      () => {
-        this.sendData({ orig_image: this.state.orig_image }, "/task");
-      }
+    await this.getBase64(e.target.files[0]).then(data =>
+      this.setState({
+        orig_image: data
+      })
     );
+    this.sendData({ orig_image: this.state.orig_image }, "/task");
+    console.log(this.state.orig_image);
   };
 
   handleChange = e => {
@@ -154,8 +162,7 @@ class Body extends Component {
             </div>
           </form>
         </div>
-
-        {JSON.stringify(this.state.crop_image)}
+        <CropInfoList data={this.state.crop_image} />
       </div>
     );
   }
