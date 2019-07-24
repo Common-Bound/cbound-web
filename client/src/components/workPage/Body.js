@@ -12,10 +12,10 @@ class Body extends Component {
     label: ""
   };
 
-  sendData = bodyData => {
+  sendData = (bodyData, sendTo) => {
     console.log("submitted");
 
-    fetch("/task", {
+    fetch(sendTo, {
       method: "post",
       headers: {
         "Content-Type": "application/json"
@@ -40,7 +40,7 @@ class Body extends Component {
         orig_image: URL.createObjectURL(e.target.files[0])
       },
       () => {
-        this.sendData({ orig_image: this.state.orig_image });
+        this.sendData({ orig_image: this.state.orig_image }, "/task");
       }
     );
   };
@@ -77,12 +77,15 @@ class Body extends Component {
   };
 
   handleSendAll() {
-    this.sendData({
-      orig_image: this.state.orig_image,
-      meta: {
-        crop_image: this.state.crop_image
-      }
-    });
+    this.sendData(
+      {
+        orig_image: this.state.orig_image,
+        meta: {
+          crop_image: this.state.crop_image
+        }
+      },
+      "/task/complete"
+    );
   }
 
   handleKeyPress = e => {
