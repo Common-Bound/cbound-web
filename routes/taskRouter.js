@@ -12,12 +12,15 @@ router.post("/", (req, res, next) => {
 
   //const imageSrc = req.body.Src;
   // AI 서버로 base64 형태로 인코딩된 파일 전송
+  const body = req.body;
+  const id = uuid();
+  console.log(body);
   const imageSrc = req.body["orig_image"];
   const url =
     "http://ec2-13-209-99-40.ap-northeast-2.compute.amazonaws.com:8080/ocr/api/";
   axios
     .post(url, {
-      id: 0,
+      id: id,
       method: "post",
       orig_image: imageSrc
     })

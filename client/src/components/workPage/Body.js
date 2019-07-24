@@ -30,10 +30,12 @@ class Body extends Component {
         return res.json();
       })
       .then(function(data) {
-        console.log("Data received" + data);
+        console.log("Data received");
+	console.log(data);
       })
       .catch(function(ex) {
-        console.log("error occured" + ex);
+        console.log("error occured");
+	console.log(ex);
       });
   };
 
