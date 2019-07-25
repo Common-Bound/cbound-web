@@ -8,12 +8,17 @@ class Body extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      __nextkey: 0,
       orig_image: "",
       crop_image: [],
       crop: {},
-      label: ""
+      label: "",
+      imageRef: ""
     };
     this.handleSendAll = this.handleSendAll.bind(this);
+    this.putReceivedDataToCropImage = this.putReceivedDataToCropImage.bind(
+      this
+    );
   }
 
   sendData = (bodyData, sendTo) => {
@@ -21,9 +26,6 @@ class Body extends Component {
 
     fetch(sendTo, {
       method: "post",
-      headers: {
-        "Content-Type": "application/json"
-      },
       body: bodyData
     })
       .then(function(res) {
@@ -32,10 +34,10 @@ class Body extends Component {
       .then(function(data) {
         console.log("Data received");
         switch (sendTo) {
-          case "/work":
+          case "/task":
             this.putReceivedDataToCropImage(data);
             break;
-          case "/work/complete":
+          case "/task/complete":
             console.log("complete");
             break;
           default:
@@ -64,18 +66,16 @@ class Body extends Component {
 
   onFileSelected = async e => {
     // 파일 보내주면 됨
-    /*await this.getBase64(e.target.files[0]).then(data =>
+    const bodyData = new FormData();
+    bodyData.append("imgFile", e.target.files[0]);
+    this.sendData(bodyData, "/task");
+
+    await this.getBase64(e.target.files[0]).then(data =>
       this.setState({
         orig_image: data
       })
-    );*/
+    );
 
-    this.setState({
-      orig_image: e.target.files[0]
-    });
-    const bodyData = new FormData();
-    bodyData.append("imgFile", this.state.orig_image);
-    this.sendData(bodyData, "/task");
     console.log(this.state.orig_image);
   };
 
@@ -85,37 +85,13 @@ class Body extends Component {
     });
   };
 
-  getCroppedImg(image, crop, fileName) {
-    const canvas = document.createElement("canvas");
-    const scaleX = image.naturalWidth / image.width;
-    const scaleY = image.naturalHeight / image.height;
-    canvas.width = crop.width;
-    canvas.height = crop.height;
-    const ctx = canvas.getContext("2d");
+  // As Base64 string
+  // ;
 
-    ctx.drawImage(
-      image,
-      crop.x * scaleX,
-      crop.y * scaleY,
-      crop.width * scaleX,
-      crop.height * scaleY,
-      0,
-      0,
-      crop.width,
-      crop.height
-    );
-
-    // As Base64 string
-    // ;
-
-    // As a blobreturn new Promise(resolve => {
-    return new Promise(resolve => {
-      resolve(canvas.toDataURL());
-    });
-  }
+  // As a blobreturn new Promise(resolve => {
 
   handleImageLoaded = image => {
-    this.imageRef = image;
+    this.setState({ imageRef: image });
   };
 
   handleOnCropChange = crop => {
@@ -127,21 +103,19 @@ class Body extends Component {
     const image = new Image();
     image.src = this.state.orig_image;
     if (this.state.orig_image && this.state.label) {
-      this.setState(
-        {
-          crop_image: this.state.crop_image.concat({
-            imgSrc: await this.getCroppedImg(this.imageRef, this.state.crop),
-            x: cropData.x,
-            y: cropData.y,
-            width: cropData.width,
-            height: cropData.height,
-            label: this.state.label
-          })
-        },
-        () => {
-          console.log(this.state.crop_image[0].imgSrc);
-        }
-      );
+      this.setState({
+        crop_image: this.state.crop_image.concat({
+          id: this.state.__nextkey,
+          x: cropData.x,
+          y: cropData.y,
+          width: cropData.width,
+          height: cropData.height,
+          label: this.state.label
+        }),
+        __nextkey: this.state.__nextkey + 1,
+        label: ""
+      });
+      //console.log(this.state.crop_image[0].imgSrc);
     }
   };
 
@@ -163,6 +137,11 @@ class Body extends Component {
       this.handleOnCropComplete();
     }
   };
+
+  handleOnCropChange = id => {};
+
+  handleOnCropRemove = id => {};
+
   render() {
     const workStyle = {
       borderTop: "3px solid lightgrey"
@@ -220,8 +199,10 @@ class Body extends Component {
           </form>
         </div>
         <CropInfoList
-          orig_image={this.state.orig_image}
-          data={this.state.crop_image}
+          crops={this.state.crop_image}
+          image={this.state.imageRef}
+          onChange={this.handleOnCropChange}
+          onRemove={this.handleOnCropRemove}
         />
       </div>
     );

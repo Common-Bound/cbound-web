@@ -1,26 +1,24 @@
 import React, { Component } from "react";
+import CropItem from "./CropItem";
 
-/**
- * The example data is structured as follows:
- *
- * import image from 'path/to/image.jpg';
- * [etc...]
- *
- * const tileData = [
- *   {
- *     img: image,
- *     title: 'Image',
- *     author: 'author',
- *     cols: 2,
- *   },
- *   {
- *     [etc...]
- *   },
- * ];
- */
 class CropInfoList extends Component {
+  shouldComponentUpdate(nextProps, nextState) {
+    return this.props.crops !== nextProps.crops;
+  }
+
   render() {
-    return <div />;
+    const { crops, image, onChange, onRemove } = this.props;
+
+    const cropList = crops.map(crop => (
+      <CropItem
+        image={image}
+        crop={crop}
+        onRemove={onRemove}
+        onChange={onChange}
+      />
+    ));
+
+    return <div>{cropList}</div>;
   }
 }
 

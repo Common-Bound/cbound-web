@@ -30,7 +30,6 @@ class App extends React.Component {
           <Route path="/auth/signin" component={SignIn} />
           <Route path="/auth/signout" component={SignOut} />
         </Router>
-        <TestForm />
       </div>
     );
   }
