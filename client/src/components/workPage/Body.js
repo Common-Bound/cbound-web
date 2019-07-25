@@ -24,20 +24,34 @@ class Body extends Component {
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify(bodyData)
+      body: bodyData
     })
       .then(function(res) {
         return res.json();
       })
       .then(function(data) {
         console.log("Data received");
-	console.log(data);
+        switch (sendTo) {
+          case "/work":
+            this.putReceivedDataToCropImage(data);
+            break;
+          case "/work/complete":
+            console.log("complete");
+            break;
+          default:
+            break;
+        }
+        console.log(data);
       })
       .catch(function(ex) {
         console.log("error occured");
-	console.log(ex);
+        console.log(ex);
       });
   };
+
+  putReceivedDataToCropImage(data) {
+    this.setState({ crop_image: data.meta.crop_image });
+  }
 
   getBase64(file) {
     return new Promise((resolve, reject) => {
@@ -50,12 +64,18 @@ class Body extends Component {
 
   onFileSelected = async e => {
     // 파일 보내주면 됨
-    await this.getBase64(e.target.files[0]).then(data =>
+    /*await this.getBase64(e.target.files[0]).then(data =>
       this.setState({
         orig_image: data
       })
-    );
-    this.sendData({ orig_image: this.state.orig_image }, "/task");
+    );*/
+
+    this.setState({
+      orig_image: e.target.files[0]
+    });
+    const bodyData = new FormData();
+    bodyData.append("imgFile", this.state.orig_image);
+    this.sendData(bodyData, "/task");
     console.log(this.state.orig_image);
   };
 
@@ -65,28 +85,63 @@ class Body extends Component {
     });
   };
 
+  getCroppedImg(image, crop, fileName) {
+    const canvas = document.createElement("canvas");
+    const scaleX = image.naturalWidth / image.width;
+    const scaleY = image.naturalHeight / image.height;
+    canvas.width = crop.width;
+    canvas.height = crop.height;
+    const ctx = canvas.getContext("2d");
+
+    ctx.drawImage(
+      image,
+      crop.x * scaleX,
+      crop.y * scaleY,
+      crop.width * scaleX,
+      crop.height * scaleY,
+      0,
+      0,
+      crop.width,
+      crop.height
+    );
+
+    // As Base64 string
+    // ;
+
+    // As a blobreturn new Promise(resolve => {
+    return new Promise(resolve => {
+      resolve(canvas.toDataURL());
+    });
+  }
+
   handleImageLoaded = image => {
-    console.log(image);
+    this.imageRef = image;
   };
 
   handleOnCropChange = crop => {
     this.setState({ crop: crop });
   };
 
-  handleOnCropComplete = e => {
+  handleOnCropComplete = async e => {
     const cropData = this.state.crop;
-    console.log(cropData);
+    const image = new Image();
+    image.src = this.state.orig_image;
     if (this.state.orig_image && this.state.label) {
-      this.setState({
-        crop_image: this.state.crop_image.concat({
-          x: cropData.x,
-          y: cropData.y,
-          width: cropData.width,
-          height: cropData.height,
-          label: this.state.label
-        }),
-        label: ""
-      });
+      this.setState(
+        {
+          crop_image: this.state.crop_image.concat({
+            imgSrc: await this.getCroppedImg(this.imageRef, this.state.crop),
+            x: cropData.x,
+            y: cropData.y,
+            width: cropData.width,
+            height: cropData.height,
+            label: this.state.label
+          })
+        },
+        () => {
+          console.log(this.state.crop_image[0].imgSrc);
+        }
+      );
     }
   };
 
@@ -164,7 +219,10 @@ class Body extends Component {
             </div>
           </form>
         </div>
-        <CropInfoList data={this.state.crop_image} />
+        <CropInfoList
+          orig_image={this.state.orig_image}
+          data={this.state.crop_image}
+        />
       </div>
     );
   }

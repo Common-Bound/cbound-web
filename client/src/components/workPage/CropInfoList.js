@@ -1,15 +1,26 @@
 import React, { Component } from "react";
 
+/**
+ * The example data is structured as follows:
+ *
+ * import image from 'path/to/image.jpg';
+ * [etc...]
+ *
+ * const tileData = [
+ *   {
+ *     img: image,
+ *     title: 'Image',
+ *     author: 'author',
+ *     cols: 2,
+ *   },
+ *   {
+ *     [etc...]
+ *   },
+ * ];
+ */
 class CropInfoList extends Component {
-  static defaultProps = {
-    data: []
-  };
-
   render() {
-    const { data } = this.props;
-    //const list = data.map(info => <PhoneInfo key={info.id} info={info} />);
-
-    return null;
+    return <div />;
   }
 }
 
