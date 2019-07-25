@@ -11,10 +11,11 @@ class CropInfoList extends Component {
 
     const cropList = crops.map(crop => (
       <CropItem
+        key={crop.id}
         image={image}
         crop={crop}
-        onRemove={onRemove}
         onChange={onChange}
+        onRemove={onRemove}
       />
     ));
 

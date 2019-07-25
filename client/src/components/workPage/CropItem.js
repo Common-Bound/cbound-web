@@ -28,22 +28,21 @@ class CropItem extends Component {
     });
   }
   handleRemove = e => {
-    // e.preventDefault();
+    e.stopPropagation();
     this.props.onRemove(this.props.crop.id);
   };
 
   async componentDidMount() {
-    const { image, crop, onRemove, onChange } = this.props;
+    const { image, crop } = this.props;
 
     await this.setState({ imgSrc: await this.getCroppedImg(image, crop) });
   }
 
   render() {
-    console.log("1");
     return (
       <div>
         <img src={this.state.imgSrc} alt="prop" />
-        {this.props.crop.label}
+        {this.props.crop.label} {this.props.crop.id}
         <input type="button" value="삭제" onClick={this.handleRemove} />
       </div>
     );

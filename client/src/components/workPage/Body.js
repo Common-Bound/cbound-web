@@ -105,14 +105,13 @@ class Body extends Component {
     if (this.state.orig_image && this.state.label) {
       this.setState({
         crop_image: this.state.crop_image.concat({
-          id: this.state.__nextkey,
+          id: this.state.__nextkey++,
           x: cropData.x,
           y: cropData.y,
           width: cropData.width,
           height: cropData.height,
           label: this.state.label
         }),
-        __nextkey: this.state.__nextkey + 1,
         label: ""
       });
       //console.log(this.state.crop_image[0].imgSrc);
@@ -138,9 +137,17 @@ class Body extends Component {
     }
   };
 
-  handleOnCropChange = id => {};
+  handleOnCropModify = id => {
+    console.log(id);
+  };
 
-  handleOnCropRemove = id => {};
+  handleOnCropRemove = id => {
+    console.log(id);
+    const { crop_image } = this.state;
+    this.setState({
+      crop_image: crop_image.filter(crop => crop.id !== id)
+    });
+  };
 
   render() {
     const workStyle = {
@@ -181,7 +188,7 @@ class Body extends Component {
                   className="btn btn-outline-secondary"
                   type="button"
                   onClick={this.handleOnCropComplete}
-                  id="button-addon2"
+                  id="store"
                 >
                   저장
                 </button>
@@ -201,7 +208,7 @@ class Body extends Component {
         <CropInfoList
           crops={this.state.crop_image}
           image={this.state.imageRef}
-          onChange={this.handleOnCropChange}
+          onChange={this.handleOnCropModify}
           onRemove={this.handleOnCropRemove}
         />
       </div>
