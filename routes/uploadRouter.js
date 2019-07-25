@@ -6,8 +6,8 @@ const multerS3 = require("multer-s3");
 const AWS = require("aws-sdk");
 
 // AWS config 파일 불러오기
-AWS.config.loadFromPath(__dirname + "/../config/awsConfig.json");
-let s3 = new AWS.S3();
+/*AWS.config.loadFromPath(__dirname + "/../config/awsConfig.json");
+let s3 = new AWS.S3();*/
 
 // 서버의 메모리에 올리는 모듈
 const upload_mem = multer({
@@ -15,7 +15,7 @@ const upload_mem = multer({
 });
 
 // S3에 올리는 모듈
-const upload_s3 = multer({
+/*const upload_s3 = multer({
   storage: multerS3({
     s3: s3,
     bucket: "task-data-bucket",
@@ -27,7 +27,7 @@ const upload_s3 = multer({
     },
     acl: "public-read-write"
   })
-});
+});*/
 
 const upload = multer({
   //dest: "upload/"
@@ -35,7 +35,7 @@ const upload = multer({
 });
 
 // path: ~/upload
-router.post("/", upload_s3.single("imgFile"), (req, res, next) => {
+router.post("/", /*upload_s3.single("imgFile"),*/ (req, res, next) => {
   console.log("upload 라우터 도착");
   console.log(req.body);
 
