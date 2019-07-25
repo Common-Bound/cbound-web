@@ -7,6 +7,7 @@ import SignIn from "./components/auth/SignIn";
 import SignOut from "./components/auth/SignOut";
 import WorkPage from "./components/workPage/WorkPage";
 import ProjectsPage from "./components/projectsPage/ProjectsPage";
+import TestForm from "./TestForm";
 
 function Main() {
   return <h1>Welcome to DALA!</h1>;
@@ -29,6 +30,7 @@ class App extends React.Component {
           <Route path="/auth/signin" component={SignIn} />
           <Route path="/auth/signout" component={SignOut} />
         </Router>
+        <TestForm />
       </div>
     );
   }

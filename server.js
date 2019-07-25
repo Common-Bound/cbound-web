@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const morgan = require("morgan");
 const passport = require("passport");
 const session = require("express-session");
+
 const PORT = process.env.PORT || 4000;
 
 const app = express();
@@ -13,6 +14,7 @@ const authRouter = require("./routes/authRouter");
 const mypageRouter = require("./routes/mypageRouter");
 const projectsRouter = require("./routes/projectsRouter");
 const taskRouter = require("./routes/taskRouter");
+const uploadRouter = require("./routes/uploadRouter");
 
 /* 외부 라이브러리 미들웨어 사용 */
 app.use("/public", express.static(__dirname + "/client/public"));
@@ -33,6 +35,7 @@ app.use("/auth", authRouter);
 app.use("/mypage", mypageRouter);
 app.use("/projects", projectsRouter);
 app.use("/task", taskRouter);
+app.use("/upload", uploadRouter);
 
 /* 라우트 */
 app.get("/hello", (req, res, next) => {
