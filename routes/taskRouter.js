@@ -3,22 +3,28 @@ const router = express.Router();
 const db = require("../db/index");
 const uuid = require("uuid/v4");
 const axios = require("axios");
+const multer = require("multer");
+const memory = multer.memoryStorage();
+const upload = multer({
+  storage: memory
+});
 
 // path: ~/task
-router.post("/", (req, res, next) => {
+router.post("/", upload.single("imgFile"), (req, res, next) => {
   if (!req.user) {
     return res.status(401).json({ result: false });
   }
 
-  //const imageSrc = req.body.Src;
-  // AI 서버로 base64 형태로 인코딩된 파일 전송
-  const body = req.body;
+  if (!req.file) {
+    return res.status(400).json({ error: "파일을 전달받지 못 했습니다" });
+  }
+
+  const file = req.file;
+  console.log(file);
   const id = uuid();
-  console.log(body);
-  const imageSrc = req.body["orig_image"];
   const url =
     "http://ec2-13-209-99-40.ap-northeast-2.compute.amazonaws.com:8080/ocr/api/";
-  axios
+  /*axios
     .post(url, {
       id: id,
       method: "post",
@@ -32,7 +38,8 @@ router.post("/", (req, res, next) => {
     .catch(err => {
       console.log(err);
       return res.json(500).json({ error: err });
-    });
+    });*/
+  return res.json({ result: file });
 });
 
 router.post("/complete", (req, res, next) => {

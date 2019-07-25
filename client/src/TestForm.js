@@ -18,7 +18,9 @@ class TestForm extends Component {
   handleClick = e => {
     e.preventDefault();
     const data = new FormData();
+    const obj = { foo: "bar" };
     data.append("imgFile", this.state.selectedFile);
+    data.append("json", JSON.stringify(obj));
 
     const url = "/upload";
     fetch(url, {

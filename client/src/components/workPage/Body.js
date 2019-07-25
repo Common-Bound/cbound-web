@@ -14,6 +14,9 @@ class Body extends Component {
       label: ""
     };
     this.handleSendAll = this.handleSendAll.bind(this);
+    this.putReceivedDataToCropImage = this.putReceivedDataToCropImage.bind(
+      this
+    );
   }
 
   sendData = (bodyData, sendTo) => {
@@ -21,9 +24,6 @@ class Body extends Component {
 
     fetch(sendTo, {
       method: "post",
-      headers: {
-        "Content-Type": "application/json"
-      },
       body: bodyData
     })
       .then(function(res) {
@@ -32,10 +32,10 @@ class Body extends Component {
       .then(function(data) {
         console.log("Data received");
         switch (sendTo) {
-          case "/work":
+          case "/task":
             this.putReceivedDataToCropImage(data);
             break;
-          case "/work/complete":
+          case "/task/complete":
             console.log("complete");
             break;
           default:
