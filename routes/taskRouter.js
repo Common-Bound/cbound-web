@@ -9,8 +9,8 @@ const AWS = require("aws-sdk");
 const memory = multer.memoryStorage();
 
 // AWS config 파일 불러오기
-/*AWS.config.loadFromPath(__dirname + "/../config/awsConfig.json");
-let s3 = new AWS.S3();*/;
+AWS.config.loadFromPath(__dirname + "/../config/awsConfig.json");
+let s3 = new AWS.S3();
 
 // 서버의 메모리에 올리는 모듈
 const upload_mem = multer({
@@ -18,7 +18,7 @@ const upload_mem = multer({
 });
 
 // S3에 올리는 모듈
-/*const upload_s3 = multer({
+const upload_s3 = multer({
   storage: multerS3({
     s3: s3,
     bucket: "task-data-bucket",
@@ -30,17 +30,17 @@ const upload_mem = multer({
     },
     acl: "public-read-write"
   })
-});*/
+});
 
 // path: ~/task
 // 사용자 로그인 여부 검사
-const isAuthenticated = (req, res, next) => {
+/*const isAuthenticated = (req, res, next) => {
   if (!req.user) {
     return res.status(401).json({ result: false });
   } else next();
 };
 
-router.use(isAuthenticated);
+router.use(isAuthenticated);*/
 
 // 파일 최초 업로드 요청 핸들링
 router.post("/", upload_mem.single("imgFile"), (req, res, next) => {
@@ -53,7 +53,7 @@ router.post("/", upload_mem.single("imgFile"), (req, res, next) => {
   const id = uuid();
   const url =
     "http://ec2-13-209-99-40.ap-northeast-2.compute.amazonaws.com:8080/ocr/test1/";
-  axios
+  /*axios
     .post(url, {
       id: id,
       method: "post",
@@ -67,11 +67,11 @@ router.post("/", upload_mem.single("imgFile"), (req, res, next) => {
     .catch(err => {
       console.log(err);
       return res.json(500).json({ error: err });
-    });
+    });*/
 });
 
 // 작업을 최종 제출하는 요청 핸들링
-router.post("/complete", /*upload_s3.single("imgFile"),*/ (req, res, next) => {
+router.post("/complete", upload_s3.single("imgFile"), (req, res, next) => {
   const user_id = req.user.id;
   const body = req.body;
   const id = uuid();
