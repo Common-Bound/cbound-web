@@ -3,6 +3,7 @@ import ReactCrop from "react-image-crop";
 import "react-image-crop/dist/ReactCrop.css";
 import "./Body.css";
 import CropInfoList from "./CropInfoList.js";
+import { array } from "prop-types";
 
 class Body extends Component {
   constructor(props) {
@@ -13,7 +14,9 @@ class Body extends Component {
       crop_image: [],
       crop: {},
       label: "",
-      imageRef: ""
+      imageRef: "",
+      changeMode: false,
+      preId: ""
     };
     this.handleSendAll = this.handleSendAll.bind(this);
     this.putReceivedDataToCropImage = this.putReceivedDataToCropImage.bind(
@@ -35,7 +38,7 @@ class Body extends Component {
         console.log("Data received");
         switch (sendTo) {
           case "/task":
-            this.putReceivedDataToCropImage(data);
+            this.setState({ crop_image: data.meta.crop_image });
             break;
           case "/task/complete":
             console.log("complete");
@@ -103,18 +106,37 @@ class Body extends Component {
     const image = new Image();
     image.src = this.state.orig_image;
     if (this.state.orig_image && this.state.label) {
-      this.setState({
-        crop_image: this.state.crop_image.concat({
-          id: this.state.__nextkey++,
-          x: cropData.x,
-          y: cropData.y,
-          width: cropData.width,
-          height: cropData.height,
-          label: this.state.label
-        }),
-        label: ""
-      });
-      //console.log(this.state.crop_image[0].imgSrc);
+      if (this.state.changeMode) {
+        this.setState({
+          crop_image: this.state.crop_image.map(crop => {
+            if (crop.id === this.state.preId) {
+              return {
+                id: this.state.preId,
+                x: cropData.x,
+                y: cropData.y,
+                width: cropData.width,
+                height: cropData.height,
+                label: this.state.label
+              };
+            } else return crop;
+          }),
+          label: "",
+          changeMode: false
+        });
+      } else {
+        this.setState({
+          crop_image: this.state.crop_image.concat({
+            id: this.state.__nextkey++,
+            x: cropData.x,
+            y: cropData.y,
+            width: cropData.width,
+            height: cropData.height,
+            label: this.state.label
+          }),
+          label: ""
+        });
+        //console.log(this.state.crop_image[0].imgSrc);
+      }
     }
   };
 
@@ -138,7 +160,22 @@ class Body extends Component {
   };
 
   handleOnCropModify = id => {
-    console.log(id);
+    const preCrop = this.state.crop_image.find(crop => {
+      return crop.id === id;
+    });
+    this.setState({
+      crop: {
+        x: preCrop.x,
+        y: preCrop.y,
+        width: preCrop.width,
+        height: preCrop.height,
+        label: preCrop.label,
+        unit: "px"
+      },
+      label: preCrop.label,
+      changeMode: true,
+      preId: id
+    });
   };
 
   handleOnCropRemove = id => {
