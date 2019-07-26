@@ -32,31 +32,41 @@ class Body extends Component {
       method: "post",
       body: bodyData
     })
-      .then(function (res) {
+      .then(function(res) {
         return res.json();
       })
       .then(data => {
         console.log("Data received");
         console.log(data);
-        switch (sendTo) {
-          case "/task":
-            this.setState({ crop_image: data.meta.crop_image });
-            break;
-          case "/task/complete":
+        if (sendTo === "/task") {
+            this.putReceivedDataToCropImage();
+        }
+          else {"/task/complete":
             console.log("complete");
-            break;
-          default:
-            break;
         }
       })
-      .catch(function (ex) {
+      .catch(function(ex) {
         console.log("error occured");
         console.log(ex);
       });
   };
 
-  putReceivedDataToCropImage(data) {
-    this.setState({ crop_image: data.meta.crop_image });
+  putReceivedDataToCropImage(crops) {
+    console.log(crops);
+    var counter = 0;
+    this.setState({
+      crop_image: crops.map(crop => {
+        return {
+          id: counter++,
+          x: crop.x,
+          y: crop.y,
+          width: crop.width,
+          height: crop.height,
+          label: crop.label
+        };
+      }),
+      __nextkey: counter
+    });
   }
 
   getBase64(file) {
@@ -70,19 +80,15 @@ class Body extends Component {
 
   onFileSelected = async e => {
     // 파일 보내주면 됨
-    const bodyData = new FormData();
-    console.log(e.target.files[0]);
-    bodyData.append("orig_image", e.target.files[0]);
-    this.setState({
-      orig_image_file: e.target.files[0]
-    })
-    this.sendData(bodyData, "/task");
-
     await this.getBase64(e.target.files[0]).then(data =>
       this.setState({
         orig_image: data
       })
     );
+    bodyData = JSON.stringify({ orig_image: this.state.orig_image })
+
+    this.sendData(bodyData, "/task");
+
 
     console.log(this.state.orig_image);
   };
@@ -147,12 +153,9 @@ class Body extends Component {
 
   handleSendAll() {
     const bodyData = new FormData();
-    bodyData.append('orig_image', this.state.orig_image_file);
-    bodyData.append('data', this.state.crop_image);
-    this.sendData(
-      bodyData,
-      "/task/complete"
-    );
+    bodyData.append("orig_image", this.state.orig_image_file);
+    bodyData.append("data", this.state.crop_image);
+    this.sendData(bodyData, "/task/complete");
   }
 
   handleKeyPress = e => {
