@@ -2,7 +2,8 @@ import React, { Component } from "react";
 
 class CropItem extends Component {
   state = {
-    imgSrc: ""
+    imgSrc: "",
+    editing: false
   };
   getCroppedImg(image, crop) {
     const canvas = document.createElement("canvas");
@@ -33,13 +34,25 @@ class CropItem extends Component {
   };
   handleChange = e => {
     e.stopPropagation();
+    this.setState({
+      editing: true
+    });
     this.props.onChange(this.props.crop.id);
   };
 
   async componentDidMount() {
     const { image, crop } = this.props;
-
     await this.setState({ imgSrc: await this.getCroppedImg(image, crop) });
+  }
+
+  async componentDidUpdate(prevProps) {
+    if (this.state.editing && prevProps !== this.props) {
+      const { image, crop } = this.props;
+      await this.setState({
+        imgSrc: await this.getCroppedImg(image, crop),
+        editing: false
+      });
+    }
   }
 
   render() {
