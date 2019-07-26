@@ -9,6 +9,7 @@ class CropInfoList extends Component {
   render() {
     const { crops, image, onChange, onRemove } = this.props;
 
+    console.log("a", crops);
     const cropList = crops.map(crop => (
       <CropItem
         key={crop.id}

@@ -108,7 +108,7 @@ class Body extends Component {
     if (this.state.orig_image && this.state.label) {
       if (this.state.changeMode) {
         this.setState({
-          crop_image: this.state.crop_image.map(crop => {
+          crop_image: await this.state.crop_image.map(crop => {
             if (crop.id === this.state.preId) {
               return {
                 id: this.state.preId,
