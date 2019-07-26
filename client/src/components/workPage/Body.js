@@ -20,9 +20,6 @@ class Body extends Component {
       preId: ""
     };
     this.handleSendAll = this.handleSendAll.bind(this);
-    this.putReceivedDataToCropImage = this.putReceivedDataToCropImage.bind(
-      this
-    );
   }
 
   sendData = (bodyData, sendTo) => {
@@ -32,43 +29,38 @@ class Body extends Component {
       method: "post",
       body: bodyData
     })
-      .then(function(res) {
+      .then(function (res) {
         return res.json();
       })
       .then(data => {
         console.log("Data received");
         console.log(data);
         if (sendTo === "/task") {
-          this.putReceivedDataToCropImage();
+          var counter = 0;
+          this.setState({
+            crop_image: data.data.meta['crop_image'].map(crop => {
+              return {
+                id: counter++,
+                x: crop.x,
+                y: crop.y,
+                width: crop.width,
+                height: crop.height,
+                label: crop.label
+              };
+            }),
+            __nextkey: counter
+          });
         } else {
           console.log("complete");
         }
       })
-      .catch(function(ex) {
+      .catch(function (ex) {
         console.log("error occured");
         console.log(ex);
       });
   };
 
-  putReceivedDataToCropImage(crops) {
-    console.log(crops);
-    var counter = 0;
-    this.setState({
-      crop_image: crops.map(crop => {
-        return {
-          id: counter++,
-          x: crop.x,
-          y: crop.y,
-          width: crop.width,
-          height: crop.height,
-          label: crop.label
-        };
-      }),
-      __nextkey: counter
-    });
-  }
-
-  getBase64(file) {
+  async getBase64(file) {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.readAsDataURL(file);
@@ -79,17 +71,20 @@ class Body extends Component {
 
   onFileSelected = async e => {
     // 파일 보내주면 됨
-    var bodyData;
-    this.setState({});
+    this.setState({ orig_image_file: e.target.files[0] });
 
     await this.getBase64(e.target.files[0]).then(data =>
-      this.setState({
-        orig_image: data,
-        orig_image_file: e.target.files[0]
-      })
+      new Promise((resolve) => {
+        resolve(this.setState({
+          orig_image: data
+        }));
+      }
+      )
     );
 
-    bodyData = JSON.stringify({ orig_image: this.state.orig_image });
+    const bodyData = new FormData();
+    bodyData.append('orig_image', this.state.orig_image);
+
     this.sendData(bodyData, "/task");
   };
 

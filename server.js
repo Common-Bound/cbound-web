@@ -21,11 +21,11 @@ app.use("/public", express.static(__dirname + "/client/public"));
 app.use(morgan("dev"));
 app.use(
   bodyParser.json({
-    limit: "10mb",
+    limit: "50mb",
     extended: true
   })
 );
-app.use(bodyParser.urlencoded({ limit: "10mb", extended: false }));
+app.use(bodyParser.urlencoded({ limit: "50mb", extended: false }));
 app.use(session({ secret: "myKey" })); // 세션 활성화
 // passport.js 모듈 사용
 app.use(passport.initialize()); // passport 구동
