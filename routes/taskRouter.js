@@ -44,25 +44,27 @@ router.post("/", upload_mem.single("orig_image"), fileLogger, (req, res, next) =
   }
 
   const file = req.file;
+  const meta = req.body.meta;
+  console.log(meta);
   const id = uuid();
   const url =
     "http://ec2-13-209-99-40.ap-northeast-2.compute.amazonaws.com:8080/ocr/api/";
   /*axios
-    .post(url, {
-      id: id,
-      method: "post",
-      orig_image: file,
-      meta: meta
-    })
-    .then(res => res.data)
-    .then(data => {
-      console.log(data);
-      return res.json({ data: data });
-    })
-    .catch(err => {
-      console.log(err);
-      return res.json(500).json({ error: err });
-    });*/
+  .post(url, {
+    id: id,
+    method: "post",
+    orig_image: file,
+    meta: meta
+  })
+  .then(res => res.data)
+  .then(data => {
+    console.log(data);
+    return res.json({ data: data });
+  })
+  .catch(err => {
+    console.log(err);
+    return res.json(500).json({ error: err });
+  });*/
 });
 
 module.exports = router;
