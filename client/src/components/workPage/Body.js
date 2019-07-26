@@ -11,6 +11,7 @@ class Body extends Component {
     this.state = {
       __nextkey: 0,
       orig_image: "",
+      orig_image_file: null,
       crop_image: [],
       crop: {},
       label: "",
@@ -31,11 +32,12 @@ class Body extends Component {
       method: "post",
       body: bodyData
     })
-      .then(function(res) {
+      .then(function (res) {
         return res.json();
       })
-      .then(function(data) {
+      .then(data => {
         console.log("Data received");
+        console.log(data);
         switch (sendTo) {
           case "/task":
             this.setState({ crop_image: data.meta.crop_image });
@@ -46,9 +48,8 @@ class Body extends Component {
           default:
             break;
         }
-        console.log(data);
       })
-      .catch(function(ex) {
+      .catch(function (ex) {
         console.log("error occured");
         console.log(ex);
       });
@@ -70,7 +71,11 @@ class Body extends Component {
   onFileSelected = async e => {
     // 파일 보내주면 됨
     const bodyData = new FormData();
-    bodyData.append("imgFile", e.target.files[0]);
+    console.log(e.target.files[0]);
+    bodyData.append("orig_image", e.target.files[0]);
+    this.setState({
+      orig_image_file: e.target.files[0]
+    })
     this.sendData(bodyData, "/task");
 
     await this.getBase64(e.target.files[0]).then(data =>
@@ -141,13 +146,11 @@ class Body extends Component {
   };
 
   handleSendAll() {
+    const bodyData = new FormData();
+    bodyData.append('orig_image', this.state.orig_image_file);
+    bodyData.append('data', this.state.crop_image);
     this.sendData(
-      {
-        orig_image: this.state.orig_image,
-        meta: {
-          crop_image: this.state.crop_image
-        }
-      },
+      bodyData,
       "/task/complete"
     );
   }
