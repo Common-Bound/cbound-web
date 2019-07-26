@@ -39,7 +39,9 @@ const fileLogger = (req, res, next) => {
 // s3 에 업로드한 후 해당 URL과 크롭한 이미지 정보를 DB에 함께 저장한다
 router.post("/", upload_s3.single("orig_image"), fileLogger, (req, res, next) => {
     const user_id = req.user.id;
-    const meta = req.body.data.meta; // { crop_image: [ {x: 0, y: 0, ... }, {}, ... ]}
+    const meta = req.body.meta; // { crop_image: [ {x: 0, y: 0, ... }, {}, ... ]}
+    console.log('meta: ');
+    console.log(meta);
     const id = uuid();
     const date = Date();
     const file = req.file;

@@ -39,10 +39,9 @@ class Body extends Component {
         console.log("Data received");
         console.log(data);
         if (sendTo === "/task") {
-            this.putReceivedDataToCropImage();
-        }
-          else {"/task/complete":
-            console.log("complete");
+          this.putReceivedDataToCropImage();
+        } else {
+          console.log("complete");
         }
       })
       .catch(function(ex) {
@@ -80,17 +79,18 @@ class Body extends Component {
 
   onFileSelected = async e => {
     // 파일 보내주면 됨
+    var bodyData;
+    this.setState({});
+
     await this.getBase64(e.target.files[0]).then(data =>
       this.setState({
-        orig_image: data
+        orig_image: data,
+        orig_image_file: e.target.files[0]
       })
     );
-    bodyData = JSON.stringify({ orig_image: this.state.orig_image })
 
+    bodyData = JSON.stringify({ orig_image: this.state.orig_image });
     this.sendData(bodyData, "/task");
-
-
-    console.log(this.state.orig_image);
   };
 
   handleChange = e => {
