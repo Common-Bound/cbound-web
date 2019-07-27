@@ -159,7 +159,7 @@ class Body extends Component {
   handleSendAll() {
     const bodyData = new FormData();
     bodyData.append("orig_image", this.state.orig_image_file);
-    bodyData.append("data", this.state.crop_image);
+    bodyData.append("meta", JSON.stringify({ crop_image: this.state.crop_image }));
     this.sendData(bodyData, "/task/complete");
   }
 
