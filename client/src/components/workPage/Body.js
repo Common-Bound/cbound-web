@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import ReactCrop from "react-image-crop"; // Cropper Import
-import CropInfoList from "./CropInfoList.js";
+import CropInfoList from "./CropInfoList.js"; // 크롭 리스트를 출력함
+import PrintTotalCrop from "./PrintTotalCrop"; // 크롭 리스트를 한 캔버스에 그려줌
 
 import "react-image-crop/dist/ReactCrop.css";
 import "./Body.css";
@@ -19,10 +20,13 @@ class Body extends Component {
       label: "", // 작업한 영역에 대해 레이블링 할 때 사용되는 입력창의 변경 사항에 대해 저장함
       imageRef: "", // 크롭 컨테이너에 이미지가 로드 되었을 때 이미지 값을 저장함
       changeMode: false, // 현재 크롭된 이미지를 추가해야 할지 수정해야 할지 결정하는 Flag
-      preId: "" // ChangeMode 가 true 라면 변경할 이미지의 id
+      preId: "", // ChangeMode 가 true 라면 변경할 이미지의 id
+      showEdit: true // 한 개의 크롭 영역을 변경할 수 있는 이미지를 줄지 크롭된 영역 리스트를 이미지에 그려줄 지
     };
 
     this.handleSendAll = this.handleSendAll.bind(this);
+    this.handleOnCropModify = this.handleOnCropModify.bind(this);
+    this.handleClickImage = this.handleClickImage.bind(this);
   }
 
   // 서버(sendTo)로 body에 bodyData를 넣어서 Fetch 할 때 호출됨
@@ -126,13 +130,14 @@ class Body extends Component {
 
   // 레이블링과 크롭을 끝냈을 때 호출
   handleOnCropComplete = async e => {
+    console.log(this.state.crop);
     const cropData = this.state.crop;
     const image = new Image();
 
     image.src = this.state.orig_image;
 
     // state의 changeMode 를 보고 크롭된 영역을 추가/수정함
-    if (this.state.orig_image && this.state.label) {
+    if (this.state.orig_image && this.state.label && this.state.showEdit) {
       if (this.state.changeMode) {
         // 수정
         this.setState({
@@ -210,16 +215,47 @@ class Body extends Component {
       changeMode: true,
       preId: id
     });
+    console.log("aa");
   };
 
   // crop.id 가 id인 크롭 데이터를 삭제함
   handleOnCropRemove = id => {
-    console.log(id);
+    if (this.state.showEdit) {
+      console.log(id);
 
-    const { crop_image } = this.state;
+      const { crop_image } = this.state;
 
+      this.setState({
+        crop_image: crop_image.filter(crop => crop.id !== id)
+      });
+    }
+  };
+
+  // 이미지를 눌렀을 때 좌표를 불러옴
+  handleClickImage = e => {
+    const x = e.nativeEvent.offsetX;
+    const y = e.nativeEvent.offsetY;
+    const crops = this.state.crop_image;
+    var targetId = "nothing";
+    crops.every(function(crop) {
+      if (
+        x > crop.x &&
+        x < crop.x + crop.width &&
+        y > crop.y &&
+        y < crop.y + crop.height
+      ) {
+        targetId = crop.id;
+        return false;
+      } else return true;
+    });
+
+    console.log(targetId);
+
+    if (targetId !== "nothing") {
+      this.handleOnCropModify(targetId);
+    }
     this.setState({
-      crop_image: crop_image.filter(crop => crop.id !== id)
+      showEdit: true
     });
   };
 
@@ -232,12 +268,25 @@ class Body extends Component {
       <div>
         <hr style={workStyle} />
         <div>
-          <ReactCrop
-            src={this.state.orig_image}
-            crop={this.state.crop}
-            onChange={this.handleOnCropChange}
-            onImageLoaded={this.handleImageLoaded}
-          />
+          {this.state.orig_image ? (
+            <div>
+              <ReactCrop
+                src={this.state.orig_image}
+                crop={this.state.crop}
+                onChange={this.handleOnCropChange}
+                onImageLoaded={this.handleImageLoaded}
+                style={{ display: this.state.showEdit ? "" : "none" }}
+              />
+              {this.state.imageRef ? (
+                <PrintTotalCrop
+                  crops={this.state.crop_image}
+                  image={this.state.imageRef}
+                  onClick={this.handleClickImage.bind(this)}
+                  showEdit={this.state.showEdit}
+                />
+              ) : null}
+            </div>
+          ) : null}
         </div>
         <br />
 
@@ -246,6 +295,16 @@ class Body extends Component {
             <div className="filebox">
               <label htmlFor="ex_file">업로드</label>
               <input type="file" id="ex_file" onChange={this.onFileSelected} />
+              <button
+                type="button"
+                onClick={() => {
+                  this.setState({
+                    showEdit: false
+                  });
+                }}
+              >
+                전체 보기
+              </button>
             </div>
             <div className="input-group mb-3">
               <input

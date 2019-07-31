@@ -2,8 +2,7 @@ import React, { Component } from "react";
 
 class CropItem extends Component {
   state = {
-    imgSrc: "", // 지금 Crop 된 영역이 Base64 인코딩된 값
-    editing: false // 이 크롭 영역이 변경 대상인지 flag
+    imgSrc: "" // 지금 Crop 된 영역이 Base64 인코딩된 값
   };
 
   // 캔버스에 크롭된 영역을 그려주고 캔버스를 Base64 인코딩함
@@ -60,12 +59,12 @@ class CropItem extends Component {
 
   // 크롭 변경 대상이고 새로 변경할 영역이 들어왔다면 imgSrc 를 바꿔줌
   async componentDidUpdate(prevProps) {
-    if (this.state.editing && prevProps !== this.props) {
+    if (prevProps !== this.props) {
       const { image, crop } = this.props;
 
+      console.log(crop);
       await this.setState({
-        imgSrc: await this.getCroppedImg(image, crop),
-        editing: false
+        imgSrc: await this.getCroppedImg(image, crop)
       });
     }
   }

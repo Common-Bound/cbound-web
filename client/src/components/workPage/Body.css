@@ -1,6 +1,6 @@
 .filebox label {
   display: inline-block;
-  padding: .5em .75em;
+  padding: 0.5em 0.75em;
   color: #fff;
   font-size: inherit;
   line-height: normal;
@@ -8,7 +8,7 @@
   background-color: #5cb85c;
   cursor: pointer;
   border: 1px solid #4cae4c;
-  border-radius: .25em;
+  border-radius: 0.25em;
   -webkit-transition: background-color 0.2s;
   transition: background-color 0.2s;
 }
