@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import Project from '../card/Project';
+import Project_orig from '../card/Project_orig';
 
 class AvailableProjects extends Component {
   constructor(props) {
@@ -17,14 +17,18 @@ class AvailableProjects extends Component {
    *      않는다면 false 를 반환한다
    */
   async componentDidMount() {
+    await this.fetchProject();
+  }
+
+  async fetchProject() {
     const url = this.props.match.path;
     const result = await fetch(url)
       .then(res => res.json())
       .then(data => {
+        console.log(data);
         if (data.message) {
           return alert(data.message);
         }
-        console.log(data);
         this.setState({ session: data.result, loading: false });
         return new Promise(resolve => {
           resolve(data.result);
@@ -38,7 +42,7 @@ class AvailableProjects extends Component {
     if (result) {
       const my_proj = result.map(el => {
         return (
-          <Project
+          <Project_orig
             key={el.id}
             id={el.id}
             title={el.title}
@@ -58,8 +62,32 @@ class AvailableProjects extends Component {
     }
   }
 
+  /**
+ * @description 랜덤 프로젝트 추가 버튼 클릭시 랜덤한 프로젝트를 생성하고 
+ *              프로젝트 목록을 다시 불러온다
+ */
+  handleClick = e => {
+    const url = this.props.match.path;
+    fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+      .then(res => res.json())
+      .then(data => {
+        console.log(data);
+        this.fetchProject();
+      });
+  };
+
   render() {
-    return <div>{this.state.projects}</div>;
+    return (
+      <div>
+        <ul>{this.state.projects}</ul>
+        <button onClick={this.handleClick.bind(this)}>랜덤 프로젝트 추가</button>
+      </div>
+    );
   }
 }
 

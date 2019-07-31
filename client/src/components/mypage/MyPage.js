@@ -3,25 +3,8 @@ import { Route, Link, Redirect } from "react-router-dom";
 import ProjectsPage from '../projectsPage/ProjectsPage';
 import WorkPage from '../workPage/WorkPage';
 import AvailableProjects from './AvailableProjects';
-import Project from "../card/Project";
 
 class MyPage extends Component {
-
-  handleClick = e => {
-    const url = this.props.match.path;
-    fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      }
-    })
-      .then(res => res.json())
-      .then(data => {
-        console.log(data);
-        this.fetchProject();
-      });
-  };
-
   render() {
     return (
       <div>
@@ -35,7 +18,6 @@ class MyPage extends Component {
         <Route exact path={`${this.props.match.url}`} component={AvailableProjects} />
         <Route path={`${this.props.match.url}/projects`} component={ProjectsPage} />
         <Route path={`${this.props.match.url}/task`} component={WorkPage} />
-        <button onClick={this.handleClick.bind(this)}>랜덤 프로젝트 추가</button>
       </div >
     );
   }
