@@ -12,7 +12,6 @@ const app = express();
 /* 라우터 */
 const authRouter = require("./routes/authRouter");
 const mypageRouter = require("./routes/mypageRouter");
-const projectsRouter = require("./routes/projectsRouter");
 const taskRouter = require("./routes/taskRouter");
 const uploadRouter = require("./routes/uploadRouter");
 
@@ -33,7 +32,6 @@ app.use(passport.session()); // 세션 연결
 /* 사용자 작성 라우터 사용 */
 app.use("/auth", authRouter);
 app.use("/mypage", mypageRouter);
-app.use("/projects", projectsRouter);
 app.use("/task", taskRouter);
 app.use("/upload", uploadRouter);
 

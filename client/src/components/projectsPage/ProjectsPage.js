@@ -1,17 +1,26 @@
 import React, { Component } from "react";
-import Project from "../card/Project";
+import Project_joined from '../card/Project_joined';
 
 class ProjectsPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
       projects: []
-    };
-    this.handleClick = this.handleClick.bind(this);
+    }
   }
 
+  componentDidMount() {
+    this.fetchProject();
+  }
+
+  /**
+   * @description 내가 참여한 프로젝트 목록을 가져온다
+   *
+   * @memberof ProjectsPage
+   */
   async fetchProject() {
     const url = this.props.match.path;
+    console.log(url);
     await fetch(url)
       .then(res => res.json())
       .then(data => {
@@ -21,7 +30,10 @@ class ProjectsPage extends Component {
         if (data.result) {
           console.log(data);
           const new_projects = data.result.map(el => {
-            return <Project key={el.id} id={el.id} title={el.title} />;
+            return <Project_joined key={el.id} id={el.id} title={el.title}
+              simple_description={el.simple_description} detail_description={el.detail_description}
+              due_date={el.due_date} created_at={el.created_at} type={el.type}
+              guideline_url={el.guideline_url} reward={el.reward} />;
           });
           this.setState({
             projects: new_projects
@@ -30,29 +42,9 @@ class ProjectsPage extends Component {
       });
   }
 
-  componentDidMount() {
-    this.fetchProject();
-  }
-
-  handleClick = e => {
-    const url = this.props.match.path;
-    fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      }
-    })
-      .then(res => res.json())
-      .then(data => {
-        console.log(data);
-        this.fetchProject();
-      });
-  };
-
   render() {
     return (
       <div>
-        <button onClick={this.handleClick}>랜덤 프로젝트 추가</button>
         <ul>{this.state.projects}</ul>
       </div>
     );
