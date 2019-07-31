@@ -9,20 +9,6 @@ router.use("/", (req, res, next) => {
   next();
 });
 
-router.get("/", (req, res, next) => {
-  const sql = "select * from project";
-  db.query(sql, [], (err, result) => {
-    if (err) {
-      console.log(err);
-      return res.status(500).send(err);
-    }
-    if (result.rows.length > 0) {
-      return res.json({ result: result.rows });
-    } else {
-      return res.json({ message: "프로젝트가 존재하지 않습니다" });
-    }
-  });
-});
 
 // 프로젝트 생성 요청 핸들링
 router.post("/", (req, res, next) => {
@@ -34,11 +20,17 @@ router.post("/", (req, res, next) => {
     "실내 가구 바운딩"
   ];
   const title_index = Math.floor(Math.random() * 4);
+  const reward = Math.floor(Math.random() * 500);
+  const date = new Date();
 
   // project 테이블에 project 를 추가한다
+  // project 속성
+  // id, title, image, simple_desc, detail_desc,
+  // due_date, created_at, type, guideline_url, reward
   db.query(
-    "insert into project values($1, $2)",
-    [id, titles[title_index]],
+    "insert into project values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)",
+    [id, titles[title_index], null, '간단한 설명', '자세한 설명 입니다',
+      '무기한', date, 'image', null, reward],
     (err, result) => {
       if (err) {
         console.log(err);

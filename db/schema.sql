@@ -42,7 +42,8 @@ CREATE TABLE "project" (
   "due_date" varchar,
   "created_at" varchar,
   "type" Type,
-  "guideline_url" varchar
+  "guideline_url" varchar,
+  "reward" int
 );
 CREATE TABLE "data" (
   "id" varchar PRIMARY KEY,

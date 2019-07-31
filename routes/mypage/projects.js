@@ -3,6 +3,7 @@ const router = express.Router();
 const db = require("../../db/index");
 
 // path: ~/mypage/projects
+// 내가 참여한 프로젝트 목록을 반환한다
 router.get("/", (req, res, next) => {
   if (req.user) {
     const user_id = req.user.id;

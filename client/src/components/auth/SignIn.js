@@ -79,7 +79,7 @@ class SignIn extends Component {
             <button>회원가입</button>
           </Link>
         </p>
-        <div>{result === true ? <Redirect to="/" /> : ""}</div>
+        <div>{result === true ? <Redirect to="/mypage" /> : ""}</div>
       </div>
     );
   }

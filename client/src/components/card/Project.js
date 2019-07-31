@@ -20,7 +20,8 @@ class Project extends Component {
       .then(res => res.json())
       .then(data => {
         if (data.result) {
-          return alert(data.result);
+          alert(data.result);
+
         }
       })
       .catch(err => {
@@ -31,9 +32,11 @@ class Project extends Component {
   render() {
     return (
       <div>
-        <h1>제목: {this.props.title}</h1>
-        <h6>id: {this.props.id}</h6>
-        <button onClick={this.handleClick}>참여하기</button>
+        <h1 onClick={this.handleClick}>제목: {this.props.title}</h1>
+        <h2>{this.props.simple_description}</h2>
+        <h2>보상: {this.props.reward}</h2>
+        <br></br>
+        <h3>{this.props.detail_description}</h3>
       </div>
     );
   }

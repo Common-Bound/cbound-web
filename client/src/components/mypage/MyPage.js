@@ -1,67 +1,43 @@
 import React, { Component } from "react";
-import { Link, Redirect } from "react-router-dom";
+import { Route, Link, Redirect } from "react-router-dom";
+import ProjectsPage from '../projectsPage/ProjectsPage';
+import WorkPage from '../workPage/WorkPage';
+import AvailableProjects from './AvailableProjects';
 import Project from "../card/Project";
 
 class MyPage extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      loading: true,
-      session: "",
-      projects: []
-    };
-  }
 
-  async componentDidMount() {
+  handleClick = e => {
     const url = this.props.match.path;
-    const result = await fetch(url)
+    fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
       .then(res => res.json())
       .then(data => {
         console.log(data);
-        this.setState({ session: data.result, loading: false });
-        return new Promise(resolve => {
-          resolve(data.result);
-        });
-      })
-      .catch(err => {
-        console.log(err);
+        this.fetchProject();
       });
-
-    // 만약 세션이 존재한다면 프로젝트 목록을 불러온다
-    if (result === true) {
-      const url = "/mypage/projects";
-      fetch(url)
-        .then(res => res.json())
-        .then(data => {
-          //console.log(data);
-          const my_proj = data.result.map(el => {
-            return <Project key={el.id} id={el.id} title={el.title} />;
-          });
-          this.setState({
-            projects: my_proj
-          });
-        });
-    }
-  }
+  };
 
   render() {
-    if (this.state.loading) {
-      return <div>로딩 중...</div>;
-    }
-
-    if (this.state.session === true) {
-      return (
-        <div>
-          <h1>마이페이지</h1>
-          <h2>참여한 프로젝트 목록</h2>
-          <ul>{this.state.projects}</ul>
+    return (
+      <div>
+        <h1>마이페이지</h1>
+        <header>
+          <Link to={`${this.props.match.url}`}>참여 가능한 프로젝트 목록</Link>
+          <Link to={`${this.props.match.url}/projects`}>참여한 프로젝트 목록</Link>
+          <Link to={`${this.props.match.url}/task`}>작업 페이지</Link>
           <Link to="/auth/signout">로그아웃</Link>
-        </div>
-      );
-    }
-    if (this.state.session === false) {
-      return <Redirect to="/auth/signin" />;
-    }
+        </header>
+        <Route exact path={`${this.props.match.url}`} component={AvailableProjects} />
+        <Route path={`${this.props.match.url}/projects`} component={ProjectsPage} />
+        <Route path={`${this.props.match.url}/task`} component={WorkPage} />
+        <button onClick={this.handleClick.bind(this)}>랜덤 프로젝트 추가</button>
+      </div >
+    );
   }
 }
 
