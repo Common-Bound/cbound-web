@@ -9,7 +9,6 @@ class CropInfoList extends Component {
   render() {
     const { crops, image, onChange, onRemove } = this.props;
 
-    console.log("a", crops);
     const cropList = crops.map(crop => (
       <CropItem
         key={crop.id}
@@ -20,6 +19,7 @@ class CropInfoList extends Component {
       />
     ));
 
+    // CropItem 요소를 하나씩 화면에 출력해줌
     return <div>{cropList}</div>;
   }
 }
