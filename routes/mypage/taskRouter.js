@@ -6,7 +6,8 @@ const multer = require('multer');
 const memory = multer.memoryStorage();
 
 const upload_mem = multer({
-  storage: memory
+  storage: memory,
+  limits: { fieldSize: 25 * 1024 * 1024 }
 })
 
 const completeRouter = require('./task/complete');

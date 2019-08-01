@@ -28,6 +28,7 @@ class Body extends Component {
     this.handleSendAll = this.handleSendAll.bind(this);
     this.handleOnCropModify = this.handleOnCropModify.bind(this);
     this.handleClickImage = this.handleClickImage.bind(this);
+    this.handleCropMouseUp = this.handleCropMouseUp.bind(this);
   }
 
   // 서버(sendTo)로 body에 bodyData를 넣어서 Fetch 할 때 호출됨
@@ -36,7 +37,7 @@ class Body extends Component {
       method: "post",
       body: bodyData
     })
-      .then(function(res) {
+      .then(function (res) {
         return res.json();
       })
       .then(data => {
@@ -65,7 +66,7 @@ class Body extends Component {
           console.log("complete");
         }
       })
-      .catch(function(ex) {
+      .catch(function (ex) {
         console.log("error occured");
         console.log(ex);
       });
@@ -73,14 +74,16 @@ class Body extends Component {
 
   // 업로드된 이미지를 출력하기 위해 Base64로 바꿀 때 호출됨
   async getBase64(file) {
-    // File 을 Base64로 바꿔줌
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
+    if (file) {
+      // File 을 Base64로 바꿔줌
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
 
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = error => reject(error);
-    });
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+      });
+    }
   }
 
   // 이미지가 업로드 되었을 때 호출됨
@@ -261,7 +264,7 @@ class Body extends Component {
     const y = e.nativeEvent.offsetY;
     const crops = this.state.crop_image;
     var targetId = "nothing";
-    crops.every(function(crop) {
+    crops.every(function (crop) {
       if (
         x > crop.x &&
         x < crop.x + crop.width &&
@@ -286,13 +289,10 @@ class Body extends Component {
   // 크롭이 완료되었을 때 이미지화 시켜 서버로 전송시킨다
   async handleCropMouseUp() {
     if (this.state.useAI) {
-      const bodyData = new FormData();
-      bodyData.append(
-        "crop_image",
-        await this.getCroppedImg(this.state.imageRef, this.state.crop)
-      );
 
-      this.sendData(bodyData, "/mypage/task/complete"); // 서버로 전송( /mypage/task)
+      const bodyData = JSON.stringify({ crop_image: await this.getCroppedImg(this.state.imageRef, this.state.crop) });
+
+      this.sendData(bodyData, "https://cors-anywhere.herokuapp.com/http://ec2-15-164-171-145.ap-northeast-2.compute.amazonaws.com:8080/ocr/crop/"); // 서버로 전송( /mypage/task)
     }
   }
 

@@ -34,7 +34,6 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        <WorkPage />
         <Router>
           <Route path="/" exact component={Main} />
           <Route path="/mypage" component={MyPage} />
