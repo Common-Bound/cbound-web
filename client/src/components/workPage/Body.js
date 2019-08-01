@@ -37,7 +37,7 @@ class Body extends Component {
       method: "post",
       body: bodyData
     })
-      .then(function (res) {
+      .then(function(res) {
         return res.json();
       })
       .then(data => {
@@ -69,7 +69,7 @@ class Body extends Component {
           console.log("complete");
         }
       })
-      .catch(function (ex) {
+      .catch(function(ex) {
         console.log("error occured");
         console.log(ex);
       });
@@ -160,7 +160,12 @@ class Body extends Component {
     image.src = this.state.orig_image;
 
     // state의 changeMode 를 보고 크롭된 영역을 추가/수정함
-    if (this.state.orig_image && this.state.label && this.state.showEdit) {
+    if (
+      this.state.orig_image &&
+      this.state.label &&
+      this.state.showEdit &&
+      this.state.crop
+    ) {
       if (this.state.changeMode) {
         // 수정
         this.setState({
@@ -265,7 +270,7 @@ class Body extends Component {
     const y = e.nativeEvent.offsetY;
     const crops = this.state.crop_image;
     var targetId = "nothing";
-    crops.every(function (crop) {
+    crops.every(function(crop) {
       if (
         x > crop.x &&
         x < crop.x + crop.width &&
@@ -289,11 +294,18 @@ class Body extends Component {
 
   // 크롭이 완료되었을 때 이미지화 시켜 서버로 전송시킨다
   async handleCropMouseUp() {
-    if (this.state.useAI && this.state.crop) {
+    if (this.state.useAI && this.state.crop && this.state.showEdit) {
+      const bodyData = JSON.stringify({
+        crop_image: await this.getCroppedImg(
+          this.state.imageRef,
+          this.state.crop
+        )
+      });
 
-      const bodyData = JSON.stringify({ crop_image: await this.getCroppedImg(this.state.imageRef, this.state.crop) });
-
-      this.sendData(bodyData, "https://cors-anywhere.herokuapp.com/http://ec2-15-164-171-145.ap-northeast-2.compute.amazonaws.com:8080/ocr/crop/"); // 서버로 전송( /mypage/task)
+      this.sendData(
+        bodyData,
+        "https://cors-anywhere.herokuapp.com/http://ec2-15-164-171-145.ap-northeast-2.compute.amazonaws.com:8080/ocr/crop/"
+      ); // 서버로 전송( /mypage/task)
     }
   }
 
