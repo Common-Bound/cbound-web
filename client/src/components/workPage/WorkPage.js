@@ -13,7 +13,7 @@ class WorkPage extends Component {
     return (
       <div style={workContainer}>
         <Header />
-        <Body />
+        <Body project_id={this.props.match.params.project_id} />
       </div>
     );
   }

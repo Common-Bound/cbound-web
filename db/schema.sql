@@ -48,7 +48,7 @@ CREATE TABLE "project" (
 CREATE TABLE "data" (
   "id" varchar PRIMARY KEY,
   "type" Type,
-  "payload" json,
+  "payload" jsonb,
   "created_at" varchar,
   "status" "data_status",
   "creator_id" varchar,

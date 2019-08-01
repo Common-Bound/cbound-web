@@ -45,6 +45,7 @@ router.post("/", upload_s3.single("orig_image"), fileLogger, (req, res, next) =>
     const id = uuid();
     const date = Date();
     const file = req.file;
+    const project_id = req.body.project_id;
 
     const payload = {
         orig_image: file.location,
@@ -54,7 +55,7 @@ router.post("/", upload_s3.single("orig_image"), fileLogger, (req, res, next) =>
     // creator_id, ck1_id, ck2_id, project_id
     db.query(
         "insert into data values($1, $2, $3, $4, $5, $6, $7, $8, $9)",
-        [id, "image", payload, date, "created", user_id, null, null, null],
+        [id, "image", payload, date, "created", user_id, null, null, project_id],
         (err, result) => {
             if (err) {
                 console.log(err);
