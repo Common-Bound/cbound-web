@@ -61,7 +61,10 @@ class Body extends Component {
             }),
             __nextkey: counter
           });
-        } else {
+        } else if (sendTo.startsWith("https://")) {
+          this.setState({
+            label: data.label
+          });
           console.log("complete");
         }
       })
@@ -203,9 +206,7 @@ class Body extends Component {
       "meta",
       JSON.stringify({ crop_image: this.state.crop_image })
     );
-    bodyData.append(
-      'project_id', this.props.project_id
-    )
+    bodyData.append("project_id", this.props.project_id);
 
     this.sendData(bodyData, "/mypage/task/complete"); // 서버로 전송( /mypage/task/complete)
   }
@@ -285,7 +286,7 @@ class Body extends Component {
 
   // 크롭이 완료되었을 때 이미지화 시켜 서버로 전송시킨다
   async handleCropMouseUp() {
-    if (this.state.useAI) {
+    if (this.state.useAI && this.state.crop) {
       const bodyData = new FormData();
       bodyData.append(
         "crop_image",
@@ -374,6 +375,7 @@ class Body extends Component {
                   type="button"
                   onClick={() => {
                     this.setState({
+                      crop: {},
                       showEdit: false
                     });
                   }}
