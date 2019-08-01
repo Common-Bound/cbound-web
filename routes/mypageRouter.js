@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const projectRouter = require("./mypage/projects");
 const joinRouter = require('./mypage/join');
+const taskRouter = require('./mypage/taskRouter');
 const db = require("../db/index");
 const uuid = require('uuid/v4');
 
@@ -16,7 +17,7 @@ router.use(isAuthenticated);
 
 router.use('/join', joinRouter);
 router.use("/projects", projectRouter);
-
+router.use('/task', taskRouter);
 
 // 내가 참여 가능한 프로젝트 목록들을 보여준다
 router.get("/", (req, res, next) => {

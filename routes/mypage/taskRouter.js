@@ -11,6 +11,7 @@ const upload_mem = multer({
 
 const completeRouter = require('./task/complete');
 
+// path: ~/mypage/task
 router.use("/", (req, res, next) => {
   console.log("/task 라우터 도착");
   next();

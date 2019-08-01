@@ -35,14 +35,15 @@ class Body extends Component {
       method: "post",
       body: bodyData
     })
-      .then(function(res) {
+      .then(function (res) {
         return res.json();
       })
       .then(data => {
         console.log("Data received");
+        console.log(data);
 
         // 경로별 받은 데이터를 다르게 핸들링함
-        if (sendTo === "/task") {
+        if (sendTo === "/mypage/task") {
           var counter = 0; // Crop.id 생성을 위한 임시 변수
 
           this.setState({
@@ -63,7 +64,7 @@ class Body extends Component {
           console.log("complete");
         }
       })
-      .catch(function(ex) {
+      .catch(function (ex) {
         console.log("error occured");
         console.log(ex);
       });
@@ -83,22 +84,24 @@ class Body extends Component {
 
   // 이미지가 업로드 되었을 때 호출됨
   onFileSelected = async e => {
-    this.setState({ orig_image_file: e.target.files[0] });
+    // 이미지가 업로드 되었을 때 기존에 크롭된 영역을 초기화함
+    this.setState({
+      orig_image_file: e.target.files[0],
+      __nextkey: 0,
+      crop_image: [],
+      crop: {},
+      label: "",
+      imageRef: "",
+      changeMode: false,
+      preId: "",
+      orig_image: null
+    });
 
     await this.getBase64(e.target.files[0]).then(
       data =>
         new Promise(resolve => {
           resolve(
             this.setState({
-              // 이미지가 업로드 되었을 때 기존에 크롭된 영역을 초기화함
-              __nextkey: 0,
-              orig_image_file: null,
-              crop_image: [],
-              crop: {},
-              label: "",
-              imageRef: "",
-              changeMode: false,
-              preId: "",
               orig_image: data
             })
           );
@@ -108,7 +111,7 @@ class Body extends Component {
     const bodyData = new FormData();
     bodyData.append("orig_image", this.state.orig_image);
 
-    this.sendData(bodyData, "/task"); // 서버로 전송
+    this.sendData(bodyData, '/mypage/task'); // 서버로 전송( /mypage/task)
   };
 
   // 입력창의 value가 바뀔 때 변경사항 적용
@@ -179,12 +182,13 @@ class Body extends Component {
     const bodyData = new FormData();
 
     bodyData.append("orig_image", this.state.orig_image_file);
+    console.log(this.state.orig_image_file);
     bodyData.append(
       "meta",
       JSON.stringify({ crop_image: this.state.crop_image })
     );
 
-    this.sendData(bodyData, "/task/complete");
+    this.sendData(bodyData, "/mypage/task/complete"); // 서버로 전송( /mypage/task/complete)
   }
 
   // 사용자의 편의를 위해 버튼을 누르지 않아도 (13==enter) 이벤트를 받으면 handleOnCropComplete 를 호출해줌
@@ -237,7 +241,7 @@ class Body extends Component {
     const y = e.nativeEvent.offsetY;
     const crops = this.state.crop_image;
     var targetId = "nothing";
-    crops.every(function(crop) {
+    crops.every(function (crop) {
       if (
         x > crop.x &&
         x < crop.x + crop.width &&

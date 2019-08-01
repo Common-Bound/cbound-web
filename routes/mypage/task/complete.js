@@ -4,10 +4,10 @@ const AWS = require('aws-sdk');
 const multer = require("multer");
 const multerS3 = require("multer-s3");
 const uuid = require('uuid/v4');
-const db = require('../../db/index');
+const db = require('../../../db/index');
 
 // AWS config 파일 불러오기
-AWS.config.loadFromPath(__dirname + "/../../config/awsConfig.json");
+AWS.config.loadFromPath(__dirname + "/../../../config/awsConfig.json");
 let s3 = new AWS.S3();
 
 // S3에 올리는 모듈
@@ -34,7 +34,7 @@ const fileLogger = (req, res, next) => {
     next();
 }
 
-// path: ~/task/complete
+// path: ~/mypage/task/complete
 // 작업을 최종 제출하는 요청 핸들링
 // s3 에 업로드한 후 해당 URL과 크롭한 이미지 정보를 DB에 함께 저장한다
 router.post("/", upload_s3.single("orig_image"), fileLogger, (req, res, next) => {
