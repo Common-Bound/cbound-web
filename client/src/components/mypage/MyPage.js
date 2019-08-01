@@ -12,12 +12,11 @@ class MyPage extends Component {
         <header>
           <Link to={`${this.props.match.url}`}>참여 가능한 프로젝트 목록</Link>
           <Link to={`${this.props.match.url}/projects`}>참여한 프로젝트 목록</Link>
-          <Link to={`${this.props.match.url}/task`}>작업 페이지</Link>
           <Link to="/auth/signout">로그아웃</Link>
         </header>
         <Route exact path={`${this.props.match.url}`} component={AvailableProjects} />
         <Route path={`${this.props.match.url}/projects`} component={ProjectsPage} />
-        <Route path={`${this.props.match.url}/task`} component={WorkPage} />
+        <Route path={`${this.props.match.url}/task/:project_id`} component={WorkPage} />
       </div >
     );
   }

@@ -187,6 +187,9 @@ class Body extends Component {
       "meta",
       JSON.stringify({ crop_image: this.state.crop_image })
     );
+    bodyData.append(
+      'project_id', this.props.project_id
+    )
 
     this.sendData(bodyData, "/mypage/task/complete"); // 서버로 전송( /mypage/task/complete)
   }
