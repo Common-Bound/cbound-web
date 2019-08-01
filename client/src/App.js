@@ -8,7 +8,7 @@ import SignOut from "./components/auth/SignOut";
 import WorkPage from "./components/workPage/WorkPage";
 import ProjectsPage from "./components/projectsPage/ProjectsPage";
 import TestForm from "./TestForm";
-import Select from './components/auth/Select';
+import Select from "./components/auth/Select";
 
 function Main() {
   return (
@@ -27,13 +27,14 @@ function Header() {
       <Link to="/mypage">마이페이지</Link>
       <Link to="/projects">프로젝트 목록</Link>
     </header>
-  )
+  );
 }
 
 class App extends React.Component {
   render() {
     return (
       <div>
+        <WorkPage />
         <Router>
           <Route path="/" exact component={Main} />
           <Route path="/mypage" component={MyPage} />

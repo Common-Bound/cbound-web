@@ -43,10 +43,6 @@ class CropItem extends Component {
   handleChange = e => {
     e.stopPropagation();
 
-    this.setState({
-      editing: true
-    });
-
     this.props.onChange(this.props.crop.id);
   };
 
@@ -72,10 +68,11 @@ class CropItem extends Component {
   render() {
     return (
       <div>
-        <img src={this.state.imgSrc} alt="prop" />
+        <img src={this.state.imgSrc} alt="prop" onClick={this.handleChange} />
         {this.props.crop.label} {this.props.crop.id}
-        <input type="button" value="삭제" onClick={this.handleRemove} />
-        <input type="button" value="변경" onClick={this.handleChange} />
+        <div>
+          <input type="button" value="삭제" onClick={this.handleRemove} />
+        </div>
       </div>
     );
   }

@@ -62,6 +62,7 @@ class PrintTotalCrop extends Component {
       const width = crop.width;
       const height = crop.height;
 
+      ctx.strokeStyle = "yellow";
       ctx.rect(x, y, width, height);
       ctx.stroke();
     });

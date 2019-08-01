@@ -21,7 +21,8 @@ class Body extends Component {
       imageRef: "", // 크롭 컨테이너에 이미지가 로드 되었을 때 이미지 값을 저장함
       changeMode: false, // 현재 크롭된 이미지를 추가해야 할지 수정해야 할지 결정하는 Flag
       preId: "", // ChangeMode 가 true 라면 변경할 이미지의 id
-      showEdit: true // 한 개의 크롭 영역을 변경할 수 있는 이미지를 줄지 크롭된 영역 리스트를 이미지에 그려줄 지
+      showEdit: true, // 한 개의 크롭 영역을 변경할 수 있는 이미지를 줄지 크롭된 영역 리스트를 이미지에 그려줄 지
+      useAI: false // AI를 사용할지 말지 스위치 할 때 변경할 값
     };
 
     this.handleSendAll = this.handleSendAll.bind(this);
@@ -35,7 +36,7 @@ class Body extends Component {
       method: "post",
       body: bodyData
     })
-      .then(function (res) {
+      .then(function(res) {
         return res.json();
       })
       .then(data => {
@@ -64,7 +65,7 @@ class Body extends Component {
           console.log("complete");
         }
       })
-      .catch(function (ex) {
+      .catch(function(ex) {
         console.log("error occured");
         console.log(ex);
       });
@@ -107,18 +108,31 @@ class Body extends Component {
           );
         })
     );
+    // AI를 사용할 경우에만 이미지 데이터를 서버로 전송해줌
+    if (this.state.useAI) {
+      const bodyData = new FormData();
+      bodyData.append("orig_image", this.state.orig_image);
 
-    const bodyData = new FormData();
-    bodyData.append("orig_image", this.state.orig_image);
-
-    this.sendData(bodyData, '/mypage/task'); // 서버로 전송( /mypage/task)
+      this.sendData(bodyData, "/mypage/task"); // 서버로 전송( /mypage/task)
+    }
   };
 
   // 입력창의 value가 바뀔 때 변경사항 적용
   handleChange = e => {
-    this.setState({
-      [e.target.name]: e.target.value
-    });
+    if (e.target.name === "useAI") {
+      this.setState(
+        {
+          [e.target.name]: !this.state.useAI
+        },
+        () => {
+          console.log(this.state.useAI);
+        }
+      );
+    } else {
+      this.setState({
+        [e.target.name]: e.target.value
+      });
+    }
   };
 
   // 크롭 컨테이너에 이미지가 로드 되었을 때 이미지 값을 저장함
@@ -157,6 +171,7 @@ class Body extends Component {
             } else return crop;
           }),
           label: "",
+          crop: {},
           changeMode: false
         });
       } else {
@@ -170,7 +185,8 @@ class Body extends Component {
             height: cropData.height,
             label: this.state.label
           }),
-          label: ""
+          label: "",
+          crop: {}
         });
         //console.log(this.state.crop_image[0].imgSrc);
       }
@@ -230,6 +246,7 @@ class Body extends Component {
       const { crop_image } = this.state;
 
       this.setState({
+        changeMode: false,
         crop_image: crop_image.filter(crop => crop.id !== id)
       });
     }
@@ -241,7 +258,7 @@ class Body extends Component {
     const y = e.nativeEvent.offsetY;
     const crops = this.state.crop_image;
     var targetId = "nothing";
-    crops.every(function (crop) {
+    crops.every(function(crop) {
       if (
         x > crop.x &&
         x < crop.x + crop.width &&
@@ -263,6 +280,46 @@ class Body extends Component {
     });
   };
 
+  // 크롭이 완료되었을 때 이미지화 시켜 서버로 전송시킨다
+  async handleCropMouseUp() {
+    if (this.state.useAI) {
+      const bodyData = new FormData();
+      bodyData.append(
+        "crop_image",
+        await this.getCroppedImg(this.state.imageRef, this.state.crop)
+      );
+
+      this.sendData(bodyData, "/mypage/task/complete"); // 서버로 전송( /mypage/task)
+    }
+  }
+
+  // 캔버스에 크롭된 영역을 그려주고 캔버스를 Base64 인코딩함
+  getCroppedImg(image, crop) {
+    const canvas = document.createElement("canvas");
+    const scaleX = image.naturalWidth / image.width;
+    const scaleY = image.naturalHeight / image.height;
+
+    canvas.width = crop.width;
+    canvas.height = crop.height;
+
+    const ctx = canvas.getContext("2d");
+
+    ctx.drawImage(
+      image,
+      crop.x * scaleX,
+      crop.y * scaleY,
+      crop.width * scaleX,
+      crop.height * scaleY,
+      0,
+      0,
+      crop.width,
+      crop.height
+    );
+    return new Promise(resolve => {
+      resolve(canvas.toDataURL());
+    });
+  }
+
   render() {
     const workStyle = {
       borderTop: "3px solid lightgrey"
@@ -271,9 +328,19 @@ class Body extends Component {
     return (
       <div>
         <hr style={workStyle} />
+        AI
+        <label className="switch">
+          <input
+            type="checkbox"
+            name="useAI"
+            onChange={this.handleChange}
+            checked={this.state.useAI}
+          />
+          <span className="slider round" />
+        </label>
         <div>
           {this.state.orig_image ? (
-            <div>
+            <div onMouseUp={this.handleCropMouseUp}>
               <ReactCrop
                 src={this.state.orig_image}
                 crop={this.state.crop}
@@ -281,6 +348,7 @@ class Body extends Component {
                 onImageLoaded={this.handleImageLoaded}
                 style={{ display: this.state.showEdit ? "" : "none" }}
               />
+
               {this.state.imageRef ? (
                 <PrintTotalCrop
                   crops={this.state.crop_image}
@@ -293,22 +361,23 @@ class Body extends Component {
           ) : null}
         </div>
         <br />
-
         <div>
           <form>
             <div className="filebox">
               <label htmlFor="ex_file">업로드</label>
               <input type="file" id="ex_file" onChange={this.onFileSelected} />
-              <button
-                type="button"
-                onClick={() => {
-                  this.setState({
-                    showEdit: false
-                  });
-                }}
-              >
-                전체 보기
-              </button>
+              {this.state.showEdit && this.state.orig_image ? (
+                <button
+                  type="button"
+                  onClick={() => {
+                    this.setState({
+                      showEdit: false
+                    });
+                  }}
+                >
+                  전체 보기
+                </button>
+              ) : null}
             </div>
             <div className="input-group mb-3">
               <input
@@ -321,6 +390,7 @@ class Body extends Component {
                 aria-label="label"
                 aria-describedby="label input"
               />
+
               <div className="input-group-append">
                 <button
                   className="btn btn-outline-secondary"

@@ -7,7 +7,7 @@ class CropInfoList extends Component {
   }
 
   render() {
-    const { crops, image, onChange, onRemove } = this.props;
+    const { crops, image, onChange, onRemove, showEdit } = this.props;
 
     const cropList = crops.map(crop => (
       <CropItem
@@ -16,6 +16,7 @@ class CropInfoList extends Component {
         crop={crop}
         onChange={onChange}
         onRemove={onRemove}
+        showEdit={showEdit}
       />
     ));
 
