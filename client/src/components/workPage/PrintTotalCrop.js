@@ -56,7 +56,7 @@ class PrintTotalCrop extends Component {
       image.height
     );
 
-    crops.forEach(function(crop) {
+    crops.forEach(function (crop) {
       const x = crop.x;
       const y = crop.y;
       const width = crop.width;
@@ -65,6 +65,10 @@ class PrintTotalCrop extends Component {
       ctx.strokeStyle = "yellow";
       ctx.rect(x, y, width, height);
       ctx.stroke();
+
+      // 텍스트 그리기
+      ctx.font = "16px serif";
+      ctx.fillText(crop.label, crop.x, crop.y);
     });
 
     await this.setState(

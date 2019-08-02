@@ -37,11 +37,11 @@ class Body extends Component {
       method: "post",
       body: bodyData
     })
-      .then(function(res) {
+      .then(function (res) {
         return res.json();
       })
       .then(data => {
-        console.log("Data received");
+        console.log("Data received: ");
         console.log(data);
 
         // 경로별 받은 데이터를 다르게 핸들링함
@@ -55,12 +55,14 @@ class Body extends Component {
                 this.state.imageRef.naturalWidth / this.state.imageRef.width;
               const scaleY =
                 this.state.imageRef.naturalHeight / this.state.imageRef.height;
+              console.log('scaleX: ' + scaleX);
+              console.log('scaleY: ' + scaleY);
               return {
                 id: counter++,
-                x: crop.x * scaleX,
-                y: crop.y * scaleY,
-                width: crop.width * scaleX,
-                height: crop.height * scaleY,
+                x: crop.x / scaleX,
+                y: crop.y / scaleY,
+                width: crop.width / scaleX,
+                height: crop.height / scaleY,
                 label: crop.label
               };
             }),
@@ -73,7 +75,7 @@ class Body extends Component {
           console.log("complete");
         }
       })
-      .catch(function(ex) {
+      .catch(function (ex) {
         console.log("error occured");
         console.log(ex);
       });
@@ -274,7 +276,7 @@ class Body extends Component {
     const y = e.nativeEvent.offsetY;
     const crops = this.state.crop_image;
     var targetId = "nothing";
-    crops.every(function(crop) {
+    crops.every(function (crop) {
       if (
         x > crop.x &&
         x < crop.x + crop.width &&
