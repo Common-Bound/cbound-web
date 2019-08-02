@@ -51,12 +51,16 @@ class Body extends Component {
           this.setState({
             crop_image: data.data.meta["crop_image"].map(crop => {
               // 서버에서 인식한 크롭 영역들을 미리 crop_image에 넣어줌
+              const scaleX =
+                this.state.imageRef.naturalWidth / this.state.imageRef.width;
+              const scaleY =
+                this.state.imageRef.naturalHeight / this.state.imageRef.height;
               return {
                 id: counter++,
-                x: crop.x,
-                y: crop.y,
-                width: crop.width,
-                height: crop.height,
+                x: crop.x * scaleX,
+                y: crop.y * scaleY,
+                width: crop.width * scaleX,
+                height: crop.height * scaleY,
                 label: crop.label
               };
             }),
