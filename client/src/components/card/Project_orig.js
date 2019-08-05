@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import styled from 'styled-components';
 
-const Card = styled.div`
+const Tr = styled.tr`
   border: 1px solid lightgrey;
-`
+`;
 
 class Project_orig extends Component {
   constructor(props) {
@@ -38,13 +38,11 @@ class Project_orig extends Component {
 
   render() {
     return (
-      <Card>
-        <h2 onClick={this.handleClick}>제목: {this.props.title}</h2>
-        <h3>{this.props.simple_description}</h3>
-        <h3>보상: {this.props.reward}</h3>
-        <br></br>
-        <h4>{this.props.detail_description}</h4>
-      </Card>
+      <Tr>
+        <td onClick={this.handleClick}>{this.props.title}</td>
+        <td>{this.props.reward}</td>
+        <td>{this.props.due_date}</td>
+      </Tr>
     );
   }
 }

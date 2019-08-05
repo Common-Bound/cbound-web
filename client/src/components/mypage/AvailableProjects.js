@@ -1,5 +1,32 @@
 import React, { Component } from "react";
 import Project_orig from '../card/Project_orig';
+import styled from 'styled-components';
+
+const Container = styled.div`
+  border: 1px solid blue;
+  width: 100%;
+  height: 100vh;
+`;
+
+const Title = styled.div`
+  font-size: 2rem;
+  font-weight: bold;
+  padding: 40px 60px;
+`
+const TableContainer = styled.div`
+  width: 100%;
+  text-align: center;
+`;
+
+const Table = styled.table`
+  width: 80%;
+  margin: 0 auto;
+  border: 1px solid lightgrey;
+`;
+
+const Thead = styled.thead`
+  width: 100%;
+`;
 
 class AvailableProjects extends Component {
   constructor(props) {
@@ -83,10 +110,22 @@ class AvailableProjects extends Component {
 
   render() {
     return (
-      <div>
-        <ul>{this.state.projects}</ul>
+      <Container>
+        <Title>참여 가능한 프로젝트</Title>
+        <TableContainer>
+          <Table>
+            <Thead>
+              <th align="center">제목</th>
+              <th align="center">보상</th>
+              <th align="center">마감 기한</th>
+            </Thead>
+            <tbody>
+              {this.state.projects}
+            </tbody>
+          </Table>
+        </TableContainer>
         <button onClick={this.handleClick.bind(this)}>랜덤 프로젝트 추가</button>
-      </div>
+      </Container>
     );
   }
 }
