@@ -36,7 +36,7 @@ router.post("/", upload_mem.single('orig_image'), (req, res, next) => {
   console.log(req.body);
   const id = uuid();
   const url =
-    "http://ec2-15-164-171-145.ap-northeast-2.compute.amazonaws.com:8080/ocr/api/";
+    "http://ec2-54-180-87-68.ap-northeast-2.compute.amazonaws.com:8080/ocr/api/";
   axios
     .post(url, {
       id: id,

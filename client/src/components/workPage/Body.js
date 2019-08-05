@@ -12,6 +12,7 @@ class Body extends Component {
     super(props);
 
     this.state = {
+      loading: false,
       __nextkey: 0, // Crop.id 생성을 위한 임시 변수
       orig_image: "", // Base64로 인코딩된 값을 가져 화면에 출력할 때 사용됨
       orig_image_file: null, // 현재 작업하고 있는 이미지를 FormData로 패킹해 서버로 보낼 때 사용됨
@@ -32,12 +33,16 @@ class Body extends Component {
   }
 
   // 서버(sendTo)로 body에 bodyData를 넣어서 Fetch 할 때 호출됨
-  sendData = (bodyData, sendTo) => {
-    fetch(sendTo, {
+  sendData = async (bodyData, sendTo) => {
+    this.setState({
+      loading: true
+    });
+
+    await fetch(sendTo, {
       method: "post",
       body: bodyData
     })
-      .then(function(res) {
+      .then(function (res) {
         return res.json();
       })
       .then(data => {
@@ -72,11 +77,19 @@ class Body extends Component {
           });
           console.log("complete");
         }
+
+        return new Promise((resolve) => {
+          resolve(true);
+        });
       })
-      .catch(function(ex) {
+      .catch(function (ex) {
         console.log("error occured");
         console.log(ex);
       });
+
+    this.setState({
+      loading: false
+    })
   };
 
   // 업로드된 이미지를 출력하기 위해 Base64로 바꿀 때 호출됨
@@ -274,7 +287,7 @@ class Body extends Component {
     const y = e.nativeEvent.offsetY;
     const crops = this.state.crop_image;
     var targetId = "nothing";
-    crops.every(function(crop) {
+    crops.every(function (crop) {
       if (
         x > crop.x &&
         x < crop.x + crop.width &&
@@ -308,7 +321,7 @@ class Body extends Component {
 
       this.sendData(
         bodyData,
-        "https://cors-anywhere.herokuapp.com/http://ec2-15-164-171-145.ap-northeast-2.compute.amazonaws.com:8080/ocr/crop/"
+        "https://cors-anywhere.herokuapp.com/http://ec2-54-180-87-68.ap-northeast-2.compute.amazonaws.com:8080/ocr/crop/"
       ); // 서버로 전송( /mypage/task)
     }
   }
@@ -344,6 +357,15 @@ class Body extends Component {
     const workStyle = {
       borderTop: "3px solid lightgrey"
     };
+
+    if (this.state.loading) {
+      return (
+        <div>
+          <div class="lds-grid"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+          <p>이미지 분석 중..</p>
+        </div>
+      )
+    }
 
     return (
       <div>

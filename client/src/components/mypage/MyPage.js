@@ -17,7 +17,7 @@ const LeftBanner = styled.div`
   display: flex;
   flex-direction: column;
   border: 1px solid white;
-  background-color: lightgreen;
+  background-color: lightblue;
   align-content: center;
 `;
 
