@@ -12,7 +12,6 @@ class Body extends Component {
     super(props);
 
     this.state = {
-      loading: false,
       __nextkey: 0, // Crop.id 생성을 위한 임시 변수
       orig_image: "", // Base64로 인코딩된 값을 가져 화면에 출력할 때 사용됨
       orig_image_file: null, // 현재 작업하고 있는 이미지를 FormData로 패킹해 서버로 보낼 때 사용됨
@@ -34,18 +33,15 @@ class Body extends Component {
 
   // 서버(sendTo)로 body에 bodyData를 넣어서 Fetch 할 때 호출됨
   sendData = async (bodyData, sendTo) => {
-    this.setState({
-      loading: true
-    });
 
-    await fetch(sendTo, {
+    return await fetch(sendTo, {
       method: "post",
       body: bodyData
     })
       .then(function (res) {
         return res.json();
       })
-      .then(data => {
+      .then(async data => {
         console.log("Data received");
         console.log(data);
 
@@ -62,10 +58,10 @@ class Body extends Component {
                 this.state.imageRef.naturalHeight / this.state.imageRef.height;
               return {
                 id: counter++,
-                x: crop.x * scaleX,
-                y: crop.y * scaleY,
-                width: crop.width * scaleX,
-                height: crop.height * scaleY,
+                x: crop.x / scaleX,
+                y: crop.y / scaleY,
+                width: crop.width / scaleX,
+                height: crop.height / scaleY,
                 label: crop.label
               };
             }),
@@ -86,10 +82,6 @@ class Body extends Component {
         console.log("error occured");
         console.log(ex);
       });
-
-    this.setState({
-      loading: false
-    })
   };
 
   // 업로드된 이미지를 출력하기 위해 Base64로 바꿀 때 호출됨
@@ -339,10 +331,10 @@ class Body extends Component {
 
     ctx.drawImage(
       image,
-      crop.x * scaleX,
-      crop.y * scaleY,
-      crop.width * scaleX,
-      crop.height * scaleY,
+      crop.x / scaleX,
+      crop.y / scaleY,
+      crop.width / scaleX,
+      crop.height / scaleY,
       0,
       0,
       crop.width,
@@ -357,15 +349,6 @@ class Body extends Component {
     const workStyle = {
       borderTop: "3px solid lightgrey"
     };
-
-    if (this.state.loading) {
-      return (
-        <div>
-          <div class="lds-grid"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
-          <p>이미지 분석 중..</p>
-        </div>
-      )
-    }
 
     return (
       <div>
