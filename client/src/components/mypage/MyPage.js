@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { Route, Link, Redirect } from "react-router-dom";
-import ProjectsPage from '../projectsPage/ProjectsPage';
-import WorkPage from '../workPage/WorkPage';
-import AvailableProjects from './AvailableProjects';
-import styled from 'styled-components';
+import ProjectsPage from "../projectsPage/ProjectsPage";
+import WorkPage from "../workPage/WorkPage";
+import AvailableProjects from "./AvailableProjects";
+import styled from "styled-components";
 
 const Container = styled.div`
   width: 100%;
@@ -35,14 +35,36 @@ class MyPage extends Component {
     return (
       <Container>
         <LeftBanner>
-          <Icon><Link to={`${this.props.match.url}`}><i class="fas fa-search-dollar"></i></Link></Icon>
-          <Icon><Link to={`${this.props.match.url}/projects`}><i class="fas fa-list"></i></Link></Icon>
-          <Icon><Link to="/auth/signout"><i class="fas fa-sign-in-alt"></i></Link></Icon>
+          <Icon>
+            <Link to={`${this.props.match.url}`}>
+              <i className="fas fa-search-dollar" />
+            </Link>
+          </Icon>
+          <Icon>
+            <Link to={`${this.props.match.url}/projects`}>
+              <i className="fas fa-list" />
+            </Link>
+          </Icon>
+          <Icon>
+            <Link to="/auth/signout">
+              <i className="fas fa-sign-in-alt" />
+            </Link>
+          </Icon>
         </LeftBanner>
-        <Route exact path={`${this.props.match.url}`} component={AvailableProjects} />
-        <Route path={`${this.props.match.url}/projects`} component={ProjectsPage} />
-        <Route path={`${this.props.match.url}/task/:project_id`} component={WorkPage} />
-      </Container >
+        <Route
+          exact
+          path={`${this.props.match.url}`}
+          component={AvailableProjects}
+        />
+        <Route
+          path={`${this.props.match.url}/projects`}
+          component={ProjectsPage}
+        />
+        <Route
+          path={`${this.props.match.url}/task/:project_id`}
+          component={WorkPage}
+        />
+      </Container>
     );
   }
 }

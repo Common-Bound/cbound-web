@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import Project_orig from '../card/Project_orig';
-import styled from 'styled-components';
+import ProjectOrig from "../card/Project_orig";
+import styled from "styled-components";
 
 const Container = styled.div`
   border: 1px solid blue;
@@ -12,7 +12,7 @@ const Title = styled.div`
   font-size: 2rem;
   font-weight: bold;
   padding: 40px 60px;
-`
+`;
 const TableContainer = styled.div`
   width: 100%;
   text-align: center;
@@ -69,7 +69,7 @@ class AvailableProjects extends Component {
     if (result) {
       const my_proj = result.map(el => {
         return (
-          <Project_orig
+          <ProjectOrig
             key={el.id}
             id={el.id}
             title={el.title}
@@ -90,9 +90,9 @@ class AvailableProjects extends Component {
   }
 
   /**
- * @description 랜덤 프로젝트 추가 버튼 클릭시 랜덤한 프로젝트를 생성하고 
- *              프로젝트 목록을 다시 불러온다
- */
+   * @description 랜덤 프로젝트 추가 버튼 클릭시 랜덤한 프로젝트를 생성하고
+   *              프로젝트 목록을 다시 불러온다
+   */
   handleClick = e => {
     const url = this.props.match.path;
     fetch(url, {
@@ -115,16 +115,18 @@ class AvailableProjects extends Component {
         <TableContainer>
           <Table>
             <Thead>
-              <th align="center">제목</th>
-              <th align="center">보상</th>
-              <th align="center">마감 기한</th>
+              <tr>
+                <th align="center">제목</th>
+                <th align="center">보상</th>
+                <th align="center">마감 기한</th>
+              </tr>
             </Thead>
-            <tbody>
-              {this.state.projects}
-            </tbody>
+            <tbody>{this.state.projects}</tbody>
           </Table>
         </TableContainer>
-        <button onClick={this.handleClick.bind(this)}>랜덤 프로젝트 추가</button>
+        <button onClick={this.handleClick.bind(this)}>
+          랜덤 프로젝트 추가
+        </button>
       </Container>
     );
   }
