@@ -40,6 +40,7 @@ class ProjectsPage extends Component {
                 due_date={el.due_date}
                 created_at={el.created_at}
                 type={el.type}
+                project_type={el.project_type}
                 guideline_url={el.guideline_url}
                 reward={el.reward}
               />

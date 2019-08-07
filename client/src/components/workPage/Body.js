@@ -63,7 +63,7 @@ class Body extends Component {
         console.log(data);
 
         // 경로별 받은 데이터를 다르게 핸들링함
-        if (sendTo === "/mypage/task") {
+        if (sendTo === "/mypage/task/normal") {
           var counter = 0; // Crop.id 생성을 위한 임시 변수
 
           this.setState({
@@ -150,7 +150,7 @@ class Body extends Component {
       const bodyData = new FormData();
       bodyData.append("orig_image", this.state.orig_image);
 
-      this.sendData(bodyData, "/mypage/task"); // 서버로 전송( /mypage/task)
+      this.sendData(bodyData, "/mypage/task/normal"); // 서버로 전송( /mypage/task)
     }
   };
 
@@ -238,7 +238,7 @@ class Body extends Component {
     );
     bodyData.append("project_id", this.props.project_id);
 
-    this.sendData(bodyData, "/mypage/task/complete"); // 서버로 전송( /mypage/task/complete)
+    this.sendData(bodyData, "/mypage/task/normal/complete"); // 서버로 전송( /mypage/task/complete)
   }
 
   // 사용자의 편의를 위해 버튼을 누르지 않아도 (13==enter) 이벤트를 받으면 handleOnCropComplete 를 호출해줌

@@ -4,10 +4,10 @@ const AWS = require('aws-sdk');
 const multer = require("multer");
 const multerS3 = require("multer-s3");
 const uuid = require('uuid/v4');
-const db = require('../../../db/index');
+const db = require('../../../../db/index');
 
 // AWS config 파일 불러오기
-AWS.config.loadFromPath(__dirname + "/../../../config/awsConfig.json");
+AWS.config.loadFromPath(__dirname + "/../../../../config/awsConfig.json");
 let s3 = new AWS.S3();
 
 // S3에 올리는 모듈
