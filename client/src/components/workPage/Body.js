@@ -344,10 +344,10 @@ class Body extends Component {
 
     ctx.drawImage(
       image,
-      crop.x / scaleX,
-      crop.y / scaleY,
-      crop.width / scaleX,
-      crop.height / scaleY,
+      crop.x * scaleX,
+      crop.y * scaleY,
+      crop.width * scaleX,
+      crop.height * scaleY,
       0,
       0,
       crop.width,
