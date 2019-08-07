@@ -56,7 +56,7 @@ class PrintTotalCrop extends Component {
       image.height
     );
 
-    crops.forEach(function(crop) {
+    crops.forEach(function (crop) {
       const x = crop.x;
       const y = crop.y;
       const width = crop.width;
@@ -64,7 +64,16 @@ class PrintTotalCrop extends Component {
 
       ctx.strokeStyle = "yellow";
       ctx.rect(x, y, width, height);
+
+      ctx.fillStyle = 'yellow'
+      ctx.fillRect(x, y - 16, crop.label.length * 10, 16);
+
+      ctx.fillStyle = 'black';
+      ctx.font = '16px serif';
+      ctx.fillText(crop.label, x, y);
+
       ctx.stroke();
+
     });
 
     await this.setState(

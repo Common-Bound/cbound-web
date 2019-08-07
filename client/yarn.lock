@@ -2859,7 +2859,7 @@ core-js@^2.4.0:
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-2.6.5.tgz#44bc8d249e7fb2ff5d00e0341a7ffb94fbf67895"
   integrity sha512-klh/kDpwX8hryYL14M9w/xei6vrv6sE8gTHDG7/T/+SEovB/G4ejwcfE/CBzO6Edsu+OETZMZ3wcX/EjUkrl5A==
 
-core-js@^3.0.1:
+core-js@^3.1.4:
   version "3.1.4"
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.1.4.tgz#3a2837fc48e582e1ae25907afcd6cf03b0cc7a07"
   integrity sha512-YNZN8lt82XIMLnLirj9MhKDFZHalwzzrL9YLt6eb0T5D0EDl4IQ90IGkua8mHbnxNrkj1d8hbdizMc0Qmg1WnQ==
@@ -8218,13 +8218,12 @@ react-error-overlay@^5.1.6:
   resolved "https://registry.yarnpkg.com/react-error-overlay/-/react-error-overlay-5.1.6.tgz#0cd73407c5d141f9638ae1e0c63e7b2bf7e9929d"
   integrity sha512-X1Y+0jR47ImDVr54Ab6V9eGk0Hnu7fVWGeHQSOXHf/C2pF9c6uy3gef8QUeuUiWlNb0i08InPSE5a/KJzNzw1Q==
 
-react-image-crop@^8.1.0:
-  version "8.1.0"
-  resolved "https://registry.yarnpkg.com/react-image-crop/-/react-image-crop-8.1.0.tgz#b5e44b84d6ffc0e1b8d9c5ad912ef197aaeeb4cf"
-  integrity sha512-37FyIuVMsSLVdx2SfDihdX6Nu2kGzrHe9jmoXeIEXQhuCY9cB3HwKEusINWN7oM973ZfzDpYczm8av3IFDMdEw==
+"react-image-crop@git+https://github.com/eunsukimme/react-image-crop.git":
+  version "8.2.0"
+  resolved "git+https://github.com/eunsukimme/react-image-crop.git#ae08dc0cd70d6152971f1bb9ffdf57efb7b347ba"
   dependencies:
     clsx "^1.0.4"
-    core-js "^3.0.1"
+    core-js "^3.1.4"
     prop-types "^15.7.2"
 
 react-is@^16.6.0, react-is@^16.7.0, react-is@^16.8.0, react-is@^16.8.1, react-is@^16.8.4:
