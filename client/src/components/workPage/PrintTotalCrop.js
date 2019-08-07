@@ -64,11 +64,18 @@ class PrintTotalCrop extends Component {
 
       ctx.strokeStyle = "yellow";
       ctx.rect(x, y, width, height);
+
+      if (crop.label) {
+        ctx.fillStyle = 'yellow'
+        ctx.fillRect(x, y - 16, crop.label.length * 10, 16);
+
+        ctx.fillStyle = 'black';
+        ctx.font = '16px serif';
+        ctx.fillText(crop.label, x, y);
+      }
+
       ctx.stroke();
 
-      // 텍스트 그리기
-      ctx.font = "16px serif";
-      ctx.fillText(crop.label, crop.x, crop.y);
     });
 
     await this.setState(

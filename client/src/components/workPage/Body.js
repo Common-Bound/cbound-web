@@ -2,9 +2,22 @@ import React, { Component } from "react";
 import ReactCrop from "react-image-crop"; // Cropper Import
 import CropInfoList from "./CropInfoList.js"; // 크롭 리스트를 출력함
 import PrintTotalCrop from "./PrintTotalCrop"; // 크롭 리스트를 한 캔버스에 그려줌
+import Dropzone from 'react-dropzone';
+import styled from 'styled-components';
 
 import "react-image-crop/dist/ReactCrop.css";
 import "./Body.css";
+
+const ImageContainer = styled.div`
+  max-width: 720px;
+  position: relative;
+`;
+
+const LoadingContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
 
 class Body extends Component {
   // Body Component 생성
@@ -18,11 +31,12 @@ class Body extends Component {
       crop_image: [], // 지금까지 크롭한 영역들의 정보 리스트 (x, y, width, height)
       crop: {}, // ReactCrop 에 사용되는 값으로 크롭 영역이 변경될 때 함께 변경됨. (현재 크롭 영역에 대한 정보를 가지고 있음)
       label: "", // 작업한 영역에 대해 레이블링 할 때 사용되는 입력창의 변경 사항에 대해 저장함
-      imageRef: "", // 크롭 컨테이너에 이미지가 로드 되었을 때 이미지 값을 저장함
+      imageRef: null, // 크롭 컨테이너에 이미지가 로드 되었을 때 이미지 값을 저장함
       changeMode: false, // 현재 크롭된 이미지를 추가해야 할지 수정해야 할지 결정하는 Flag
       preId: "", // ChangeMode 가 true 라면 변경할 이미지의 id
       showEdit: true, // 한 개의 크롭 영역을 변경할 수 있는 이미지를 줄지 크롭된 영역 리스트를 이미지에 그려줄 지
-      useAI: false // AI를 사용할지 말지 스위치 할 때 변경할 값
+      useAI: false, // AI를 사용할지 말지 스위치 할 때 변경할 값
+      loading: false
     };
 
     this.handleSendAll = this.handleSendAll.bind(this);
@@ -32,20 +46,24 @@ class Body extends Component {
   }
 
   // 서버(sendTo)로 body에 bodyData를 넣어서 Fetch 할 때 호출됨
-  sendData = (bodyData, sendTo) => {
-    fetch(sendTo, {
+  sendData = async (bodyData, sendTo) => {
+    this.setState({
+      loading: true
+    });
+
+    await fetch(sendTo, {
       method: "post",
       body: bodyData
     })
       .then(function (res) {
         return res.json();
       })
-      .then(data => {
-        console.log("Data received: ");
+      .then(async data => {
+        console.log("Data received");
         console.log(data);
 
         // 경로별 받은 데이터를 다르게 핸들링함
-        if (sendTo === "/mypage/task") {
+        if (sendTo === "/mypage/task/normal") {
           var counter = 0; // Crop.id 생성을 위한 임시 변수
 
           this.setState({
@@ -74,11 +92,19 @@ class Body extends Component {
           });
           console.log("complete");
         }
+
+        return new Promise(resolve => {
+          resolve(true);
+        });
       })
       .catch(function (ex) {
         console.log("error occured");
         console.log(ex);
       });
+
+    this.setState({
+      loading: false
+    })
   };
 
   // 업로드된 이미지를 출력하기 위해 Base64로 바꿀 때 호출됨
@@ -96,10 +122,11 @@ class Body extends Component {
   }
 
   // 이미지가 업로드 되었을 때 호출됨
-  onFileSelected = async e => {
+  onFileSelected = async files => {
     // 이미지가 업로드 되었을 때 기존에 크롭된 영역을 초기화함
+    console.log(files[0]);
     this.setState({
-      orig_image_file: e.target.files[0],
+      orig_image_file: files[0],
       __nextkey: 0,
       crop_image: [],
       crop: {},
@@ -110,7 +137,7 @@ class Body extends Component {
       orig_image: null
     });
 
-    await this.getBase64(e.target.files[0]).then(
+    await this.getBase64(files[0]).then(
       data =>
         new Promise(resolve => {
           resolve(
@@ -125,31 +152,22 @@ class Body extends Component {
       const bodyData = new FormData();
       bodyData.append("orig_image", this.state.orig_image);
 
-      this.sendData(bodyData, "/mypage/task"); // 서버로 전송( /mypage/task)
+      this.sendData(bodyData, "/mypage/task/normal"); // 서버로 전송( /mypage/task)
     }
   };
 
   // 입력창의 value가 바뀔 때 변경사항 적용
   handleChange = e => {
-    if (e.target.name === "useAI") {
-      this.setState(
-        {
-          [e.target.name]: !this.state.useAI
-        },
-        () => {
-          console.log(this.state.useAI);
-        }
-      );
-    } else {
-      this.setState({
-        [e.target.name]: e.target.value
-      });
-    }
+    this.state[e.target.name] ? this.setState({
+      [e.target.name]: !e.target.value
+    }) : this.setState({
+      [e.target.name]: e.target.value
+    })
   };
 
   // 크롭 컨테이너에 이미지가 로드 되었을 때 이미지 값을 저장함
-  handleImageLoaded = image => {
-    this.setState({ imageRef: image });
+  handleImageLoaded = async image => {
+    await this.setState({ imageRef: image });
   };
 
   // 크롭 영역이 변경되었을 때 변경사항 적용
@@ -222,7 +240,7 @@ class Body extends Component {
     );
     bodyData.append("project_id", this.props.project_id);
 
-    this.sendData(bodyData, "/mypage/task/complete"); // 서버로 전송( /mypage/task/complete)
+    this.sendData(bodyData, "/mypage/task/normal/complete"); // 서버로 전송( /mypage/task/complete)
   }
 
   // 사용자의 편의를 위해 버튼을 누르지 않아도 (13==enter) 이벤트를 받으면 handleOnCropComplete 를 호출해줌
@@ -310,7 +328,7 @@ class Body extends Component {
 
       this.sendData(
         bodyData,
-        "https://cors-anywhere.herokuapp.com/http://ec2-15-164-171-145.ap-northeast-2.compute.amazonaws.com:8080/ocr/crop/"
+        "https://cors-anywhere.herokuapp.com/http://ec2-54-180-87-68.ap-northeast-2.compute.amazonaws.com:8080/ocr/recognition/"
       ); // 서버로 전송( /mypage/task)
     }
   }
@@ -360,7 +378,7 @@ class Body extends Component {
           />
           <span className="slider round" />
         </label>
-        <div>
+        <ImageContainer>
           {this.state.orig_image ? (
             <div onMouseUp={this.handleCropMouseUp}>
               <ReactCrop
@@ -381,13 +399,32 @@ class Body extends Component {
               ) : null}
             </div>
           ) : null}
-        </div>
+          {this.state.loading && this.state.imageRef ?
+            <LoadingContainer style={{
+              position: "absolute", top: '0px', left: '0px', width: `${this.state.imageRef.width}px`,
+              height: `${this.state.imageRef.height}px`, zIndex: 1, backgroundColor: 'rgba(0, 0, 0, 0.7)'
+            }}>
+              <div className="lds-grid"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+              <p style={{ color: 'white' }}>이미지 분석 중...</p>
+            </LoadingContainer>
+            : ''}
+        </ImageContainer>
         <br />
         <div>
           <form>
             <div className="filebox">
-              <label htmlFor="ex_file">업로드</label>
-              <input type="file" id="ex_file" onChange={this.onFileSelected} />
+              {!this.state.orig_image_file ? <Dropzone onDrop={this.onFileSelected}>
+                {({ getRootProps, getInputProps }) => (
+                  <section>
+                    <div {...getRootProps()}>
+                      <input {...getInputProps()} />
+                      <div style={{ width: '400px', height: '400px', backgroundColor: 'lightblue' }}>
+                        사진을 올려주세요
+                      </div>
+                    </div>
+                  </section>
+                )}
+              </Dropzone> : ''}
               {this.state.showEdit && this.state.orig_image ? (
                 <button
                   type="button"
@@ -403,17 +440,6 @@ class Body extends Component {
               ) : null}
             </div>
             <div className="input-group mb-3">
-              <input
-                value={this.state.label}
-                className="form-control"
-                onChange={this.handleChange}
-                onKeyPress={this.handleKeyPress}
-                name="label"
-                placeholder="label"
-                aria-label="label"
-                aria-describedby="label input"
-              />
-
               <div className="input-group-append">
                 <button
                   className="btn btn-outline-secondary"

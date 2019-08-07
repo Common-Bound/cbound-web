@@ -1,5 +1,32 @@
 import React, { Component } from "react";
-import Project_orig from '../card/Project_orig';
+import ProjectOrig from "../card/Project_orig";
+import styled from "styled-components";
+
+const Container = styled.div`
+  border: 1px solid blue;
+  width: 100%;
+  height: 100vh;
+`;
+
+const Title = styled.div`
+  font-size: 2rem;
+  font-weight: bold;
+  padding: 40px 60px;
+`;
+const TableContainer = styled.div`
+  width: 100%;
+  text-align: center;
+`;
+
+const Table = styled.table`
+  width: 80%;
+  margin: 0 auto;
+  border: 1px solid lightgrey;
+`;
+
+const Thead = styled.thead`
+  width: 100%;
+`;
 
 class AvailableProjects extends Component {
   constructor(props) {
@@ -42,7 +69,7 @@ class AvailableProjects extends Component {
     if (result) {
       const my_proj = result.map(el => {
         return (
-          <Project_orig
+          <ProjectOrig
             key={el.id}
             id={el.id}
             title={el.title}
@@ -51,6 +78,7 @@ class AvailableProjects extends Component {
             due_date={el.due_date}
             created_at={el.created_at}
             type={el.type}
+            project_type={el.project_type}
             guideline_url={el.guideline_url}
             reward={el.reward}
           />
@@ -63,9 +91,9 @@ class AvailableProjects extends Component {
   }
 
   /**
- * @description 랜덤 프로젝트 추가 버튼 클릭시 랜덤한 프로젝트를 생성하고 
- *              프로젝트 목록을 다시 불러온다
- */
+   * @description 랜덤 프로젝트 추가 버튼 클릭시 랜덤한 프로젝트를 생성하고
+   *              프로젝트 목록을 다시 불러온다
+   */
   handleClick = e => {
     const url = this.props.match.path;
     fetch(url, {
@@ -83,10 +111,24 @@ class AvailableProjects extends Component {
 
   render() {
     return (
-      <div>
-        <ul>{this.state.projects}</ul>
-        <button onClick={this.handleClick.bind(this)}>랜덤 프로젝트 추가</button>
-      </div>
+      <Container>
+        <Title>참여 가능한 프로젝트</Title>
+        <TableContainer>
+          <Table>
+            <Thead>
+              <tr>
+                <th align="center">제목</th>
+                <th align="center">보상</th>
+                <th align="center">마감 기한</th>
+              </tr>
+            </Thead>
+            <tbody>{this.state.projects}</tbody>
+          </Table>
+        </TableContainer>
+        <button onClick={this.handleClick.bind(this)}>
+          랜덤 프로젝트 추가
+        </button>
+      </Container>
     );
   }
 }

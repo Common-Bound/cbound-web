@@ -4,10 +4,10 @@ const AWS = require('aws-sdk');
 const multer = require("multer");
 const multerS3 = require("multer-s3");
 const uuid = require('uuid/v4');
-const db = require('../../../db/index');
+const db = require('../../../../db/index');
 
 // AWS config 파일 불러오기
-AWS.config.loadFromPath(__dirname + "/../../../config/awsConfig.json");
+AWS.config.loadFromPath(__dirname + "/../../../../config/awsConfig.json");
 let s3 = new AWS.S3();
 
 // S3에 올리는 모듈
@@ -52,10 +52,10 @@ router.post("/", upload_s3.single("orig_image"), fileLogger, (req, res, next) =>
         meta: meta
     }
     // id, type, payload(json), created_at, status,
-    // creator_id, ck1_id, ck2_id, project_id
+    // creator_id, correct, incorrect, project_id
     db.query(
         "insert into data values($1, $2, $3, $4, $5, $6, $7, $8, $9)",
-        [id, "image", payload, date, "created", user_id, null, null, project_id],
+        [id, "image", payload, date, "created", user_id, 0, 0, project_id],
         (err, result) => {
             if (err) {
                 console.log(err);
