@@ -70,7 +70,7 @@ class PrintTotalCrop extends Component {
         ctx.fillRect(x, y - 16, crop.label.length * 10, 16);
 
         ctx.fillStyle = 'black';
-        ctx.font = '18px serif';
+        ctx.font = '16px serif';
         ctx.fillText(crop.label, x, y);
       }
 

@@ -3,9 +3,21 @@ import ReactCrop from "react-image-crop"; // Cropper Import
 import CropInfoList from "./CropInfoList.js"; // 크롭 리스트를 출력함
 import PrintTotalCrop from "./PrintTotalCrop"; // 크롭 리스트를 한 캔버스에 그려줌
 import Dropzone from 'react-dropzone';
+import styled from 'styled-components';
 
 import "react-image-crop/dist/ReactCrop.css";
 import "./Body.css";
+
+const ImageContainer = styled.div`
+  max-width: 720px;
+  position: relative;
+`;
+
+const LoadingContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
 
 class Body extends Component {
   // Body Component 생성
@@ -19,11 +31,12 @@ class Body extends Component {
       crop_image: [], // 지금까지 크롭한 영역들의 정보 리스트 (x, y, width, height)
       crop: {}, // ReactCrop 에 사용되는 값으로 크롭 영역이 변경될 때 함께 변경됨. (현재 크롭 영역에 대한 정보를 가지고 있음)
       label: "", // 작업한 영역에 대해 레이블링 할 때 사용되는 입력창의 변경 사항에 대해 저장함
-      imageRef: "", // 크롭 컨테이너에 이미지가 로드 되었을 때 이미지 값을 저장함
+      imageRef: null, // 크롭 컨테이너에 이미지가 로드 되었을 때 이미지 값을 저장함
       changeMode: false, // 현재 크롭된 이미지를 추가해야 할지 수정해야 할지 결정하는 Flag
       preId: "", // ChangeMode 가 true 라면 변경할 이미지의 id
       showEdit: true, // 한 개의 크롭 영역을 변경할 수 있는 이미지를 줄지 크롭된 영역 리스트를 이미지에 그려줄 지
-      useAI: false // AI를 사용할지 말지 스위치 할 때 변경할 값
+      useAI: false, // AI를 사용할지 말지 스위치 할 때 변경할 값
+      loading: false
     };
 
     this.handleSendAll = this.handleSendAll.bind(this);
@@ -34,11 +47,15 @@ class Body extends Component {
 
   // 서버(sendTo)로 body에 bodyData를 넣어서 Fetch 할 때 호출됨
   sendData = async (bodyData, sendTo) => {
-    return await fetch(sendTo, {
+    this.setState({
+      loading: true
+    });
+
+    await fetch(sendTo, {
       method: "post",
       body: bodyData
     })
-      .then(function(res) {
+      .then(function (res) {
         return res.json();
       })
       .then(async data => {
@@ -78,10 +95,14 @@ class Body extends Component {
           resolve(true);
         });
       })
-      .catch(function(ex) {
+      .catch(function (ex) {
         console.log("error occured");
         console.log(ex);
       });
+
+    this.setState({
+      loading: false
+    })
   };
 
   // 업로드된 이미지를 출력하기 위해 Base64로 바꿀 때 호출됨
@@ -101,6 +122,7 @@ class Body extends Component {
   // 이미지가 업로드 되었을 때 호출됨
   onFileSelected = async files => {
     // 이미지가 업로드 되었을 때 기존에 크롭된 영역을 초기화함
+    console.log(files[0]);
     this.setState({
       orig_image_file: files[0],
       __nextkey: 0,
@@ -142,8 +164,8 @@ class Body extends Component {
   };
 
   // 크롭 컨테이너에 이미지가 로드 되었을 때 이미지 값을 저장함
-  handleImageLoaded = image => {
-    this.setState({ imageRef: image });
+  handleImageLoaded = async image => {
+    await this.setState({ imageRef: image });
   };
 
   // 크롭 영역이 변경되었을 때 변경사항 적용
@@ -270,7 +292,7 @@ class Body extends Component {
     const y = e.nativeEvent.offsetY;
     const crops = this.state.crop_image;
     var targetId = "nothing";
-    crops.every(function(crop) {
+    crops.every(function (crop) {
       if (
         x > crop.x &&
         x < crop.x + crop.width &&
@@ -354,7 +376,7 @@ class Body extends Component {
           />
           <span className="slider round" />
         </label>
-        <div>
+        <ImageContainer>
           {this.state.orig_image ? (
             <div onMouseUp={this.handleCropMouseUp}>
               <ReactCrop
@@ -375,7 +397,16 @@ class Body extends Component {
               ) : null}
             </div>
           ) : null}
-        </div>
+          {this.state.loading && this.state.imageRef ?
+            <LoadingContainer style={{
+              position: "absolute", top: '0px', left: '0px', width: `${this.state.imageRef.width}px`,
+              height: `${this.state.imageRef.height}px`, zIndex: 1, backgroundColor: 'rgba(0, 0, 0, 0.7)'
+            }}>
+              <div className="lds-grid"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+              <p style={{ color: 'white' }}>이미지 분석 중...</p>
+            </LoadingContainer>
+            : ''}
+        </ImageContainer>
         <br />
         <div>
           <form>
