@@ -405,17 +405,6 @@ class Body extends Component {
               ) : null}
             </div>
             <div className="input-group mb-3">
-              <input
-                value={this.state.label}
-                className="form-control"
-                onChange={this.handleChange}
-                onKeyPress={this.handleKeyPress}
-                name="label"
-                placeholder="label"
-                aria-label="label"
-                aria-describedby="label input"
-              />
-
               <div className="input-group-append">
                 <button
                   className="btn btn-outline-secondary"
