@@ -1,12 +1,12 @@
 import React, { Component } from "react";
-import Project_joined from '../card/Project_joined';
+import ProjectJoined from "../card/Project_joined";
 
 class ProjectsPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
       projects: []
-    }
+    };
   }
 
   componentDidMount() {
@@ -30,10 +30,20 @@ class ProjectsPage extends Component {
         if (data.result) {
           console.log(data);
           const new_projects = data.result.map(el => {
-            return <Project_joined key={el.id} id={el.id} title={el.title}
-              simple_description={el.simple_description} detail_description={el.detail_description}
-              due_date={el.due_date} created_at={el.created_at} type={el.type}
-              guideline_url={el.guideline_url} reward={el.reward} />;
+            return (
+              <ProjectJoined
+                key={el.id}
+                id={el.id}
+                title={el.title}
+                simple_description={el.simple_description}
+                detail_description={el.detail_description}
+                due_date={el.due_date}
+                created_at={el.created_at}
+                type={el.type}
+                guideline_url={el.guideline_url}
+                reward={el.reward}
+              />
+            );
           });
           this.setState({
             projects: new_projects

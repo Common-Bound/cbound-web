@@ -6,19 +6,45 @@ import AvailableProjects from "./AvailableProjects";
 import styled from "styled-components";
 
 const Container = styled.div`
+  padding: 0;
+
+  margin: 0;
+
+  /*background-image: url(3jpg);*/
+
   width: 100%;
-  height: 100vh;
-  display: flex;
-  border: 1px solid red;
+
+  height: 100%;
+
+  overflow: hidden;
+
+  background-position: 0 0;
+
+  background-repeat: no-repeat;
+
+  background-attachment: fixed;
+
+  background-size: cover;
+
+  position: relative;
+
+  overflow-y: auto;
 `;
 
 const LeftBanner = styled.div`
-  width: 60px;
-  display: flex;
-  flex-direction: column;
-  border: 1px solid white;
-  background-color: lightblue;
-  align-content: center;
+  width: 70px;
+
+  height: 3000px;
+
+  position: fixed;
+
+  background: #353535;
+
+  color: white;
+
+  overflow: hidden;
+
+  float: left;
 `;
 
 const Icon = styled.div`
@@ -28,6 +54,18 @@ const Icon = styled.div`
   width: 100%;
   height: 60px;
   margin-top: 20px;
+`;
+
+const Section = styled.div`
+  margin-top: 0px;
+
+  margin-left: 70px;
+
+  margin-right: 0px;
+
+  margin-bottom: 100px;
+
+  background: white;
 `;
 
 class MyPage extends Component {
@@ -51,19 +89,21 @@ class MyPage extends Component {
             </Link>
           </Icon>
         </LeftBanner>
-        <Route
-          exact
-          path={`${this.props.match.url}`}
-          component={AvailableProjects}
-        />
-        <Route
-          path={`${this.props.match.url}/projects`}
-          component={ProjectsPage}
-        />
-        <Route
-          path={`${this.props.match.url}/task/:project_id`}
-          component={WorkPage}
-        />
+        <Section>
+          <Route
+            exact
+            path={`${this.props.match.url}`}
+            component={AvailableProjects}
+          />
+          <Route
+            path={`${this.props.match.url}/projects`}
+            component={ProjectsPage}
+          />
+          <Route
+            path={`${this.props.match.url}/task/:project_id`}
+            component={WorkPage}
+          />
+        </Section>
       </Container>
     );
   }

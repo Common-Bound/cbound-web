@@ -33,12 +33,11 @@ class Body extends Component {
 
   // 서버(sendTo)로 body에 bodyData를 넣어서 Fetch 할 때 호출됨
   sendData = async (bodyData, sendTo) => {
-
     return await fetch(sendTo, {
       method: "post",
       body: bodyData
     })
-      .then(function (res) {
+      .then(function(res) {
         return res.json();
       })
       .then(async data => {
@@ -74,11 +73,11 @@ class Body extends Component {
           console.log("complete");
         }
 
-        return new Promise((resolve) => {
+        return new Promise(resolve => {
           resolve(true);
         });
       })
-      .catch(function (ex) {
+      .catch(function(ex) {
         console.log("error occured");
         console.log(ex);
       });
@@ -279,7 +278,7 @@ class Body extends Component {
     const y = e.nativeEvent.offsetY;
     const crops = this.state.crop_image;
     var targetId = "nothing";
-    crops.every(function (crop) {
+    crops.every(function(crop) {
       if (
         x > crop.x &&
         x < crop.x + crop.width &&
