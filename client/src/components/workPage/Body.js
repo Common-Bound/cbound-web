@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import ReactCrop from "react-image-crop"; // Cropper Import
 import CropInfoList from "./CropInfoList.js"; // 크롭 리스트를 출력함
 import PrintTotalCrop from "./PrintTotalCrop"; // 크롭 리스트를 한 캔버스에 그려줌
+import Dropzone from 'react-dropzone';
 
 import "react-image-crop/dist/ReactCrop.css";
 import "./Body.css";
@@ -98,10 +99,10 @@ class Body extends Component {
   }
 
   // 이미지가 업로드 되었을 때 호출됨
-  onFileSelected = async e => {
+  onFileSelected = async files => {
     // 이미지가 업로드 되었을 때 기존에 크롭된 영역을 초기화함
     this.setState({
-      orig_image_file: e.target.files[0],
+      orig_image_file: files[0],
       __nextkey: 0,
       crop_image: [],
       crop: {},
@@ -112,7 +113,7 @@ class Body extends Component {
       orig_image: null
     });
 
-    await this.getBase64(e.target.files[0]).then(
+    await this.getBase64(files[0]).then(
       data =>
         new Promise(resolve => {
           resolve(
@@ -133,20 +134,11 @@ class Body extends Component {
 
   // 입력창의 value가 바뀔 때 변경사항 적용
   handleChange = e => {
-    if (e.target.name === "useAI") {
-      this.setState(
-        {
-          [e.target.name]: !this.state.useAI
-        },
-        () => {
-          console.log(this.state.useAI);
-        }
-      );
-    } else {
-      this.setState({
-        [e.target.name]: e.target.value
-      });
-    }
+    this.state[e.target.name] ? this.setState({
+      [e.target.name]: !e.target.value
+    }) : this.setState({
+      [e.target.name]: e.target.value
+    })
   };
 
   // 크롭 컨테이너에 이미지가 로드 되었을 때 이미지 값을 저장함
@@ -312,7 +304,7 @@ class Body extends Component {
 
       this.sendData(
         bodyData,
-        "https://cors-anywhere.herokuapp.com/http://ec2-54-180-87-68.ap-northeast-2.compute.amazonaws.com:8080/ocr/crop/"
+        "https://cors-anywhere.herokuapp.com/http://ec2-54-180-87-68.ap-northeast-2.compute.amazonaws.com:8080/ocr/recognition/"
       ); // 서버로 전송( /mypage/task)
     }
   }
@@ -388,8 +380,18 @@ class Body extends Component {
         <div>
           <form>
             <div className="filebox">
-              <label htmlFor="ex_file">업로드</label>
-              <input type="file" id="ex_file" onChange={this.onFileSelected} />
+              {!this.state.orig_image_file ? <Dropzone onDrop={this.onFileSelected}>
+                {({ getRootProps, getInputProps }) => (
+                  <section>
+                    <div {...getRootProps()}>
+                      <input {...getInputProps()} />
+                      <div style={{ width: '400px', height: '400px', backgroundColor: 'lightblue' }}>
+                        사진을 올려주세요
+                      </div>
+                    </div>
+                  </section>
+                )}
+              </Dropzone> : ''}
               {this.state.showEdit && this.state.orig_image ? (
                 <button
                   type="button"

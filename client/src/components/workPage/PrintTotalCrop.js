@@ -65,12 +65,14 @@ class PrintTotalCrop extends Component {
       ctx.strokeStyle = "yellow";
       ctx.rect(x, y, width, height);
 
-      ctx.fillStyle = 'yellow'
-      ctx.fillRect(x, y - 16, crop.label.length * 10, 16);
+      if (crop.label) {
+        ctx.fillStyle = 'yellow'
+        ctx.fillRect(x, y - 16, crop.label.length * 10, 16);
 
-      ctx.fillStyle = 'black';
-      ctx.font = '16px serif';
-      ctx.fillText(crop.label, x, y);
+        ctx.fillStyle = 'black';
+        ctx.font = '18px serif';
+        ctx.fillText(crop.label, x, y);
+      }
 
       ctx.stroke();
 
