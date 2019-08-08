@@ -1,5 +1,14 @@
 import React, { Component } from "react";
 import CropItem from "./CropItem";
+import styled from 'styled-components';
+
+const List = styled.div`
+  display: flex;
+  flex-flow: row;
+  width: 100%;
+  border: 1px solid red;
+  overflow: scroll;
+`;
 
 class CropInfoList extends Component {
   shouldComponentUpdate(nextProps, nextState) {
@@ -34,7 +43,7 @@ class CropInfoList extends Component {
     ));
 
     // CropItem 요소를 하나씩 화면에 출력해줌
-    return <div>{cropList}</div>;
+    return <List>{cropList}</List>;
   }
 }
 

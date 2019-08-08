@@ -100,7 +100,7 @@ class MyPage extends Component {
             component={ProjectsPage}
           />
           <Route
-            path={`${this.props.match.url}/task/:project_id`}
+            path={`${this.props.match.url}/task/:project_type/:project_id`}
             component={WorkPage}
           />
         </Section>

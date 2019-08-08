@@ -6,6 +6,8 @@ CREATE TYPE "data_status" AS ENUM (
   'failure'
 );
 CREATE TYPE "type" AS ENUM ('image', 'context', 'voice', 'survey');
+CREATE TYPE "project_type" AS ENUM ('normal', 'inspection');
+CREATE TYPE "schedule_state" AS ENUM ('queued', 'reserved');
 CREATE TABLE "data_requester" (
   "id" varchar PRIMARY KEY,
   "email" varchar UNIQUE,
@@ -41,20 +43,21 @@ CREATE TABLE "project" (
   "detail_description" varchar,
   "due_date" varchar,
   "created_at" varchar,
-  "type" Type,
+  "type" type,
+  "project_type" project_type,
   "guideline_url" varchar,
   "reward" int
 );
 CREATE TABLE "data" (
   "id" varchar PRIMARY KEY,
-  "type" Type,
+  "type" type,
   "payload" jsonb,
   "created_at" varchar,
   "status" "data_status",
   "creator_id" varchar,
-  "checker1_id" varchar,
-  "checker2_id" varchar,
-  "project_id" varchar
+  "inspector" varchar [],
+  "project_id" varchar,
+  "schedule_state" schedule_state
 );
 ALTER TABLE
   "creator_pool"
@@ -76,14 +79,6 @@ ALTER TABLE
   "data"
 ADD
   FOREIGN KEY ("creator_id") REFERENCES "data_creator" ("id");
-ALTER TABLE
-  "data"
-ADD
-  FOREIGN KEY ("checker1_id") REFERENCES "data_creator" ("id");
-ALTER TABLE
-  "data"
-ADD
-  FOREIGN KEY ("checker2_id") REFERENCES "data_creator" ("id");
 ALTER TABLE
   "data"
 ADD

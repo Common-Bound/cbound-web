@@ -37,7 +37,8 @@ router.get("/", (req, res, next) => {
 
 // 프로젝트 생성 요청 핸들링
 router.post("/", (req, res, next) => {
-  const id = uuid();
+  const normal_id = uuid();
+  const inspection_id = uuid();
   const titles = [
     "얼굴 사진 찍기",
     "음식 사진 찍기",
@@ -51,17 +52,30 @@ router.post("/", (req, res, next) => {
   // project 테이블에 project 를 추가한다
   // project 속성
   // id, title, image, simple_desc, detail_desc,
-  // due_date, created_at, type, guideline_url, reward
+  // due_date, created_at, type, project_type,
+  // guideline_url, reward
   db.query(
-    "insert into project values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)",
-    [id, titles[title_index], null, '간단한 설명', '자세한 설명 입니다',
-      '무기한', date, 'image', null, reward],
+    "insert into project values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)",
+    [normal_id, titles[title_index], null, '간단한 설명', '자세한 설명 입니다',
+      '무기한', date, 'image', 'normal', null, reward],
     (err, result) => {
       if (err) {
         console.log(err);
         return res.status(500).send(err);
       }
-      return res.json({ result: true });
+      // 검수 프로젝트 추가
+      db.query(
+        "insert into project values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)",
+        [inspection_id, titles[title_index] + '(검수)', null, '간단한 설명', '자세한 설명 입니다',
+          '무기한', date, 'image', 'inspection', null, reward],
+        (err, result) => {
+          if (err) {
+            console.log(err);
+            return res.status(500).send(err);
+          }
+          return res.json({ result: true });
+        }
+      )
     }
   );
 });

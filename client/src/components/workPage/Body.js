@@ -18,6 +18,11 @@ const LoadingContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  z-index: 1;
+  background-color: rgba(0, 0, 0, 0.7);
 `;
 
 class Body extends Component {
@@ -64,7 +69,7 @@ class Body extends Component {
         console.log(data);
 
         // 경로별 받은 데이터를 다르게 핸들링함
-        if (sendTo === "/mypage/task") {
+        if (sendTo === "/mypage/task/normal") {
           var counter = 0; // Crop.id 생성을 위한 임시 변수
 
           this.setState({
@@ -74,6 +79,8 @@ class Body extends Component {
                 this.state.imageRef.naturalWidth / this.state.imageRef.width;
               const scaleY =
                 this.state.imageRef.naturalHeight / this.state.imageRef.height;
+              console.log('scaleX: ' + scaleX);
+              console.log('scaleY: ' + scaleY);
               return {
                 id: counter++,
                 x: crop.x / scaleX,
@@ -151,7 +158,7 @@ class Body extends Component {
       const bodyData = new FormData();
       bodyData.append("orig_image", this.state.orig_image);
 
-      this.sendData(bodyData, "/mypage/task"); // 서버로 전송( /mypage/task)
+      this.sendData(bodyData, "/mypage/task/normal"); // 서버로 전송( /mypage/task)
     }
   };
 
@@ -244,7 +251,7 @@ class Body extends Component {
     );
     bodyData.append("project_id", this.props.project_id);
 
-    this.sendData(bodyData, "/mypage/task/complete"); // 서버로 전송( /mypage/task/complete)
+    this.sendData(bodyData, "/mypage/task/normal/complete"); // 서버로 전송( /mypage/task/complete)
   }
 
   // 사용자의 편의를 위해 버튼을 누르지 않아도 (13==enter) 이벤트를 받으면 handleOnCropComplete 를 호출해줌

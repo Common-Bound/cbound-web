@@ -5,7 +5,7 @@ class Project_joined extends Component {
   render() {
     return (
       <div>
-        <Link to={`/mypage/task/${this.props.id}`}>
+        <Link to={`/mypage/task/${this.props.project_type}/${this.props.id}`}>
           <h2>제목: {this.props.title}</h2>
         </Link>
         <h3>{this.props.simple_description}</h3>
