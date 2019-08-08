@@ -17,6 +17,11 @@ const LoadingContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  position: absolute; 
+  top: 0px;
+  left: 0px; 
+  z-index: 1; 
+  background-color: rgba(0, 0, 0, 0.7);
 `;
 
 class Body extends Component {
@@ -401,8 +406,8 @@ class Body extends Component {
           ) : null}
           {this.state.loading && this.state.imageRef ?
             <LoadingContainer style={{
-              position: "absolute", top: '0px', left: '0px', width: `${this.state.imageRef.width}px`,
-              height: `${this.state.imageRef.height}px`, zIndex: 1, backgroundColor: 'rgba(0, 0, 0, 0.7)'
+              width: `${this.state.imageRef.width}px`,
+              height: `${this.state.imageRef.height}px`
             }}>
               <div className="lds-grid"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
               <p style={{ color: 'white' }}>이미지 분석 중...</p>

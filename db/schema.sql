@@ -7,6 +7,7 @@ CREATE TYPE "data_status" AS ENUM (
 );
 CREATE TYPE "type" AS ENUM ('image', 'context', 'voice', 'survey');
 CREATE TYPE "project_type" AS ENUM ('normal', 'inspection');
+CREATE TYPE "schedule_state" AS ENUM ('queued', 'reserved');
 CREATE TABLE "data_requester" (
   "id" varchar PRIMARY KEY,
   "email" varchar UNIQUE,
@@ -54,9 +55,9 @@ CREATE TABLE "data" (
   "created_at" varchar,
   "status" "data_status",
   "creator_id" varchar,
-  "correct" int,
-  "incorrect" int,
-  "project_id" varchar
+  "inspector" varchar [],
+  "project_id" varchar,
+  "schedule_state" schedule_state
 );
 ALTER TABLE
   "creator_pool"
