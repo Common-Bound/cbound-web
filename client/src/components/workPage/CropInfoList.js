@@ -3,20 +3,33 @@ import CropItem from "./CropItem";
 
 class CropInfoList extends Component {
   shouldComponentUpdate(nextProps, nextState) {
-    return this.props.crops !== nextProps.crops;
+    return (
+      this.props.crops !== nextProps.crops ||
+      this.props.useAI !== nextProps.useAI
+    );
   }
 
   render() {
-    const { crops, image, onChange, onRemove, showEdit } = this.props;
+    const {
+      useAI,
+      crops,
+      image,
+      onChange,
+      onRemove,
+      showEdit,
+      changeLabel
+    } = this.props;
 
     const cropList = crops.map(crop => (
       <CropItem
         key={crop.id}
+        useAI={useAI}
         image={image}
         crop={crop}
         onChange={onChange}
         onRemove={onRemove}
         showEdit={showEdit}
+        changeLabel={changeLabel}
       />
     ));
 

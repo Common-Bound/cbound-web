@@ -2,11 +2,12 @@ import React, { Component } from "react";
 import ReactCrop from "react-image-crop"; // Cropper Import
 import CropInfoList from "./CropInfoList.js"; // 크롭 리스트를 출력함
 import PrintTotalCrop from "./PrintTotalCrop"; // 크롭 리스트를 한 캔버스에 그려줌
-import Dropzone from 'react-dropzone';
-import styled from 'styled-components';
+import Dropzone from "react-dropzone";
+import styled from "styled-components";
 
 import "react-image-crop/dist/ReactCrop.css";
 import "./Body.css";
+import { isThisQuarter } from "date-fns";
 
 const ImageContainer = styled.div`
   max-width: 720px;
@@ -55,7 +56,7 @@ class Body extends Component {
       method: "post",
       body: bodyData
     })
-      .then(function (res) {
+      .then(function(res) {
         return res.json();
       })
       .then(async data => {
@@ -88,21 +89,21 @@ class Body extends Component {
           this.setState({
             label: data.label
           });
-          console.log("complete");
+          this.handleOnCropComplete();
         }
 
         return new Promise(resolve => {
           resolve(true);
         });
       })
-      .catch(function (ex) {
+      .catch(function(ex) {
         console.log("error occured");
         console.log(ex);
       });
 
     this.setState({
       loading: false
-    })
+    });
   };
 
   // 업로드된 이미지를 출력하기 위해 Base64로 바꿀 때 호출됨
@@ -156,11 +157,20 @@ class Body extends Component {
 
   // 입력창의 value가 바뀔 때 변경사항 적용
   handleChange = e => {
-    this.state[e.target.name] ? this.setState({
-      [e.target.name]: !e.target.value
-    }) : this.setState({
-      [e.target.name]: e.target.value
-    })
+    if (e.target.name === "useAI") {
+      this.setState(
+        {
+          [e.target.name]: !this.state.useAI
+        },
+        () => {
+          console.log(this.state.useAI);
+        }
+      );
+    } else {
+      this.setState({
+        [e.target.name]: e.target.value
+      });
+    }
   };
 
   // 크롭 컨테이너에 이미지가 로드 되었을 때 이미지 값을 저장함
@@ -175,19 +185,15 @@ class Body extends Component {
 
   // 레이블링과 크롭을 끝냈을 때 호출
   handleOnCropComplete = async e => {
-    console.log(this.state.crop);
+    console.log("Complete");
     const cropData = this.state.crop;
     const image = new Image();
 
     image.src = this.state.orig_image;
 
     // state의 changeMode 를 보고 크롭된 영역을 추가/수정함
-    if (
-      this.state.orig_image &&
-      this.state.label &&
-      this.state.showEdit &&
-      this.state.crop
-    ) {
+    if (this.state.orig_image && this.state.showEdit && this.state.crop) {
+      console.log("Complete");
       if (this.state.changeMode) {
         // 수정
         this.setState({
@@ -269,7 +275,6 @@ class Body extends Component {
       changeMode: true,
       preId: id
     });
-    console.log("aa");
   };
 
   // crop.id 가 id인 크롭 데이터를 삭제함
@@ -286,13 +291,37 @@ class Body extends Component {
     }
   };
 
+  // 라벨값이 서버로부터 전송되었을 때 crop_image 의 라벨값을 채워준다.
+  handleChangeLabel = (id, label) => {
+    const preCrop = this.state.crop_image.find(crop => {
+      return crop.id === id;
+    });
+
+    this.setState({
+      crop_image: this.state.crop_image.map(crop => {
+        if (crop.id === preCrop.id) {
+          return {
+            id: preCrop.id,
+            x: crop.x,
+            y: crop.y,
+            width: crop.width,
+            height: crop.height,
+            label: label
+          };
+        } else return crop;
+      })
+    });
+
+    console.log("label change");
+  };
+
   // 이미지를 눌렀을 때 좌표를 불러옴
   handleClickImage = e => {
     const x = e.nativeEvent.offsetX;
     const y = e.nativeEvent.offsetY;
     const crops = this.state.crop_image;
     var targetId = "nothing";
-    crops.every(function (crop) {
+    crops.every(function(crop) {
       if (
         x > crop.x &&
         x < crop.x + crop.width &&
@@ -316,19 +345,14 @@ class Body extends Component {
 
   // 크롭이 완료되었을 때 이미지화 시켜 서버로 전송시킨다
   async handleCropMouseUp() {
-    if (this.state.useAI && this.state.crop && this.state.showEdit) {
-      const bodyData = JSON.stringify({
-        crop_image: await this.getCroppedImg(
-          this.state.imageRef,
-          this.state.crop
-        )
-      });
-
-      this.sendData(
-        bodyData,
-        "https://cors-anywhere.herokuapp.com/http://ec2-54-180-87-68.ap-northeast-2.compute.amazonaws.com:8080/ocr/recognition/"
-      ); // 서버로 전송( /mypage/task)
-    }
+    console.log(this.state.crop.height);
+    if (this.state.crop.height)
+      this.setState(
+        {
+          label: ""
+        },
+        () => this.handleOnCropComplete()
+      );
   }
 
   // 캔버스에 크롭된 영역을 그려주고 캔버스를 Base64 인코딩함
@@ -344,10 +368,10 @@ class Body extends Component {
 
     ctx.drawImage(
       image,
-      crop.x / scaleX,
-      crop.y / scaleY,
-      crop.width / scaleX,
-      crop.height / scaleY,
+      crop.x * scaleX,
+      crop.y * scaleY,
+      crop.width * scaleX,
+      crop.height * scaleY,
       0,
       0,
       crop.width,
@@ -397,32 +421,33 @@ class Body extends Component {
               ) : null}
             </div>
           ) : null}
-          {this.state.loading && this.state.imageRef ?
-            <LoadingContainer style={{
-              position: "absolute", top: '0px', left: '0px', width: `${this.state.imageRef.width}px`,
-              height: `${this.state.imageRef.height}px`, zIndex: 1, backgroundColor: 'rgba(0, 0, 0, 0.7)'
-            }}>
-              <div className="lds-grid"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
-              <p style={{ color: 'white' }}>이미지 분석 중...</p>
-            </LoadingContainer>
-            : ''}
         </ImageContainer>
         <br />
         <div>
           <form>
             <div className="filebox">
-              {!this.state.orig_image_file ? <Dropzone onDrop={this.onFileSelected}>
-                {({ getRootProps, getInputProps }) => (
-                  <section>
-                    <div {...getRootProps()}>
-                      <input {...getInputProps()} />
-                      <div style={{ width: '400px', height: '400px', backgroundColor: 'lightblue' }}>
-                        사진을 올려주세요
+              {!this.state.orig_image_file ? (
+                <Dropzone onDrop={this.onFileSelected}>
+                  {({ getRootProps, getInputProps }) => (
+                    <section>
+                      <div {...getRootProps()}>
+                        <input {...getInputProps()} />
+                        <div
+                          style={{
+                            width: "400px",
+                            height: "400px",
+                            backgroundColor: "lightblue"
+                          }}
+                        >
+                          사진을 올려주세요
+                        </div>
                       </div>
-                    </div>
-                  </section>
-                )}
-              </Dropzone> : ''}
+                    </section>
+                  )}
+                </Dropzone>
+              ) : (
+                ""
+              )}
               {this.state.showEdit && this.state.orig_image ? (
                 <button
                   type="button"
@@ -461,10 +486,12 @@ class Body extends Component {
           </form>
         </div>
         <CropInfoList
+          useAI={this.state.useAI}
           crops={this.state.crop_image}
           image={this.state.imageRef}
           onChange={this.handleOnCropModify}
           onRemove={this.handleOnCropRemove}
+          changeLabel={this.handleChangeLabel}
         />
       </div>
     );
