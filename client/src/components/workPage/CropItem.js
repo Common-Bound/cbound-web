@@ -2,8 +2,12 @@ import React, { Component } from "react";
 import styled from "styled-components";
 
 const ImageContainer = styled.div`
-  max-width: 200px;
+  width: 150px;
+  height: 150px;
   position: relative;
+  text-align: center;
+  border: solid;
+  border-width: 1px;
 `;
 
 const LoadingContainer = styled.div`
@@ -70,6 +74,7 @@ class CropItem extends Component {
 
   // 라벨값을 부모 컴포넌트로부터 바꿔준다.
   changeLabel() {
+    console.log(this.state.label);
     this.props.changeLabel(this.props.crop.id, this.state.label);
   }
 
@@ -120,6 +125,7 @@ class CropItem extends Component {
     const { image, crop } = this.props;
 
     await this.setState({ imgSrc: await this.getCroppedImg(image, crop) });
+    console.log("crop!" + crop.x);
 
     const bodyData = JSON.stringify({ crop_image: this.state.imgSrc });
     if (this.props.useAI) {
@@ -139,10 +145,16 @@ class CropItem extends Component {
     if (prevProps.crop !== this.props.crop) {
       const { image, crop } = this.props;
 
-      console.log(crop);
-      await this.setState({
-        imgSrc: await this.getCroppedImg(image, crop)
-      });
+      if (
+        crop.x !== prevProps.crop.x ||
+        crop.y !== prevProps.crop.y ||
+        crop.width !== prevProps.crop.width ||
+        crop.height !== prevProps.crop.height
+      ) {
+        await this.setState({
+          imgSrc: await this.getCroppedImg(image, crop)
+        });
+      }
       const bodyData = JSON.stringify({ crop_image: this.state.imgSrc });
       if (this.props.useAI && this.props.crop.label !== this.state.label) {
         console.log("UPDATE");
@@ -159,38 +171,48 @@ class CropItem extends Component {
 
   render() {
     return (
-      <ImageContainer>
-        <img src={this.state.imgSrc} alt="prop" onClick={this.handleChange} />
+      <div>
+        <ImageContainer onClick={this.handleChange}>
+          <img
+            src={this.state.imgSrc}
+            alt="prop"
+            style={{
+              maxWidth: "150px",
+              maxHeight: "150px"
+            }}
+          />
+          {this.state.editing ? (
+            <LoadingContainer
+              style={{
+                position: "absolute",
+                top: "0px",
+                left: "0px",
+                width: `${this.props.crop.width}px`,
+                height: `${this.props.crop.height}px`,
+                zIndex: 1,
+                backgroundColor: "rgba(0, 0, 0, 0.7)"
+              }}
+            >
+              <div className="lds-grid">
+                <div />
+                <div />
+                <div />
+                <div />
+                <div />
+                <div />
+                <div />
+                <div />
+                <div />
+              </div>
+              <p style={{ color: "white" }}>이미지 분석 중...</p>
+            </LoadingContainer>
+          ) : null}
+        </ImageContainer>
+
         <div>
           <input type="button" value="삭제" onClick={this.handleRemove} />
         </div>
-        {this.state.editing ? (
-          <LoadingContainer
-            style={{
-              position: "absolute",
-              top: "0px",
-              left: "0px",
-              width: `${this.props.crop.width}px`,
-              height: `${this.props.crop.height}px`,
-              zIndex: 1,
-              backgroundColor: "rgba(0, 0, 0, 0.7)"
-            }}
-          >
-            <div className="lds-grid">
-              <div />
-              <div />
-              <div />
-              <div />
-              <div />
-              <div />
-              <div />
-              <div />
-              <div />
-            </div>
-            <p style={{ color: "white" }}>이미지 분석 중...</p>
-          </LoadingContainer>
-        ) : null}
-      </ImageContainer>
+      </div>
     );
   }
 }

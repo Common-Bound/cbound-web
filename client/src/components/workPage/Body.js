@@ -79,8 +79,8 @@ class Body extends Component {
                 this.state.imageRef.naturalWidth / this.state.imageRef.width;
               const scaleY =
                 this.state.imageRef.naturalHeight / this.state.imageRef.height;
-              console.log('scaleX: ' + scaleX);
-              console.log('scaleY: ' + scaleY);
+              console.log("scaleX: " + scaleX);
+              console.log("scaleY: " + scaleY);
               return {
                 id: counter++,
                 x: crop.x / scaleX,
@@ -304,11 +304,13 @@ class Body extends Component {
       return crop.id === id;
     });
 
+    console.log(label);
+
     this.setState({
       crop_image: this.state.crop_image.map(crop => {
         if (crop.id === preCrop.id) {
           return {
-            id: preCrop.id,
+            id: id,
             x: crop.x,
             y: crop.y,
             width: crop.width,
@@ -352,14 +354,16 @@ class Body extends Component {
 
   // 크롭이 완료되었을 때 이미지화 시켜 서버로 전송시킨다
   async handleCropMouseUp() {
-    console.log(this.state.crop.height);
-    if (this.state.crop.height)
-      this.setState(
-        {
-          label: ""
-        },
-        () => this.handleOnCropComplete()
-      );
+    if (this.state.useAI) {
+      console.log(this.state.crop.height);
+      if (this.state.crop.height)
+        this.setState(
+          {
+            label: ""
+          },
+          () => this.handleOnCropComplete()
+        );
+    }
   }
 
   // 캔버스에 크롭된 영역을 그려주고 캔버스를 Base64 인코딩함
@@ -393,7 +397,6 @@ class Body extends Component {
     const workStyle = {
       borderTop: "3px solid lightgrey"
     };
-
     return (
       <div>
         <hr style={workStyle} />
@@ -427,6 +430,32 @@ class Body extends Component {
                 />
               ) : null}
             </div>
+          ) : null}
+          {this.state.loading && this.state.imageRef ? (
+            <LoadingContainer
+              style={{
+                position: "absolute",
+                top: "0px",
+                left: "0px",
+                width: `${this.state.imageRef.width}px`,
+                height: `${this.state.imageRef.height}px`,
+                zIndex: 1,
+                backgroundColor: "rgba(0, 0, 0, 0.7)"
+              }}
+            >
+              <div className="lds-grid">
+                <div />
+                <div />
+                <div />
+                <div />
+                <div />
+                <div />
+                <div />
+                <div />
+                <div />
+              </div>
+              <p style={{ color: "white" }}>이미지 분석 중...</p>
+            </LoadingContainer>
           ) : null}
         </ImageContainer>
         <br />
@@ -468,6 +497,16 @@ class Body extends Component {
                   전체 보기
                 </button>
               ) : null}
+            </div>
+
+            <div>
+              <input
+                type="text"
+                onChange={this.handleChange}
+                value={this.state.label}
+                name="label"
+                onKeyPress={this.handleKeyPress}
+              />
             </div>
             <div className="input-group mb-3">
               <div className="input-group-append">
