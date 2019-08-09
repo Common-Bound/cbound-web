@@ -177,8 +177,8 @@ class CropItem extends Component {
             src={this.state.imgSrc}
             alt="prop"
             style={{
-              maxWidth: "150px",
-              maxHeight: "150px"
+              maxWidth: "148px",
+              maxHeight: "148px"
             }}
           />
           {this.state.editing ? (
@@ -187,8 +187,8 @@ class CropItem extends Component {
                 position: "absolute",
                 top: "0px",
                 left: "0px",
-                width: `${this.props.crop.width}px`,
-                height: `${this.props.crop.height}px`,
+                width: `150px`,
+                height: `150px`,
                 zIndex: 1,
                 backgroundColor: "rgba(0, 0, 0, 0.7)"
               }}
@@ -204,7 +204,6 @@ class CropItem extends Component {
                 <div />
                 <div />
               </div>
-              <p style={{ color: "white" }}>이미지 분석 중...</p>
             </LoadingContainer>
           ) : null}
         </ImageContainer>

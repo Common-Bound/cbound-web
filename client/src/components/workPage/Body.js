@@ -69,7 +69,7 @@ class Body extends Component {
         console.log(data);
 
         // 경로별 받은 데이터를 다르게 핸들링함
-        if (sendTo === "/mypage/task/normal") {
+        /*if (sendTo === "/mypage/task/normal") {
           var counter = 0; // Crop.id 생성을 위한 임시 변수
 
           this.setState({
@@ -92,7 +92,9 @@ class Body extends Component {
             }),
             __nextkey: counter
           });
-        } else if (sendTo.startsWith("https://")) {
+        } else */ if (
+          sendTo.startsWith("https://")
+        ) {
           this.setState({
             label: data.label
           });
