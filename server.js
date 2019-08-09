@@ -14,7 +14,7 @@ const authRouter = require("./routes/authRouter");
 const mypageRouter = require("./routes/mypageRouter");
 
 /* 외부 라이브러리 미들웨어 사용 */
-app.use("/public", express.static(__dirname + "/client/public"));
+app.use("/", express.static(__dirname + "/client/public"));
 app.use(morgan("dev"));
 app.use(
   bodyParser.json({

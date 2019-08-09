@@ -44,7 +44,7 @@ class CropItem extends Component {
       method: "post",
       body: bodyData
     })
-      .then(function(res) {
+      .then(function (res) {
         return res.json();
       })
       .then(async data => {
@@ -61,7 +61,7 @@ class CropItem extends Component {
           resolve(true);
         });
       })
-      .catch(function(ex) {
+      .catch(function (ex) {
         console.log("error occured");
         console.log(ex);
       });
@@ -83,6 +83,10 @@ class CropItem extends Component {
     const canvas = document.createElement("canvas");
     const scaleX = image.naturalWidth / image.width;
     const scaleY = image.naturalHeight / image.height;
+    console.log('scaleX: ');
+    console.log(scaleX);
+    console.log('scaleY: ');
+    console.log(scaleY);
 
     canvas.width = crop.width;
     canvas.height = crop.height;

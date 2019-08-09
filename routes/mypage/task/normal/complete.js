@@ -39,11 +39,13 @@ const fileLogger = (req, res, next) => {
 // s3 에 업로드한 후 해당 URL과 크롭한 이미지 정보를 DB에 함께 저장한다
 router.post("/", upload_s3.single("orig_image"), fileLogger, (req, res, next) => {
     const user_id = req.user.id;
-    const meta = JSON.parse(req.body.meta); // { crop_image: [ {x: 0, y: 0, ... }, {}, ... ]}
-    const new_crop_image_info = meta.crop_image.map(el => {
+    let meta = JSON.parse(req.body.meta);
+    let crop_image = meta.crop_image; // [ {x: 0, y: 0, ... }, {}, ... ]
+    new_crop_image = crop_image.map(el => {
         el.correct = [];    // detection된 영역의 O(1), X(0) 여부 검사한 값이 들어가는 필드. 검수자에 의해 수정됨
         return el;
     })
+    meta.crop_image = new_crop_image;
     const id = uuid();
     const date = Date.now(); // UTC 기준으로 1970년 1월 1일 0시 0분 0초부터 현재까지 경과된 밀리 초를 반환
     const file = req.file;
@@ -51,7 +53,7 @@ router.post("/", upload_s3.single("orig_image"), fileLogger, (req, res, next) =>
 
     const payload = {
         orig_image: file.location,
-        meta: new_crop_image_info
+        meta: meta
     }
     console.log('payload: ');
     console.log(payload);

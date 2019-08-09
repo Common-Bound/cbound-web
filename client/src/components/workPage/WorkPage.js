@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import Header from "./Header";
 import Body from "./Body";
 import styled from 'styled-components';
-import { Route } from 'react-router-dom';
 import Footer from "./Footer";
 import InspectionPage from '../inspectionPage/InspectionPage';
 

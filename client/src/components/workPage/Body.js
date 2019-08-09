@@ -61,7 +61,7 @@ class Body extends Component {
       method: "post",
       body: bodyData
     })
-      .then(function(res) {
+      .then(function (res) {
         return res.json();
       })
       .then(async data => {
@@ -103,7 +103,7 @@ class Body extends Component {
           resolve(true);
         });
       })
-      .catch(function(ex) {
+      .catch(function (ex) {
         console.log("error occured");
         console.log(ex);
       });
@@ -182,6 +182,8 @@ class Body extends Component {
 
   // 크롭 컨테이너에 이미지가 로드 되었을 때 이미지 값을 저장함
   handleImageLoaded = async image => {
+    console.log(image);
+    console.log(image.width);
     await this.setState({ imageRef: image });
   };
 
@@ -330,7 +332,7 @@ class Body extends Component {
     const y = e.nativeEvent.offsetY;
     const crops = this.state.crop_image;
     var targetId = "nothing";
-    crops.every(function(crop) {
+    crops.every(function (crop) {
       if (
         x > crop.x &&
         x < crop.x + crop.width &&
@@ -461,6 +463,7 @@ class Body extends Component {
         <br />
         <div>
           <form>
+            {/* 파일 올리는 DropZone */}
             <div className="filebox">
               {!this.state.orig_image_file ? (
                 <Dropzone onDrop={this.onFileSelected}>
@@ -482,8 +485,8 @@ class Body extends Component {
                   )}
                 </Dropzone>
               ) : (
-                ""
-              )}
+                  ""
+                )}
               {this.state.showEdit && this.state.orig_image ? (
                 <button
                   type="button"
@@ -531,6 +534,7 @@ class Body extends Component {
             </div>
           </form>
         </div>
+        {/* 지금까지 작업한 영역들을 리스트로 보여줌 */}
         <CropInfoList
           useAI={this.state.useAI}
           crops={this.state.crop_image}
