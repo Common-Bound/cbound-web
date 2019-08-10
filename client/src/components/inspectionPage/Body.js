@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 
 const Main = styled.div`
-  display: flex;
 `;
 
 class Body extends Component {
@@ -11,9 +10,9 @@ class Body extends Component {
     this.state = {
       data: null,
       loading: true,
-      imgSrc: null
+      correct: [],
     }
-    this.imageRef = React.createRef();
+    this.handleClick = this.handleClick.bind(this);
   }
 
   async componentDidMount() {
@@ -45,6 +44,7 @@ class Body extends Component {
           return new Promise(resolve =>
             resolve(this.setState({
               data: data,
+              correct: Array(data.payload.meta.crop_image.length),
               loading: false
             })
             )
@@ -53,34 +53,29 @@ class Body extends Component {
       });
   }
 
-  async drawImage(e) {
-    console.log('drawImage');
-    console.log(e);
+  /**
+   * @dev 가져온 data의 payload 부분을 참조하여 원본 이미지를
+   *      canvas 위에 그려준다
+   */
+  async drawImage() {
     const canvas = document.getElementById('canvas');
     const image = document.getElementById('image');
     console.log(image);
 
     const ctx = canvas.getContext('2d');
 
-    //const image = new Image(); // Using optional size for image
-    // Load an image of intrinsic size 300x227 in CSS pixels
-    //image.src = this.state.data.payload.orig_image;
     let scale = 1;
+    // 이미지의 가로 길이가 720이 넘으면, 720으로 나눈 비율을 계산한다
     if (image.naturalWidth > 720) {
       scale = image.naturalWidth / 720;
     }
 
-    // Use the intrinsic size of image in CSS pixels for the canvas element
+    // 계샨된 비율만큼 나눠줘서 캔버스 영역의 가로 길이를 720 으로 맞춰준다
+    // 또한 세로 길이도 이와 같은 비율로 조정해준다
     canvas.width = image.width / scale;
     canvas.height = image.height / scale;
 
-    // Will draw the image as 300x227, ignoring the custom size of 60x45
-    // given in the constructor
-    ctx.drawImage(image, 0, 0);
-
-    // To use the custom size we'll have to specify the scale parameters 
-    // using the element's width and height properties - lets draw one 
-    // on top in the corner:
+    // 이미지의 크기도 조절해서 그려준다
     ctx.drawImage(image, 0, 0, image.width / scale, image.height / scale);
 
     return new Promise((resolve) => {
@@ -89,8 +84,10 @@ class Body extends Component {
     })
   }
 
+  /**
+   * @dev 원본 이미지를 그린 다음 그 위에 크롭 영역을 그려준다
+   */
   async drawCrop() {
-    console.log('drawCrop');
     const canvas = document.getElementById('canvas');
     const ctx = canvas.getContext('2d');
 
@@ -101,40 +98,67 @@ class Body extends Component {
       const width = crop.width;
       const height = crop.height;
 
+      // 사각형 바운딩 박스 그려준다
       ctx.strokeStyle = "yellow";
       ctx.rect(x, y, width, height);
+      ctx.stroke();
 
+      // 라벨이 존재하면 그려준다
       if (crop.label) {
         ctx.fillStyle = 'yellow'
         ctx.fillRect(x, y - 16, crop.label.length * 10, 16);
 
         ctx.fillStyle = 'black';
         ctx.font = '16px serif';
-
         ctx.fillText(crop.label, x, y);
       }
-
-      ctx.stroke();
-
     });
-    console.log('drawCrop end');
   }
 
-  handleClick = e => {
+  // 검수 완료 버튼
+  handleClick = async e => {
+    let new_crop_image = [];
+    // ok 라고 응답하면 모든 crop_image의 각 correct 배열에 1(OK)를 추가한다
+    if (e.target.name === 'ok') {
+      new_crop_image = this.state.data.payload.meta.crop_image.map(el => {
+        el.correct.push(1);
+        return el;
+      })
+    }
+
     const url = '/mypage/task/inspection';
-    fetch(url, {
+    const option = {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ data: this.state.data })
-    })
-      .then(res => res.json())
-      .then(data => {
-        console.log(data);
+      body: JSON.stringify({
+        new_crop_image: new_crop_image,
+        data_id: this.state.data.id
       })
+    }
+
+    await this.sendData(url, option);
+    await this.fetchData();
   }
 
+
+  /**
+   * @dev 서버 url로 데이터(option) 전송
+   */
+  sendData = async (url, option) => {
+    await fetch(url, option)
+      .then(res => res.json())
+      .then(data => {
+        if (data.message) {
+          return alert(data.message);
+        }
+        else return new Promise((resolve) => {
+          return resolve(console.log(data));
+        });
+      })
+      .catch(err => console.log(err));
+  }
 
   render() {
     const { data, loading } = this.state;
@@ -160,10 +184,11 @@ class Body extends Component {
               <img id="image" src={data.payload.orig_image} alt="" onLoad={this.drawImage.bind(this)} />
             </div>
           </canvas>
+          <p>문제가 없는 데이터 인가요?</p>
+          {true ? <button onClick={this.handleClick} name="ok">예(다음 작업 가져오기)</button> : ''}
+          <button onClick={this.handleClick} name="nok">아니오(어떤 크롭이 잘못된지 표시하기)</button>
         </Main>
-
-        {true ? '' : <button onClick={this.handleClick.bind(this)}>작업 완료(상태 'queued'로 변경)</button>}
-      </div>
+      </div >
     );
   }
 }

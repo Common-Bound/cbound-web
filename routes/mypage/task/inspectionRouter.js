@@ -47,17 +47,23 @@ router.get('/', (req, res, next) => {
 
 // 작업 완료 요청 핸들링
 // reserved 상태 였던 data를 다시 queue로 되돌린다
-// 지금으로썬 payload 부분을 수정하지 않고, 다른 작업자들한테 어떻게 보이는지 테스트 해본다
+/**
+ * @dev new_crop_image 필드를 받아서 data의 payload 부분을 업데이트 해준다
+ */
 router.post('/', (req, res, next) => {
 
-  const data = req.body.data;
+  const data = req.body;
   console.log(data);
+  const new_crop_image = JSON.stringify(data.new_crop_image);
+  const data_id = data.data_id;
+
 
   db.query(
     `
     update data
-    set schedule_state='queued', inspector = array_append(inspector, '${req.user.id}')
-    where id='${data.id}'
+    set schedule_state='queued', inspector = array_append(inspector, '${req.user.id}'),
+    payload = jsonb_set(payload, '{meta, 0}', jsonb '${new_crop_image}', true)
+    where id='${data_id}'
     `,
     [],
     (err, result) => {
