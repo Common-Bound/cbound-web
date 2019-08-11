@@ -79,8 +79,9 @@ class Body extends Component {
                 this.state.imageRef.naturalWidth / this.state.imageRef.width;
               const scaleY =
                 this.state.imageRef.naturalHeight / this.state.imageRef.height;
-              console.log("scaleX: " + scaleX);
-              console.log("scaleY: " + scaleY);
+              //console.log("scaleX: " + scaleX);
+              //console.log("scaleY: " + scaleY);
+              
               return {
                 id: counter++,
                 x: crop.x / scaleX,
@@ -130,7 +131,7 @@ class Body extends Component {
   // 이미지가 업로드 되었을 때 호출됨
   onFileSelected = async files => {
     // 이미지가 업로드 되었을 때 기존에 크롭된 영역을 초기화함
-    console.log(files[0]);
+    //console.log(files[0]);
     this.setState({
       orig_image_file: files[0],
       __nextkey: 0,
@@ -168,9 +169,6 @@ class Body extends Component {
       this.setState(
         {
           [e.target.name]: !this.state.useAI
-        },
-        () => {
-          console.log(this.state.useAI);
         }
       );
     } else {
@@ -182,8 +180,8 @@ class Body extends Component {
 
   // 크롭 컨테이너에 이미지가 로드 되었을 때 이미지 값을 저장함
   handleImageLoaded = async image => {
-    console.log(image);
-    console.log(image.width);
+    //console.log(image);
+    //console.log(image.width);
     await this.setState({ imageRef: image });
   };
 
@@ -194,7 +192,7 @@ class Body extends Component {
 
   // 레이블링과 크롭을 끝냈을 때 호출
   handleOnCropComplete = async e => {
-    console.log("Complete");
+    //console.log("Complete");
     const cropData = this.state.crop;
     const image = new Image();
 
@@ -202,7 +200,7 @@ class Body extends Component {
 
     // state의 changeMode 를 보고 크롭된 영역을 추가/수정함
     if (this.state.orig_image && this.state.showEdit && this.state.crop) {
-      console.log("Complete");
+      //console.log("Complete");
       if (this.state.changeMode) {
         // 수정
         this.setState({
@@ -246,7 +244,8 @@ class Body extends Component {
     const bodyData = new FormData();
 
     bodyData.append("orig_image", this.state.orig_image_file);
-    console.log(this.state.orig_image_file);
+    
+    // console.log(this.state.orig_image_file);
     bodyData.append(
       "meta",
       JSON.stringify({ crop_image: this.state.crop_image })
@@ -289,7 +288,7 @@ class Body extends Component {
   // crop.id 가 id인 크롭 데이터를 삭제함
   handleOnCropRemove = id => {
     if (this.state.showEdit) {
-      console.log(id);
+      //console.log(id);
 
       const { crop_image } = this.state;
 
@@ -306,7 +305,7 @@ class Body extends Component {
       return crop.id === id;
     });
 
-    console.log(label);
+    //console.log(label);
 
     this.setState({
       crop_image: this.state.crop_image.map(crop => {
@@ -323,7 +322,7 @@ class Body extends Component {
       })
     });
 
-    console.log("label change");
+    //console.log("label change");
   };
 
   // 이미지를 눌렀을 때 좌표를 불러옴
@@ -344,7 +343,7 @@ class Body extends Component {
       } else return true;
     });
 
-    console.log(targetId);
+    //console.log(targetId);
 
     if (targetId !== "nothing") {
       this.handleOnCropModify(targetId);
@@ -357,7 +356,7 @@ class Body extends Component {
   // 크롭이 완료되었을 때 이미지화 시켜 서버로 전송시킨다
   async handleCropMouseUp() {
     if (this.state.useAI) {
-      console.log(this.state.crop.height);
+      //console.log(this.state.crop.height);
       if (this.state.crop.height)
         this.setState(
           {
