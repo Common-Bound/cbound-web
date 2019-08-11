@@ -139,9 +139,9 @@ class Body extends Component {
   handleClick = async e => {
     let new_crop_image = [];
     // ok 라고 응답하면 모든 crop_image의 각 correct 배열에 1(OK)를 추가한다
-    if (e.target.name === 'ok') {
+    if (e.target.name === 'notAssociated') {
       new_crop_image = this.state.data.payload.meta.crop_image.map(el => {
-        el.correct.push(1);
+        el.correct.push(0);
         return el;
       })
     }
@@ -159,7 +159,7 @@ class Body extends Component {
     }
 
     await this.sendData(url, option);
-    await this.fetchData();
+    //await this.fetchData();
   }
 
 
@@ -204,9 +204,11 @@ class Body extends Component {
               <img id="image" src={data.payload.orig_image} alt="" onLoad={this.drawImage.bind(this)} />
             </div>
           </canvas>
-          <p>문제가 없는 데이터 인가요?</p>
-          {true ? <button onClick={this.handleClick} name="ok">예(다음 작업 가져오기)</button> : ''}
-          <button onClick={this.handleClick} name="nok">아니오(어떤 크롭이 잘못된지 표시하기)</button>
+          <p>작업 전!</p>
+          {true ? <button onClick={this.handleClick} name="notAssociated">프로젝트와 연관된 사진인가요?</button> : ''}
+          <button onClick={this.handleClick} name="good">문제 없습니다. Step2로 가죠</button>
+
+          {/* 해상도가 깨지는 경우 또는 블러 사진일 경우 인공지능이 걸러준다고 가정 */}
         </Main>
       </div >
     );

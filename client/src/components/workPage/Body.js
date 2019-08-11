@@ -455,7 +455,7 @@ class Body extends Component {
                 <div />
                 <div />
               </div>
-              <p style={{ color: "white" }}>이미지 분석 중...</p>
+              <p style={{ color: "white" }}></p>
             </LoadingContainer>
           ) : null}
         </ImageContainer>
