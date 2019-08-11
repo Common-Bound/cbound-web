@@ -19,6 +19,11 @@ const Title = styled.div`
   padding: 40px 60px;
 `;
 
+const SemiTitle = styled.div`
+  font-size: 1.4rem;
+  padding: 10px 60px;
+`;
+
 const TableContainer = styled.div`
   width: 80%;
   height: 600px;
@@ -82,7 +87,8 @@ class ProjectsPage extends Component {
   render() {
     return (
       <Container>
-        <Title>참여한 프로젝트</Title>
+        <Title>Common Bound</Title>
+        <SemiTitle>참여한 프로젝트</SemiTitle>
         <TableContainer>
           <Table>
             <TableHead>

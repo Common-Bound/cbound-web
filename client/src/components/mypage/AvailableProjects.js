@@ -19,6 +19,12 @@ const Title = styled.div`
   font-weight: bold;
   padding: 40px 60px;
 `;
+
+const SemiTitle = styled.div`
+  font-size: 1.4rem;
+  padding: 10px 60px;
+`;
+
 const TableContainer = styled.div`
   width: 80%;
   height: 600px;
@@ -121,7 +127,8 @@ class AvailableProjects extends Component {
   render() {
     return (
       <Container>
-        <Title>참여 가능한 프로젝트</Title>
+        <Title>Common Bound</Title>
+        <SemiTitle>참여 가능한 프로젝트</SemiTitle>
         <TableContainer>
           <Table>
             <TableHead>
@@ -133,10 +140,10 @@ class AvailableProjects extends Component {
             </TableHead>
             <TableBody>{this.state.projects}</TableBody>
           </Table>
+          <Button onClick={this.handleClick.bind(this)}>
+            랜덤 프로젝트 추가
+          </Button>
         </TableContainer>
-        <Button onClick={this.handleClick.bind(this)}>
-          랜덤 프로젝트 추가
-        </Button>
       </Container>
     );
   }

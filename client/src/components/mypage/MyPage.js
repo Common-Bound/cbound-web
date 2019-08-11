@@ -63,8 +63,6 @@ const Section = styled.div`
 
   margin-right: 0px;
 
-  margin-bottom: 100px;
-
   background: white;
 `;
 
