@@ -40,7 +40,7 @@ class Header extends Component {
       <HeaderContainer>
         <Logo />
         <Title>Common Bound</Title>
-        <Link to='/auth/signin'><LoginButton>로그인</LoginButton></Link>
+        <Link to='/signin/select'><LoginButton>로그인</LoginButton></Link>
       </HeaderContainer>
     );
   }
