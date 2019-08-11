@@ -11,7 +11,9 @@ class Body extends Component {
     this.state = {
       data: null,
       loading: true,
-      correct: []
+      correct: [],
+      needCropAll: false,
+      nowCropImgId: 0
     };
     this.handleClick = this.handleClick.bind(this);
   }
@@ -154,6 +156,7 @@ class Body extends Component {
           return el;
         });
       }
+
       const url = "/mypage/task/inspection";
       const option = {
         method: "POST",
@@ -167,7 +170,13 @@ class Body extends Component {
       };
 
       await this.sendData(url, option);
-      //await this.fetchData();
+      await this.fetchData();
+    } else {
+      // 하나하나 봐가면서 Crop OX 해야함
+
+      this.setState({
+        needCropAll: true
+      });
     }
   };
 
@@ -206,48 +215,52 @@ class Body extends Component {
   render() {
     const { data, loading } = this.state;
 
-    if (loading) {
-      return <div>검수 작업 가져오는 중...</div>;
+    if (this.state.needCropAll) {
+      return <div>검수할 크롭 이미지가 나올 영역</div>;
     } else {
-      return (
-        <div>
-          <header>
-            <p>데이터 생산 시각: {data.created_at}</p>
-            <p>프로젝트 ID: {data.project_id}</p>
-            <p>데이터 생산자 ID: {data.creator_id}</p>
-            <p>스케줄링 상태: {data.schedule_state}</p>
-          </header>
-          <Main id="main">
-            <canvas id="canvas">
-              <div style={{ display: "none" }}>
-                <img
-                  id="image"
-                  src={data.payload.orig_image}
-                  alt=""
-                  onLoad={this.drawImage.bind(this)}
-                />
-              </div>
-            </canvas>
-            <p>문제가 없는 사진인가요?</p>
-            {true ? (
-              <button onClick={this.handleClick} name="ok">
-                예(다음 작업 가져오기)
+      if (loading) {
+        return <div>검수 작업 가져오는 중...</div>;
+      } else {
+        return (
+          <div>
+            <header>
+              <p>데이터 생산 시각: {data.created_at}</p>
+              <p>프로젝트 ID: {data.project_id}</p>
+              <p>데이터 생산자 ID: {data.creator_id}</p>
+              <p>스케줄링 상태: {data.schedule_state}</p>
+            </header>
+            <Main id="main">
+              <canvas id="canvas">
+                <div style={{ display: "none" }}>
+                  <img
+                    id="image"
+                    src={data.payload.orig_image}
+                    alt=""
+                    onLoad={this.drawImage.bind(this)}
+                  />
+                </div>
+              </canvas>
+              <p>문제가 없는 사진인가요?</p>
+              {true ? (
+                <button onClick={this.handleClick} name="ok">
+                  예(다음 작업 가져오기)
+                </button>
+              ) : (
+                ""
+              )}
+              <button onClick={this.handleClick} name="nok">
+                아니오(어떤 크롭이 잘못된지 표시하기)
               </button>
-            ) : (
-              ""
-            )}
-            <button onClick={this.handleClick} name="nok">
-              아니오(어떤 크롭이 잘못된지 표시하기)
-            </button>
-            <button onClick={this.handleClick} name="notAssociated">
-              연관성이 없는 사진
-            </button>
-            <button onClick={this.handleReset.bind(this)} name="reset">
-              모든 작업 초기화(스케줄 상태 + 검수 내역 삭제)
-            </button>
-          </Main>
-        </div>
-      );
+              <button onClick={this.handleClick} name="notAssociated">
+                연관성이 없는 사진
+              </button>
+              <button onClick={this.handleReset.bind(this)} name="reset">
+                모든 작업 초기화(스케줄 상태 + 검수 내역 삭제)
+              </button>
+            </Main>
+          </div>
+        );
+      }
     }
   }
 }
