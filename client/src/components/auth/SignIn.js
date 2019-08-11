@@ -2,6 +2,10 @@ import React, { Component } from "react";
 import { Redirect, Link } from "react-router-dom";
 import styled from 'styled-components';
 
+const SingInContainer = styled.div`
+  width: 100%;
+`;
+
 class SignIn extends Component {
   constructor(props) {
     super(props);
@@ -54,7 +58,7 @@ class SignIn extends Component {
   render() {
     const { email, password, result } = this.state;
     return (
-      <div>
+      <SingInContainer>
         <form onSubmit={this.handleSubmit}>
           <input
             type="text"
@@ -81,7 +85,7 @@ class SignIn extends Component {
           </Link>
         </p>
         <div>{result === true ? <Redirect to="/mypage" /> : ""}</div>
-      </div>
+      </SingInContainer>
     );
   }
 }
