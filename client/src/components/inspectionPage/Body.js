@@ -142,28 +142,34 @@ class Body extends Component {
   handleClick = async e => {
     let new_crop_image = [];
     // ok 라고 응답하면 모든 crop_image의 각 correct 배열에 1(OK)를 추가한다
-    if (e.target.name === 'notAssociated') {
-      new_crop_image = this.state.data.payload.meta.crop_image.map(el => {
-        el.correct.push(0);
-        return el;
-      });
+    if (e.target.name !== "nok") {
+      if (e.target.name === "notAssociated") {
+        new_crop_image = this.state.data.payload.meta.crop_image.map(el => {
+          el.correct.push(0);
+          return el;
+        });
+      } else if (e.target.name === "ok") {
+        new_crop_image = this.state.data.payload.meta.crop_image.map(el => {
+          el.correct.push(1);
+          return el;
+        });
+      }
+      const url = "/mypage/task/inspection";
+      const option = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          new_crop_image: new_crop_image,
+          data_id: this.state.data.id
+        })
+      };
+
+      await this.sendData(url, option);
+      //await this.fetchData();
     }
-
-    const url = "/mypage/task/inspection";
-    const option = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        new_crop_image: new_crop_image,
-        data_id: this.state.data.id
-      })
-    };
-
-    await this.sendData(url, option);
-    //await this.fetchData();
-  }
+  };
 
   handleReset = async e => {
     const url = "/mypage/task/inspection";
@@ -202,7 +208,7 @@ class Body extends Component {
 
     if (loading) {
       return <div>검수 작업 가져오는 중...</div>;
-    } else
+    } else {
       return (
         <div>
           <header>
@@ -222,7 +228,7 @@ class Body extends Component {
                 />
               </div>
             </canvas>
-            <p>문제가 없는 데이터 인가요?</p>
+            <p>문제가 없는 사진인가요?</p>
             {true ? (
               <button onClick={this.handleClick} name="ok">
                 예(다음 작업 가져오기)
@@ -233,35 +239,16 @@ class Body extends Component {
             <button onClick={this.handleClick} name="nok">
               아니오(어떤 크롭이 잘못된지 표시하기)
             </button>
+            <button onClick={this.handleClick} name="notAssociated">
+              연관성이 없는 사진
+            </button>
             <button onClick={this.handleReset.bind(this)} name="reset">
               모든 작업 초기화(스케줄 상태 + 검수 내역 삭제)
             </button>
           </Main>
         </div>
-      )
+      );
     }
-    else return (
-      <div>
-        <header>
-          <p>데이터 생산 시각: {data.created_at}</p>
-          <p>프로젝트 ID: {data.project_id}</p>
-          <p>데이터 생산자 ID: {data.creator_id}</p>
-          <p>스케줄링 상태: {data.schedule_state}</p>
-        </header>
-        <Main id="main">
-          <canvas id="canvas">
-            <div style={{ display: 'none' }} >
-              <img id="image" src={data.payload.orig_image} alt="" onLoad={this.drawImage.bind(this)} />
-            </div>
-          </canvas>
-          <p>작업 전!</p>
-          {true ? <button onClick={this.handleClick} name="notAssociated">프로젝트와 연관된 사진인가요?</button> : ''}
-          <button onClick={this.handleClick} name="good">문제 없습니다. Step2로 가죠</button>
-
-          {/* 해상도가 깨지는 경우 또는 블러 사진일 경우 인공지능이 걸러준다고 가정 */}
-        </Main>
-      </div >
-    );
   }
 }
 
