@@ -1,5 +1,31 @@
 import React, { Component } from "react";
 import ProjectJoined from "../card/Project_joined";
+import styled from "styled-components";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+
+const Container = styled.div`
+  border: 1px solid blue;
+  width: 100%;
+  height: 100vh;
+`;
+
+const Title = styled.div`
+  font-size: 2rem;
+  font-weight: bold;
+  padding: 40px 60px;
+`;
+
+const TableContainer = styled.div`
+  width: 80%;
+  height: 600px;
+  margin: 0 auto;
+  overflow: scroll;
+  text-align: center;
+`;
 
 class ProjectsPage extends Component {
   constructor(props) {
@@ -55,9 +81,21 @@ class ProjectsPage extends Component {
 
   render() {
     return (
-      <div>
-        <ul>{this.state.projects}</ul>
-      </div>
+      <Container>
+        <Title>참여한 프로젝트</Title>
+        <TableContainer>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell align="center">제목</TableCell>
+                <TableCell align="center">보상</TableCell>
+                <TableCell align="center">마감 기한</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>{this.state.projects}</TableBody>
+          </Table>
+        </TableContainer>
+      </Container>
     );
   }
 }

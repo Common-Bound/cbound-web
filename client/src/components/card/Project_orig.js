@@ -1,12 +1,7 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 import TableCell from "@material-ui/core/TableCell";
-import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
-
-const Tr = styled.tr`
-  border: 1px solid lightgrey;
-`;
 
 class Project_orig extends Component {
   constructor(props) {

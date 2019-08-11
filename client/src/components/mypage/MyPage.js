@@ -14,7 +14,7 @@ const Container = styled.div`
 
   width: 100%;
 
-  height: 100%;
+  height: 100vh;
 
   overflow: hidden;
 
@@ -34,7 +34,7 @@ const Container = styled.div`
 const LeftBanner = styled.div`
   width: 70px;
 
-  height: 3000px;
+  height: 100vh;
 
   position: fixed;
 
