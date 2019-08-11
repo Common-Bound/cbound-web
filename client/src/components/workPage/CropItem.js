@@ -160,17 +160,11 @@ class CropItem extends Component {
         });
       }
       const bodyData = JSON.stringify({ crop_image: this.state.imgSrc });
-      
-      //console.log(this.props.useAI)
-      
-      //console.log(this.props.crop.label, this.state.label);
-      
-      if (this.props.useAI && this.props.crop.label !== this.state.label || (!this.props.crop.label)) {
+      if (this.props.useAI && this.props.crop.label !== this.state.label) {
         console.log("UPDATE");
         this.setState({
           editing: true
         });
-        
         await this.sendData(
           bodyData,
           "https://cors-anywhere.herokuapp.com/http://ec2-54-180-87-68.ap-northeast-2.compute.amazonaws.com:8080/ocr/recognition/"
