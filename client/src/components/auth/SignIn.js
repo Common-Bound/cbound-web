@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Redirect, Link } from "react-router-dom";
-import styled from 'styled-components';
+import styled from "styled-components";
+import Button from "@material-ui/core/Button";
 
 const SingInContainer = styled.div`
   width: 100%;
@@ -74,9 +75,14 @@ class SignIn extends Component {
             onChange={this.handleChange}
             placeholder="password"
           />
-          <button type="submit" onClick={this.handleSubmit}>
+          <Button
+            variant="contained"
+            color="primary"
+            type="submit"
+            onClick={this.handleSubmit}
+          >
             로그인
-          </button>
+          </Button>
         </form>
         <p>
           아직 회원이 아니신가요?

@@ -1,6 +1,12 @@
 import React, { Component } from "react";
 import ProjectOrig from "../card/Project_orig";
 import styled from "styled-components";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import Button from "@material-ui/core/Button";
 
 const Container = styled.div`
   border: 1px solid blue;
@@ -14,11 +20,14 @@ const Title = styled.div`
   padding: 40px 60px;
 `;
 const TableContainer = styled.div`
-  width: 100%;
+  width: 80%;
+  height: 600px;
+  margin: 0 auto;
+  overflow: scroll;
   text-align: center;
 `;
 
-const Table = styled.table`
+/*const Table = styled.table`
   width: 80%;
   margin: 0 auto;
   border: 1px solid lightgrey;
@@ -26,7 +35,7 @@ const Table = styled.table`
 
 const Thead = styled.thead`
   width: 100%;
-`;
+`;*/
 
 class AvailableProjects extends Component {
   constructor(props) {
@@ -115,19 +124,19 @@ class AvailableProjects extends Component {
         <Title>참여 가능한 프로젝트</Title>
         <TableContainer>
           <Table>
-            <Thead>
-              <tr>
-                <th align="center">제목</th>
-                <th align="center">보상</th>
-                <th align="center">마감 기한</th>
-              </tr>
-            </Thead>
-            <tbody>{this.state.projects}</tbody>
+            <TableHead>
+              <TableRow>
+                <TableCell align="center">제목</TableCell>
+                <TableCell align="center">보상</TableCell>
+                <TableCell align="center">마감 기한</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>{this.state.projects}</TableBody>
           </Table>
         </TableContainer>
-        <button onClick={this.handleClick.bind(this)}>
+        <Button onClick={this.handleClick.bind(this)}>
           랜덤 프로젝트 추가
-        </button>
+        </Button>
       </Container>
     );
   }

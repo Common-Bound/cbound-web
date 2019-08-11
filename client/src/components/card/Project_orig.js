@@ -1,5 +1,8 @@
 import React, { Component } from "react";
-import styled from 'styled-components';
+import styled from "styled-components";
+import TableCell from "@material-ui/core/TableCell";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
 
 const Tr = styled.tr`
   border: 1px solid lightgrey;
@@ -12,7 +15,7 @@ class Project_orig extends Component {
   }
 
   handleClick = e => {
-    const url = '/mypage/join';
+    const url = "/mypage/join";
     fetch(url, {
       method: "POST",
       headers: {
@@ -28,7 +31,9 @@ class Project_orig extends Component {
           return alert(data.message);
         }
         if (data.result === true) {
-          return alert('프로젝트에 참여하였습니다. 가이드라인을 잘 읽고 참여해 주세요');
+          return alert(
+            "프로젝트에 참여하였습니다. 가이드라인을 잘 읽고 참여해 주세요"
+          );
         }
       })
       .catch(err => {
@@ -38,11 +43,13 @@ class Project_orig extends Component {
 
   render() {
     return (
-      <Tr>
-        <td onClick={this.handleClick}>{this.props.title}</td>
-        <td>{this.props.reward}</td>
-        <td>{this.props.due_date}</td>
-      </Tr>
+      <TableRow>
+        <TableCell align="center" onClick={this.handleClick}>
+          {this.props.title}
+        </TableCell>
+        <TableCell align="center">{this.props.reward}</TableCell>
+        <TableCell align="center">{this.props.due_date}</TableCell>
+      </TableRow>
     );
   }
 }
