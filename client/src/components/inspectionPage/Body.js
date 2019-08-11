@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 
 const Main = styled.div`
+  position: relative;
 `;
 
 class Body extends Component {
@@ -98,6 +99,25 @@ class Body extends Component {
       const width = crop.width;
       const height = crop.height;
 
+      // 사각형 그려주기
+
+      const rect = document.createElement('div');
+      document.getElementById('main').appendChild(rect);
+
+      rect.setAttribute('style', `
+        border: 1px dotted red;
+        background-color: rgba(0, 0, 0, 0.2);
+        position: absolute;
+        top: ${y}px;
+        left: ${x}px;
+        width: ${width}px;
+        height: ${height}px;
+      `)
+      rect.setAttribute('name', crop.label);
+      rect.onmouseenter = function () {
+        console.log(this.getAttribute('name'));
+      }
+
       // 사각형 바운딩 박스 그려준다
       ctx.strokeStyle = "yellow";
       ctx.rect(x, y, width, height);
@@ -178,7 +198,7 @@ class Body extends Component {
           <p>데이터 생산자 ID: {data.creator_id}</p>
           <p>스케줄링 상태: {data.schedule_state}</p>
         </header>
-        <Main>
+        <Main id="main">
           <canvas id="canvas">
             <div style={{ display: 'none' }} >
               <img id="image" src={data.payload.orig_image} alt="" onLoad={this.drawImage.bind(this)} />

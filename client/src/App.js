@@ -1,39 +1,24 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Route } from "react-router-dom";
+import styled from 'styled-components';
 import "./App.css";
 import SignUp from "./components/auth/SignUp";
 import MyPage from "./components/mypage/MyPage";
 import SignIn from "./components/auth/SignIn";
 import SignOut from "./components/auth/SignOut";
-import WorkPage from "./components/workPage/WorkPage";
 import ProjectsPage from "./components/projectsPage/ProjectsPage";
-import TestForm from "./TestForm";
+import Main from './components/main/Main';
 import Select from "./components/auth/Select";
 
-function Main() {
-  return (
-    <div>
-      <h1>Welcome to DALA!</h1>
-      <header>
-        <Link to="/signin/select">로그인</Link>
-      </header>
-    </div>
-  );
-}
-
-function Header() {
-  return (
-    <header>
-      <Link to="/mypage">마이페이지</Link>
-      <Link to="/projects">프로젝트 목록</Link>
-    </header>
-  );
-}
+const AppContainer = styled.div`
+  width: 100%;
+  heigth: 100vh;
+`;
 
 class App extends React.Component {
   render() {
     return (
-      <div>
+      <AppContainer>
         <Router>
           <Route path="/" exact component={Main} />
           <Route path="/mypage" component={MyPage} />
@@ -43,7 +28,7 @@ class App extends React.Component {
           <Route path="/auth/signin" component={SignIn} />
           <Route path="/auth/signout" component={SignOut} />
         </Router>
-      </div>
+      </AppContainer>
     );
   }
 }
