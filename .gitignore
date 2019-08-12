@@ -59,3 +59,9 @@ typings/
 
 # next.js build output
 .next
+
+# AWS config file
+config/
+
+# DB config file
+db/

@@ -1,5 +1,11 @@
 import React, { Component } from "react";
 import { Redirect, Link } from "react-router-dom";
+import styled from "styled-components";
+import Button from "@material-ui/core/Button";
+
+const SingInContainer = styled.div`
+  width: 100%;
+`;
 
 class SignIn extends Component {
   constructor(props) {
@@ -53,7 +59,7 @@ class SignIn extends Component {
   render() {
     const { email, password, result } = this.state;
     return (
-      <div>
+      <SingInContainer>
         <form onSubmit={this.handleSubmit}>
           <input
             type="text"
@@ -69,9 +75,14 @@ class SignIn extends Component {
             onChange={this.handleChange}
             placeholder="password"
           />
-          <button type="submit" onClick={this.handleSubmit}>
+          <Button
+            variant="contained"
+            color="primary"
+            type="submit"
+            onClick={this.handleSubmit}
+          >
             로그인
-          </button>
+          </Button>
         </form>
         <p>
           아직 회원이 아니신가요?
@@ -79,8 +90,8 @@ class SignIn extends Component {
             <button>회원가입</button>
           </Link>
         </p>
-        <div>{result === true ? <Redirect to="/" /> : ""}</div>
-      </div>
+        <div>{result === true ? <Redirect to="/mypage" /> : ""}</div>
+      </SingInContainer>
     );
   }
 }
