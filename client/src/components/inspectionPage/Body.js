@@ -39,7 +39,7 @@ class Body extends Component {
     this.setState({
       loading: true
     });
-    const url = "/mypage/task/inspection";
+    const url = `/mypage/task/inspection?project_id=${this.props.project_id}`;
     console.log(url);
     await fetch(url)
       .then(res => res.json())

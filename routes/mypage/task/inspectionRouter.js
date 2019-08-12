@@ -85,7 +85,7 @@ router.post("/", (req, res, next) => {
     set schedule_state='queued', inspector = array_append(inspector, '${
       req.user.id
     }'),
-    payload = jsonb_set(payload, '{meta, 0}', jsonb '${new_crop_image}', true)
+    payload = jsonb_set(payload, '{meta, crop_image}', jsonb '${new_crop_image}', true)
     where id='${data_id}'
     `,
     [],
