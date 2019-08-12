@@ -44,7 +44,7 @@ class CropItem extends Component {
       method: "post",
       body: bodyData
     })
-      .then(function (res) {
+      .then(function(res) {
         return res.json();
       })
       .then(async data => {
@@ -61,7 +61,7 @@ class CropItem extends Component {
           resolve(true);
         });
       })
-      .catch(function (ex) {
+      .catch(function(ex) {
         console.log("error occured");
         console.log(ex);
       });
@@ -83,7 +83,7 @@ class CropItem extends Component {
     const canvas = document.createElement("canvas");
     const scaleX = image.naturalWidth / image.width;
     const scaleY = image.naturalHeight / image.height;
-    
+
     /*
     console.log('scaleX: ');
     console.log(scaleX);
@@ -129,7 +129,7 @@ class CropItem extends Component {
   // 처음 컴포넌트가 첫 렌더링을 마쳤을 때 실행됨
   async componentDidMount() {
     //console.log("DIDMONT");
-    
+
     const { image, crop } = this.props;
 
     await this.setState({ imgSrc: await this.getCroppedImg(image, crop) });
@@ -165,10 +165,13 @@ class CropItem extends Component {
       }
       const bodyData = JSON.stringify({ crop_image: this.state.imgSrc });
       //console.log(this.props.useAI)
-      
+
       //console.log(this.props.crop.label, this.state.label);
-      
-      if (this.props.useAI && this.props.crop.label !== this.state.label || (!this.props.crop.label)) {
+
+      if (
+        (this.props.useAI && this.props.crop.label !== this.state.label) ||
+        !this.props.crop.label
+      ) {
         // console.log("UPDATE");
         this.setState({
           editing: true

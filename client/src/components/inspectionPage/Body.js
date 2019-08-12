@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import styled from "styled-components";
+import Insepct1By1 from "./Inspect1By1";
+import Inspect1By1 from "./Inspect1By1";
 
 const Main = styled.div`
   position: relative;
@@ -13,9 +15,14 @@ class Body extends Component {
       loading: true,
       correct: [],
       needCropAll: false,
-      nowCropImgId: 0
+      nowCropImgId: 0,
+      is_crops_correct: []
     };
     this.handleClick = this.handleClick.bind(this);
+
+    this.clickO = this.clickO.bind(this);
+    this.clickX = this.clickX.bind(this);
+    this.handleEndInspect = this.handleEndInspect.bind(this);
   }
 
   async componentDidMount() {
@@ -173,7 +180,6 @@ class Body extends Component {
       await this.fetchData();
     } else {
       // 하나하나 봐가면서 Crop OX 해야함
-
       this.setState({
         needCropAll: true
       });
@@ -212,11 +218,66 @@ class Body extends Component {
       .catch(err => console.log(err));
   };
 
+  clickO() {
+    this.setState(
+      {
+        nowCropImgId: this.state.nowCropImgId + 1,
+        is_crops_correct: this.state.is_crops_correct.concat(1)
+      },
+      () => {
+        console.log(this.state.is_crops_correct);
+      }
+    );
+  }
+
+  clickX() {
+    this.setState({
+      nowCropImgId: this.state.nowCropImgId + 1,
+      is_crops_correct: this.state.is_crops_correct.concat(0)
+    });
+  }
+
+  async handleEndInspect() {
+    let new_crop_image = [];
+    let cnt = 0;
+
+    new_crop_image = this.state.data.payload.meta.crop_image.map(el => {
+      el.correct.push(this.state.is_crops_correct[cnt++]);
+      return el;
+    });
+
+    const url = "/mypage/task/inspection";
+    const option = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        new_crop_image: new_crop_image,
+        data_id: this.state.data.id
+      })
+    };
+
+    console.log(new_crop_image);
+    await this.sendData(url, option);
+    await this.fetchData();
+  }
+
   render() {
     const { data, loading } = this.state;
 
     if (this.state.needCropAll) {
-      return <div>검수할 크롭 이미지가 나올 영역</div>;
+      return (
+        <Inspect1By1
+          clickO={this.clickO}
+          clickX={this.clickX}
+          handleEndInspect={this.handleEndInspect}
+          id={this.state.nowCropImgId}
+          data={data.payload.orig_image}
+          ammountCropImage={this.state.correct.length}
+          crop_image={data.payload.meta.crop_image}
+        />
+      );
     } else {
       if (loading) {
         return <div>검수 작업 가져오는 중...</div>;
