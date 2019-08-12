@@ -61,7 +61,7 @@ class Body extends Component {
       method: "post",
       body: bodyData
     })
-      .then(function (res) {
+      .then(function(res) {
         return res.json();
       })
       .then(async data => {
@@ -81,7 +81,7 @@ class Body extends Component {
                 this.state.imageRef.naturalHeight / this.state.imageRef.height;
               //console.log("scaleX: " + scaleX);
               //console.log("scaleY: " + scaleY);
-              
+
               return {
                 id: counter++,
                 x: crop.x / scaleX,
@@ -104,7 +104,7 @@ class Body extends Component {
           resolve(true);
         });
       })
-      .catch(function (ex) {
+      .catch(function(ex) {
         console.log("error occured");
         console.log(ex);
       });
@@ -166,11 +166,9 @@ class Body extends Component {
   // 입력창의 value가 바뀔 때 변경사항 적용
   handleChange = e => {
     if (e.target.name === "useAI") {
-      this.setState(
-        {
-          [e.target.name]: !this.state.useAI
-        }
-      );
+      this.setState({
+        [e.target.name]: !this.state.useAI
+      });
     } else {
       this.setState({
         [e.target.name]: e.target.value
@@ -244,7 +242,7 @@ class Body extends Component {
     const bodyData = new FormData();
 
     bodyData.append("orig_image", this.state.orig_image_file);
-    
+
     // console.log(this.state.orig_image_file);
     bodyData.append(
       "meta",
@@ -331,7 +329,7 @@ class Body extends Component {
     const y = e.nativeEvent.offsetY;
     const crops = this.state.crop_image;
     var targetId = "nothing";
-    crops.every(function (crop) {
+    crops.every(function(crop) {
       if (
         x > crop.x &&
         x < crop.x + crop.width &&
@@ -455,7 +453,7 @@ class Body extends Component {
                 <div />
                 <div />
               </div>
-              <p style={{ color: "white" }}></p>
+              <p style={{ color: "white" }} />
             </LoadingContainer>
           ) : null}
         </ImageContainer>
@@ -484,8 +482,8 @@ class Body extends Component {
                   )}
                 </Dropzone>
               ) : (
-                  ""
-                )}
+                ""
+              )}
               {this.state.showEdit && this.state.orig_image ? (
                 <button
                   type="button"
