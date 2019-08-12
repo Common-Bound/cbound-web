@@ -50,7 +50,7 @@ class ProjectsPage extends Component {
    * @memberof ProjectsPage
    */
   async fetchProject() {
-    const url = this.props.match.path;
+    const url = `${this.props.match.path}`;
     console.log(url);
     await fetch(url)
       .then(res => res.json())
@@ -65,6 +65,7 @@ class ProjectsPage extends Component {
               <ProjectJoined
                 key={el.id}
                 id={el.id}
+                ref_project={el.ref_project}
                 title={el.title}
                 simple_description={el.simple_description}
                 detail_description={el.detail_description}

@@ -1,13 +1,13 @@
 import React from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
-import styled from 'styled-components';
+import styled from "styled-components";
 import "./App.css";
 import SignUp from "./components/auth/SignUp";
 import MyPage from "./components/mypage/MyPage";
 import SignIn from "./components/auth/SignIn";
 import SignOut from "./components/auth/SignOut";
 import ProjectsPage from "./components/projectsPage/ProjectsPage";
-import Main from './components/main/Main';
+import Main from "./components/main/Main";
 import Select from "./components/auth/Select";
 
 const AppContainer = styled.div`

@@ -1,46 +1,57 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import styled from 'styled-components';
+import React, { Component } from "react";
+import { Link } from "react-router-dom";
+import styled from "styled-components";
+
+import logo from "../../images/좌측상단_로고.png";
+import name from "../../images/COMMONBOUND.png";
+import signIn from "../../images/Sign_In_Off.png";
 
 const HeaderContainer = styled.div`
-  display: flex;
   position: fixed;
+  display: flex;
   justify-content: space-between;
+
   align-items: center;
-  top: 0px;
+
+  background-color: #000000;
   width: 100%;
-  height: 60px;
-  background-color: black;
+  height: 100px;
 `;
 
 const Logo = styled.div`
-  width: 30px;
-  height: 30px;
-  margin: 10px 40px;
-  background-color: white;
-  border-radius: 100%;
+  padding: 0px 24px;
+
+  width: 67px;
+  height: 67px;
 `;
 
 const Title = styled.div`
-  color: white;
+  width: 347px;
+  height: 40px;
 `;
 
 const LoginButton = styled.div`
-  background-color: lightblue;
-  width: 70px;
-  height: 26px;
-  margin: 10px 40px;
-  border-radius: 40px;
-  text-align: center;
+  margin: 20px;
+
+  width: 127px;
+  height: 41px;
 `;
 
 class Header extends Component {
   render() {
     return (
       <HeaderContainer>
-        <Logo />
-        <Title>Common Bound</Title>
-        <Link to='/signin/select'><LoginButton>로그인</LoginButton></Link>
+        <Logo>
+          <img src={logo} alt="" />
+        </Logo>
+        <Title>
+          <img src={name} alt="" />
+        </Title>
+        <Link to="/signin/select">
+          <LoginButton>
+            <img src={signIn} alt="" />
+          </LoginButton>
+        </Link>
       </HeaderContainer>
     );
   }

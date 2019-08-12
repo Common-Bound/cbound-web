@@ -1,10 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const projectRouter = require("./mypage/projects");
-const joinRouter = require('./mypage/join');
-const taskRouter = require('./mypage/taskRouter');
+const joinRouter = require("./mypage/join");
+const taskRouter = require("./mypage/taskRouter");
 const db = require("../db/index");
-const uuid = require('uuid/v4');
+const uuid = require("uuid/v4");
 
 // path: ~/mypage
 // 사용자 로그인 여부 검사
@@ -15,9 +15,9 @@ const isAuthenticated = (req, res, next) => {
 };
 router.use(isAuthenticated);
 
-router.use('/join', joinRouter);
+router.use("/join", joinRouter);
 router.use("/projects", projectRouter);
-router.use('/task', taskRouter);
+router.use("/task", taskRouter);
 
 // 내가 참여 가능한 프로젝트 목록들을 보여준다
 router.get("/", (req, res, next) => {
@@ -51,13 +51,25 @@ router.post("/", (req, res, next) => {
 
   // project 테이블에 project 를 추가한다
   // project 속성
-  // id, title, image, simple_desc, detail_desc,
+  // id, ref_project, title, image, simple_desc, detail_desc,
   // due_date, created_at, type, project_type,
   // guideline_url, reward
   db.query(
-    "insert into project values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)",
-    [normal_id, titles[title_index], null, '간단한 설명', '자세한 설명 입니다',
-      '무기한', date, 'image', 'normal', null, reward],
+    "insert into project values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)",
+    [
+      normal_id,
+      null,
+      titles[title_index],
+      null,
+      "간단한 설명",
+      "자세한 설명 입니다",
+      "무기한",
+      date,
+      "image",
+      "normal",
+      null,
+      reward
+    ],
     (err, result) => {
       if (err) {
         console.log(err);
@@ -65,9 +77,21 @@ router.post("/", (req, res, next) => {
       }
       // 검수 프로젝트 추가
       db.query(
-        "insert into project values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)",
-        [inspection_id, titles[title_index] + '(검수)', null, '간단한 설명', '자세한 설명 입니다',
-          '무기한', date, 'image', 'inspection', null, reward],
+        "insert into project values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)",
+        [
+          inspection_id,
+          normal_id,
+          titles[title_index] + "(검수)",
+          null,
+          "간단한 설명",
+          "자세한 설명 입니다",
+          "무기한",
+          date,
+          "image",
+          "inspection",
+          null,
+          reward
+        ],
         (err, result) => {
           if (err) {
             console.log(err);
@@ -75,7 +99,7 @@ router.post("/", (req, res, next) => {
           }
           return res.json({ result: true });
         }
-      )
+      );
     }
   );
 });

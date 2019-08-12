@@ -87,6 +87,7 @@ class AvailableProjects extends Component {
           <ProjectOrig
             key={el.id}
             id={el.id}
+            ref_project={el.ref_project}
             title={el.title}
             simple_description={el.simple_description}
             detail_description={el.detail_description}
