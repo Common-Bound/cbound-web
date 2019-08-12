@@ -13,6 +13,8 @@ router.use("/", (req, res, next) => {
 // 그리고 해당 data의 상태를 'reserved' 로 변경한다
 // 그리하여 다른 검수 작업자가 해당 data에 접근하지 못 하게 한다
 router.get("/", (req, res, next) => {
+  const project_id = req.query.project_id;
+  console.log(project_id);
   db.query(
     `begin;
     lock table data in exclusive mode;
@@ -24,7 +26,9 @@ router.get("/", (req, res, next) => {
       where 
         schedule_state='queued' 
         and 
-        '${req.user.id}' != ALL(inspector) 
+        '${req.user.id}' != ALL(inspector)
+        and
+        project_id='${project_id}'
       order by 
         created_at asc 
       limit 1 

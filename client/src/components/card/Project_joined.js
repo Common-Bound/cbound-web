@@ -9,7 +9,15 @@ class Project_joined extends Component {
     return (
       <TableRow>
         <TableCell align="center">
-          <Link to={`/mypage/task/${this.props.project_type}/${this.props.id}`}>
+          <Link
+            to={
+              this.props.ref_project
+                ? `/mypage/task/${this.props.project_type}/${
+                    this.props.ref_project
+                  }`
+                : `/mypage/task/${this.props.project_type}/${this.props.id}`
+            }
+          >
             {this.props.title}
           </Link>
         </TableCell>

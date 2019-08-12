@@ -37,6 +37,7 @@ CREATE TABLE "requester_pool" (
 );
 CREATE TABLE "project" (
   "id" varchar PRIMARY KEY,
+  "ref_project" varchar,
   "title" varchar,
   "title_image" varchar,
   "simple_description" varchar,
