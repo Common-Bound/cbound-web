@@ -3,6 +3,7 @@ import styled from "styled-components";
 import TableCell from "@material-ui/core/TableCell";
 import TableRow from "@material-ui/core/TableRow";
 import { Link } from "react-router-dom";
+import moment from "moment";
 
 const StyledTableCell = styled(TableCell)`
   color: ${props =>
@@ -24,11 +25,27 @@ const StyledLink = styled(Link)`
 
 class Project_joined extends Component {
   render() {
+    function replaceAll(str, searchStr, replaceStr) {
+      return str.split(searchStr).join(replaceStr);
+    }
+
+    const created_time = moment(this.props.created_at, "YYYY-MM-DD").format(
+      "YYYY-MM-DD"
+    );
+    const due_date_time = moment(this.props.due_date, "YYYY-MM-DD").format(
+      "YYYY-MM-DD"
+    );
+
+    const t1 = moment(replaceAll(this.props.created_at, '"', ""));
+    const t2 = moment(replaceAll(this.props.due_date, '"', ""));
+
+    const days = moment.duration(t2.diff(t1)).days();
+    const hours = moment.duration(t2.diff(t1)).hours();
+    const minutes = moment.duration(t2.diff(t1)).minutes();
+
     return (
       <StyledTableRow>
-        <TableCell align="center">
-          {this.props.created_at.substring(0, 10)}
-        </TableCell>
+        <TableCell align="center">{created_time}</TableCell>
         <StyledTableCell align="center" project_type={this.props.project_type}>
           {this.props.project_type === "normal" ? "생성" : "검수"}
         </StyledTableCell>
@@ -46,8 +63,8 @@ class Project_joined extends Component {
           </StyledLink>
         </TableCell>
         <TableCell align="center">{this.props.reward}</TableCell>
-        <TableCell align="center">{this.props.due_date}</TableCell>
-        <TableCell align="center">-</TableCell>
+        <TableCell align="center">{due_date_time}</TableCell>
+        <TableCell align="center">{`${days}일 ${hours}시간 ${minutes}분 뒤 종료`}</TableCell>
       </StyledTableRow>
     );
   }

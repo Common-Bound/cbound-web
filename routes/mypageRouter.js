@@ -5,6 +5,7 @@ const joinRouter = require("./mypage/join");
 const taskRouter = require("./mypage/taskRouter");
 const db = require("../db/index");
 const uuid = require("uuid/v4");
+const moment = require("moment");
 
 // path: ~/mypage
 // 사용자 로그인 여부 검사
@@ -47,7 +48,8 @@ router.post("/", (req, res, next) => {
   ];
   const title_index = Math.floor(Math.random() * 4);
   const reward = Math.floor(Math.random() * 500);
-  const date = new Date();
+  const created_at = moment();
+  const due_date = moment().add("30", "d"); // 마감 기한 30일
 
   // project 테이블에 project 를 추가한다
   // project 속성
@@ -63,8 +65,8 @@ router.post("/", (req, res, next) => {
       null,
       "간단한 설명",
       "자세한 설명 입니다",
-      "무기한",
-      date,
+      due_date,
+      created_at,
       "image",
       "normal",
       null,
@@ -85,8 +87,8 @@ router.post("/", (req, res, next) => {
           null,
           "간단한 설명",
           "자세한 설명 입니다",
-          "무기한",
-          date,
+          due_date,
+          created_at,
           "image",
           "inspection",
           null,
