@@ -12,7 +12,7 @@ class Main extends Component {
   render() {
     return (
       <MainContainer>
-        <Header />
+        <Header page="main" />
         <Body />
       </MainContainer>
     );

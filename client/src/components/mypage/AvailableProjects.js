@@ -33,16 +33,6 @@ const TableContainer = styled.div`
   text-align: center;
 `;
 
-/*const Table = styled.table`
-  width: 80%;
-  margin: 0 auto;
-  border: 1px solid lightgrey;
-`;
-
-const Thead = styled.thead`
-  width: 100%;
-`;*/
-
 class AvailableProjects extends Component {
   constructor(props) {
     super(props);
