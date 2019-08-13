@@ -2,9 +2,8 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
-import logo from "../../images/좌측상단_로고.png";
+import logo from "../../images/logo_2.png";
 import name from "../../images/COMMONBOUND.png";
-import signIn from "../../images/Sign_In_Off.png";
 
 const HeaderContainer = styled.div`
   position: fixed;
@@ -20,10 +19,10 @@ const HeaderContainer = styled.div`
   z-index: 1;
 `;
 
-const Logo = styled.img`
+const Logo = styled.div`
   margin-left: 24px;
   background-image: url(${props => props.img});
-  width: 48px;
+  width: 47px;
   height: 48px;
   background-size: cover;
 `;
@@ -67,6 +66,7 @@ const ProfileButton = styled.div`
   color: white;
 
   transition: 0.5s;
+  text-decoration: none !important;
 
   :hover {
     background-color: white;

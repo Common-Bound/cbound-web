@@ -141,9 +141,10 @@ class CropItem extends Component {
         editing: true
       });
 
+      const randn = Math.floor(Math.random() * 10); // 0 ~ 9 랜덤 정수 생성
       await this.sendData(
         bodyData,
-        "https://cors-anywhere.herokuapp.com/http://ec2-54-180-87-68.ap-northeast-2.compute.amazonaws.com:8080/ocr/recognition/"
+        `https://cors-anywhere.herokuapp.com/http://ec2-18-219-1-134.us-east-2.compute.amazonaws.com:800${randn}/ocr/recognition/`
       );
     }
   }
@@ -176,9 +177,11 @@ class CropItem extends Component {
         this.setState({
           editing: true
         });
+
+        const randn = Math.floor(Math.random() * 10); // 0 ~ 9 랜덤 정수 생성
         await this.sendData(
           bodyData,
-          "https://cors-anywhere.herokuapp.com/http://ec2-54-180-87-68.ap-northeast-2.compute.amazonaws.com:8080/ocr/recognition/"
+          `https://cors-anywhere.herokuapp.com/http://ec2-18-219-1-134.us-east-2.compute.amazonaws.com:800${randn}/ocr/recognition/`
         );
       }
     }
