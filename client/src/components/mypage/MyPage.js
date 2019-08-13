@@ -4,88 +4,101 @@ import ProjectsPage from "../projectsPage/ProjectsPage";
 import WorkPage from "../workPage/WorkPage";
 import AvailableProjects from "./AvailableProjects";
 import styled from "styled-components";
+import Header from "../main/Header";
 
 const Container = styled.div`
-  padding: 0;
-
-  margin: 0;
-
-  /*background-image: url(3jpg);*/
-
   width: 100%;
-
-  height: 100vh;
-
-  overflow: hidden;
-
-  background-position: 0 0;
-
-  background-repeat: no-repeat;
-
-  background-attachment: fixed;
-
-  background-size: cover;
-
-  position: relative;
-
-  overflow-y: auto;
 `;
 
 const LeftBanner = styled.div`
-  width: 70px;
-
+  width: 200px;
   height: 100vh;
-
   position: fixed;
+  top: 64px;
+
+  display: flex;
+  flex-flow: column;
+  align-items: center;
 
   background: #353535;
-
   color: white;
-
-  overflow: hidden;
-
-  float: left;
+  z-index: 1;
 `;
 
-const Icon = styled.div`
+const StyledLink = styled(Link)`
   display: flex;
+  flex-flow: row;
   justify-content: center;
-  align-content: center;
-  width: 100%;
-  height: 60px;
+  align-items: center;
+
+  width: 80%;
+  margin: 0 auto;
+  height: 40px;
   margin-top: 20px;
+
+  text-decoration: none !important;
+
+  color: rgba(255, 255, 255, 0.3);
+
+  :hover {
+    color: white;
+  }
+`;
+
+const AllProjectButton = styled(StyledLink)`
+  color: ${props =>
+    props.pathname === "/mypage" ? "white" : "rgba(255, 255, 255, 0.3)"};
+`;
+
+const MyProjectButton = styled(StyledLink)`
+  color: ${props =>
+    props.pathname === "/mypage/projects"
+      ? "white"
+      : "rgba(255, 255, 255, 0.3)"};
+`;
+
+const Icon = styled.i`
+  transform: scale(1.4, 1.4);
+`;
+
+const IconTitle = styled.div`
+  width: 100px;
+  margin-left: 14px;
 `;
 
 const Section = styled.div`
-  margin-top: 0px;
-
-  margin-left: 70px;
-
-  margin-right: 0px;
-
-  background: white;
+  position: relative;
+  padding-left: 200px;
+  padding-top: 64px;
 `;
 
 class MyPage extends Component {
   render() {
     return (
       <Container>
+        <Header page="mypage" />
         <LeftBanner>
-          <Icon>
-            <Link to={`${this.props.match.url}`}>
-              <i className="fas fa-search-dollar" />
-            </Link>
-          </Icon>
-          <Icon>
-            <Link to={`${this.props.match.url}/projects`}>
-              <i className="fas fa-list" />
-            </Link>
-          </Icon>
-          <Icon>
-            <Link to="/auth/signout">
-              <i className="fas fa-sign-in-alt" />
-            </Link>
-          </Icon>
+          <AllProjectButton
+            to={`${this.props.match.url}`}
+            pathname={this.props.location.pathname}
+          >
+            <Icon className="fas fa-search-dollar" />
+            <IconTitle>All Projects</IconTitle>
+          </AllProjectButton>
+          <MyProjectButton
+            to={`${this.props.match.url}/projects`}
+            pathname={this.props.location.pathname}
+          >
+            <Icon className="fas fa-list" />
+            <IconTitle>My Projects</IconTitle>
+          </MyProjectButton>
+          <StyledLink
+            to="/auth/signout"
+            pathname={this.props.location.pathname}
+          >
+            <Icon className="fas fa-sign-in-alt" />
+            <IconTitle>Quit Mission</IconTitle>
+          </StyledLink>
         </LeftBanner>
         <Section>
           <Route
