@@ -4,12 +4,36 @@ import TableCell from "@material-ui/core/TableCell";
 import TableRow from "@material-ui/core/TableRow";
 import { Link } from "react-router-dom";
 
+const StyledTableCell = styled(TableCell)`
+  color: ${props =>
+    props.project_type === "normal" ? "black" : "blue"} !important;
+`;
+
+const StyledTableRow = styled(TableRow)`
+  transition: 0.2s;
+  cursor: pointer;
+  :hover {
+    background-color: lightgrey;
+  }
+`;
+
+const StyledLink = styled(Link)`
+  text-decoration: none !important;
+  color: black !important;
+`;
+
 class Project_joined extends Component {
   render() {
     return (
-      <TableRow>
+      <StyledTableRow>
         <TableCell align="center">
-          <Link
+          {this.props.created_at.substring(0, 10)}
+        </TableCell>
+        <StyledTableCell align="center" project_type={this.props.project_type}>
+          {this.props.project_type === "normal" ? "생성" : "검수"}
+        </StyledTableCell>
+        <TableCell align="center">
+          <StyledLink
             to={
               this.props.ref_project
                 ? `/mypage/task/${this.props.project_type}/${
@@ -19,11 +43,12 @@ class Project_joined extends Component {
             }
           >
             {this.props.title}
-          </Link>
+          </StyledLink>
         </TableCell>
         <TableCell align="center">{this.props.reward}</TableCell>
         <TableCell align="center">{this.props.due_date}</TableCell>
-      </TableRow>
+        <TableCell align="center">-</TableCell>
+      </StyledTableRow>
     );
   }
 }
