@@ -449,7 +449,7 @@ class Body extends Component {
                 <div />
                 <div />
                 <div />
-                <div />
+                <div />\
                 <div />
                 <div />
               </div>
@@ -525,7 +525,7 @@ class Body extends Component {
                   className="btn btn-outline-secondary"
                   onClick={this.handleSendAll}
                 >
-                  완전 다 보내기
+                  끝내기
                 </button>
               </div>
             </div>
