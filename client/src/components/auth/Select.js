@@ -43,10 +43,10 @@ class Select extends Component {
         <SelectMain>
           <SelectMenu>
             <Link to="/">
-              <SelectCard>데이터 요청자 로그인</SelectCard>
+              <SelectCard>데이터 요청자</SelectCard>
             </Link>
             <Link to="/auth/signin">
-              <SelectCard>데이터 생산자 로그인</SelectCard>
+              <SelectCard>데이터 생산자</SelectCard>
             </Link>
           </SelectMenu>
         </SelectMain>

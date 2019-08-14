@@ -8,7 +8,6 @@ import moment from "moment";
 
 import "react-image-crop/dist/ReactCrop.css";
 import "./Body.css";
-import { isThisQuarter } from "date-fns";
 
 const BodyContainer = styled.div`
   width: 80%;
@@ -128,6 +127,7 @@ class Body extends Component {
       })
       .then(async data => {
         console.log("Data received");
+
         console.log(data);
 
         // 경로별 받은 데이터를 다르게 핸들링함

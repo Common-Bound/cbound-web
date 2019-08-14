@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import CropItem from "./CropItem";
-import styled from 'styled-components';
+import styled from "styled-components";
 
 const List = styled.div`
   display: flex;

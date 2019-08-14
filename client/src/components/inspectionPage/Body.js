@@ -313,7 +313,7 @@ class Body extends Component {
                 아니오(어떤 크롭이 잘못된지 표시하기)
               </button>
               <button onClick={this.handleClick} name="notAssociated">
-                연관성이 없는 사진
+                프로젝트와 관련없는 사진입니다
               </button>
               <button onClick={this.handleReset.bind(this)} name="reset">
                 모든 작업 초기화(스케줄 상태 + 검수 내역 삭제)
