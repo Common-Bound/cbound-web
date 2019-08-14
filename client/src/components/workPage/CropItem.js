@@ -228,7 +228,7 @@ class CropItem extends Component {
 
   render() {
     return (
-      <ImageContainer>
+      <ImageContainer onClick={this.handleChange}>
         <Image src={this.state.imgSrc} />
         <input
           type="text"
