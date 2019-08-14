@@ -66,10 +66,9 @@ const ProfileButton = styled.div`
   color: white;
 
   transition: 0.5s;
-  <<<<<<<HEAD
-=======
+
   text-decoration: none !important;
-  >>>>>>>dev :hover {
+  :hover {
     background-color: white;
     color: black;
   }
