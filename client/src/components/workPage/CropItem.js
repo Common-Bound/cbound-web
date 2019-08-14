@@ -97,11 +97,20 @@ class CropItem extends Component {
     });
   };
 
+  // 라벨값을 바꿈
+  handleLabelChange = e => {
+    e.preventDefault();
+    e.stopPropagation();
+    this.setState({
+      label: e.target.value
+    });
+  };
+
   // 라벨값을 부모 컴포넌트로부터 바꿔준다.
-  changeLabel() {
+  changeLabel = e => {
     //console.log(this.state.label);
     this.props.changeLabel(this.props.crop.id, this.state.label);
-  }
+  };
 
   // 캔버스에 크롭된 영역을 그려주고 캔버스를 Base64 인코딩함
   getCroppedImg(image, crop) {
@@ -209,10 +218,24 @@ class CropItem extends Component {
     }
   }
 
+  handleKeyPress = e => {
+    if (e.charCode === 13) {
+      e.preventDefault();
+
+      this.changeLabel();
+    }
+  };
+
   render() {
     return (
-      <ImageContainer onClick={this.handleChange}>
+      <ImageContainer>
         <Image src={this.state.imgSrc} />
+        <input
+          type="text"
+          value={this.state.label}
+          onChange={this.handleLabelChange}
+          onKeyPress={this.handleKeyPress}
+        />
         {this.state.editing ? (
           <LoadingContainer
             style={{
