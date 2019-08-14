@@ -8,80 +8,126 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
-What things you need to install the software and how to install them
+What things you need to install.
 
-```
-Give examples
-```
+- [yarn](https://yarnpkg.com/lang/en/) - JavaScript Package Manager
+- [node](https://nodejs.org/ko/) - Node Package Manager
 
 ### Installing
 
-A step by step series of examples that tell you how to get a development env running
+Run projects directly on the computer (run development server)
 
-Say what the step will be
-
-```
-Give the example
-```
-
-And repeat
+1. Run the terminal first. (Or if you are using a vscode, you may use the built-in terminal.)
+2. Clone the repository with the command below.
 
 ```
-until finished
+git clone https://git.swmgit.org/root/p1021_dal.git
 ```
 
-End with an example of getting some data out of the system or using it for a little demo
-
-## Running the tests
-
-Explain how to run the automated tests for this system
-
-### Break down into end to end tests
-
-Explain what these tests test and why
+3. Change the location to the replicated folder.
 
 ```
-Give an example
+cd p1021_dal
 ```
 
-### And coding style tests
-
-Explain what these tests test and why
+4. Download the package.
 
 ```
-Give an example
+npm install
+```
+
+​	or type
+
+```
+yarn
+```
+
+5. Enter the command ```yarn dev``` and enter localhost:3000 to see that the project is running well.
+
+![Landing Page](https://user-images.githubusercontent.com/39645522/63000194-86194980-beab-11e9-8e08-75721bef0427.PNG)
+
+### Coding Style
+
+#### Introduction
+In this section, you can check the the code styling, rules and commit message conventions for showdown and it's related projects. It's roughly based on [Google JavaScript Style Guide](https://google-styleguide.googlecode.com/svn/trunk/javascriptguide.xml) and AngularJS Git Commit Msg Convention. Using these rules is strongly advisable when contributing to showdown projects. 
+
+#### Tabs and indentation
+ - **DO NOT USE** tab character, use spaces instead
+    - Tab size is 2 spaces
+ - Indentation is 1 tab size (2 spaces)
+ - Blank lines CAN be added for readability
+
+```javascript
+function foo() {
+  var bar = 'bar',
+      baz = 1;
+
+  if (bar === 'bar') {
+    alert('something');
+  }
+}
+```
+
+#### Spaces
+
+##### Before parenthesis
+
+  - **DO NOT ADD** before:
+    - function declaration
+    - function call
+
+
+```javascript
+function foo() {
+  return 0;
+}
+
+foo();
+```
+
+
+  - **ADD** before:
+    - 'if'
+    - 'for'
+    - 'while'
+    - 'switch'
+    - 'catch'
+    - in function expression
+
+
+```javascript
+if (i > 10) {
+  for (var j = 0; j < 10; j++) {
+    switch (j) {
+      case 0:
+        value = 'zero';
+        break;
+      case 1:
+        value = 'one';
+        break;
+    }
+  }
+}
 ```
 
 ## Deployment
 
-Add additional notes about how to deploy this on a live system
+Not yet under consideration
 
 ## Built With
 
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
-
-## Contributing
-
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
-
-## Versioning
-
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags).
+* [React](https://ko.reactjs.org/) - Client
+* [Node](https://nodejs.org/ko/) - Server
+  * [Express](https://expressjs.com/ko/)
 
 ## Authors
 
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
+* **EunSu Kim** - *Server* - [eunsukimme](https://github.com/eunsukimme)
+* **HyunSeo Choi** - *Client* - [HyunSeoChoi](https://github.com/HyunSeoChoi)
+* **김광호** - *API* - [김광호](깃헙주소)
 
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
+See also the list of [contributors](https://github.com/eunsukimme/Common-Bound/contributors) who participated in this project.
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
-
-## Acknowledgments
-
-* Hat tip to anyone whose code was used
-* Inspiration
-* etc
+This project is licensed under the MIT License
