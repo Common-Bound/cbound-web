@@ -396,6 +396,7 @@ class Body extends Component {
     const workStyle = {
       borderTop: "3px solid lightgrey"
     };
+    console.log(this.props.info);
     return (
       <div>
         <hr style={workStyle} />

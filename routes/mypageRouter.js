@@ -46,10 +46,20 @@ router.post("/", (req, res, next) => {
     "강아지 사진 바운딩",
     "실내 가구 바운딩"
   ];
+
+  function replaceAll(str, searchStr, replaceStr) {
+    return str.split(searchStr).join(replaceStr);
+  }
+
+  const time = moment();
+  console.log(time.toISOString());
+
   const title_index = Math.floor(Math.random() * 4);
   const reward = Math.floor(Math.random() * 500);
-  const created_at = moment();
-  const due_date = moment().add("30", "d"); // 마감 기한 30일
+  const created_at = time.toISOString();
+  const due_date = time.add("30", "d").toISOString(); // 마감 기한 30일
+  console.log("created_at : " + created_at);
+  console.log("due_date : " + due_date);
 
   // project 테이블에 project 를 추가한다
   // project 속성

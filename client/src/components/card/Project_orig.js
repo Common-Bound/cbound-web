@@ -51,10 +51,6 @@ class Project_orig extends Component {
   };
 
   render() {
-    function replaceAll(str, searchStr, replaceStr) {
-      return str.split(searchStr).join(replaceStr);
-    }
-
     const created_time = moment(this.props.created_at, "YYYY-MM-DD").format(
       "YYYY-MM-DD"
     );
@@ -62,8 +58,8 @@ class Project_orig extends Component {
       "YYYY-MM-DD"
     );
 
-    const t1 = moment(replaceAll(this.props.created_at, '"', ""));
-    const t2 = moment(replaceAll(this.props.due_date, '"', ""));
+    const t1 = moment(this.props.created_at);
+    const t2 = moment(this.props.due_date);
 
     const days = moment.duration(t2.diff(t1)).days();
     const hours = moment.duration(t2.diff(t1)).hours();
