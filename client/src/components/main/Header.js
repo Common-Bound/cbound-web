@@ -19,7 +19,7 @@ const HeaderContainer = styled.div`
   z-index: 1;
 `;
 
-const Logo = styled.img`
+const Logo = styled.div`
   margin-left: 24px;
   background-image: url(${props => props.img});
   width: 48px;
