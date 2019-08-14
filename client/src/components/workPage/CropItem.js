@@ -3,8 +3,8 @@ import endpoint from "../../AIserverEndpoint";
 import styled from "styled-components";
 
 const ImageContainer = styled.div`
-  width: 150px;
-  height: 150px;
+  width: 140px;
+  height: 100px;
   position: relative;
   text-align: center;
   border: solid;
@@ -193,8 +193,8 @@ class CropItem extends Component {
             src={this.state.imgSrc}
             alt="prop"
             style={{
-              maxWidth: "148px",
-              maxHeight: "148px"
+              maxWidth: "140px",
+              maxHeight: "108px"
             }}
           />
           {this.state.editing ? (
@@ -203,8 +203,8 @@ class CropItem extends Component {
                 position: "absolute",
                 top: "0px",
                 left: "0px",
-                width: `150px`,
-                height: `150px`,
+                width: `140px`,
+                height: `100px`,
                 zIndex: 1,
                 backgroundColor: "rgba(0, 0, 0, 0.7)"
               }}

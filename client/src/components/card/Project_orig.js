@@ -58,7 +58,7 @@ class Project_orig extends Component {
       "YYYY-MM-DD"
     );
 
-    const t1 = moment(this.props.created_at);
+    const t1 = moment();
     const t2 = moment(this.props.due_date);
 
     const days = moment.duration(t2.diff(t1)).days();

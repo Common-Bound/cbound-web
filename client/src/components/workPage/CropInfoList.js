@@ -10,6 +10,13 @@ const List = styled.div`
   overflow: scroll;
 `;
 
+const EmptyBox = styled.div`
+  width: 140px;
+  height: 100px;
+  border: 1px solid lightgrey;
+  margin: 5px;
+`;
+
 class CropInfoList extends Component {
   shouldComponentUpdate(nextProps, nextState) {
     return (
@@ -43,7 +50,11 @@ class CropInfoList extends Component {
     ));
 
     // CropItem 요소를 하나씩 화면에 출력해줌
-    return <List>{cropList}</List>;
+    return (
+      <List>
+        {cropList.length > 0 ? cropList : Array(5).fill(<EmptyBox />)}
+      </List>
+    );
   }
 }
 
