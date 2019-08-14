@@ -86,7 +86,7 @@ class Body extends Component {
     canvas.height = image.height / scale;
 
     // 이미지의 크기도 조절해서 그려준다
-    ctx.drawImage(image, 0, 0, image.width / scale, image.height / scale);
+    ctx.drawImage(image, 0, 0, image.width * scale, image.height * scale);
 
     return new Promise(resolve => {
       console.log("drawImage end");
