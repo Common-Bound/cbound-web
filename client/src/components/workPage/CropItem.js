@@ -1,20 +1,44 @@
 import React, { Component } from "react";
 import endpoint from "../../AIserverEndpoint";
 import styled from "styled-components";
+import deleteImg from "../../images/close_button.png";
 
 const ImageContainer = styled.div`
   width: 140px;
   height: 100px;
   position: relative;
   text-align: center;
-  border: solid;
-  border-width: 1px;
+  border: 1px solid lightgrey;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
+
+const Image = styled.img`
+  src: ${props => props.img};
+  max-width: 140px;
+  max-height: 100px;
 `;
 
 const LoadingContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+`;
+
+const DeleteButton = styled.div`
+  position: absolute;
+  right: 0px;
+  top: 0px;
+  width: 20px;
+  height: 20px;
+
+  background-image: url(${props => props.img});
+  backgrondd-size: cover;
+  background-repeat: no-repeat;
+  z-index: 1;
 `;
 
 class CropItem extends Component {
@@ -187,47 +211,39 @@ class CropItem extends Component {
 
   render() {
     return (
-      <div>
-        <ImageContainer onClick={this.handleChange}>
-          <img
-            src={this.state.imgSrc}
-            alt="prop"
+      <ImageContainer onClick={this.handleChange}>
+        <Image src={this.state.imgSrc} />
+        {this.state.editing ? (
+          <LoadingContainer
             style={{
-              maxWidth: "140px",
-              maxHeight: "108px"
+              position: "absolute",
+              top: "0px",
+              left: "0px",
+              width: `140px`,
+              height: `100px`,
+              zIndex: 1,
+              backgroundColor: "rgba(0, 0, 0, 0.7)"
             }}
-          />
-          {this.state.editing ? (
-            <LoadingContainer
-              style={{
-                position: "absolute",
-                top: "0px",
-                left: "0px",
-                width: `140px`,
-                height: `100px`,
-                zIndex: 1,
-                backgroundColor: "rgba(0, 0, 0, 0.7)"
-              }}
-            >
-              <div className="lds-grid">
-                <div />
-                <div />
-                <div />
-                <div />
-                <div />
-                <div />
-                <div />
-                <div />
-                <div />
-              </div>
-            </LoadingContainer>
-          ) : null}
-        </ImageContainer>
-
-        <div>
-          <input type="button" value="삭제" onClick={this.handleRemove} />
-        </div>
-      </div>
+          >
+            <div className="lds-grid">
+              <div />
+              <div />
+              <div />
+              <div />
+              <div />
+              <div />
+              <div />
+              <div />
+              <div />
+            </div>
+          </LoadingContainer>
+        ) : null}
+        <DeleteButton
+          img={deleteImg}
+          value="삭제"
+          onClick={this.handleRemove}
+        />
+      </ImageContainer>
     );
   }
 }

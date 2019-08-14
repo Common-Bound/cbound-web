@@ -127,6 +127,12 @@ const DescriptionBox = styled.div`
   padding: 10px;
 `;
 
+const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
 const BoundButton = styled.button`
   width: 80px;
   height: 80px;
@@ -141,6 +147,16 @@ const BoundButton = styled.button`
   :hover {
     color: black;
     background-color: white;
+  }
+`;
+
+const ShowButton = styled(BoundButton)`
+  color: black;
+  background-color: white;
+
+  :hover {
+    color: white;
+    background-color: black;
   }
 `;
 
@@ -165,6 +181,11 @@ const LoadingContainer = styled.div`
   left: 0px;
   z-index: 1;
   background-color: rgba(0, 0, 0, 0.7);
+`;
+
+const CropListContainer = styled.div`
+  display: flex;
+  border: 1px solid black;
 `;
 
 class Body extends Component {
@@ -604,16 +625,6 @@ class Body extends Component {
                     </Step>
                   ))}
                 </StyledStepper>
-                <div>
-                  {this.state.step === steps.length ? (
-                    <div>
-                      <Typography>All steps completed</Typography>
-                      <Button onClick={this.handleReset}>Reset</Button>
-                    </div>
-                  ) : (
-                    ""
-                  )}
-                </div>
               </StepperRoot>
             </StepperContainer>
             {/* 파일 올리는 DropZone */}
@@ -727,13 +738,14 @@ class Body extends Component {
             ) : this.state.step == 1 ? (
               <DescriptionBoxContainer>
                 <DescriptionBox>
-                  4. 좌측 이미지에서 선택된 영역들이 AI가 자동으로 인식한
-                  글자입니다. 선택되지 않은 영역에서 글자로 생각되는 부분이
-                  있다면 선택 영역을 드래그하여 글자를 선택하세요. (영역을
+                  4. SHOW 버튼을 누르면, 좌측 이미지에서 AI가 자동으로 인식한
+                  영역들이 보여집니다. 선택되지 않은 영역에서 글자로 생각되는
+                  부분이 있다면 그 영역을 드래그하여 추가하세요. (영역을
                   드래그하면 영역 이동 가능)
                 </DescriptionBox>
                 <DescriptionBox>
-                  5. 선택 후, 아래의 바운드 버튼을 누르면 AI가 추가로 글자를
+                  5. 선택 후, 아래의 바운드 버튼 혹은 엔터를 누르면 AI가 추가로
+                  글자를 학습합니다. AI가 활성화 상태면 자동으로 글자를
                   학습합니다.
                 </DescriptionBox>
                 <DescriptionBox>
@@ -757,33 +769,64 @@ class Body extends Component {
                 </DescriptionBox>
               </DescriptionBoxContainer>
             )}
-            <BoundButton
-              type="button"
-              onClick={this.handleOnCropComplete}
-              id="store"
-            >
-              BOUND
-            </BoundButton>
+            <ButtonContainer>
+              <BoundButton
+                type="button"
+                onClick={this.handleOnCropComplete}
+                id="store"
+              >
+                BOUND
+              </BoundButton>
+              {this.state.showEdit && this.state.orig_image ? (
+                <ShowButton
+                  type="button"
+                  onClick={() => {
+                    this.setState({
+                      crop: {},
+                      showEdit: false
+                    });
+                  }}
+                >
+                  SHOW
+                </ShowButton>
+              ) : null}
+            </ButtonContainer>
           </RightDescriptionContainer>
         </MainContainer>
-
+        {/* 크롭된 이미지가 보여지는 영역 */}
+        <CropListContainer>
+          <CropInfoList
+            useAI={this.state.useAI}
+            crops={this.state.crop_image}
+            image={this.state.imageRef}
+            onChange={this.handleOnCropModify}
+            onRemove={this.handleOnCropRemove}
+            changeLabel={this.handleChangeLabel}
+          />
+          <Button disabled={this.state.step === 0} onClick={this.handleBack}>
+            Back
+          </Button>
+          <Button
+            disabled={
+              this.state.orig_image === "" || this.state.loading === true
+            }
+            variant="contained"
+            color="primary"
+            onClick={this.handleNext}
+          >
+            {this.state.step === steps.length - 1 ? "Finish" : "Next"}
+          </Button>
+          {this.state.step === steps.length ? (
+            <div>
+              <Button onClick={this.handleSendAll}>완료하기</Button>
+            </div>
+          ) : (
+            ""
+          )}
+        </CropListContainer>
         <br />
         <div>
-          <div className="filebox">
-            {this.state.showEdit && this.state.orig_image ? (
-              <button
-                type="button"
-                onClick={() => {
-                  this.setState({
-                    crop: {},
-                    showEdit: false
-                  });
-                }}
-              >
-                전체 보기
-              </button>
-            ) : null}
-          </div>
+          <div className="filebox" />
 
           <div>
             <input
@@ -794,33 +837,7 @@ class Body extends Component {
               onKeyPress={this.handleKeyPress}
             />
           </div>
-          <div className="input-group mb-3">
-            <div>
-              <button
-                type="button"
-                className="btn btn-outline-secondary"
-                onClick={this.handleSendAll}
-              >
-                끝내기
-              </button>
-            </div>
-          </div>
         </div>
-        <Button disabled={this.state.step === 0} onClick={this.handleBack}>
-          Back
-        </Button>
-        <Button variant="contained" color="primary" onClick={this.handleNext}>
-          {this.state.step === steps.length - 1 ? "Finish" : "Next"}
-        </Button>
-        {/* 지금까지 작업한 영역들을 리스트로 보여줌 */}
-        <CropInfoList
-          useAI={this.state.useAI}
-          crops={this.state.crop_image}
-          image={this.state.imageRef}
-          onChange={this.handleOnCropModify}
-          onRemove={this.handleOnCropRemove}
-          changeLabel={this.handleChangeLabel}
-        />
       </BodyContainer>
     );
   }
