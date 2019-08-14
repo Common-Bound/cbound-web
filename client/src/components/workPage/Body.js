@@ -9,7 +9,6 @@ import Stepper from "@material-ui/core/Stepper";
 import Step from "@material-ui/core/Step";
 import StepLabel from "@material-ui/core/StepLabel";
 import Button from "@material-ui/core/Button";
-import Typography from "@material-ui/core/Typography";
 
 import "react-image-crop/dist/ReactCrop.css";
 import "./Body.css";
@@ -365,7 +364,11 @@ class Body extends Component {
     image.src = this.state.orig_image;
 
     // state의 changeMode 를 보고 크롭된 영역을 추가/수정함
-    if (this.state.orig_image && this.state.showEdit && this.state.crop) {
+    if (
+      this.state.orig_image &&
+      this.state.showEdit &&
+      this.state.crop.height
+    ) {
       //console.log("Complete");
       if (this.state.changeMode) {
         // 수정
@@ -824,20 +827,6 @@ class Body extends Component {
             ""
           )}
         </CropListContainer>
-        <br />
-        <div>
-          <div className="filebox" />
-
-          <div>
-            <input
-              type="text"
-              onChange={this.handleChange}
-              value={this.state.label}
-              name="label"
-              onKeyPress={this.handleKeyPress}
-            />
-          </div>
-        </div>
       </BodyContainer>
     );
   }

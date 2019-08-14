@@ -5,6 +5,7 @@ import styled from "styled-components";
 const List = styled.div`
   display: flex;
   flex-flow: row;
+  justify-content: flex-start;
   width: 100%;
   border: 1px solid red;
   overflow: scroll;

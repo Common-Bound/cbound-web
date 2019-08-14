@@ -3,6 +3,10 @@ import endpoint from "../../AIserverEndpoint";
 import styled from "styled-components";
 import deleteImg from "../../images/close_button.png";
 
+const CropItemContainer = styled.div`
+  max-width: 140px;
+`;
+
 const ImageContainer = styled.div`
   width: 140px;
   height: 100px;
@@ -39,6 +43,12 @@ const DeleteButton = styled.div`
   backgrondd-size: cover;
   background-repeat: no-repeat;
   z-index: 1;
+`;
+
+const BlueInput = styled.input`
+  background-color: lightblue;
+  width: 140px;
+  text-align: center;
 `;
 
 class CropItem extends Component {
@@ -228,45 +238,47 @@ class CropItem extends Component {
 
   render() {
     return (
-      <ImageContainer onClick={this.handleChange}>
-        <Image src={this.state.imgSrc} />
-        <input
+      <CropItemContainer>
+        <ImageContainer onClick={this.handleChange}>
+          <Image src={this.state.imgSrc} />
+          {this.state.editing ? (
+            <LoadingContainer
+              style={{
+                position: "absolute",
+                top: "0px",
+                left: "0px",
+                width: `140px`,
+                height: `100px`,
+                zIndex: 1,
+                backgroundColor: "rgba(0, 0, 0, 0.7)"
+              }}
+            >
+              <div className="lds-grid">
+                <div />
+                <div />
+                <div />
+                <div />
+                <div />
+                <div />
+                <div />
+                <div />
+                <div />
+              </div>
+            </LoadingContainer>
+          ) : null}
+          <DeleteButton
+            img={deleteImg}
+            value="삭제"
+            onClick={this.handleRemove}
+          />
+        </ImageContainer>
+        <BlueInput
           type="text"
           value={this.state.label}
           onChange={this.handleLabelChange}
           onKeyPress={this.handleKeyPress}
         />
-        {this.state.editing ? (
-          <LoadingContainer
-            style={{
-              position: "absolute",
-              top: "0px",
-              left: "0px",
-              width: `140px`,
-              height: `100px`,
-              zIndex: 1,
-              backgroundColor: "rgba(0, 0, 0, 0.7)"
-            }}
-          >
-            <div className="lds-grid">
-              <div />
-              <div />
-              <div />
-              <div />
-              <div />
-              <div />
-              <div />
-              <div />
-              <div />
-            </div>
-          </LoadingContainer>
-        ) : null}
-        <DeleteButton
-          img={deleteImg}
-          value="삭제"
-          onClick={this.handleRemove}
-        />
-      </ImageContainer>
+      </CropItemContainer>
     );
   }
 }
