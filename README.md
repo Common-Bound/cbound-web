@@ -1,6 +1,6 @@
 # COMMON-BOUND
 
-AI Training Data Transaction Platform
+AI Training Data CrowdSourcing Platform
 
 ## Getting Started
 
@@ -33,13 +33,13 @@ cd p1021_dal
 4. Download the package.
 
 ```
-npm install
+npm install && cd client && npm install
 ```
 
 ​	or type
 
 ```
-yarn
+yarn && cd client && yarn
 ```
 
 5. Enter the command ```yarn dev``` and enter localhost:3000 to see that the project is running well.
@@ -124,7 +124,7 @@ Not yet under consideration
 
 * **EunSu Kim** - *Server* - [eunsukimme](https://github.com/eunsukimme)
 * **HyunSeo Choi** - *Client* - [HyunSeoChoi](https://github.com/HyunSeoChoi)
-* **Kim GwangHo** - *API* - [FKgk](https://github.com/FKgk)
+* **GwangHo Kim** - *API* - [FKgk](https://github.com/FKgk)
 
 See also the list of [contributors](https://github.com/eunsukimme/Common-Bound/contributors) who participated in this project.
 
