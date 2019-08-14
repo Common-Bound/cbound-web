@@ -14,14 +14,17 @@ const Container = styled.div`
 `;
 
 const Title = styled.div`
-  font-size: 2rem;
+  padding: 40px 60px 0px 60px;
+  font-family: Avenir;
+  font-size: 20px;
   font-weight: bold;
-  padding: 40px 60px;
 `;
 
 const SemiTitle = styled.div`
-  font-size: 1.4rem;
-  padding: 10px 60px;
+  padding: 0px 60px 40px 60px;
+  font-family: SpoqaHanSans;
+  font-size: 32px;
+  font-weight: bold;
 `;
 
 const TableContainer = styled.div`
@@ -30,6 +33,15 @@ const TableContainer = styled.div`
   margin: 0 auto;
   overflow: scroll;
   text-align: center;
+`;
+
+const StyledTableHead = styled(TableHead)`
+  background-color: black;
+`;
+
+const StyledTableCell = styled(TableCell)`
+  color: rgba(255, 255, 255, 0.6) !important;
+  font-family: Avenir;
 `;
 
 class ProjectsPage extends Component {
@@ -88,17 +100,20 @@ class ProjectsPage extends Component {
   render() {
     return (
       <Container>
-        <Title>Common Bound</Title>
+        <Title>On Going Projects</Title>
         <SemiTitle>참여한 프로젝트</SemiTitle>
         <TableContainer>
           <Table>
-            <TableHead>
+            <StyledTableHead>
               <TableRow>
-                <TableCell align="center">제목</TableCell>
-                <TableCell align="center">보상</TableCell>
-                <TableCell align="center">마감 기한</TableCell>
+                <StyledTableCell align="center">KICK-OFF</StyledTableCell>
+                <StyledTableCell align="center">ROLE</StyledTableCell>
+                <StyledTableCell align="center">TITLE</StyledTableCell>
+                <StyledTableCell align="center">POINT</StyledTableCell>
+                <StyledTableCell align="center">DUE</StyledTableCell>
+                <StyledTableCell align="center">REMAINED</StyledTableCell>
               </TableRow>
-            </TableHead>
+            </StyledTableHead>
             <TableBody>{this.state.projects}</TableBody>
           </Table>
         </TableContainer>

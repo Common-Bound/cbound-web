@@ -2,6 +2,20 @@ import React, { Component } from "react";
 import styled from "styled-components";
 import TableCell from "@material-ui/core/TableCell";
 import TableRow from "@material-ui/core/TableRow";
+import moment from "moment";
+
+const StyledTableCell = styled(TableCell)`
+  color: ${props =>
+    props.project_type === "normal" ? "black" : "blue"} !important;
+`;
+
+const StyledTableRow = styled(TableRow)`
+  transition: 0.2s;
+  cursor: pointer;
+  :hover {
+    background-color: lightgrey;
+  }
+`;
 
 class Project_orig extends Component {
   constructor(props) {
@@ -37,14 +51,31 @@ class Project_orig extends Component {
   };
 
   render() {
+    const created_time = moment(this.props.created_at, "YYYY-MM-DD").format(
+      "YYYY-MM-DD"
+    );
+    const due_date_time = moment(this.props.due_date, "YYYY-MM-DD").format(
+      "YYYY-MM-DD"
+    );
+
+    const t1 = moment();
+    const t2 = moment(this.props.due_date);
+
+    const days = moment.duration(t2.diff(t1)).days();
+    const hours = moment.duration(t2.diff(t1)).hours();
+    const minutes = moment.duration(t2.diff(t1)).minutes();
+
     return (
-      <TableRow>
-        <TableCell align="center" onClick={this.handleClick}>
-          {this.props.title}
-        </TableCell>
+      <StyledTableRow onClick={this.handleClick}>
+        <TableCell align="center">{created_time}</TableCell>
+        <StyledTableCell align="center" project_type={this.props.project_type}>
+          {this.props.project_type === "normal" ? "생성" : "검수"}
+        </StyledTableCell>
+        <TableCell align="center">{this.props.title}</TableCell>
         <TableCell align="center">{this.props.reward}</TableCell>
-        <TableCell align="center">{this.props.due_date}</TableCell>
-      </TableRow>
+        <TableCell align="center">{due_date_time}</TableCell>
+        <TableCell align="center">{`${days}일 ${hours}시간 ${minutes}분 뒤 종료`}</TableCell>
+      </StyledTableRow>
     );
   }
 }

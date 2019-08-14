@@ -2,9 +2,8 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
-import logo from "../../images/좌측상단_로고.png";
+import logo from "../../images/logo_2.png";
 import name from "../../images/COMMONBOUND.png";
-import signIn from "../../images/Sign_In_Off.png";
 
 const HeaderContainer = styled.div`
   position: fixed;
@@ -67,8 +66,10 @@ const ProfileButton = styled.div`
   color: white;
 
   transition: 0.5s;
-
-  :hover {
+  <<<<<<<HEAD
+=======
+  text-decoration: none !important;
+  >>>>>>>dev :hover {
     background-color: white;
     color: black;
   }

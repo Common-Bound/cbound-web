@@ -4,14 +4,171 @@ import CropInfoList from "./CropInfoList.js"; // 크롭 리스트를 출력함
 import PrintTotalCrop from "./PrintTotalCrop"; // 크롭 리스트를 한 캔버스에 그려줌
 import Dropzone from "react-dropzone";
 import styled from "styled-components";
+import moment from "moment";
+import Stepper from "@material-ui/core/Stepper";
+import Step from "@material-ui/core/Step";
+import StepLabel from "@material-ui/core/StepLabel";
+import Button from "@material-ui/core/Button";
 
 import "react-image-crop/dist/ReactCrop.css";
 import "./Body.css";
-import { isThisQuarter } from "date-fns";
+
+const BodyContainer = styled.div`
+  width: 80%;
+  margin: 0 auto;
+
+  border: 1px solid blue;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: cneter;
+`;
+
+const EntireTitleContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  border: 1px solid black;
+  padding: 20px 0px 10px 0px;
+`;
+
+const LeftTitleContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const LeftTitleDate = styled.div`
+  font-family: Avenir;
+  text-align: left;
+  color: #8d8d8d;
+  font-size: 16px;
+`;
+
+const LeftTitle = styled.div`
+  font-family: SpoqaHanSans;
+  text-align: left;
+  font-weight: bold;
+  font-size: 32px;
+`;
+
+const RightTitleContainer = styled.div`
+  font-family: Avenir;
+  display: flex;
+  flex-direction: column;
+
+  padding: 10px;
+`;
+
+const RightTitle = styled.div`
+  font-weight: bold;
+  font-size: 18px;
+  text-align: right;
+`;
+
+const RightTitleDate = styled.div`
+  font-size: 16px;
+  text-align: right;
+  color: #8d8d8d;
+`;
+
+const MainContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid green;
+  padding: 10px;
+`;
+
+const LeftMainContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+`;
+
+const StepperContainer = styled.div`
+  width: 100%;
+`;
+
+const StepperRoot = styled.div`
+  width: 90%;
+  margin: 0 auto;
+`;
+
+const StyledStepper = styled(Stepper)`
+  height: 20px;
+  padding: 20px 0px 20px 0px !important;
+`;
+
+const RightDescriptionContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  width: 400px;
+  height: 440px;
+  background-color: #f0f0f0;
+`;
+
+const DescriptionBoxContainer = styled.div`
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+`;
+
+const DescriptionBox = styled.div`
+  font-family: SpoqaHanSans;
+  font-size: 16px;
+  padding: 10px;
+`;
+
+const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const BoundButton = styled.button`
+  width: 80px;
+  height: 80px;
+  background-color: black;
+  color: white;
+  border-radius: 100%;
+  border: 1px solid black;
+  transition: 0.3s;
+  text-align: center;
+  margin: 10px;
+
+  :hover {
+    color: black;
+    background-color: white;
+  }
+`;
+
+const ShowButton = styled(BoundButton)`
+  color: black;
+  background-color: white;
+
+  :hover {
+    color: white;
+    background-color: black;
+  }
+`;
 
 const ImageContainer = styled.div`
-  max-width: 720px;
+  max-width: 640px;
   position: relative;
+`;
+
+const DropZoneBox = styled.div`
+  width: 400px;
+  height: 400px;
+  background-color: lightblue;
+  border: 1px solid green;
 `;
 
 const LoadingContainer = styled.div`
@@ -23,6 +180,11 @@ const LoadingContainer = styled.div`
   left: 0px;
   z-index: 1;
   background-color: rgba(0, 0, 0, 0.7);
+`;
+
+const CropListContainer = styled.div`
+  display: flex;
+  border: 1px solid black;
 `;
 
 class Body extends Component {
@@ -41,14 +203,18 @@ class Body extends Component {
       changeMode: false, // 현재 크롭된 이미지를 추가해야 할지 수정해야 할지 결정하는 Flag
       preId: "", // ChangeMode 가 true 라면 변경할 이미지의 id
       showEdit: true, // 한 개의 크롭 영역을 변경할 수 있는 이미지를 줄지 크롭된 영역 리스트를 이미지에 그려줄 지
-      useAI: false, // AI를 사용할지 말지 스위치 할 때 변경할 값
-      loading: false
+      useAI: true, // AI를 사용할지 말지 스위치 할 때 변경할 값
+      loading: false,
+      step: 0 // 현재 STEP 수
     };
 
     this.handleSendAll = this.handleSendAll.bind(this);
     this.handleOnCropModify = this.handleOnCropModify.bind(this);
     this.handleClickImage = this.handleClickImage.bind(this);
     this.handleCropMouseUp = this.handleCropMouseUp.bind(this);
+    this.handleBack = this.handleBack.bind(this);
+    this.handleNext = this.handleNext.bind(this);
+    this.handleReset = this.handleReset.bind(this);
   }
 
   // 서버(sendTo)로 body에 bodyData를 넣어서 Fetch 할 때 호출됨
@@ -66,6 +232,7 @@ class Body extends Component {
       })
       .then(async data => {
         console.log("Data received");
+
         console.log(data);
 
         // 경로별 받은 데이터를 다르게 핸들링함
@@ -197,7 +364,11 @@ class Body extends Component {
     image.src = this.state.orig_image;
 
     // state의 changeMode 를 보고 크롭된 영역을 추가/수정함
-    if (this.state.orig_image && this.state.showEdit && this.state.crop) {
+    if (
+      this.state.orig_image &&
+      this.state.showEdit &&
+      this.state.crop.height
+    ) {
       //console.log("Complete");
       if (this.state.changeMode) {
         // 수정
@@ -392,100 +563,225 @@ class Body extends Component {
     });
   }
 
-  render() {
-    const workStyle = {
-      borderTop: "3px solid lightgrey"
-    };
-    return (
-      <div>
-        <hr style={workStyle} />
-        AI
-        <label className="switch">
-          <input
-            type="checkbox"
-            name="useAI"
-            onChange={this.handleChange}
-            checked={this.state.useAI}
-          />
-          <span className="slider round" />
-        </label>
-        <ImageContainer>
-          {this.state.orig_image ? (
-            <div onMouseUp={this.handleCropMouseUp}>
-              <ReactCrop
-                src={this.state.orig_image}
-                crop={this.state.crop}
-                onChange={this.handleOnCropChange}
-                onImageLoaded={this.handleImageLoaded}
-                style={{ display: this.state.showEdit ? "" : "none" }}
-              />
+  handleNext() {
+    //setActiveStep(prevActiveStep => prevActiveStep + 1);
+    this.setState({
+      step: this.state.step + 1
+    });
+  }
 
-              {this.state.imageRef ? (
-                <PrintTotalCrop
-                  crops={this.state.crop_image}
-                  image={this.state.imageRef}
-                  onClick={this.handleClickImage.bind(this)}
-                  showEdit={this.state.showEdit}
-                />
-              ) : null}
-            </div>
-          ) : null}
-          {this.state.loading && this.state.imageRef ? (
-            <LoadingContainer
-              style={{
-                position: "absolute",
-                top: "0px",
-                left: "0px",
-                width: `${this.state.imageRef.width}px`,
-                height: `${this.state.imageRef.height}px`,
-                zIndex: 1,
-                backgroundColor: "rgba(0, 0, 0, 0.7)"
-              }}
-            >
-              <div className="lds-grid">
-                <div />
-                <div />
-                <div />
-                <div />
-                <div />
-                <div />
-                <div />
-                <div />
-                <div />
-              </div>
-              <p style={{ color: "white" }} />
-            </LoadingContainer>
-          ) : null}
-        </ImageContainer>
-        <br />
-        <div>
-          <form>
+  handleBack() {
+    //setActiveStep(prevActiveStep => prevActiveStep - 1);
+    this.setState({
+      step: this.state.step - 1
+    });
+  }
+
+  handleReset() {
+    this.setState({
+      step: 0
+    });
+  }
+
+  render() {
+    const info = this.props.info;
+
+    const t1 = moment();
+    const t2 = moment(info.due_date);
+
+    const days = moment.duration(t2.diff(t1)).days();
+    const hours = moment.duration(t2.diff(t1)).hours();
+    const minutes = moment.duration(t2.diff(t1)).minutes();
+
+    const steps = ["STEP 1", "STEP 2", "STEP 3"];
+
+    return (
+      <BodyContainer>
+        {/* 최 상단에 위취한 정보를 보여주는 컨테이너 */}
+        <EntireTitleContainer>
+          <LeftTitleContainer>
+            <LeftTitleDate>
+              <span style={{ color: "black", fontWeight: "bold" }}>
+                MISSION
+              </span>
+              {` ${moment(info.created_at).format("YYYY-MM-DD")} - ${moment(
+                info.due_date
+              ).format("YYYY-MM-DD")}`}
+            </LeftTitleDate>
+            <LeftTitle>{info.title}</LeftTitle>
+          </LeftTitleContainer>
+          <RightTitleContainer>
+            <RightTitle>DEADLINE</RightTitle>
+            <RightTitleDate>{`${days} DAYS : ${hours} HOURS : ${minutes} MINUTES`}</RightTitleDate>
+          </RightTitleContainer>
+        </EntireTitleContainer>
+        {/* 이미지 업로드 창과 이미지, 설명을 보여주는 메인 컨테이너 */}
+        <MainContainer>
+          {/* Main Container 의 왼쪽 영역 */}
+          <LeftMainContainer>
+            <StepperContainer>
+              <StepperRoot>
+                <StyledStepper activeStep={this.state.step}>
+                  {steps.map(label => (
+                    <Step key={label}>
+                      <StepLabel>{label}</StepLabel>
+                    </Step>
+                  ))}
+                </StyledStepper>
+              </StepperRoot>
+            </StepperContainer>
             {/* 파일 올리는 DropZone */}
-            <div className="filebox">
-              {!this.state.orig_image_file ? (
-                <Dropzone onDrop={this.onFileSelected}>
-                  {({ getRootProps, getInputProps }) => (
-                    <section>
-                      <div {...getRootProps()}>
-                        <input {...getInputProps()} />
-                        <div
-                          style={{
-                            width: "400px",
-                            height: "400px",
-                            backgroundColor: "lightblue"
-                          }}
-                        >
-                          사진을 올려주세요
-                        </div>
-                      </div>
-                    </section>
-                  )}
-                </Dropzone>
-              ) : (
-                ""
-              )}
+            {!this.state.orig_image_file ? (
+              <Dropzone onDrop={this.onFileSelected}>
+                {({ getRootProps, getInputProps }) => (
+                  <section>
+                    <div {...getRootProps()}>
+                      <input {...getInputProps()} />
+                      <DropZoneBox
+                        style={{
+                          width: "400px",
+                          height: "400px",
+                          border: "5px solid lightgrey",
+                          borderRadius: "5px",
+                          backgroundColor: "white",
+                          fontFamily: "Avenir",
+                          fontSize: "25px",
+                          fontWeight: "bold",
+                          textAlign: "center",
+                          lineHeight: "370px"
+                        }}
+                      >
+                        [+] UPLOAD IMAGE
+                      </DropZoneBox>
+                    </div>
+                  </section>
+                )}
+              </Dropzone>
+            ) : (
+              ""
+            )}
+            {/* 크롭할 이미지 영역 */}
+            <ImageContainer>
+              {this.state.orig_image ? (
+                <div onMouseUp={this.handleCropMouseUp}>
+                  <ReactCrop
+                    src={this.state.orig_image}
+                    crop={this.state.crop}
+                    onChange={this.handleOnCropChange}
+                    onImageLoaded={this.handleImageLoaded}
+                    style={{ display: this.state.showEdit ? "" : "none" }}
+                  />
+
+                  {this.state.imageRef ? (
+                    <PrintTotalCrop
+                      crops={this.state.crop_image}
+                      image={this.state.imageRef}
+                      onClick={this.handleClickImage.bind(this)}
+                      showEdit={this.state.showEdit}
+                    />
+                  ) : null}
+                </div>
+              ) : null}
+              {this.state.loading && this.state.imageRef ? (
+                <LoadingContainer
+                  style={{
+                    position: "absolute",
+                    top: "0px",
+                    left: "0px",
+                    width: `${this.state.imageRef.width}px`,
+                    height: `${this.state.imageRef.height}px`,
+                    zIndex: 1,
+                    backgroundColor: "rgba(0, 0, 0, 0.7)"
+                  }}
+                >
+                  <div className="lds-grid">
+                    <div />
+                    <div />
+                    <div />
+                    <div />
+                    <div />
+                    <div />
+                    <div />\
+                    <div />
+                    <div />
+                  </div>
+                  <p style={{ color: "white" }} />
+                </LoadingContainer>
+              ) : null}
+            </ImageContainer>
+          </LeftMainContainer>
+          {/* Main Container 의 오른쪽 영역 */}
+          <RightDescriptionContainer>
+            AI
+            <label className="switch">
+              <input
+                type="checkbox"
+                name="useAI"
+                onChange={this.handleChange}
+                checked={this.state.useAI}
+              />
+              <span className="slider round" />
+            </label>
+            {this.state.step == 0 ? (
+              <DescriptionBoxContainer>
+                <DescriptionBox>
+                  1. 좌측 [+] 영역을 클릭하여 이미지 업로드 후, 아래의 원형
+                  [BOUND] 버튼을 누르세요. (단, 이미지 선명하지 않거나 해상도가
+                  낮으면 업로드 되지 않습니다)
+                </DescriptionBox>
+                <DescriptionBox>
+                  2. 이미지가 정상적으로 업로드 되어 바운드 되면, AI가 자동으로
+                  글자라고 인식하여 이미지들을 아래 썸네일로 보여줍니다.
+                </DescriptionBox>
+                <DescriptionBox>
+                  3. 썸네일 이미지가 정상적으로 로드 되었다면, 하단 우측의
+                  노란색 [NEXT] 버튼을 눌러 다음 단계로 이동하세요.
+                </DescriptionBox>
+              </DescriptionBoxContainer>
+            ) : this.state.step == 1 ? (
+              <DescriptionBoxContainer>
+                <DescriptionBox>
+                  4. SHOW 버튼을 누르면, 좌측 이미지에서 AI가 자동으로 인식한
+                  영역들이 보여집니다. 선택되지 않은 영역에서 글자로 생각되는
+                  부분이 있다면 그 영역을 드래그하여 추가하세요. (영역을
+                  드래그하면 영역 이동 가능)
+                </DescriptionBox>
+                <DescriptionBox>
+                  5. 선택 후, 아래의 바운드 버튼 혹은 엔터를 누르면 AI가 추가로
+                  글자를 학습합니다. AI가 활성화 상태면 자동으로 글자를
+                  학습합니다.
+                </DescriptionBox>
+                <DescriptionBox>
+                  6. 완료 후 NEXT버튼을 눌러 다음의 마지막 단계(STEP3)로
+                  이동하세요.
+                </DescriptionBox>
+              </DescriptionBoxContainer>
+            ) : (
+              <DescriptionBoxContainer>
+                <DescriptionBox>
+                  8. AI가 글자를 제대로 인식했는지 아래 블루박스를 확인해주세요.
+                </DescriptionBox>
+                <DescriptionBox>
+                  9. AI가 글자를 잘못 인식했거나, 바운드 영역이 잘못 선택되어
+                  있다면 아래 바운드 썸네일을 삭제(DELETE)하거나, 편집(EDIT)하여
+                  AI를 학습시켜주세요.
+                </DescriptionBox>
+                <DescriptionBox>
+                  * AI의 정확도를 개선한 분에겐 추가 포인트를 드립니다. (기여도
+                  확인 시, 검증 후 개당 +10포인트 추가 지급)
+                </DescriptionBox>
+              </DescriptionBoxContainer>
+            )}
+            <ButtonContainer>
+              <BoundButton
+                type="button"
+                onClick={this.handleOnCropComplete}
+                id="store"
+              >
+                BOUND
+              </BoundButton>
               {this.state.showEdit && this.state.orig_image ? (
-                <button
+                <ShowButton
                   type="button"
                   onClick={() => {
                     this.setState({
@@ -494,53 +790,44 @@ class Body extends Component {
                     });
                   }}
                 >
-                  전체 보기
-                </button>
+                  SHOW
+                </ShowButton>
               ) : null}
-            </div>
-
+            </ButtonContainer>
+          </RightDescriptionContainer>
+        </MainContainer>
+        {/* 크롭된 이미지가 보여지는 영역 */}
+        <CropListContainer>
+          <CropInfoList
+            useAI={this.state.useAI}
+            crops={this.state.crop_image}
+            image={this.state.imageRef}
+            onChange={this.handleOnCropModify}
+            onRemove={this.handleOnCropRemove}
+            changeLabel={this.handleChangeLabel}
+          />
+          <Button disabled={this.state.step === 0} onClick={this.handleBack}>
+            Back
+          </Button>
+          <Button
+            disabled={
+              this.state.orig_image === "" || this.state.loading === true
+            }
+            variant="contained"
+            color="primary"
+            onClick={this.handleNext}
+          >
+            {this.state.step === steps.length - 1 ? "Finish" : "Next"}
+          </Button>
+          {this.state.step === steps.length ? (
             <div>
-              <input
-                type="text"
-                onChange={this.handleChange}
-                value={this.state.label}
-                name="label"
-                onKeyPress={this.handleKeyPress}
-              />
+              <Button onClick={this.handleSendAll}>완료하기</Button>
             </div>
-            <div className="input-group mb-3">
-              <div className="input-group-append">
-                <button
-                  className="btn btn-outline-secondary"
-                  type="button"
-                  onClick={this.handleOnCropComplete}
-                  id="store"
-                >
-                  저장
-                </button>
-              </div>
-              <div>
-                <button
-                  type="button"
-                  className="btn btn-outline-secondary"
-                  onClick={this.handleSendAll}
-                >
-                  완전 다 보내기
-                </button>
-              </div>
-            </div>
-          </form>
-        </div>
-        {/* 지금까지 작업한 영역들을 리스트로 보여줌 */}
-        <CropInfoList
-          useAI={this.state.useAI}
-          crops={this.state.crop_image}
-          image={this.state.imageRef}
-          onChange={this.handleOnCropModify}
-          onRemove={this.handleOnCropRemove}
-          changeLabel={this.handleChangeLabel}
-        />
-      </div>
+          ) : (
+            ""
+          )}
+        </CropListContainer>
+      </BodyContainer>
     );
   }
 }

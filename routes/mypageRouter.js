@@ -5,6 +5,7 @@ const joinRouter = require("./mypage/join");
 const taskRouter = require("./mypage/taskRouter");
 const db = require("../db/index");
 const uuid = require("uuid/v4");
+const moment = require("moment");
 
 // path: ~/mypage
 // 사용자 로그인 여부 검사
@@ -45,9 +46,20 @@ router.post("/", (req, res, next) => {
     "강아지 사진 바운딩",
     "실내 가구 바운딩"
   ];
+
+  function replaceAll(str, searchStr, replaceStr) {
+    return str.split(searchStr).join(replaceStr);
+  }
+
+  const time = moment();
+  console.log(time.toISOString());
+
   const title_index = Math.floor(Math.random() * 4);
   const reward = Math.floor(Math.random() * 500);
-  const date = new Date();
+  const created_at = time.toISOString();
+  const due_date = time.add("30", "d").toISOString(); // 마감 기한 30일
+  console.log("created_at : " + created_at);
+  console.log("due_date : " + due_date);
 
   // project 테이블에 project 를 추가한다
   // project 속성
@@ -63,8 +75,8 @@ router.post("/", (req, res, next) => {
       null,
       "간단한 설명",
       "자세한 설명 입니다",
-      "무기한",
-      date,
+      due_date,
+      created_at,
       "image",
       "normal",
       null,
@@ -85,8 +97,8 @@ router.post("/", (req, res, next) => {
           null,
           "간단한 설명",
           "자세한 설명 입니다",
-          "무기한",
-          date,
+          due_date,
+          created_at,
           "image",
           "inspection",
           null,

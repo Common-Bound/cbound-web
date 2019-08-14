@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-
+import { Link } from "react-router-dom";
 import background from "../../images/BackGround.png";
 
 const BodyContainer = styled.div`
@@ -63,7 +63,7 @@ const SubTitle = styled.div`
   line-height: 30px;
 `;
 
-const TestButton = styled.div`
+const TestButton = styled(Link)`
   width: 240px;
   height: 60px;
 
@@ -74,11 +74,19 @@ const TestButton = styled.div`
   margin-top: 40px;
   border-radius: 100px;
   border: 1px solid white;
+
+  color: white;
+  transition: 0.5s;
+  text-decoration: none !important;
+
+  :hover {
+    background-color: white;
+    color: black;
+  }
 `;
 
 const TestButtonText = styled.div`
   font-family: SpoqaHanSans;
-  color: #ffffff;
   font-size: 20px;
   font-weight: bold;
 `;
@@ -122,7 +130,10 @@ class Body extends Component {
               지식으로 바꾸는 일. 커먼 바운드가 함께 합니다.
             </SubTitle>
           </MainSlide>
-          <TestButton className="animated fadeInUp  delay-1s">
+          <TestButton
+            className="animated fadeInUp  delay-1s"
+            to="/signin/select"
+          >
             <TestButtonText>체험하기</TestButtonText>
           </TestButton>
         </MainSlideContainer>

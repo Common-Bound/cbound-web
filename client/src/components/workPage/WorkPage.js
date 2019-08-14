@@ -1,33 +1,33 @@
 import React, { Component } from "react";
 import Header from "./Header";
 import Body from "./Body";
-import styled from 'styled-components';
-import Footer from "./Footer";
-import InspectionPage from '../inspectionPage/InspectionPage';
+import styled from "styled-components";
+import InspectionPage from "../inspectionPage/InspectionPage";
 
 const WorkContainer = styled.div`
-  margin: 20px auto;
-  max-width: 720px;
+  width: 100%;
+  border: 1px solid black;
 `;
 
 class WorkPage extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-
-    }
-  }
   render() {
+    const info = this.props.location.state;
 
     return (
       <WorkContainer>
         <Header />
-        {this.props.match.params.project_type === 'normal' ?
-          <Body project_type={this.props.match.params.project_type}
-            project_id={this.props.match.params.project_id} /> :
-          <InspectionPage project_type={this.props.match.params.project_type}
-            project_id={this.props.match.params.project_id} />
-        }
+        {this.props.match.params.project_type === "normal" ? (
+          <Body
+            info={info}
+            project_type={this.props.match.params.project_type}
+            project_id={this.props.match.params.project_id}
+          />
+        ) : (
+          <InspectionPage
+            project_type={this.props.match.params.project_type}
+            project_id={this.props.match.params.project_id}
+          />
+        )}
       </WorkContainer>
     );
   }

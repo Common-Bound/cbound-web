@@ -1,19 +1,54 @@
 import React, { Component } from "react";
+import endpoint from "../../AIserverEndpoint";
 import styled from "styled-components";
+import deleteImg from "../../images/close_button.png";
+
+const CropItemContainer = styled.div`
+  max-width: 140px;
+`;
 
 const ImageContainer = styled.div`
-  width: 150px;
-  height: 150px;
+  width: 140px;
+  height: 100px;
   position: relative;
   text-align: center;
-  border: solid;
-  border-width: 1px;
+  border: 1px solid lightgrey;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
+
+const Image = styled.img`
+  src: ${props => props.img};
+  max-width: 140px;
+  max-height: 100px;
 `;
 
 const LoadingContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+`;
+
+const DeleteButton = styled.div`
+  position: absolute;
+  right: 0px;
+  top: 0px;
+  width: 20px;
+  height: 20px;
+
+  background-image: url(${props => props.img});
+  backgrondd-size: cover;
+  background-repeat: no-repeat;
+  z-index: 1;
+`;
+
+const BlueInput = styled.input`
+  background-color: lightblue;
+  width: 140px;
+  text-align: center;
 `;
 
 class CropItem extends Component {
@@ -72,11 +107,20 @@ class CropItem extends Component {
     });
   };
 
+  // 라벨값을 바꿈
+  handleLabelChange = e => {
+    e.preventDefault();
+    e.stopPropagation();
+    this.setState({
+      label: e.target.value
+    });
+  };
+
   // 라벨값을 부모 컴포넌트로부터 바꿔준다.
-  changeLabel() {
+  changeLabel = e => {
     //console.log(this.state.label);
     this.props.changeLabel(this.props.crop.id, this.state.label);
-  }
+  };
 
   // 캔버스에 크롭된 영역을 그려주고 캔버스를 Base64 인코딩함
   getCroppedImg(image, crop) {
@@ -143,7 +187,7 @@ class CropItem extends Component {
 
       await this.sendData(
         bodyData,
-        "https://cors-anywhere.herokuapp.com/http://ec2-54-180-87-68.ap-northeast-2.compute.amazonaws.com:8080/ocr/recognition/"
+        `https://cors-anywhere.herokuapp.com/${endpoint.url}/ocr/recognition/`
       );
     }
   }
@@ -178,32 +222,33 @@ class CropItem extends Component {
         });
         await this.sendData(
           bodyData,
-          "https://cors-anywhere.herokuapp.com/http://ec2-54-180-87-68.ap-northeast-2.compute.amazonaws.com:8080/ocr/recognition/"
+          `https://cors-anywhere.herokuapp.com/${endpoint.url}/ocr/recognition/`
         );
       }
     }
   }
 
+  handleKeyPress = e => {
+    if (e.charCode === 13) {
+      e.preventDefault();
+
+      this.changeLabel();
+    }
+  };
+
   render() {
     return (
-      <div>
+      <CropItemContainer>
         <ImageContainer onClick={this.handleChange}>
-          <img
-            src={this.state.imgSrc}
-            alt="prop"
-            style={{
-              maxWidth: "148px",
-              maxHeight: "148px"
-            }}
-          />
+          <Image src={this.state.imgSrc} />
           {this.state.editing ? (
             <LoadingContainer
               style={{
                 position: "absolute",
                 top: "0px",
                 left: "0px",
-                width: `150px`,
-                height: `150px`,
+                width: `140px`,
+                height: `100px`,
                 zIndex: 1,
                 backgroundColor: "rgba(0, 0, 0, 0.7)"
               }}
@@ -221,12 +266,19 @@ class CropItem extends Component {
               </div>
             </LoadingContainer>
           ) : null}
+          <DeleteButton
+            img={deleteImg}
+            value="삭제"
+            onClick={this.handleRemove}
+          />
         </ImageContainer>
-
-        <div>
-          <input type="button" value="삭제" onClick={this.handleRemove} />
-        </div>
-      </div>
+        <BlueInput
+          type="text"
+          value={this.state.label}
+          onChange={this.handleLabelChange}
+          onKeyPress={this.handleKeyPress}
+        />
+      </CropItemContainer>
     );
   }
 }
