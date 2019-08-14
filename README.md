@@ -124,7 +124,7 @@ Not yet under consideration
 
 * **EunSu Kim** - *Server* - [eunsukimme](https://github.com/eunsukimme)
 * **HyunSeo Choi** - *Client* - [HyunSeoChoi](https://github.com/HyunSeoChoi)
-* **김광호** - *API* - [김광호](깃헙주소)
+* **Kim GwangHo** - *API* - [FKgk](https://github.com/FKgk)
 
 See also the list of [contributors](https://github.com/eunsukimme/Common-Bound/contributors) who participated in this project.
 
