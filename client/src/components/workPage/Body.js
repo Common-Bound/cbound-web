@@ -4,10 +4,72 @@ import CropInfoList from "./CropInfoList.js"; // 크롭 리스트를 출력함
 import PrintTotalCrop from "./PrintTotalCrop"; // 크롭 리스트를 한 캔버스에 그려줌
 import Dropzone from "react-dropzone";
 import styled from "styled-components";
+import moment from "moment";
 
 import "react-image-crop/dist/ReactCrop.css";
 import "./Body.css";
 import { isThisQuarter } from "date-fns";
+
+const BodyContainer = styled.div`
+  width: 80%;
+  margin: 0 auto;
+  height: 95vh;
+  border: 1px solid blue;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: cneter;
+`;
+
+const EntireTitleContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  border: 1px solid black;
+`;
+
+const LeftTitleContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  border: 1px solid black;
+`;
+
+const LeftTitleDate = styled.div`
+  font-family: Avenir;
+  text-align: left;
+  color: #8d8d8d;
+  font-size: 16px;
+`;
+
+const LeftTitle = styled.div`
+  font-family: SpoqaHanSans;
+  text-align: left;
+  font-weight: bold;
+  font-size: 32px;
+`;
+
+const RightTitleContainer = styled.div`
+  font-family: Avenir;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid black;
+
+  padding: 10px;
+`;
+
+const RightTitle = styled.div`
+  font-weight: bold;
+  font-size: 18px;
+  text-align: right;
+`;
+
+const RightTitleDate = styled.div`
+  font-size: 16px;
+  text-align: right;
+  color: #8d8d8d;
+`;
 
 const ImageContainer = styled.div`
   max-width: 720px;
@@ -396,9 +458,34 @@ class Body extends Component {
     const workStyle = {
       borderTop: "3px solid lightgrey"
     };
-    console.log(this.props.info);
+    const info = this.props.info;
+
+    const t1 = moment(info.created_at);
+    const t2 = moment(info.due_date);
+
+    const days = moment.duration(t2.diff(t1)).days();
+    const hours = moment.duration(t2.diff(t1)).hours();
+    const minutes = moment.duration(t2.diff(t1)).minutes();
+
     return (
-      <div>
+      <BodyContainer>
+        <EntireTitleContainer>
+          <LeftTitleContainer>
+            <LeftTitleDate>
+              <span style={{ color: "black", fontWeight: "bold" }}>
+                MISSION
+              </span>
+              {` ${moment(info.created_at).format("YYYY-MM-DD")} - ${moment(
+                info.due_date
+              ).format("YYYY-MM-DD")}`}
+            </LeftTitleDate>
+            <LeftTitle>{info.title}</LeftTitle>
+          </LeftTitleContainer>
+          <RightTitleContainer>
+            <RightTitle>DEADLINE</RightTitle>
+            <RightTitleDate>{`${days} DAYS : ${hours} HOURS : ${minutes} MINUTES`}</RightTitleDate>
+          </RightTitleContainer>
+        </EntireTitleContainer>
         <hr style={workStyle} />
         AI
         <label className="switch">
@@ -541,7 +628,7 @@ class Body extends Component {
           onRemove={this.handleOnCropRemove}
           changeLabel={this.handleChangeLabel}
         />
-      </div>
+      </BodyContainer>
     );
   }
 }

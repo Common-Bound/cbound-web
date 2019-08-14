@@ -5,8 +5,8 @@ import styled from "styled-components";
 import InspectionPage from "../inspectionPage/InspectionPage";
 
 const WorkContainer = styled.div`
-  margin: 20px auto;
-  max-width: 720px;
+  width: 100%;
+  border: 1px solid black;
 `;
 
 class WorkPage extends Component {

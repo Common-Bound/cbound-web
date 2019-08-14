@@ -64,6 +64,7 @@ const Icon = styled.i`
 const IconTitle = styled.div`
   width: 100px;
   margin-left: 14px;
+  font-family: Avenir;
 `;
 
 const Section = styled.div`

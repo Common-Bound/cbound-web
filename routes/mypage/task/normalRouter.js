@@ -4,6 +4,7 @@ const uuid = require("uuid/v4");
 const axios = require("axios");
 const multer = require("multer");
 const memory = multer.memoryStorage();
+const endpoint = require("../../AIserverEndpoint");
 
 const completeRouter = require("./normal/complete");
 
@@ -20,8 +21,7 @@ router.post("/", upload_mem.single("orig_image"), (req, res, next) => {
   const imageSrc = req.body.orig_image;
   console.log(req.body);
   const id = uuid();
-  const randn = Math.floor(Math.random() * 10); // 0 ~ 9 랜덤 정수 생성
-  const url = `http://ec2-18-219-1-134.us-east-2.compute.amazonaws.com:800${randn}/ocr/detection/`;
+  const url = `${endpoint.url}/ocr/detection/`;
   axios
     .post(url, {
       id: id,
