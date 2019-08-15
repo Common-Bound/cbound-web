@@ -41,11 +41,11 @@ router.post("/", (req, res, next) => {
   const normal_id = uuid();
   const inspection_id = uuid();
   const titles = [
-    "식당 간판 인식",
-    "영수증 인식",
-    "명함 인식",
-    "건강검진 진단서 인식",
-    "레스토랑 메뉴 인식"
+    "식당 간판 인식(영어)",
+    "영수증 인식(영어)",
+    "명함 인식(영어)",
+    "건강검진 진단서 인식(영어)",
+    "레스토랑 메뉴 인식(영어)"
   ];
 
   const time = moment();
