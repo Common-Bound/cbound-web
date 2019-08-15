@@ -60,14 +60,14 @@ class CropItem extends Component {
 
   // label 값을 넣을 때마다 서버로 재전송 하는 것을 방지
 
-  /*shouldComponentUpdate(nextProps, nextState) {
+  shouldComponentUpdate(nextProps, nextState) {
     if (
       nextProps.crop !== this.props.crop &&
       nextProps.crop.label === this.props.crop.label
     )
       return false;
     else return true;
-  }*/
+  }
 
   // 서버(sendTo)로 body에 bodyData를 넣어서 Fetch 할 때 호출됨
   sendData = async (bodyData, sendTo) => {
@@ -77,23 +77,21 @@ class CropItem extends Component {
 
     await fetch(sendTo, {
       method: "post",
+      headers: {
+        "Access-Control-Allow-Origin": "*"
+      },
       body: bodyData
     })
-      .then(function(res) {
+      .then(res => {
         return res.json();
       })
-      .then(async data => {
+      .then(data => {
         console.log("Data received");
         console.log(data);
 
         // 경로별 받은 데이터를 다르게 핸들링함
-
         this.setState({
           label: data.label
-        });
-
-        return new Promise(resolve => {
-          resolve(true);
         });
       })
       .catch(function(ex) {
@@ -127,13 +125,6 @@ class CropItem extends Component {
     const canvas = document.createElement("canvas");
     const scaleX = image.naturalWidth / image.width;
     const scaleY = image.naturalHeight / image.height;
-
-    /*
-    console.log('scaleX: ');
-    console.log(scaleX);
-    console.log('scaleY: ');
-    console.log(scaleY);
-    */
 
     canvas.width = crop.width;
     canvas.height = crop.height;
