@@ -7,6 +7,11 @@ const Main = styled.div`
   position: relative;
 `;
 
+const StyledImg = styled.img`
+  width: 640px;
+  max-width: 640px;
+`;
+
 class Body extends Component {
   constructor(props) {
     super(props);
@@ -70,8 +75,6 @@ class Body extends Component {
   async drawImage() {
     const canvas = document.getElementById("canvas");
     const image = document.getElementById("image");
-    console.log(image);
-
     const ctx = canvas.getContext("2d");
 
     let scale = 1;
@@ -86,7 +89,7 @@ class Body extends Component {
     canvas.height = image.height / scale;
 
     // 이미지의 크기도 조절해서 그려준다
-    ctx.drawImage(image, 0, 0, image.width * scale, image.height * scale);
+    ctx.drawImage(image, 0, 0, image.width / scale, image.height / scale);
 
     return new Promise(resolve => {
       console.log("drawImage end");
@@ -99,10 +102,15 @@ class Body extends Component {
    */
   async drawCrop() {
     const canvas = document.getElementById("canvas");
+    const image = document.getElementById("image");
     const ctx = canvas.getContext("2d");
+
+    console.log(image.naturalWidth, canvas.width);
 
     console.log(this.state.data.payload.meta.crop_image);
     this.state.data.payload.meta.crop_image.forEach(function(crop) {
+      let scale = 1;
+
       const x = crop.x;
       const y = crop.y;
       const width = crop.width;
@@ -293,7 +301,7 @@ class Body extends Component {
             <Main id="main">
               <canvas id="canvas">
                 <div style={{ display: "none" }}>
-                  <img
+                  <StyledImg
                     id="image"
                     src={data.payload.orig_image}
                     alt=""

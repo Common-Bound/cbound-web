@@ -14,7 +14,7 @@ import "react-image-crop/dist/ReactCrop.css";
 import "./Body.css";
 
 const BodyContainer = styled.div`
-  width: 80%;
+  width: 90%;
   margin: 0 auto;
 
   border: 1px solid blue;
@@ -160,8 +160,14 @@ const ShowButton = styled(BoundButton)`
 `;
 
 const ImageContainer = styled.div`
-  max-width: 640px;
+  width: 640px;
+  max-width: 640px
   position: relative;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 5px solid lightgrey;
 `;
 
 const DropZoneBox = styled.div`
