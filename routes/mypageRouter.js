@@ -41,15 +41,12 @@ router.post("/", (req, res, next) => {
   const normal_id = uuid();
   const inspection_id = uuid();
   const titles = [
-    "얼굴 사진 찍기",
-    "음식 사진 찍기",
-    "강아지 사진 바운딩",
-    "실내 가구 바운딩"
+    "식당 간판 인식",
+    "영수증 인식",
+    "명함 인식",
+    "건강검진 진단서 인식",
+    "레스토랑 메뉴 인식"
   ];
-
-  function replaceAll(str, searchStr, replaceStr) {
-    return str.split(searchStr).join(replaceStr);
-  }
 
   const time = moment();
   console.log(time.toISOString());
