@@ -692,8 +692,8 @@ class Body extends Component {
                 <LoadingContainer
                   style={{
                     position: "absolute",
-                    top: "0px",
-                    left: "0px",
+                    left: "50%",
+                    transform: "translateX(-50%)",
                     width: `${this.state.imageRef.width}px`,
                     height: `${this.state.imageRef.height}px`,
                     zIndex: 1,
