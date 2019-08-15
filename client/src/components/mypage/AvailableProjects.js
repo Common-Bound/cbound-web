@@ -146,9 +146,11 @@ class AvailableProjects extends Component {
             </StyledTableHead>
             <TableBody>{this.state.projects}</TableBody>
           </Table>
+          {/* 사용성 테스트를 위해 막아놓음 
           <Button onClick={this.handleClick.bind(this)}>
             랜덤 프로젝트 추가
           </Button>
+          */}
         </TableContainer>
       </Container>
     );

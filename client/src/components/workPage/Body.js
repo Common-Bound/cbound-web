@@ -14,7 +14,7 @@ import "react-image-crop/dist/ReactCrop.css";
 import "./Body.css";
 
 const BodyContainer = styled.div`
-  width: 80%;
+  width: 90%;
   margin: 0 auto;
 
   border: 1px solid blue;
@@ -160,8 +160,14 @@ const ShowButton = styled(BoundButton)`
 `;
 
 const ImageContainer = styled.div`
-  max-width: 640px;
+  width: 640px;
+  max-width: 640px
   position: relative;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 5px solid lightgrey;
 `;
 
 const DropZoneBox = styled.div`
@@ -686,8 +692,8 @@ class Body extends Component {
                 <LoadingContainer
                   style={{
                     position: "absolute",
-                    top: "0px",
-                    left: "0px",
+                    left: "50%",
+                    transform: "translateX(-50%)",
                     width: `${this.state.imageRef.width}px`,
                     height: `${this.state.imageRef.height}px`,
                     zIndex: 1,
