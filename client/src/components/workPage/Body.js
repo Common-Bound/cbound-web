@@ -718,7 +718,7 @@ class Body extends Component {
           </LeftMainContainer>
           {/* Main Container 의 오른쪽 영역 */}
           <RightDescriptionContainer>
-            AI
+            텍스트 감지 AI 어시스턴트
             <label className="switch">
               <input
                 type="checkbox"
