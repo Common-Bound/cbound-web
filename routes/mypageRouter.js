@@ -90,7 +90,7 @@ router.post("/", (req, res, next) => {
         [
           inspection_id,
           normal_id,
-          titles[title_index] + "(검수)",
+          titles[title_index],
           null,
           "간단한 설명",
           "자세한 설명 입니다",
