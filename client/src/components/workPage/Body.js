@@ -731,9 +731,8 @@ class Body extends Component {
             {this.state.step == 0 ? (
               <DescriptionBoxContainer>
                 <DescriptionBox>
-                  1. 좌측 [+] 영역을 클릭하여 이미지 업로드 후, 아래의 원형
-                  [BOUND] 버튼을 누르세요. (단, 이미지 선명하지 않거나 해상도가
-                  낮으면 업로드 되지 않습니다)
+                  1. 좌측 [+] 영역을 클릭하여 이미지를 업로드 해 주세요 (단,
+                  이미지 선명하지 않거나 해상도가 낮으면 업로드 되지 않습니다)
                 </DescriptionBox>
                 <DescriptionBox>
                   2. 이미지가 정상적으로 업로드 되어 바운드 되면, AI가 자동으로
@@ -748,12 +747,12 @@ class Body extends Component {
               <DescriptionBoxContainer>
                 <DescriptionBox>
                   4. SHOW 버튼을 누르면, 좌측 이미지에서 AI가 자동으로 인식한
-                  영역들이 보여집니다. 선택되지 않은 영역에서 글자로 생각되는
+                  영역들이 보여집니다. 인식되지 않은 영역에서 글자로 생각되는
                   부분이 있다면 그 영역을 드래그하여 추가하세요. (영역을
                   드래그하면 영역 이동 가능)
                 </DescriptionBox>
                 <DescriptionBox>
-                  5. 선택 후, 아래의 바운드 버튼 혹은 엔터를 누르면 AI가 추가로
+                  5. 선택 후, 아래의 BOUND 버튼 혹은 엔터를 누르면 AI가 추가로
                   글자를 학습합니다. AI가 활성화 상태면 자동으로 글자를
                   학습합니다.
                 </DescriptionBox>
@@ -765,12 +764,13 @@ class Body extends Component {
             ) : (
               <DescriptionBoxContainer>
                 <DescriptionBox>
-                  8. AI가 글자를 제대로 인식했는지 아래 블루박스를 확인해주세요.
+                  8. AI가 글자를 제대로 인식했는지 각 썸네일 아래 블루박스를
+                  확인해주세요.
                 </DescriptionBox>
                 <DescriptionBox>
                   9. AI가 글자를 잘못 인식했거나, 바운드 영역이 잘못 선택되어
-                  있다면 아래 바운드 썸네일을 삭제(DELETE)하거나, 편집(EDIT)하여
-                  AI를 학습시켜주세요.
+                  있다면 아래 바운드 썸네일을 클릭하여 영역을 수정하거나,
+                  블루박스 내용을 수정하여 AI를 학습시켜주세요.
                 </DescriptionBox>
                 <DescriptionBox>
                   * AI의 정확도를 개선한 분에겐 추가 포인트를 드립니다. (기여도
