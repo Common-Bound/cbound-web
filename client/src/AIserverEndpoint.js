@@ -1,5 +1,5 @@
 const endpoint = {
-  url: "http://ec2-54-180-152-214.ap-northeast-2.compute.amazonaws.com"
+  url: "http://ec2-34-217-66-132.us-west-2.compute.amazonaws.com"
 };
 
 export default endpoint;
