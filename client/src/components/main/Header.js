@@ -20,7 +20,7 @@ const HeaderContainer = styled.div`
 `;
 
 const Logo = styled.div`
-  margin-left: 24px;
+  margin-left: 96px;
   background-image: url(${props => props.img});
   width: 48px;
   height: 48px;
@@ -86,7 +86,7 @@ class Header extends Component {
         </Link>
         {this.props.page === "main" ? (
           <Link to="/signin/select">
-            <LoginButton>SingIn</LoginButton>
+            <LoginButton>Sign In</LoginButton>
           </Link>
         ) : (
           <ProfileButton />

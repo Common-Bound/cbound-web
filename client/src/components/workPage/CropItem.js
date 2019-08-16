@@ -77,9 +77,6 @@ class CropItem extends Component {
 
     await fetch(sendTo, {
       method: "post",
-      headers: {
-        "Access-Control-Allow-Origin": "*"
-      },
       body: bodyData
     })
       .then(res => {
@@ -170,16 +167,16 @@ class CropItem extends Component {
     await this.setState({ imgSrc: await this.getCroppedImg(image, crop) });
     //console.log("crop!" + crop.x);
 
-    const bodyData = JSON.stringify({ crop_image: this.state.imgSrc });
+    const bodyData = JSON.stringify({
+      crop_image: this.state.imgSrc,
+      id: this.props.crop.id
+    });
     if (this.props.useAI) {
       this.setState({
         editing: true
       });
 
-      await this.sendData(
-        bodyData,
-        `https://cors-anywhere.herokuapp.com/${endpoint.url}/ocr/recognition/`
-      );
+      await this.sendData(bodyData, `${endpoint.url}/ocr/recognition/`);
     }
   }
 
@@ -198,7 +195,10 @@ class CropItem extends Component {
           imgSrc: await this.getCroppedImg(image, crop)
         });
       }
-      const bodyData = JSON.stringify({ crop_image: this.state.imgSrc });
+      const bodyData = JSON.stringify({
+        crop_image: this.state.imgSrc,
+        id: this.props.crop.id
+      });
       //console.log(this.props.useAI)
 
       //console.log(this.props.crop.label, this.state.label);
@@ -211,10 +211,7 @@ class CropItem extends Component {
         this.setState({
           editing: true
         });
-        await this.sendData(
-          bodyData,
-          `https://cors-anywhere.herokuapp.com/${endpoint.url}/ocr/recognition/`
-        );
+        await this.sendData(bodyData, `${endpoint.url}/ocr/recognition/`);
       }
     }
   }
