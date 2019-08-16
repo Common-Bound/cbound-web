@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import endpoint from "../../AIserverEndpoint";
+import endpoint from "../../RecognitionEndpoint";
 import styled from "styled-components";
 import deleteImg from "../../images/close_button.png";
 
