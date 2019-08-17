@@ -14,10 +14,8 @@ import "react-image-crop/dist/ReactCrop.css";
 import "./Body.css";
 
 const BodyContainer = styled.div`
-  width: 90%;
+  width: 80%;
   margin: 0 auto;
-
-  border: 1px solid blue;
 
   display: flex;
   flex-direction: column;
@@ -28,10 +26,9 @@ const BodyContainer = styled.div`
 const EntireTitleContainer = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
-  border: 1px solid black;
-  padding: 20px 0px 10px 0px;
+  padding: 40px 0px 10px 10px;
 `;
 
 const LeftTitleContainer = styled.div`
@@ -75,15 +72,15 @@ const RightTitleDate = styled.div`
 
 const MainContainer = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  border: 1px solid green;
   padding: 10px;
 `;
 
 const LeftMainContainer = styled.div`
   display: flex;
   flex-direction: column;
+  flex-basis: auto;
   align-items: center;
   justify-content: flex-start;
 `;
@@ -93,7 +90,7 @@ const StepperContainer = styled.div`
 `;
 
 const StepperRoot = styled.div`
-  width: 90%;
+  width: 100%;
   margin: 0 auto;
 `;
 
@@ -105,10 +102,11 @@ const StyledStepper = styled(Stepper)`
 const RightDescriptionContainer = styled.div`
   display: flex;
   flex-direction: column;
+  flex-basis: auto;
   align-items: flex-start;
+  padding: 40px 20px 0px 20px;
 
-  width: 400px;
-  height: 440px;
+  width: 440px;
   background-color: #f0f0f0;
 `;
 
@@ -138,10 +136,9 @@ const BoundButton = styled.button`
   background-color: black;
   color: white;
   border-radius: 100%;
-  border: 1px solid black;
   transition: 0.3s;
   text-align: center;
-  margin: 10px;
+  margin: 10px 10px 20px 10px;
 
   :hover {
     color: black;
@@ -161,20 +158,28 @@ const ShowButton = styled(BoundButton)`
 
 const ImageContainer = styled.div`
   width: 640px;
+  height: ${props => (props.show ? "440px" : "none")};
   max-width: 640px
   position: relative;
 
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 5px solid lightgrey;
+  border: ${props => (props.show ? "5px solid lightgrey" : "none")};
 `;
 
 const DropZoneBox = styled.div`
-  width: 400px;
-  height: 400px;
-  background-color: lightblue;
-  border: 1px solid green;
+  width: 640px;
+  height: 440px;
+  background-color: white;
+  border: 5px solid lightgrey;
+                          
+  border-radius: 20px;
+  font-family: Avenir;
+  font-size: 25px
+  font-weight: bold;
+  text-align: center;
+  line-height: 370px;
 `;
 
 const LoadingContainer = styled.div`
@@ -190,7 +195,12 @@ const LoadingContainer = styled.div`
 
 const CropListContainer = styled.div`
   display: flex;
-  border: 1px solid black;
+  justify-content: space-between;
+`;
+
+const StepButtonContainer = styled.div`
+  display: flex;
+  padding-right: 10px;
 `;
 
 class Body extends Component {
@@ -643,22 +653,7 @@ class Body extends Component {
                   <section>
                     <div {...getRootProps()}>
                       <input {...getInputProps()} />
-                      <DropZoneBox
-                        style={{
-                          width: "400px",
-                          height: "400px",
-                          border: "5px solid lightgrey",
-                          borderRadius: "5px",
-                          backgroundColor: "white",
-                          fontFamily: "Avenir",
-                          fontSize: "25px",
-                          fontWeight: "bold",
-                          textAlign: "center",
-                          lineHeight: "370px"
-                        }}
-                      >
-                        [+] UPLOAD IMAGE
-                      </DropZoneBox>
+                      <DropZoneBox>[+] UPLOAD IMAGE</DropZoneBox>
                     </div>
                   </section>
                 )}
@@ -667,7 +662,7 @@ class Body extends Component {
               ""
             )}
             {/* 크롭할 이미지 영역 */}
-            <ImageContainer>
+            <ImageContainer show={this.state.orig_image}>
               {this.state.orig_image ? (
                 <div onMouseUp={this.handleCropMouseUp}>
                   <ReactCrop
@@ -812,26 +807,28 @@ class Body extends Component {
             onRemove={this.handleOnCropRemove}
             changeLabel={this.handleChangeLabel}
           />
-          <Button disabled={this.state.step === 0} onClick={this.handleBack}>
-            Back
-          </Button>
-          <Button
-            disabled={
-              this.state.orig_image === "" || this.state.loading === true
-            }
-            variant="contained"
-            color="primary"
-            onClick={this.handleNext}
-          >
-            {this.state.step === steps.length - 1 ? "Finish" : "Next"}
-          </Button>
-          {this.state.step === steps.length ? (
-            <div>
-              <Button onClick={this.handleSendAll}>완료하기</Button>
-            </div>
-          ) : (
-            ""
-          )}
+          <StepButtonContainer>
+            <Button disabled={this.state.step === 0} onClick={this.handleBack}>
+              Back
+            </Button>
+            <Button
+              disabled={
+                this.state.orig_image === "" || this.state.loading === true
+              }
+              variant="contained"
+              color="primary"
+              onClick={this.handleNext}
+            >
+              {this.state.step === steps.length - 1 ? "Finish" : "Next"}
+            </Button>
+            {this.state.step === steps.length ? (
+              <div>
+                <Button onClick={this.handleSendAll}>완료하기</Button>
+              </div>
+            ) : (
+              ""
+            )}
+          </StepButtonContainer>
         </CropListContainer>
       </BodyContainer>
     );

@@ -6,7 +6,6 @@ import InspectionPage from "../inspectionPage/InspectionPage";
 
 const WorkContainer = styled.div`
   width: 100%;
-  border: 1px solid black;
 `;
 
 class WorkPage extends Component {
