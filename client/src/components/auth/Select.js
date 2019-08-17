@@ -35,19 +35,19 @@ const SelectMenu = styled.div`
   margin: 0 auto;
 `;
 
-const LeftSubCard = styled.div`
+const RightCard = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
 `;
 
-const RightSubCard = styled.div`
+const LeftCard = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-end;
 `;
 
-const SelectSubTitle = styled.div`
+const SubTitle = styled.div`
   font-size: 80px;
   line-height: 80px;
   font-weight: bold;
@@ -102,9 +102,9 @@ class Select extends Component {
           <Header page="main" />
           <SelectMain className="animated fadeInUp ">
             <SelectMenu>
-              <RightSubCard>
-                <SelectSubTitle>Data</SelectSubTitle>
-                <SelectSubTitle color={"#389eff"}>Requester</SelectSubTitle>
+              <LeftCard>
+                <SubTitle>Data</SubTitle>
+                <SubTitle color={"#389eff"}>Requester</SubTitle>
                 <StyledLink to="/">
                   <Button className="animated fadeInUp  delay-1s">
                     데이터 요청자(기업)
@@ -116,11 +116,11 @@ class Select extends Component {
                 <LeftDescription className="animated fadeInUp  delay-1s">
                   사람이 하는 일을 자동으로 효율적으로 해결하고 싶은 기업
                 </LeftDescription>
-              </RightSubCard>
+              </LeftCard>
 
-              <LeftSubCard>
-                <SelectSubTitle>Data</SelectSubTitle>
-                <SelectSubTitle color={"#00d8ff"}>Generator</SelectSubTitle>
+              <RightCard>
+                <SubTitle>Data</SubTitle>
+                <SubTitle color={"#00d8ff"}>Generator</SubTitle>
                 <StyledLink to="/auth/signin">
                   <Button className="animated fadeInUp  delay-1s">
                     데이터 생산자(개인)
@@ -132,7 +132,7 @@ class Select extends Component {
                 <RightDescription className="animated fadeInUp  delay-1s">
                   사진을 찍고, 올리면서 보상을 받기를 원하는 모든 사람
                 </RightDescription>
-              </LeftSubCard>
+              </RightCard>
             </SelectMenu>
           </SelectMain>
         </SelectContainer>
