@@ -24,8 +24,3 @@ Detection와 Recogition를 한 서버에 두니, 많은 GPU Memory 사용량에 
 ## 설치 방법
 
 [How to Install](./How to Install.md)
-
-## 라이센스
-
-This project is licensed under the MIT License
-
