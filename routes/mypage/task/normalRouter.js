@@ -4,7 +4,7 @@ const uuid = require("uuid/v4");
 const axios = require("axios");
 const multer = require("multer");
 const memory = multer.memoryStorage();
-const endpoint = require("../../AIserverEndpoint");
+const endpoint = require("../../DetectionEndpoint");
 
 const completeRouter = require("./normal/complete");
 

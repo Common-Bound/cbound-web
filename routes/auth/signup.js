@@ -78,10 +78,25 @@ passport.deserializeUser((user, done) => {
   done(null, user);
 });
 
-// 로그인 요청 핸들링 라우트
-router.post("/", passport.authenticate("signup-local"), (req, res, next) => {
-  console.log("회원가입 성공!");
-  res.json({ result: true });
+// 회원가입 요청 핸들링 라우트
+router.post("/", (req, res, next) => {
+  passport.authenticate("signup-local", (err, user, info) => {
+    // passport 인증 도중 에러 발생시 콘솔에 찍어준다
+    if (err) {
+      console.log(err);
+      return res.status(500).send(err);
+    }
+    // 인증 실패 메시지를 담은 info 메시지가 존재한다면 해당 메시지를 클라이언트로 전달한다
+    if (info !== undefined) {
+      console.log(info.message);
+      return res.status(401).json(info);
+    }
+    // 위 두 상황을 모두 통과하면 로그인 성공
+    else {
+      console.log("회원가입 성공!");
+      return res.json({ result: true });
+    }
+  })(req, res, next);
 });
 
 module.exports = router;

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import endpoint from "../../AIserverEndpoint";
+import endpoint from "../../RecognitionEndpoint";
 import styled from "styled-components";
 import deleteImg from "../../images/close_button.png";
 
@@ -60,14 +60,14 @@ class CropItem extends Component {
 
   // label 값을 넣을 때마다 서버로 재전송 하는 것을 방지
 
-  /*shouldComponentUpdate(nextProps, nextState) {
+  shouldComponentUpdate(nextProps, nextState) {
     if (
       nextProps.crop !== this.props.crop &&
       nextProps.crop.label === this.props.crop.label
     )
       return false;
     else return true;
-  }*/
+  }
 
   // 서버(sendTo)로 body에 bodyData를 넣어서 Fetch 할 때 호출됨
   sendData = async (bodyData, sendTo) => {
@@ -79,21 +79,16 @@ class CropItem extends Component {
       method: "post",
       body: bodyData
     })
-      .then(function(res) {
+      .then(res => {
         return res.json();
       })
-      .then(async data => {
+      .then(data => {
         console.log("Data received");
         console.log(data);
 
         // 경로별 받은 데이터를 다르게 핸들링함
-
         this.setState({
           label: data.label
-        });
-
-        return new Promise(resolve => {
-          resolve(true);
         });
       })
       .catch(function(ex) {
@@ -127,13 +122,6 @@ class CropItem extends Component {
     const canvas = document.createElement("canvas");
     const scaleX = image.naturalWidth / image.width;
     const scaleY = image.naturalHeight / image.height;
-
-    /*
-    console.log('scaleX: ');
-    console.log(scaleX);
-    console.log('scaleY: ');
-    console.log(scaleY);
-    */
 
     canvas.width = crop.width;
     canvas.height = crop.height;
@@ -179,16 +167,16 @@ class CropItem extends Component {
     await this.setState({ imgSrc: await this.getCroppedImg(image, crop) });
     //console.log("crop!" + crop.x);
 
-    const bodyData = JSON.stringify({ crop_image: this.state.imgSrc });
+    const bodyData = JSON.stringify({
+      crop_image: this.state.imgSrc,
+      id: this.props.crop.id
+    });
     if (this.props.useAI) {
       this.setState({
         editing: true
       });
 
-      await this.sendData(
-        bodyData,
-        `https://cors-anywhere.herokuapp.com/${endpoint.url}/ocr/recognition/`
-      );
+      await this.sendData(bodyData, `${endpoint.url}/ocr/recognition/`);
     }
   }
 
@@ -207,7 +195,10 @@ class CropItem extends Component {
           imgSrc: await this.getCroppedImg(image, crop)
         });
       }
-      const bodyData = JSON.stringify({ crop_image: this.state.imgSrc });
+      const bodyData = JSON.stringify({
+        crop_image: this.state.imgSrc,
+        id: this.props.crop.id
+      });
       //console.log(this.props.useAI)
 
       //console.log(this.props.crop.label, this.state.label);
@@ -220,10 +211,7 @@ class CropItem extends Component {
         this.setState({
           editing: true
         });
-        await this.sendData(
-          bodyData,
-          `https://cors-anywhere.herokuapp.com/${endpoint.url}/ocr/recognition/`
-        );
+        await this.sendData(bodyData, `${endpoint.url}/ocr/recognition/`);
       }
     }
   }

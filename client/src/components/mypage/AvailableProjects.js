@@ -6,7 +6,6 @@ import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
-import Button from "@material-ui/core/Button";
 
 const Container = styled.div`
   border: 1px solid blue;
@@ -14,15 +13,20 @@ const Container = styled.div`
   height: 100vh;
 `;
 
+const TitleContainer = styled.div`
+  width: 80%;
+  margin: 0 auto;
+`;
+
 const Title = styled.div`
-  padding: 40px 60px 0px 60px;
+  padding-top: 40px;
   font-family: Avenir;
   font-size: 20px;
   font-weight: bold;
 `;
 
 const SemiTitle = styled.div`
-  padding: 0px 60px 40px 60px;
+  padding-bottom: 40px;
   font-family: SpoqaHanSans;
   font-size: 32px;
   font-weight: bold;
@@ -130,8 +134,10 @@ class AvailableProjects extends Component {
   render() {
     return (
       <Container>
-        <Title>Available Projects</Title>
-        <SemiTitle>참여 가능한 프로젝트</SemiTitle>
+        <TitleContainer>
+          <Title>Available Projects</Title>
+          <SemiTitle>참여 가능한 프로젝트</SemiTitle>
+        </TitleContainer>
         <TableContainer>
           <Table>
             <StyledTableHead>
@@ -146,9 +152,11 @@ class AvailableProjects extends Component {
             </StyledTableHead>
             <TableBody>{this.state.projects}</TableBody>
           </Table>
+          {/* 사용성 테스트를 위해 막아놓음 
           <Button onClick={this.handleClick.bind(this)}>
             랜덤 프로젝트 추가
           </Button>
+          */}
         </TableContainer>
       </Container>
     );

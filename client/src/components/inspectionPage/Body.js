@@ -7,6 +7,11 @@ const Main = styled.div`
   position: relative;
 `;
 
+const StyledImg = styled.img`
+  width: 640px;
+  max-width: 640px;
+`;
+
 class Body extends Component {
   constructor(props) {
     super(props);
@@ -70,17 +75,15 @@ class Body extends Component {
   async drawImage() {
     const canvas = document.getElementById("canvas");
     const image = document.getElementById("image");
-    console.log(image);
-
     const ctx = canvas.getContext("2d");
 
     let scale = 1;
-    // 이미지의 가로 길이가 720이 넘으면, 720으로 나눈 비율을 계산한다
-    if (image.naturalWidth > 720) {
-      scale = image.naturalWidth / 720;
+    // 이미지의 가로 길이가 640이 넘으면, 640으로 나눈 비율을 계산한다
+    if (image.naturalWidth > 640) {
+      scale = image.naturalWidth / 640;
     }
 
-    // 계샨된 비율만큼 나눠줘서 캔버스 영역의 가로 길이를 720 으로 맞춰준다
+    // 계샨된 비율만큼 나눠줘서 캔버스 영역의 가로 길이를 640 으로 맞춰준다
     // 또한 세로 길이도 이와 같은 비율로 조정해준다
     canvas.width = image.width / scale;
     canvas.height = image.height / scale;
@@ -99,10 +102,15 @@ class Body extends Component {
    */
   async drawCrop() {
     const canvas = document.getElementById("canvas");
+    const image = document.getElementById("image");
     const ctx = canvas.getContext("2d");
+
+    console.log(image.naturalWidth, canvas.width);
 
     console.log(this.state.data.payload.meta.crop_image);
     this.state.data.payload.meta.crop_image.forEach(function(crop) {
+      let scale = 1;
+
       const x = crop.x;
       const y = crop.y;
       const width = crop.width;
@@ -293,7 +301,7 @@ class Body extends Component {
             <Main id="main">
               <canvas id="canvas">
                 <div style={{ display: "none" }}>
-                  <img
+                  <StyledImg
                     id="image"
                     src={data.payload.orig_image}
                     alt=""

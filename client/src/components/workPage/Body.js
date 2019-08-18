@@ -17,8 +17,6 @@ const BodyContainer = styled.div`
   width: 80%;
   margin: 0 auto;
 
-  border: 1px solid blue;
-
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -28,10 +26,9 @@ const BodyContainer = styled.div`
 const EntireTitleContainer = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
-  border: 1px solid black;
-  padding: 20px 0px 10px 0px;
+  padding: 40px 0px 10px 10px;
 `;
 
 const LeftTitleContainer = styled.div`
@@ -75,15 +72,15 @@ const RightTitleDate = styled.div`
 
 const MainContainer = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  border: 1px solid green;
   padding: 10px;
 `;
 
 const LeftMainContainer = styled.div`
   display: flex;
   flex-direction: column;
+  flex-basis: auto;
   align-items: center;
   justify-content: flex-start;
 `;
@@ -93,7 +90,7 @@ const StepperContainer = styled.div`
 `;
 
 const StepperRoot = styled.div`
-  width: 90%;
+  width: 100%;
   margin: 0 auto;
 `;
 
@@ -105,10 +102,11 @@ const StyledStepper = styled(Stepper)`
 const RightDescriptionContainer = styled.div`
   display: flex;
   flex-direction: column;
+  flex-basis: auto;
   align-items: flex-start;
+  padding: 40px 20px 0px 20px;
 
-  width: 400px;
-  height: 440px;
+  width: 440px;
   background-color: #f0f0f0;
 `;
 
@@ -138,10 +136,9 @@ const BoundButton = styled.button`
   background-color: black;
   color: white;
   border-radius: 100%;
-  border: 1px solid black;
   transition: 0.3s;
   text-align: center;
-  margin: 10px;
+  margin: 10px 10px 20px 10px;
 
   :hover {
     color: black;
@@ -160,15 +157,29 @@ const ShowButton = styled(BoundButton)`
 `;
 
 const ImageContainer = styled.div`
-  max-width: 640px;
+  width: 640px;
+  height: ${props => (props.show ? "440px" : "none")};
+  max-width: 640px
   position: relative;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: ${props => (props.show ? "5px solid lightgrey" : "none")};
 `;
 
 const DropZoneBox = styled.div`
-  width: 400px;
-  height: 400px;
-  background-color: lightblue;
-  border: 1px solid green;
+  width: 640px;
+  height: 440px;
+  background-color: white;
+  border: 5px solid lightgrey;
+                          
+  border-radius: 20px;
+  font-family: Avenir;
+  font-size: 25px
+  font-weight: bold;
+  text-align: center;
+  line-height: 370px;
 `;
 
 const LoadingContainer = styled.div`
@@ -184,7 +195,12 @@ const LoadingContainer = styled.div`
 
 const CropListContainer = styled.div`
   display: flex;
-  border: 1px solid black;
+  justify-content: space-between;
+`;
+
+const StepButtonContainer = styled.div`
+  display: flex;
+  padding-right: 10px;
 `;
 
 class Body extends Component {
@@ -637,22 +653,7 @@ class Body extends Component {
                   <section>
                     <div {...getRootProps()}>
                       <input {...getInputProps()} />
-                      <DropZoneBox
-                        style={{
-                          width: "400px",
-                          height: "400px",
-                          border: "5px solid lightgrey",
-                          borderRadius: "5px",
-                          backgroundColor: "white",
-                          fontFamily: "Avenir",
-                          fontSize: "25px",
-                          fontWeight: "bold",
-                          textAlign: "center",
-                          lineHeight: "370px"
-                        }}
-                      >
-                        [+] UPLOAD IMAGE
-                      </DropZoneBox>
+                      <DropZoneBox>[+] UPLOAD IMAGE</DropZoneBox>
                     </div>
                   </section>
                 )}
@@ -661,7 +662,7 @@ class Body extends Component {
               ""
             )}
             {/* 크롭할 이미지 영역 */}
-            <ImageContainer>
+            <ImageContainer show={this.state.orig_image}>
               {this.state.orig_image ? (
                 <div onMouseUp={this.handleCropMouseUp}>
                   <ReactCrop
@@ -686,8 +687,8 @@ class Body extends Component {
                 <LoadingContainer
                   style={{
                     position: "absolute",
-                    top: "0px",
-                    left: "0px",
+                    left: "50%",
+                    transform: "translateX(-50%)",
                     width: `${this.state.imageRef.width}px`,
                     height: `${this.state.imageRef.height}px`,
                     zIndex: 1,
@@ -701,7 +702,7 @@ class Body extends Component {
                     <div />
                     <div />
                     <div />
-                    <div />\
+                    <div />
                     <div />
                     <div />
                   </div>
@@ -712,7 +713,7 @@ class Body extends Component {
           </LeftMainContainer>
           {/* Main Container 의 오른쪽 영역 */}
           <RightDescriptionContainer>
-            AI
+            텍스트 감지 AI 어시스턴트
             <label className="switch">
               <input
                 type="checkbox"
@@ -725,9 +726,8 @@ class Body extends Component {
             {this.state.step == 0 ? (
               <DescriptionBoxContainer>
                 <DescriptionBox>
-                  1. 좌측 [+] 영역을 클릭하여 이미지 업로드 후, 아래의 원형
-                  [BOUND] 버튼을 누르세요. (단, 이미지 선명하지 않거나 해상도가
-                  낮으면 업로드 되지 않습니다)
+                  1. 좌측 [+] 영역을 클릭하여 이미지를 업로드 해 주세요 (단,
+                  이미지 선명하지 않거나 해상도가 낮으면 업로드 되지 않습니다)
                 </DescriptionBox>
                 <DescriptionBox>
                   2. 이미지가 정상적으로 업로드 되어 바운드 되면, AI가 자동으로
@@ -742,12 +742,12 @@ class Body extends Component {
               <DescriptionBoxContainer>
                 <DescriptionBox>
                   4. SHOW 버튼을 누르면, 좌측 이미지에서 AI가 자동으로 인식한
-                  영역들이 보여집니다. 선택되지 않은 영역에서 글자로 생각되는
+                  영역들이 보여집니다. 인식되지 않은 영역에서 글자로 생각되는
                   부분이 있다면 그 영역을 드래그하여 추가하세요. (영역을
                   드래그하면 영역 이동 가능)
                 </DescriptionBox>
                 <DescriptionBox>
-                  5. 선택 후, 아래의 바운드 버튼 혹은 엔터를 누르면 AI가 추가로
+                  5. 선택 후, 아래의 BOUND 버튼 혹은 엔터를 누르면 AI가 추가로
                   글자를 학습합니다. AI가 활성화 상태면 자동으로 글자를
                   학습합니다.
                 </DescriptionBox>
@@ -759,12 +759,13 @@ class Body extends Component {
             ) : (
               <DescriptionBoxContainer>
                 <DescriptionBox>
-                  8. AI가 글자를 제대로 인식했는지 아래 블루박스를 확인해주세요.
+                  8. AI가 글자를 제대로 인식했는지 각 썸네일 아래 블루박스를
+                  확인해주세요.
                 </DescriptionBox>
                 <DescriptionBox>
                   9. AI가 글자를 잘못 인식했거나, 바운드 영역이 잘못 선택되어
-                  있다면 아래 바운드 썸네일을 삭제(DELETE)하거나, 편집(EDIT)하여
-                  AI를 학습시켜주세요.
+                  있다면 아래 바운드 썸네일을 클릭하여 영역을 수정하거나,
+                  블루박스 내용을 수정하여 AI를 학습시켜주세요.
                 </DescriptionBox>
                 <DescriptionBox>
                   * AI의 정확도를 개선한 분에겐 추가 포인트를 드립니다. (기여도
@@ -806,26 +807,28 @@ class Body extends Component {
             onRemove={this.handleOnCropRemove}
             changeLabel={this.handleChangeLabel}
           />
-          <Button disabled={this.state.step === 0} onClick={this.handleBack}>
-            Back
-          </Button>
-          <Button
-            disabled={
-              this.state.orig_image === "" || this.state.loading === true
-            }
-            variant="contained"
-            color="primary"
-            onClick={this.handleNext}
-          >
-            {this.state.step === steps.length - 1 ? "Finish" : "Next"}
-          </Button>
-          {this.state.step === steps.length ? (
-            <div>
-              <Button onClick={this.handleSendAll}>완료하기</Button>
-            </div>
-          ) : (
-            ""
-          )}
+          <StepButtonContainer>
+            <Button disabled={this.state.step === 0} onClick={this.handleBack}>
+              Back
+            </Button>
+            <Button
+              disabled={
+                this.state.orig_image === "" || this.state.loading === true
+              }
+              variant="contained"
+              color="primary"
+              onClick={this.handleNext}
+            >
+              {this.state.step === steps.length - 1 ? "Finish" : "Next"}
+            </Button>
+            {this.state.step === steps.length ? (
+              <div>
+                <Button onClick={this.handleSendAll}>완료하기</Button>
+              </div>
+            ) : (
+              ""
+            )}
+          </StepButtonContainer>
         </CropListContainer>
       </BodyContainer>
     );

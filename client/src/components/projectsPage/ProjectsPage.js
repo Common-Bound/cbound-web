@@ -13,15 +13,20 @@ const Container = styled.div`
   height: 100vh;
 `;
 
+const TitleContainer = styled.div`
+  width: 80%;
+  margin: 0 auto;
+`;
+
 const Title = styled.div`
-  padding: 40px 60px 0px 60px;
+  padding-top: 40px;
   font-family: Avenir;
   font-size: 20px;
   font-weight: bold;
 `;
 
 const SemiTitle = styled.div`
-  padding: 0px 60px 40px 60px;
+  padding-bottom: 40px;
   font-family: SpoqaHanSans;
   font-size: 32px;
   font-weight: bold;
@@ -100,8 +105,10 @@ class ProjectsPage extends Component {
   render() {
     return (
       <Container>
-        <Title>On Going Projects</Title>
-        <SemiTitle>참여한 프로젝트</SemiTitle>
+        <TitleContainer>
+          <Title>On Going Projects</Title>
+          <SemiTitle>참여한 프로젝트</SemiTitle>
+        </TitleContainer>
         <TableContainer>
           <Table>
             <StyledTableHead>
