@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/31213226/63397983-1ead4d80-c407-11e9-98bd-906ca01db919.png">
+  <img style="padding: 100px;" src="https://user-images.githubusercontent.com/31213226/63397983-1ead4d80-c407-11e9-98bd-906ca01db919.png">
 </p>
 
 # Common Bound
@@ -11,8 +11,8 @@
 ![Node Version](https://img.shields.io/node/v/@material-ui/core)
 ![NPM Version](https://img.shields.io/npm/v/pg)
 ![Commit Activity](https://img.shields.io/github/commit-activity/m/eunsukimme/Common-Bound)
-[![HitCount](http://hits.dwyl.io/eunsukimme/Common-Bound.svg)](http://hits.dwyl.io/eunsukimme/Common-Bound)
 ![License](https://img.shields.io/github/license/eunsukimme/Common-Bound)
+[![HitCount](http://hits.dwyl.io/eunsukimme/Common-Bound.svg)](http://hits.dwyl.io/eunsukimme/Common-Bound)
 
 ## Documentation
 
@@ -77,23 +77,32 @@
 
 ## Team
 
-- **김은수** - _일정 및 이슈 관리, 문서 관리, Back end(Web, DB) 및 Front end 개발 총괄_
-
+- **김은수**
   - **Github**: [eunsukimme](https://github.com/eunsukimme)
-  - **Role**: 데이터 생산자가 생산한 데이터를 검수하는 과정에서 검수자가 검수 페이지에 접속하면 DB에서 검수할 데이터를 가져온다. 검수자는 가져온 데이터의 적합/부적합 여부를 판단한 뒤에 이를 다시 DB로 전송하고, DB에 저장된 해당 데이터의 검수 현황 필드를 갱신시킨다. 이때, **여러 검수자가 동시에 접속하여 동일한 데이터에 대해서 검수를 진행하면**, **먼저 검수를 진행한 3**명의 검수 결과만**DB**에 반영되고 다른 검수자들의 작업은 반영되지 못하게 된다. 즉, 검수자가 작업을 진행했음에도 불구하고 기여를 인정받지 못하게 되는 것이다. 또한 여러 검수자가 동시에 접속하면, 이전 검수자의 히스토리도 확인할 수 없게 된다. **이러한 문제를 해결하기 위해서 작업 큐**(Job Queue)**를 만들고 검수할 데이터를 큐에 저장**하여 먼저 검수 페이지에 접속한 검수자가 특정 데이터를 불러오면, 해당 작업을 큐에서 불러와 스케줄링 상태를 'queued' 에서 'reserved'로 변경하도록 하였다. 그리하여 **먼저 접속한 검수자가 검수를 진행하는 동안 다른 검수자는 해당 데이터에 접근하지 못하도록 하고,** 검수 작업이 끝나면 해당 데이터의 검수 현황을 갱신한 후 다시 큐에 넣어 스케줄링 상태를 'reserved'에서 'queued'로 변경시킨다. 그런 뒤 다른 검수자가 검수 페이지에 접속했을 때, 해당 데이터를 불러올 수 있고 이전 검수자의 검수 히스토리를 확인할 수 있게 된다.  
-    또한 **검수 작업을 트랜잭션으로 만들어서, 검수 프로세스가 온전히 완료되어야만 commit 하여 데이터의 검수 현황을 갱신**시킬 수 있도록 하였다. 그리하여 만약 검수자가 검수 도중 이탈하게 된다면 rollback 하여 해당 검수 작업은 반영되지 않도록 하였다.
+  - **Role**: _일정 및 이슈 관리, 문서 관리, Front end 및 Back end(Web, DB) 개발 총괄_
+    - 프로젝트 및 멘토링 일정 관리
+    - 프로젝트 개발 내용 문서화
+    - 웹 서버 개발
+    - 클라이언트 & 서버 연동
+    - 데이터베이스 설계 및 관리
 
-- **최현서** - _Front end 개발, 이미지 크롭 기능 개발_
-
+* **최현서**
   - **Github**: [HyunSeoChoi](https://github.com/HyunSeoChoi)
-  - **Role**: 연속적으로 크롭된 영역이 바뀌는 우리 프로젝트에서는 **캔버스에 그려줄 때 Render**에서 실행하게 되면 비동기로 실행되지 않아 한 박자 늦게 캔버스에 크롭 영역을 그려주는 문제가 발생했다. 그래서 **React 공식 Docs**와 **스택 오버플로**에서 비슷한 문제들을 검색해보니 리액트에서 이런 이슈를 해결하고자 5월에 새로운 리액트 라이프사이클이 생겼다는 것을 알게 되어 성공적으로 프로젝트에 적용했다. 또한 **라이프사이클 내에서 state**를 수정하게 되면 무한루프가 도는 것을 따로 **Flag**변수를 두어 해결했다.  
-    **크롭한 영역을 전체적으로 그리는 부분에서 가끔 잘못되거나 다른 영역이 검출되었다**. 이런 현상이 왜 일어나는지 확인하기 위해 drawImage를 활용한 다른 소스를 보고 비교해봤다. 그 결과 **크롭 영역 좌표계와 canvas**의 좌표계가 서로 다르고 **CSS 스타일 강제조정에 의해 캔버스에 스케일링이 발생한다는 것을 확인**했다. 캔버스는 max-width를 720px 로 조정하는데 720px을 넘어갈 경우 스케일링을 해주기 위해 CSS 인터넷 강의 canvas 부분을 참고하여 **naturalWidth**와 **width 비율로 나눠주니 스케일링에 대해서도 정확한 좌표가 계산**되고 확대를 해도 수식에 의해 스케일링을 고려하므로 마찬가지로 정확하게 계산되었다. 하지만 이후에 글자가 지속적으로 가려져 디스코드 커뮤니티에 글을 올려보니 외곽선은 캔버스가 차지하는 영역에 포함된 데 비해 그리기 영역이 외곽선 안쪽이기 때문에 발생하는 것을 알아냈다. 따라서 **외곽선 두께도 좌표 계산에 포함시켜 외곽선 영역을 제외시켰다**.
+  - **Role**: _Front end 담당, 이미지 크롭 기능 개발_
+    - 이미지 위의 ROI 영역을 크롭하는 BOUND 기능 개발
+    - ROI 영역 수정, 삭제 인터페이스 개발
+    - 이미지 업로드, 크롭 완료 등의 이벤트 발생 체크 & 서버로 데이터 전송 기능 개발
+    - 캔버스 좌표계와 크롭 영역 좌표계 실제 비율로 동기화
+    - 캔버스에 모든 크롭 영역을 그려주는 SHOW 기능 개발
 
-- **김광호** - _AI 어시스턴트 개발, Back end(AI server) 개발_
-
+- **김광호**
   - **Github**: [FKgk](https://github.com/FKgk)
-  - **Role**: 사용자가 한 이미지를 올릴 때 처음엔 Detection 요청을, 그런 다음 검출된 텍스트 영역 개수만큼 Recognition 요청을 보낸다. 이러다 보니 **서버는 동시에 다수의 요청에 대해 각각 병렬적으로 수행할 수 있도록 설계되어야 했다**. 이를 위해 **Nginx**를 통한 로드밸런싱으로 다수의 요청에 대응할 수 있게 하였다.
-    Detection와 Recognition를 한 서버에 두니, **많은 GPU Memory 사용량에 의해 Out of Memory 에러가 발생했다**. GPU 사용량을 자세히 보니 Detection을 수행할 때는 많은 메모리를 요구하지만, Recognition의 경우 Detection에 비해 적은 메모리만으로도 충분했다. 그래서 **Detection**와 **Recognition**의 서버를 분리시켜**Detection**은 높은 메모리를 갖는**EC2, Recognition**은 빠른 연산을 갖는**EC2**에서 동작하도록 했다.
+  - **Role**: _Back end 담당, AI 어시스턴트 개발_
+    - AI 어시스턴트 개발
+    - AI 어시스턴트 서버 개발
+    - Text Detection 논문 및 오픈소스 비교 분석
+    - Text Recognition 논문 및 오픈소스 비교 분석
+    - AWS DevOps 담당
 
 ## Code Convention
 
