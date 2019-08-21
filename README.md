@@ -1,4 +1,11 @@
-# 커먼바운드
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/31213226/63397983-1ead4d80-c407-11e9-98bd-906ca01db919.png">
+</p>
+
+# Common Bound
+
+커먼바운드는 인공지능으로 기존의 문제를 새롭게 해결하고자 하는 개인이나 기업이 인공지능 학습에 필요한 데이터를 생산하는 작업을 크라우드소싱할 수 있도록 도와주는 플랫폼 입니다.
+커먼바운드는 인공지능 학습 데이터를 생산하는데 필요한 온라인 작업 환경을 제공하고, 데이터를 생산하는데에 기여한 사람들이 그에 대한 정당한 보상을 지급받을 수 있도록 합니다.
 
 ![Version](https://img.shields.io/badge/version-1.0.0-red)
 ![Node Version](https://img.shields.io/node/v/@material-ui/core)
@@ -7,7 +14,16 @@
 [![HitCount](http://hits.dwyl.io/eunsukimme/Common-Bound.svg)](http://hits.dwyl.io/eunsukimme/Common-Bound)
 ![License](https://img.shields.io/github/license/eunsukimme/Common-Bound)
 
-### 멤버
+## Documentation
+
+커먼바운드를 기획하게 된 모든 과정을 확인하시려면, [Documentation](https://git.swmgit.org/root/p1021_dal/wikis/idea/%EC%95%84%EC%9D%B4%EB%94%94%EC%96%B4)
+페이지를 참고하세요.
+
+## How To Install
+
+[How to Install](./How to Install.md)
+
+## 멤버
 
 - **김은수** - _일정 및 이슈 관리, 문서 관리, Back end(Web, DB) 및 Front end 개발 총괄_ - [eunsukimme](https://github.com/eunsukimme)
 
@@ -27,7 +43,7 @@
 
   Detection와 Recognition를 한 서버에 두니, **많은 GPU Memory 사용량에 의해 Out of Memory 에러가 발생했다**. GPU 사용량을 자세히 보니 Detection을 수행할 때는 많은 메모리를 요구하지만, Recognition의 경우 Detection에 비해 적은 메모리만으로도 충분했다. 그래서 **Detection**와 **Recognition**의 서버를 분리시켜**Detection**은 높은 메모리를 갖는**EC2, Recognition**은 빠른 연산을 갖는**EC2**에서 동작하도록 했다.
 
-### 기능
+## 기능
 
 - 기능 설명
 
@@ -102,7 +118,3 @@
 ## 코딩 스타일
 
 [Coding Style](./Coding Style.md)
-
-## 설치 방법
-
-[How to Install](./How to Install.md)
