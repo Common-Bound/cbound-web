@@ -62,16 +62,3 @@ if (i > 10) {
   }
 }
 ```
-
-## Authors
-
-- **EunSu Kim** - *Server* - [eunsukimme](https://github.com/eunsukimme)
-- **HyunSeo Choi** - *Client* - [HyunSeoChoi](https://github.com/HyunSeoChoi)
-- **GwangHo Kim** - *API* - [FKgk](https://github.com/FKgk)
-
-See also the list of [contributors](https://github.com/eunsukimme/Common-Bound/contributors) who participated in this project.
-
-## License
-
-This project is licensed under the MIT License
-
