@@ -21,7 +21,7 @@
 
 ## How To Install
 
-자세한 설치 방법은 [How to Install](./How to Install.md)에서 확인하실 수 있습니다.
+자세한 설치 방법은 [How to Install](https://github.com/eunsukimme/Common-Bound/blob/master/How%20to%20Install.md)에서 확인하실 수 있습니다.
 
 ## Feature
 
