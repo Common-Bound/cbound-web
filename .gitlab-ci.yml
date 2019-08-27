@@ -12,6 +12,8 @@ cache:
 
 install_dependencies:
   stage: build
+  tags:
+    - my-runner
   script:
     - yarn
   artifacts:
@@ -20,5 +22,7 @@ install_dependencies:
 
 testing:
   stage: test
+  tags:
+    - my-runner
   script:
     - yarn test
