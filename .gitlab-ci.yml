@@ -31,6 +31,8 @@ testing:
 #Production stage
 deploying:
   stage: deploy
+  tags:
+    - my-tag
   before_script:
     #generate ssh key
     - mkdir -p ~/.ssh
