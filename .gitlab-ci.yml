@@ -1,0 +1,24 @@
+image: node:latest
+
+stages:
+  - build
+  - test
+
+# the configuration includes a cache that specifies files
+# that should be saved for later to be used between runs or stages.
+cache:
+  paths:
+    - node_modules/
+
+install_dependencies:
+  stage: build
+  script:
+    - yarn
+  artifacts:
+    paths:
+      - node_modules/
+
+testing:
+  stage: test
+  script:
+    - yarn test
