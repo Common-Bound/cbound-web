@@ -55,22 +55,35 @@ class CropItem extends Component {
   state = {
     imgSrc: "", // 지금 Crop 된 영역이 Base64 인코딩된 값
     editing: false,
-    label: ""
+    label: "",
+    useAI: true
   };
 
   // label 값을 넣을 때마다 서버로 재전송 하는 것을 방지
 
   shouldComponentUpdate(nextProps, nextState) {
     if (
+      nextProps.useAI !== this.props.crop.useAI ||
+      nextProps.crop.height !== this.props.crop.height ||
+      nextProps.crop.x !== this.props.crop.x ||
+      nextProps.crop.y !== this.props.crop.y ||
+      nextProps.crop.width !== this.props.crop.width
+    ) {
+      return true;
+    }
+    if (
       nextProps.crop !== this.props.crop &&
       nextProps.crop.label === this.props.crop.label
-    )
+    ) {
+      console.log("a");
+
       return false;
-    else return true;
+    } else return true;
   }
 
   // 서버(sendTo)로 body에 bodyData를 넣어서 Fetch 할 때 호출됨
   sendData = async (bodyData, sendTo) => {
+    console.log(sendTo);
     this.setState({
       loading: true
     });
@@ -171,11 +184,11 @@ class CropItem extends Component {
       crop_image: this.state.imgSrc,
       id: this.props.crop.id
     });
+    console.log(this.props.useAI);
     if (this.props.useAI) {
       this.setState({
         editing: true
       });
-
       await this.sendData(bodyData, `${endpoint.url}/ocr/recognition/`);
     }
   }
@@ -199,14 +212,9 @@ class CropItem extends Component {
         crop_image: this.state.imgSrc,
         id: this.props.crop.id
       });
-      //console.log(this.props.useAI)
-
       //console.log(this.props.crop.label, this.state.label);
 
-      if (
-        (this.props.useAI && this.props.crop.label !== this.state.label) ||
-        !this.props.crop.label
-      ) {
+      if (this.props.useAI && this.props.crop.label !== this.state.label) {
         // console.log("UPDATE");
         this.setState({
           editing: true
@@ -229,6 +237,8 @@ class CropItem extends Component {
       <CropItemContainer>
         <ImageContainer onClick={this.handleChange}>
           <Image src={this.state.imgSrc} />
+
+          {/* 로딩바 */}
           {this.state.editing ? (
             <LoadingContainer
               style={{
