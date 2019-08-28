@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const db = require("../../../db/index");
+const db = require("../../../../db/index");
 
 // path: ~/mypage/task/inspection
 router.use("/", (req, res, next) => {
@@ -82,9 +82,7 @@ router.post("/", (req, res, next) => {
   db.query(
     `
     update data
-    set schedule_state='queued', inspector = array_append(inspector, '${
-      req.user.id
-    }'),
+    set schedule_state='queued', inspector = array_append(inspector, '${req.user.id}'),
     payload = jsonb_set(payload, '{meta, crop_image}', jsonb '${new_crop_image}', true)
     where id='${data_id}'
     `,

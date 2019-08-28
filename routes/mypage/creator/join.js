@@ -1,11 +1,11 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const db = require('../../db/index');
+const db = require("../../../db/index");
 
-// path: ~/mypage/join
+// path: ~/mypage/creator/join
 // 프로젝트 참여 요청 핸들링
 router.post("/", (req, res, next) => {
-  console.log('/join 라우터 도착');
+  console.log("/join 라우터 도착");
   console.log(req.user);
   const user_id = req.user.id;
   const proj_id = req.body.proj_id;
@@ -22,9 +22,8 @@ router.post("/", (req, res, next) => {
       // 이 경우 참여를 허용하지 않는다
       if (result.rows.length > 0) {
         console.log(result.rows);
-        return res.json({ message: '이미 참여한 프로젝트 입니다' });
-      }
-      else {
+        return res.json({ message: "이미 참여한 프로젝트 입니다" });
+      } else {
         // 참여 이력이 없는 경우 creator_pool 에 해당 유저 id 와 프로젝트 id 를 추가한다
         db.query(
           "insert into creator_pool values($1, $2)",
@@ -39,7 +38,7 @@ router.post("/", (req, res, next) => {
         );
       }
     }
-  )
+  );
 });
 
 module.exports = router;
