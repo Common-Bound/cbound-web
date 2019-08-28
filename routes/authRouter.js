@@ -1,16 +1,15 @@
 const express = require("express");
 const router = express.Router();
-const signupRouter = require("./auth/signup");
-const signinRouter = require("./auth/signin");
-const signoutRouter = require("./auth/signout");
+const creatorRouter = require("./auth/creatorRouter");
+const requesterrouter = require("./auth/requesterRouter");
 
 // path: ~/auth
 router.use("/", (req, res, next) => {
   console.log("/auth 라우터 도달");
   next();
 });
-router.use("/signup", signupRouter);
-router.use("/signin", signinRouter);
-router.use("/signout", signoutRouter);
+
+router.use("/creator", creatorRouter);
+router.use("/requester", requesterrouter);
 
 module.exports = router;

@@ -153,7 +153,7 @@ class SignIn extends Component {
   handleSubmit = e => {
     e.preventDefault();
 
-    const url = this.props.match.path; // /auth/signin
+    const url = this.props.match.url; // /:user_type/auth/signin
     fetch(url, {
       method: "POST",
       headers: {
@@ -217,7 +217,11 @@ class SignIn extends Component {
                 <StyledButtonContainer>
                   <Button onClick={this.handleSubmit}>로그인</Button>
                   <button type="submit" style={{ display: "none" }} />
-                  <Link to="/auth/signup">아직 회원이 아니신가요?</Link>
+                  <Link
+                    to={`/auth/${this.props.match.params.user_type}/signup`}
+                  >
+                    아직 회원이 아니신가요?
+                  </Link>
                 </StyledButtonContainer>
               </StyledForm>
               <div>{result === true ? <Redirect to="/mypage" /> : ""}</div>

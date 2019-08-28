@@ -105,7 +105,7 @@ class Select extends Component {
               <LeftCard>
                 <SubTitle>Data</SubTitle>
                 <SubTitle color={"#389eff"}>Requester</SubTitle>
-                <StyledLink to="/">
+                <StyledLink to="/auth/requester/signin">
                   <Button className="animated fadeInUp  delay-1s">
                     데이터 요청자(기업)
                   </Button>
@@ -121,7 +121,7 @@ class Select extends Component {
               <RightCard>
                 <SubTitle>Data</SubTitle>
                 <SubTitle color={"#00d8ff"}>Generator</SubTitle>
-                <StyledLink to="/auth/signin">
+                <StyledLink to="/auth/creator/signin">
                   <Button className="animated fadeInUp  delay-1s">
                     데이터 생산자(개인)
                   </Button>
