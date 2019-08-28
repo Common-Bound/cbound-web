@@ -24,7 +24,7 @@ class Project_orig extends Component {
   }
 
   handleClick = e => {
-    const url = "/mypage/join";
+    const url = "/mypage/creator/join";
     fetch(url, {
       method: "POST",
       headers: {

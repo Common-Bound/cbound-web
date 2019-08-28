@@ -224,7 +224,17 @@ class SignIn extends Component {
                   </Link>
                 </StyledButtonContainer>
               </StyledForm>
-              <div>{result === true ? <Redirect to="/mypage" /> : ""}</div>
+              <div>
+                {result === true ? (
+                  <Redirect
+                    to={{
+                      pathname: `/mypage/${this.props.match.params.user_type}`
+                    }}
+                  />
+                ) : (
+                  ""
+                )}
+              </div>
             </RightCard>
           </SignInMain>
         </SignInContainer>

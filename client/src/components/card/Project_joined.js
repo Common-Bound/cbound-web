@@ -49,10 +49,8 @@ class Project_joined extends Component {
           <StyledLink
             to={{
               pathname: this.props.ref_project
-                ? `/mypage/task/${this.props.project_type}/${
-                    this.props.ref_project
-                  }`
-                : `/mypage/task/${this.props.project_type}/${this.props.id}`,
+                ? `/mypage/creator/task/${this.props.project_type}/${this.props.ref_project}`
+                : `/mypage/creator/task/${this.props.project_type}/${this.props.id}`,
               state: {
                 title: this.props.title,
                 created_at: this.props.created_at,

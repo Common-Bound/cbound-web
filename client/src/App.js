@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import styled from "styled-components";
 import "./App.css";
 import SignUp from "./components/auth/SignUp";
@@ -8,6 +8,7 @@ import SignIn from "./components/auth/SignIn";
 import SignOut from "./components/auth/SignOut";
 import Main from "./components/main/Main";
 import Select from "./components/auth/Select";
+import notFound from "./components/notFound";
 
 const AppContainer = styled.div`
   width: 100%;
@@ -19,12 +20,15 @@ class App extends React.Component {
     return (
       <AppContainer>
         <Router>
-          <Route path="/" exact component={Main} />
-          <Route path="/mypage" component={MyPage} />
-          <Route path="/signin/select" component={Select} />
-          <Route path="/auth/:user_type/signup" component={SignUp} />
-          <Route path="/auth/:user_type/signin" component={SignIn} />
-          <Route path="/auth/:user_type/signout" component={SignOut} />
+          <Switch>
+            <Route path="/" exact component={Main} />
+            <Route path="/mypage" component={MyPage} />
+            <Route path="/signin/select" component={Select} />
+            <Route path="/auth/:user_type/signup" component={SignUp} />
+            <Route path="/auth/:user_type/signin" component={SignIn} />
+            <Route path="/auth/signout" component={SignOut} />
+            <Route component={notFound} />
+          </Switch>
         </Router>
       </AppContainer>
     );
