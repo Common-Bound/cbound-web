@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Route, Link, Redirect } from "react-router-dom";
+import { Route, Link } from "react-router-dom";
 import ProjectsPage from "../projectsPage/ProjectsPage";
 import WorkPage from "../workPage/WorkPage";
 import AvailableProjects from "./AvailableProjects";

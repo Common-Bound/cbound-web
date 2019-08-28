@@ -723,7 +723,7 @@ class Body extends Component {
               />
               <span className="slider round" />
             </label>
-            {this.state.step == 0 ? (
+            {this.state.step === 0 ? (
               <DescriptionBoxContainer>
                 <DescriptionBox>
                   1. 좌측 [+] 영역을 클릭하여 이미지를 업로드 해 주세요 (단,
@@ -738,7 +738,7 @@ class Body extends Component {
                   노란색 [NEXT] 버튼을 눌러 다음 단계로 이동하세요.
                 </DescriptionBox>
               </DescriptionBoxContainer>
-            ) : this.state.step == 1 ? (
+            ) : this.state.step === 1 ? (
               <DescriptionBoxContainer>
                 <DescriptionBox>
                   4. SHOW 버튼을 누르면, 좌측 이미지에서 AI가 자동으로 인식한

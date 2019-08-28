@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Redirect, Link } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 import styled from "styled-components";
 import background from "../../images/BackGround.png";
 import Header from "../main/Header";

@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-import Insepct1By1 from "./Inspect1By1";
 import Inspect1By1 from "./Inspect1By1";
 
 const Main = styled.div`
@@ -109,8 +108,6 @@ class Body extends Component {
 
     console.log(this.state.data.payload.meta.crop_image);
     this.state.data.payload.meta.crop_image.forEach(function(crop) {
-      let scale = 1;
-
       const x = crop.x;
       const y = crop.y;
       const width = crop.width;
