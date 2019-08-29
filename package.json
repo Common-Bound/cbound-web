@@ -29,7 +29,7 @@
     "client": "cd client && yarn start",
     "server": "nodemon server.js",
     "dev": "concurrently -k \"yarn server \" \"yarn client \"",
-    "build": "cd client && yarn build",
+    "build": "cd client && yarn && yarn build",
     "test": "mocha --recursive"
   },
   "devDependencies": {

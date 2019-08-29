@@ -40,7 +40,7 @@ deploying:
     - echo -e "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
     - chmod 600 ~/.ssh/id_rsa
     - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
-    - pm2 start ecosystem.config.js --env production
+    - pm2 start ecosystem.config.js --env productionj
   script:
     - bash .gitlab-deploy.sh
   environment:
