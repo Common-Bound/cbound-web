@@ -69,6 +69,7 @@ class AvailableProjects extends Component {
   }
 
   async fetchProject() {
+    console.log(this.props.match.path);
     const url = this.props.match.path;
     const result = await fetch(url)
       .then(res => res.json())

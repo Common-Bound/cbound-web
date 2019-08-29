@@ -14,7 +14,11 @@ const authRouter = require("./routes/authRouter");
 const mypageRouter = require("./routes/mypageRouter");
 
 /* 외부 라이브러리 미들웨어 사용 */
-app.use("/", express.static(__dirname + "/client/public"));
+if (process.env.NODE_ENV === "production") {
+  app.use("/", express.static(__dirname + "/client/build"));
+} else {
+  app.use("/", express.static(__dirname + "/client/public"));
+}
 app.use(morgan("dev"));
 app.use(
   bodyParser.json({
@@ -37,7 +41,11 @@ app.get("/hello", (req, res, next) => {
 });
 
 app.get("/", (req, res, next) => {
-  res.sendFile(path.join(__dirname, "client/build/index.html"));
+  if (process.env.NODE_ENV === "production") {
+    res.sendFile(path.join(__dirname, "client/build/index.html"));
+  } else {
+    res.sendFile(path.join(__dirname, "client/public/index.html"));
+  }
 });
 
 app.listen(PORT, () => {
