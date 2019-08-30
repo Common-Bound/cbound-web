@@ -9,5 +9,5 @@ for i in "${!array[@]}"; do
       ssh ubuntu@${array[i]} "cd cbound &&
       git pull origin master &&
       yarn build &&
-      pm2 start ecosystem.config.js"
+      pm2 start ecosystem.config.js --env production"
 done
