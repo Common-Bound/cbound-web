@@ -6,7 +6,7 @@ import SignUp from "./components/auth/SignUp";
 import MyPage from "./components/mypage/MyPage";
 import SignIn from "./components/auth/SignIn";
 import SignOut from "./components/auth/SignOut";
-import Main from "./components/main/Main";
+//import Main from "./components/main/Main";
 import Select from "./components/auth/Select";
 import notFound from "./components/notFound";
 import buildTest from "./buildTest";
