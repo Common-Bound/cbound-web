@@ -521,7 +521,7 @@ class Body extends Component {
               </StepperContainer>
               {/* 크롭할 이미지 영역 */}
               <ImageContainer id="main">
-                {!this.state.loading ? (
+                {!loading ? (
                   <canvas id="canvas">
                     <div style={{ display: "none" }}>
                       <StyledImg
