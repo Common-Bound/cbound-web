@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const db = require("../../../../db/index");
 
-// path: ~/mypage/task/inspection
+// path: ~/mypage/creator/task/inspection
 router.use("/", (req, res, next) => {
   console.log("/inspection 라우터 도착");
   next();
@@ -15,40 +15,41 @@ router.use("/", (req, res, next) => {
 router.get("/", (req, res, next) => {
   const project_id = req.query.project_id;
   console.log(project_id);
-  db.query(
-    `begin;
-    lock table data in exclusive mode;
-    update data 
-    set schedule_state='reserved' 
-    where id in (
-      select 
-        id from data 
-      where 
-        schedule_state='queued' 
-        and 
-        '${req.user.id}' != ALL(inspector)
-        and
-        project_id='${project_id}'
-      order by 
-        created_at asc 
-      limit 1 
-    )
-    returning *;
-    commit;`,
-    [],
-    (err, result) => {
-      if (err) {
-        console.log(err);
-        return res.status(500).send(err);
-      }
-      if (result[2].rows.length === 0) {
-        return res.json({
-          message: "참여 가능한 검수 작업이 존재하지 않습니다"
-        });
-      }
-      return res.json({ result: result[2].rows[0] });
+  const production_sql = `begin;
+  lock table data in exclusive mode;
+  update data 
+  set schedule_state='reserved' 
+  where id in (
+    select 
+      id from data 
+    where 
+      schedule_state='queued' 
+      and 
+      '${req.user.id}' != ALL(inspector)
+      and
+      project_id='${project_id}'
+    order by 
+      created_at asc 
+    limit 1 
+  )
+  returning *;
+  commit;`;
+
+  const debug_sql = `
+    select * from data order by created_at asc limit 1
+  `;
+  db.query(debug_sql, [], (err, result) => {
+    if (err) {
+      console.log(err);
+      return res.status(500).send(err);
     }
-  );
+    if (result.rows.length === 0) {
+      return res.json({
+        message: "참여 가능한 검수 작업이 존재하지 않습니다"
+      });
+    }
+    return res.json({ result: result.rows[0] });
+  });
 });
 
 // 작업 완료 요청 핸들링

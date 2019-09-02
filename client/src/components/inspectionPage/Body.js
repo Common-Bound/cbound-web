@@ -1,6 +1,203 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 import Inspect1By1 from "./Inspect1By1";
+import moment from "moment";
+import Stepper from "@material-ui/core/Stepper";
+import Step from "@material-ui/core/Step";
+import StepLabel from "@material-ui/core/StepLabel";
+import Button from "@material-ui/core/Button";
+
+import "react-image-crop/dist/ReactCrop.css";
+
+const BodyContainer = styled.div`
+  width: 80%;
+  margin: 0 auto;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: cneter;
+`;
+
+const EntireTitleContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 40px 0px 10px 10px;
+`;
+
+const LeftTitleContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const LeftTitleDate = styled.div`
+  font-family: Avenir;
+  text-align: left;
+  color: #8d8d8d;
+  font-size: 16px;
+`;
+
+const LeftTitle = styled.div`
+  font-family: SpoqaHanSans;
+  text-align: left;
+  font-weight: bold;
+  font-size: 32px;
+`;
+
+const RightTitleContainer = styled.div`
+  font-family: Avenir;
+  display: flex;
+  flex-direction: column;
+
+  padding: 10px;
+`;
+
+const RightTitle = styled.div`
+  font-weight: bold;
+  font-size: 18px;
+  text-align: right;
+`;
+
+const RightTitleDate = styled.div`
+  font-size: 16px;
+  text-align: right;
+  color: #8d8d8d;
+`;
+
+const MainContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+`;
+
+const LeftMainContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex-basis: auto;
+  align-items: center;
+  justify-content: flex-start;
+`;
+
+const StepperContainer = styled.div`
+  width: 100%;
+`;
+
+const StepperRoot = styled.div`
+  width: 100%;
+  margin: 0 auto;
+`;
+
+const StyledStepper = styled(Stepper)`
+  height: 20px;
+  padding: 20px 0px 20px 0px !important;
+`;
+
+const RightDescriptionContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex-basis: auto;
+  align-items: flex-start;
+  padding: 40px 20px 0px 20px;
+
+  width: 440px;
+  background-color: #f0f0f0;
+`;
+
+const DescriptionBoxContainer = styled.div`
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+`;
+
+const DescriptionBox = styled.div`
+  font-family: SpoqaHanSans;
+  font-size: 16px;
+  padding: 10px;
+`;
+
+const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const BoundButton = styled.button`
+  width: 80px;
+  height: 80px;
+  background-color: black;
+  color: white;
+  border-radius: 100%;
+  transition: 0.3s;
+  text-align: center;
+  margin: 10px 10px 20px 10px;
+
+  :hover {
+    color: black;
+    background-color: white;
+  }
+`;
+
+const ShowButton = styled(BoundButton)`
+  color: black;
+  background-color: white;
+
+  :hover {
+    color: white;
+    background-color: black;
+  }
+`;
+
+const ImageContainer = styled.div`
+  width: 640px;
+  height: ${props => (props.show ? "440px" : "none")};
+  max-width: 640px
+  position: relative;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: ${props => (props.show ? "5px solid lightgrey" : "none")};
+`;
+
+const DropZoneBox = styled.div`
+  width: 640px;
+  height: 440px;
+  background-color: white;
+  border: 5px solid lightgrey;
+                          
+  border-radius: 20px;
+  font-family: Avenir;
+  font-size: 25px
+  font-weight: bold;
+  text-align: center;
+  line-height: 370px;
+`;
+
+const LoadingContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  z-index: 1;
+  background-color: rgba(0, 0, 0, 0.7);
+`;
+
+const CropListContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
+const StepButtonContainer = styled.div`
+  display: flex;
+  padding-right: 10px;
+`;
 
 const Main = styled.div`
   position: relative;
@@ -39,12 +236,11 @@ class Body extends Component {
    *      첫 번째 데이터를 가져온다
    */
   async fetchData() {
-    console.log("fetchData");
     this.setState({
       loading: true
     });
     const url = `/mypage/creator/task/inspection?project_id=${this.props.project_id}`;
-    console.log(url);
+
     await fetch(url)
       .then(res => res.json())
       .then(result => {
@@ -108,47 +304,89 @@ class Body extends Component {
 
     console.log(this.state.data.payload.meta.crop_image);
     this.state.data.payload.meta.crop_image.forEach(function(crop) {
+      const id = crop.id;
       const x = crop.x;
       const y = crop.y;
       const width = crop.width;
       const height = crop.height;
+      const crop_label = crop.label;
 
       // 사각형 그려주기
-
       const rect = document.createElement("div");
       document.getElementById("main").appendChild(rect);
+
+      rect.setAttribute("id", `crop_image_${id}`);
+      rect.setAttribute("class", "crop_images");
+      rect.setAttribute("name", crop_label);
+      rect.setAttribute("status", false);
 
       rect.setAttribute(
         "style",
         `
-        border: 1px dotted red;
-        background-color: rgba(0, 0, 0, 0.2);
+        border: 1px solid grey;
+        background-color: rgba(0, 0, 0, 0.3);
         position: absolute;
         top: ${y}px;
         left: ${x}px;
         width: ${width}px;
         height: ${height}px;
+        
       `
       );
-      rect.setAttribute("name", crop.label);
+
+      // 마우스 enter 이벤트 추가
       rect.onmouseenter = function() {
-        console.log(this.getAttribute("name"));
+        // label 생성
+        const label = document.createElement("div");
+        label.setAttribute("id", `crop_image_label_${id}`);
+        label.setAttribute(
+          "style",
+          `
+        background-color: yellow;
+        font-size: 20px;
+        font-family: Helvetica;
+        position: absolute;
+        top: -30px;
+        left: 0px;
+        width: ${crop_label.length * 14}px;
+        height: 30px;
+        z-index: 1;
+        `
+        );
+        label.innerHTML = crop_label;
+
+        document.getElementById(`crop_image_${id}`).appendChild(label);
       };
 
-      // 사각형 바운딩 박스 그려준다
-      ctx.strokeStyle = "yellow";
-      ctx.rect(x, y, width, height);
-      ctx.stroke();
+      // 마우스 leave 이벤트 추가
+      rect.onmouseleave = function() {
+        const label = document.getElementById(`crop_image_label_${id}`);
+        document.getElementById(`crop_image_${id}`).removeChild(label);
+      };
 
-      // 라벨이 존재하면 그려준다
-      if (crop.label) {
-        ctx.fillStyle = "yellow";
-        ctx.fillRect(x, y - 16, crop.label.length * 10, 16);
+      // 마우스 click 이벤트 추가
+      rect.onclick = function() {
+        function toggleStatus() {
+          const status = document
+            .getElementById(`crop_image_${id}`)
+            .getAttribute("status");
+          const newStatus = status === "false" ? "true" : "false";
+          document
+            .getElementById(`crop_image_${id}`)
+            .setAttribute("status", newStatus);
+        }
 
-        ctx.fillStyle = "black";
-        ctx.font = "16px serif";
-        ctx.fillText(crop.label, x, y);
-      }
+        toggleStatus();
+        const status = document
+          .getElementById(`crop_image_${id}`)
+          .getAttribute("status");
+
+        if (status === "true") {
+          rect.style.border = "2px solid lime";
+        } else {
+          rect.style.border = "2px solid red";
+        }
+      };
     });
   }
 
@@ -271,6 +509,15 @@ class Body extends Component {
   render() {
     const { data, loading } = this.state;
 
+    const t1 = moment();
+    const t2 = moment(data ? data.due_date : Infinity);
+
+    const days = moment.duration(t2.diff(t1)).days();
+    const hours = moment.duration(t2.diff(t1)).hours();
+    const minutes = moment.duration(t2.diff(t1)).minutes();
+
+    const steps = ["STEP 1", "STEP 2", "STEP 3"];
+
     if (this.state.needCropAll) {
       return (
         <Inspect1By1
@@ -288,7 +535,23 @@ class Body extends Component {
         return <div>검수 작업 가져오는 중...</div>;
       } else {
         return (
-          <div>
+          <BodyContainer>
+            <EntireTitleContainer>
+              <LeftTitleContainer>
+                <LeftTitleDate>
+                  <span style={{ color: "black", fontWeight: "bold" }}>
+                    MISSION
+                  </span>
+                  {` ${moment(data.created_at).format("YYYY-MM-DD")} - ${moment(
+                    data.due_date
+                  ).format("YYYY-MM-DD")}`}
+                </LeftTitleDate>
+              </LeftTitleContainer>
+              <RightTitleContainer>
+                <RightTitle>DEADLINE</RightTitle>
+                <RightTitleDate>{`${days} DAYS : ${hours} HOURS : ${minutes} MINUTES`}</RightTitleDate>
+              </RightTitleContainer>
+            </EntireTitleContainer>
             <header>
               <p>데이터 생산 시각: {data.created_at}</p>
               <p>프로젝트 ID: {data.project_id}</p>
@@ -324,7 +587,7 @@ class Body extends Component {
                 모든 작업 초기화(스케줄 상태 + 검수 내역 삭제)
               </button>
             </Main>
-          </div>
+          </BodyContainer>
         );
       }
     }
