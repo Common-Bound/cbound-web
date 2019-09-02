@@ -120,78 +120,15 @@ const DescriptionBox = styled.div`
   padding: 10px;
 `;
 
-const ButtonContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
-
-const BoundButton = styled.button`
-  width: 80px;
-  height: 80px;
-  background-color: black;
-  color: white;
-  border-radius: 100%;
-  transition: 0.3s;
-  text-align: center;
-  margin: 10px 10px 20px 10px;
-
-  :hover {
-    color: black;
-    background-color: white;
-  }
-`;
-
-const ShowButton = styled(BoundButton)`
-  color: black;
-  background-color: white;
-
-  :hover {
-    color: white;
-    background-color: black;
-  }
-`;
-
 const ImageContainer = styled.div`
   width: 640px;
-  height: ${props => (props.show ? "440px" : "none")};
   max-width: 640px
   position: relative;
 
   display: flex;
   justify-content: center;
   align-items: center;
-  border: ${props => (props.show ? "5px solid lightgrey" : "none")};
-`;
-
-const DropZoneBox = styled.div`
-  width: 640px;
-  height: 440px;
-  background-color: white;
   border: 5px solid lightgrey;
-                          
-  border-radius: 20px;
-  font-family: Avenir;
-  font-size: 25px
-  font-weight: bold;
-  text-align: center;
-  line-height: 370px;
-`;
-
-const LoadingContainer = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  z-index: 1;
-  background-color: rgba(0, 0, 0, 0.7);
-`;
-
-const CropListContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
 `;
 
 const StepButtonContainer = styled.div`
@@ -199,14 +136,7 @@ const StepButtonContainer = styled.div`
   padding-right: 10px;
 `;
 
-const Main = styled.div`
-  position: relative;
-`;
-
-const StyledImg = styled.img`
-  width: 640px;
-  max-width: 640px;
-`;
+const StyledImg = styled.img``;
 
 class Body extends Component {
   constructor(props) {
@@ -217,13 +147,17 @@ class Body extends Component {
       correct: [],
       needCropAll: false,
       nowCropImgId: 0,
-      is_crops_correct: []
+      is_crops_correct: [],
+      step: 0
     };
     this.handleClick = this.handleClick.bind(this);
 
     this.clickO = this.clickO.bind(this);
     this.clickX = this.clickX.bind(this);
     this.handleEndInspect = this.handleEndInspect.bind(this);
+    this.handleBack = this.handleBack.bind(this);
+    this.handleNext = this.handleNext.bind(this);
+    this.handleReset = this.handleReset.bind(this);
   }
 
   async componentDidMount() {
@@ -298,7 +232,6 @@ class Body extends Component {
   async drawCrop() {
     const canvas = document.getElementById("canvas");
     const image = document.getElementById("image");
-    const ctx = canvas.getContext("2d");
 
     console.log(image.naturalWidth, canvas.width);
 
@@ -506,11 +439,33 @@ class Body extends Component {
     await this.fetchData();
   }
 
+  handleNext() {
+    //setActiveStep(prevActiveStep => prevActiveStep + 1);
+    this.setState({
+      step: this.state.step + 1
+    });
+  }
+
+  handleBack() {
+    //setActiveStep(prevActiveStep => prevActiveStep - 1);
+    this.setState({
+      step: this.state.step - 1
+    });
+  }
+
+  handleReset() {
+    this.setState({
+      step: 0
+    });
+  }
+
   render() {
     const { data, loading } = this.state;
+    const info = this.props.info;
+    console.log(data);
 
     const t1 = moment();
-    const t2 = moment(data ? data.due_date : Infinity);
+    const t2 = moment(info.due_date);
 
     const days = moment.duration(t2.diff(t1)).days();
     const hours = moment.duration(t2.diff(t1)).hours();
@@ -531,65 +486,153 @@ class Body extends Component {
         />
       );
     } else {
-      if (loading) {
-        return <div>검수 작업 가져오는 중...</div>;
-      } else {
-        return (
-          <BodyContainer>
-            <EntireTitleContainer>
-              <LeftTitleContainer>
-                <LeftTitleDate>
-                  <span style={{ color: "black", fontWeight: "bold" }}>
-                    MISSION
-                  </span>
-                  {` ${moment(data.created_at).format("YYYY-MM-DD")} - ${moment(
-                    data.due_date
-                  ).format("YYYY-MM-DD")}`}
-                </LeftTitleDate>
-              </LeftTitleContainer>
-              <RightTitleContainer>
-                <RightTitle>DEADLINE</RightTitle>
-                <RightTitleDate>{`${days} DAYS : ${hours} HOURS : ${minutes} MINUTES`}</RightTitleDate>
-              </RightTitleContainer>
-            </EntireTitleContainer>
-            <header>
-              <p>데이터 생산 시각: {data.created_at}</p>
-              <p>프로젝트 ID: {data.project_id}</p>
-              <p>데이터 생산자 ID: {data.creator_id}</p>
-              <p>스케줄링 상태: {data.schedule_state}</p>
-            </header>
-            <Main id="main">
-              <canvas id="canvas">
-                <div style={{ display: "none" }}>
-                  <StyledImg
-                    id="image"
-                    src={data.payload.orig_image}
-                    alt=""
-                    onLoad={this.drawImage.bind(this)}
-                  />
-                </div>
-              </canvas>
-              <p>문제가 없는 사진인가요?</p>
-              {true ? (
-                <button onClick={this.handleClick} name="ok">
-                  예(다음 작업 가져오기)
-                </button>
+      return (
+        <BodyContainer>
+          <EntireTitleContainer>
+            <LeftTitleContainer>
+              <LeftTitleDate>
+                <span style={{ color: "black", fontWeight: "bold" }}>
+                  MISSION
+                </span>
+                {` ${moment(info.created_at).format("YYYY-MM-DD")} - ${moment(
+                  info.due_date
+                ).format("YYYY-MM-DD")}`}
+              </LeftTitleDate>
+              <LeftTitle>{info.title}</LeftTitle>
+            </LeftTitleContainer>
+            <RightTitleContainer>
+              <RightTitle>DEADLINE</RightTitle>
+              <RightTitleDate>{`${days} DAYS : ${hours} HOURS : ${minutes} MINUTES`}</RightTitleDate>
+            </RightTitleContainer>
+          </EntireTitleContainer>
+          <MainContainer>
+            {/* Main Container 의 왼쪽 영역 */}
+            <LeftMainContainer>
+              <StepperContainer>
+                <StepperRoot>
+                  <StyledStepper activeStep={this.state.step}>
+                    {steps.map(label => (
+                      <Step key={label}>
+                        <StepLabel>{label}</StepLabel>
+                      </Step>
+                    ))}
+                  </StyledStepper>
+                </StepperRoot>
+              </StepperContainer>
+              {/* 크롭할 이미지 영역 */}
+              <ImageContainer id="main">
+                {!this.state.loading ? (
+                  <canvas id="canvas">
+                    <div style={{ display: "none" }}>
+                      <StyledImg
+                        id="image"
+                        src={data.payload.orig_image}
+                        alt=""
+                        onLoad={this.drawImage.bind(this)}
+                      />
+                    </div>
+                  </canvas>
+                ) : (
+                  "검수 할 작업을 가져오는 중..."
+                )}
+                {/* 
+                  <p>문제가 없는 사진인가요?</p>
+                  {true ? (
+                    <button onClick={this.handleClick} name="ok">
+                      예(다음 작업 가져오기)
+                    </button>
+                  ) : (
+                    ""
+                  )}
+                  <button onClick={this.handleClick} name="nok">
+                    아니오(어떤 크롭이 잘못된지 표시하기)
+                  </button>
+                  <button onClick={this.handleClick} name="notAssociated">
+                    프로젝트와 관련없는 사진입니다
+                  </button>
+                  <button onClick={this.handleReset.bind(this)} name="reset">
+                    모든 작업 초기화(스케줄 상태 + 검수 내역 삭제)
+                  </button>
+                  */}
+              </ImageContainer>
+            </LeftMainContainer>
+            {/* Main Container 의 오른쪽 영역 */}
+            <RightDescriptionContainer>
+              {this.state.step === 0 ? (
+                <DescriptionBoxContainer>
+                  <DescriptionBox>
+                    1. 좌측 [+] 영역을 클릭하여 이미지를 업로드 해 주세요 (단,
+                    이미지 선명하지 않거나 해상도가 낮으면 업로드 되지 않습니다)
+                  </DescriptionBox>
+                  <DescriptionBox>
+                    2. 이미지가 정상적으로 업로드 되어 바운드 되면, AI가
+                    자동으로 글자라고 인식하여 이미지들을 아래 썸네일로
+                    보여줍니다.
+                  </DescriptionBox>
+                  <DescriptionBox>
+                    3. 썸네일 이미지가 정상적으로 로드 되었다면, 하단 우측의
+                    노란색 [NEXT] 버튼을 눌러 다음 단계로 이동하세요.
+                  </DescriptionBox>
+                </DescriptionBoxContainer>
+              ) : this.state.step === 1 ? (
+                <DescriptionBoxContainer>
+                  <DescriptionBox>
+                    4. SHOW 버튼을 누르면, 좌측 이미지에서 AI가 자동으로 인식한
+                    영역들이 보여집니다. 인식되지 않은 영역에서 글자로 생각되는
+                    부분이 있다면 그 영역을 드래그하여 추가하세요. (영역을
+                    드래그하면 영역 이동 가능)
+                  </DescriptionBox>
+                  <DescriptionBox>
+                    5. 선택 후, 아래의 BOUND 버튼 혹은 엔터를 누르면 AI가 추가로
+                    글자를 학습합니다. AI가 활성화 상태면 자동으로 글자를
+                    학습합니다.
+                  </DescriptionBox>
+                  <DescriptionBox>
+                    6. 완료 후 NEXT버튼을 눌러 다음의 마지막 단계(STEP3)로
+                    이동하세요.
+                  </DescriptionBox>
+                </DescriptionBoxContainer>
               ) : (
-                ""
+                <DescriptionBoxContainer>
+                  <DescriptionBox>
+                    8. AI가 글자를 제대로 인식했는지 각 썸네일 아래 블루박스를
+                    확인해주세요.
+                  </DescriptionBox>
+                  <DescriptionBox>
+                    9. AI가 글자를 잘못 인식했거나, 바운드 영역이 잘못 선택되어
+                    있다면 아래 바운드 썸네일을 클릭하여 영역을 수정하거나,
+                    블루박스 내용을 수정하여 AI를 학습시켜주세요.
+                  </DescriptionBox>
+                  <DescriptionBox>
+                    * AI의 정확도를 개선한 분에겐 추가 포인트를 드립니다.
+                    (기여도 확인 시, 검증 후 개당 +10포인트 추가 지급)
+                  </DescriptionBox>
+                </DescriptionBoxContainer>
               )}
-              <button onClick={this.handleClick} name="nok">
-                아니오(어떤 크롭이 잘못된지 표시하기)
-              </button>
-              <button onClick={this.handleClick} name="notAssociated">
-                프로젝트와 관련없는 사진입니다
-              </button>
-              <button onClick={this.handleReset.bind(this)} name="reset">
-                모든 작업 초기화(스케줄 상태 + 검수 내역 삭제)
-              </button>
-            </Main>
-          </BodyContainer>
-        );
-      }
+            </RightDescriptionContainer>
+          </MainContainer>
+          <StepButtonContainer>
+            <Button disabled={this.state.step === 0} onClick={this.handleBack}>
+              Back
+            </Button>
+            <Button
+              disabled={this.state.step > steps.length - 1}
+              variant="contained"
+              color="primary"
+              onClick={this.handleNext}
+            >
+              {this.state.step === steps.length - 1 ? "Finish" : "Next"}
+            </Button>
+            {this.state.step === steps.length ? (
+              <div>
+                <Button onClick={this.handleSendAll}>완료하기</Button>
+              </div>
+            ) : (
+              ""
+            )}
+          </StepButtonContainer>
+        </BodyContainer>
+      );
     }
   }
 }

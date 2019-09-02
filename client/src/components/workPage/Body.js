@@ -158,8 +158,8 @@ const ShowButton = styled(BoundButton)`
 
 const ImageContainer = styled.div`
   width: 640px;
-  height: ${props => (props.show ? "440px" : "none")};
   max-width: 640px
+  min-height: 440px;
   position: relative;
 
   display: flex;
@@ -361,7 +361,7 @@ class Body extends Component {
 
   // 크롭 컨테이너에 이미지가 로드 되었을 때 이미지 값을 저장함
   handleImageLoaded = async image => {
-    //console.log(image);
+    //console.log(image); DOM 요소
     //console.log(image.width);
     await this.setState({ imageRef: image });
   };
@@ -662,8 +662,8 @@ class Body extends Component {
               ""
             )}
             {/* 크롭할 이미지 영역 */}
-            <ImageContainer show={this.state.orig_image}>
-              {this.state.orig_image ? (
+            {this.state.orig_image ? (
+              <ImageContainer id="image_container" show={this.state.orig_image}>
                 <div onMouseUp={this.handleCropMouseUp}>
                   <ReactCrop
                     src={this.state.orig_image}
@@ -682,34 +682,40 @@ class Body extends Component {
                     />
                   ) : null}
                 </div>
-              ) : null}
-              {this.state.loading && this.state.imageRef ? (
-                <LoadingContainer
-                  style={{
-                    position: "absolute",
-                    left: "50%",
-                    transform: "translateX(-50%)",
-                    width: `${this.state.imageRef.width}px`,
-                    height: `${this.state.imageRef.height}px`,
-                    zIndex: 1,
-                    backgroundColor: "rgba(0, 0, 0, 0.7)"
-                  }}
-                >
-                  <div className="lds-grid">
-                    <div />
-                    <div />
-                    <div />
-                    <div />
-                    <div />
-                    <div />
-                    <div />
-                    <div />
-                    <div />
-                  </div>
-                  <p style={{ color: "white" }} />
-                </LoadingContainer>
-              ) : null}
-            </ImageContainer>
+
+                {this.state.loading && this.state.imageRef ? (
+                  <LoadingContainer
+                    style={{
+                      position: "absolute",
+                      top: "50%",
+                      left: "50%",
+                      transform: "translateX(-50%) translateY(-50%)",
+                      width: `${
+                        document.getElementById("image_container").style.width
+                      }px`,
+                      height: `${
+                        document.getElementById("image_container").style.width
+                      }px`,
+                      zIndex: 1,
+                      backgroundColor: "rgba(0, 0, 0, 0.7)"
+                    }}
+                  >
+                    <div className="lds-grid">
+                      <div />
+                      <div />
+                      <div />
+                      <div />
+                      <div />
+                      <div />
+                      <div />
+                      <div />
+                      <div />
+                    </div>
+                    <p style={{ color: "white" }} />
+                  </LoadingContainer>
+                ) : null}
+              </ImageContainer>
+            ) : null}
           </LeftMainContainer>
           {/* Main Container 의 오른쪽 영역 */}
           <RightDescriptionContainer>
@@ -813,7 +819,9 @@ class Body extends Component {
             </Button>
             <Button
               disabled={
-                this.state.orig_image === "" || this.state.loading === true
+                this.state.orig_image === "" ||
+                this.state.loading === true ||
+                this.state.step > steps.length - 1
               }
               variant="contained"
               color="primary"

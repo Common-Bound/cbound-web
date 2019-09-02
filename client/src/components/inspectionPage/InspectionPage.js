@@ -5,7 +5,7 @@ class InspectionPage extends Component {
   render() {
     return (
       <div>
-        <Body project_id={this.props.project_id} />
+        <Body info={this.props.info} project_id={this.props.project_id} />
       </div>
     );
   }

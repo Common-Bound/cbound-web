@@ -11,6 +11,7 @@ const WorkContainer = styled.div`
 class WorkPage extends Component {
   render() {
     const info = this.props.location.state;
+    console.log(info);
 
     return (
       <WorkContainer>
@@ -23,6 +24,7 @@ class WorkPage extends Component {
           />
         ) : (
           <InspectionPage
+            info={info}
             project_type={this.props.match.params.project_type}
             project_id={this.props.match.params.project_id}
           />
