@@ -4,6 +4,9 @@ const bodyParser = require("body-parser");
 const morgan = require("morgan");
 const passport = require("passport");
 const session = require("express-session");
+const redis = require("redis");
+const RedisStore = require("connect-redis")(session);
+let client = redis.createClient();
 
 const PORT = process.env.PORT || 4000;
 
@@ -23,7 +26,13 @@ app.use(
   })
 );
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: false }));
-app.use(session({ secret: "myKey" })); // 세션 활성화
+app.use(
+  session({
+    store: new RedisStore({ client }),
+    secret: "myKey",
+    resave: false
+  })
+); // 세션 활성화
 // passport.js 모듈 사용
 app.use(passport.initialize()); // passport 구동
 app.use(passport.session()); // 세션 연결
