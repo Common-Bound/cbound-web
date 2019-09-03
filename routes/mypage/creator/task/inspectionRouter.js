@@ -38,17 +38,18 @@ router.get("/", (req, res, next) => {
   const debug_sql = `
     select * from data order by created_at asc limit 1
   `;
-  db.query(debug_sql, [], (err, result) => {
+  db.query(production_sql, [], (err, result) => {
     if (err) {
       console.log(err);
       return res.status(500).send(err);
     }
-    if (result.rows.length === 0) {
+
+    if (result[2].rows.length === 0) {
       return res.json({
         message: "참여 가능한 검수 작업이 존재하지 않습니다"
       });
     }
-    return res.json({ result: result.rows[0] });
+    return res.json({ result: result[2].rows[0] });
   });
 });
 

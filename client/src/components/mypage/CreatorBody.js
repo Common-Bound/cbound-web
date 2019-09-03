@@ -42,12 +42,14 @@ const StyledLink = styled(Link)`
 
 const AllProjectButton = styled(StyledLink)`
   color: ${props =>
-    props.pathname === "/mypage" ? "white" : "rgba(255, 255, 255, 0.3)"};
+    props.pathname === "/mypage/creator"
+      ? "white"
+      : "rgba(255, 255, 255, 0.3)"};
 `;
 
 const MyProjectButton = styled(StyledLink)`
   color: ${props =>
-    props.pathname === "/mypage/projects"
+    props.pathname === "/mypage/creator/projects"
       ? "white"
       : "rgba(255, 255, 255, 0.3)"};
 `;
