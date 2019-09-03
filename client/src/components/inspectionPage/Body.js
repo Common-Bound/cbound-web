@@ -6,6 +6,7 @@ import Stepper from "@material-ui/core/Stepper";
 import Step from "@material-ui/core/Step";
 import StepLabel from "@material-ui/core/StepLabel";
 import Button from "@material-ui/core/Button";
+import CropImage from "./CropImage";
 
 import "react-image-crop/dist/ReactCrop.css";
 
@@ -155,13 +156,14 @@ class Body extends Component {
       is_crops_correct: [],
       step: 3,
       width: 0,
-      height: 0
+      height: 0,
+      crop_images: []
     };
     this.handleClick = this.handleClick.bind(this);
 
-    this.clickO = this.clickO.bind(this);
-    this.clickX = this.clickX.bind(this);
-    this.handleEndInspect = this.handleEndInspect.bind(this);
+    // this.clickO = this.clickO.bind(this);
+    // this.clickX = this.clickX.bind(this);
+    // this.handleEndInspect = this.handleEndInspect.bind(this);
     this.handleBack = this.handleBack.bind(this);
     this.handleNext = this.handleNext.bind(this);
     this.handleReset = this.handleReset.bind(this);
@@ -241,118 +243,26 @@ class Body extends Component {
   /**
    * @dev 원본 이미지를 그린 다음 그 위에 크롭 영역을 그려준다
    */
-  async drawCrop() {
-    const canvas = document.getElementById("canvas");
-    const image = document.getElementById("image");
-
+  drawCrop() {
     console.log(this.state.data.payload.meta.crop_image);
-    this.state.data.payload.meta.crop_image.forEach(function(crop) {
-      const id = crop.id;
-      const x = crop.x;
-      const y = crop.y;
-      const width = crop.width;
-      const height = crop.height;
-      const crop_label = crop.label;
+    const new_crop_images = this.state.data.payload.meta.crop_image.map(
+      function(crop) {
+        const id = crop.id;
 
-      // 사각형 그려주기
-      const rect = document.createElement("div");
-      document.getElementById("crop_image_container").appendChild(rect);
+        return <CropImage key={id} crop={crop} />;
+      }
+    );
 
-      rect.setAttribute("id", `${id}`);
-      rect.setAttribute("class", "crop_images");
-      rect.setAttribute("name", crop_label);
-      rect.setAttribute("status", "unchecked");
-
-      rect.setAttribute(
-        "style",
-        `
-        border: 1px solid grey;
-        background-color: rgba(0, 0, 0, 0.3);
-        position: absolute;
-        top: ${y}px;
-        left: ${x}px;
-        width: ${width}px;
-        height: ${height}px;
-        z-index: 1;
-      `
-      );
-
-      // 마우스 enter 이벤트 추가
-      rect.onmouseenter = function() {
-        // label 생성
-        const label = document.createElement("div");
-        label.setAttribute("id", `crop_image_label_${id}`);
-        label.setAttribute(
-          "style",
-          `
-        background-color: black;
-        color: white;
-        font-size: 20px;
-        font-family: Helvetica;
-        position: absolute;
-        top: -30px;
-        left: 0px;
-        width: ${crop_label.length * 14}px;
-        height: 30px;
-        z-index: 1;
-        `
-        );
-        label.innerHTML = crop_label;
-
-        document.getElementById(`${id}`).appendChild(label);
-      };
-
-      // 마우스 leave 이벤트 추가
-      rect.onmouseleave = function() {
-        const label = document.getElementById(`crop_image_label_${id}`);
-        document.getElementById(`${id}`).removeChild(label);
-      };
-
-      // 마우스 click 이벤트 추가
-      rect.onclick = function() {
-        function toggleStatus() {
-          const status = document
-            .getElementById(`${id}`)
-            .getAttribute("status");
-          const newStatus =
-            status === "unchecked"
-              ? "true"
-              : status === "true"
-              ? "false"
-              : "true";
-          document.getElementById(`${id}`).setAttribute("status", newStatus);
-        }
-
-        toggleStatus();
-        const status = document.getElementById(`${id}`).getAttribute("status");
-
-        if (status === "true") {
-          rect.style.border = "2px solid lime";
-        } else {
-          rect.style.border = "2px solid red";
-        }
-      };
+    this.setState({
+      crop_images: new_crop_images
     });
   }
 
   // 검수 완료 버튼
   handleClick = async e => {
-    // ok 라고 응답하면 모든 crop_image의 각 correct 배열에 1(OK)를 추가한다
-    // if (e.target.name !== "nok") {
-    //   if (e.target.name === "notAssociated") {
-    //     new_crop_image = this.state.data.payload.meta.crop_image.map(el => {
-    //       el.correct.push(0);
-    //       return el;
-    //     });
-    //   } else if (e.target.name === "ok") {
-    //     new_crop_image = this.state.data.payload.meta.crop_image.map(el => {
-    //       el.correct.push(1);
-    //       return el;
-    //     });
-    //   }
-
     const crop_images = document.getElementsByClassName("crop_images");
     let new_crop_images = Array.from(crop_images);
+    console.log(new_crop_images);
 
     // 하나라도 unchecked 상태이 crop이 존재한다면 이를 확인하라고 알린다
     let check_result = true;
@@ -361,8 +271,8 @@ class Body extends Component {
       if (el.attributes[3].value === "unchecked") {
         alert("확인하지 않은 영역이 있습니다.");
         check_result = false;
-        return el.attributes[3].value === "unchecked";
       }
+      return el.attributes[3].value === "unchecked";
     });
     // unchecked 영역 존재시 빠져나간다
     if (!check_result) {
@@ -373,7 +283,7 @@ class Body extends Component {
     let crop_image = this.state.data.payload.meta.crop_image;
     new_crop_images.forEach(el => {
       const id = Number(el.attributes[0].value);
-      const status = el.attributes[3].value;
+      const status = el.dataset.status;
       if (status === "true") {
         crop_image[id].correct.push(1);
       } else crop_image[id].correct.push(0);
@@ -395,28 +305,22 @@ class Body extends Component {
 
     await this.sendData(url, option);
     await this.fetchData();
-    // } else {
-    //   // 하나하나 봐가면서 Crop OX 해야함
-    //   this.setState({
-    //     needCropAll: true
-    //   });
-    // }
   };
 
-  handleReset = async e => {
-    const url = "/mypage/task/inspection";
-    await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ reset: true })
-    })
-      .then(res => res.json())
-      .then(data => {
-        return new Promise(resolve => resolve(console.log(data)));
-      });
-  };
+  // handleReset = async e => {
+  //   const url = "/mypage/task/inspection";
+  //   await fetch(url, {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json"
+  //     },
+  //     body: JSON.stringify({ reset: true })
+  //   })
+  //     .then(res => res.json())
+  //     .then(data => {
+  //       return new Promise(resolve => resolve(console.log(data)));
+  //     });
+  // };
 
   /**
    * @dev 서버 url로 데이터(option) 전송
@@ -434,51 +338,6 @@ class Body extends Component {
       })
       .catch(err => console.log(err));
   };
-
-  clickO() {
-    this.setState(
-      {
-        nowCropImgId: this.state.nowCropImgId + 1,
-        is_crops_correct: this.state.is_crops_correct.concat(1)
-      },
-      () => {
-        console.log(this.state.is_crops_correct);
-      }
-    );
-  }
-
-  clickX() {
-    this.setState({
-      nowCropImgId: this.state.nowCropImgId + 1,
-      is_crops_correct: this.state.is_crops_correct.concat(0)
-    });
-  }
-
-  async handleEndInspect() {
-    let new_crop_image = [];
-    let cnt = 0;
-
-    new_crop_image = this.state.data.payload.meta.crop_image.map(el => {
-      el.correct.push(this.state.is_crops_correct[cnt++]);
-      return el;
-    });
-
-    const url = "/mypage/task/inspection";
-    const option = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        new_crop_image: new_crop_image,
-        data_id: this.state.data.id
-      })
-    };
-
-    console.log(new_crop_image);
-    await this.sendData(url, option);
-    await this.fetchData();
-  }
 
   handleNext() {
     //setActiveStep(prevActiveStep => prevActiveStep + 1);
@@ -501,7 +360,7 @@ class Body extends Component {
   }
 
   render() {
-    const { data, loading, width, height } = this.state;
+    const { data, loading, width, height, crop_images } = this.state;
     const info = this.props.info;
 
     const t1 = moment();
@@ -579,30 +438,13 @@ class Body extends Component {
                         />
                       </div>
                     </canvas>
-                    <CropImageContainer id="crop_image_container" />
+                    <CropImageContainer id="crop_image_container">
+                      {crop_images}
+                    </CropImageContainer>
                   </div>
                 ) : (
                   "검수 할 작업을 가져오는 중..."
                 )}
-                {/* 
-                  <p>문제가 없는 사진인가요?</p>
-                  {true ? (
-                    <button onClick={this.handleClick} name="ok">
-                      예(다음 작업 가져오기)
-                    </button>
-                  ) : (
-                    ""
-                  )}
-                  <button onClick={this.handleClick} name="nok">
-                    아니오(어떤 크롭이 잘못된지 표시하기)
-                  </button>
-                  <button onClick={this.handleClick} name="notAssociated">
-                    프로젝트와 관련없는 사진입니다
-                  </button>
-                  <button onClick={this.handleReset.bind(this)} name="reset">
-                    모든 작업 초기화(스케줄 상태 + 검수 내역 삭제)
-                  </button>
-                  */}
               </ImageContainer>
             </LeftMainContainer>
             {/* Main Container 의 오른쪽 영역 */}
