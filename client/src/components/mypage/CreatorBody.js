@@ -95,7 +95,7 @@ class CreatorBody extends Component {
             pathname={this.props.location.pathname}
           >
             <Icon className="fas fa-sign-in-alt" />
-            <IconTitle>Quit Mission</IconTitle>
+            <IconTitle>Sign Out</IconTitle>
           </StyledLink>
         </LeftBanner>
         <Section>
