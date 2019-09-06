@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import CanvasJSReact from "../../assets/canvasjs.react";
-import InspectionPage from "../inspectionPage/InspectionPage";
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
 class PieChart extends Component {

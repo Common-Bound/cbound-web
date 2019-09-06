@@ -254,7 +254,7 @@ class Main extends Component {
 
   handleClick = e => {
     console.log(e.target.dataset.index);
-    const index = e.target.dataset.index;
+    const index = Number(e.target.dataset.index);
 
     // 해당 썸네일의 index에 해당하는 Body를 display 시킨다
     const bodyHTMLCollections = document.getElementsByClassName("bodies");
@@ -262,7 +262,7 @@ class Main extends Component {
     const bodyNodes = Array.from(bodyHTMLCollections);
 
     bodyNodes.forEach((body, _id) => {
-      if (_id == index) {
+      if (_id === index) {
         body.style.display = "flex";
       } else body.style.display = "none";
     });

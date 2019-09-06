@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import Main from "./Main";
-import Body from "./Body";
 import styled from "styled-components";
 import InspectionPage from "../inspectionPage/InspectionPage";
 
