@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import Header from "./Header";
+import Main from "./Main";
 import Body from "./Body";
 import styled from "styled-components";
 import InspectionPage from "../inspectionPage/InspectionPage";
@@ -11,18 +11,19 @@ const WorkContainer = styled.div`
 class WorkPage extends Component {
   render() {
     const info = this.props.location.state;
+    console.log(info);
 
     return (
       <WorkContainer>
-        <Header />
         {this.props.match.params.project_type === "normal" ? (
-          <Body
+          <Main
             info={info}
             project_type={this.props.match.params.project_type}
             project_id={this.props.match.params.project_id}
           />
         ) : (
           <InspectionPage
+            info={info}
             project_type={this.props.match.params.project_type}
             project_id={this.props.match.params.project_id}
           />

@@ -19,7 +19,7 @@ const upload_s3 = multer({
       cb(null, { fieldName: file.fieldname });
     },
     key: function(req, file, cb) {
-      cb(null, Date.now().toString() + " " + file.originalname);
+      cb(null, `${req.user.id}/${Date.now().toString()}-${file.originalname}`);
     },
     acl: "public-read-write"
   })
@@ -34,7 +34,7 @@ const fileLogger = (req, res, next) => {
   next();
 };
 
-// path: ~/mypage/task/complete
+// path: ~/mypage/creator/task/complete
 // 작업을 최종 제출하는 요청 핸들링
 // s3 에 업로드한 후 해당 URL과 크롭한 이미지 정보를 DB에 함께 저장한다
 router.post(

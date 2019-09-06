@@ -10,12 +10,12 @@ const completeRouter = require("./normal/complete");
 
 const upload_mem = multer({
   storage: memory,
-  limits: { fieldSize: 25 * 1024 * 1024 }
+  limits: { fieldSize: 10 * 2048 * 2048 }
 });
 
 router.use("/complete", completeRouter);
 
-// path: ~/mypage/task/normal
+// path: ~/mypage/creator/task/normal
 // 파일 최초 업로드 요청 핸들링
 router.post("/", upload_mem.single("orig_image"), (req, res, next) => {
   const imageSrc = req.body.orig_image;

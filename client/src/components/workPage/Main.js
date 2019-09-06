@@ -1,17 +1,41 @@
 import React, { Component } from "react";
+import styled from "styled-components";
 import ReactCrop from "react-image-crop"; // Cropper Import
 import CropInfoList from "./CropInfoList.js"; // 크롭 리스트를 출력함
 import PrintTotalCrop from "./PrintTotalCrop"; // 크롭 리스트를 한 캔버스에 그려줌
 import Dropzone from "react-dropzone";
-import styled from "styled-components";
 import moment from "moment";
 import Stepper from "@material-ui/core/Stepper";
 import Step from "@material-ui/core/Step";
 import StepLabel from "@material-ui/core/StepLabel";
 import Button from "@material-ui/core/Button";
+import Body from "./Body";
 
-import "react-image-crop/dist/ReactCrop.css";
-import "./Body.css";
+const FileList = styled.div`
+  width: 640px;
+  height: 64px;
+
+  display: flex;
+
+  justify-content: flex-start;
+  align-items: center;
+  margin-bottom: 10px;
+
+  overflow: scroll;
+
+  border: 1px solid lightgrey;
+`;
+
+const FileThumbnail = styled.div`
+  width: 50px;
+  min-height: 50px;
+  margin: 0px 5px;
+
+  border: 1px solid lightgrey;
+
+  background-image: url(${props => props.base64});
+  background-size: 100% 100%;
+`;
 
 const BodyContainer = styled.div`
   width: 80%;
@@ -97,6 +121,7 @@ const StepperRoot = styled.div`
 const StyledStepper = styled(Stepper)`
   height: 20px;
   padding: 20px 0px 20px 0px !important;
+  background-color: #f0f0f0 !important;
 `;
 
 const RightDescriptionContainer = styled.div`
@@ -104,9 +129,10 @@ const RightDescriptionContainer = styled.div`
   flex-direction: column;
   flex-basis: auto;
   align-items: flex-start;
-  padding: 40px 20px 0px 20px;
+  padding: 20px 20px 0px 20px;
 
   width: 440px;
+  height: 520px;
   background-color: #f0f0f0;
 `;
 
@@ -203,15 +229,13 @@ const StepButtonContainer = styled.div`
   padding-right: 10px;
 `;
 
-class Body extends Component {
-  // Body Component 생성
+class Main extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
-      __nextkey: 0, // Crop.id 생성을 위한 임시 변수
-      orig_image: "", // Base64로 인코딩된 값을 가져 화면에 출력할 때 사용됨
-      orig_image_file: null, // 현재 작업하고 있는 이미지를 FormData로 패킹해 서버로 보낼 때 사용됨
+      orig_image_files: undefined,
+      orig_image_base64: undefined,
+      bodies: undefined,
       crop_image: [], // 지금까지 크롭한 영역들의 정보 리스트 (x, y, width, height)
       crop: {}, // ReactCrop 에 사용되는 값으로 크롭 영역이 변경될 때 함께 변경됨. (현재 크롭 영역에 대한 정보를 가지고 있음)
       label: "", // 작업한 영역에 대해 레이블링 할 때 사용되는 입력창의 변경 사항에 대해 저장함
@@ -223,83 +247,11 @@ class Body extends Component {
       loading: false,
       step: 0 // 현재 STEP 수
     };
-
-    this.handleSendAll = this.handleSendAll.bind(this);
-    this.handleOnCropModify = this.handleOnCropModify.bind(this);
-    this.handleClickImage = this.handleClickImage.bind(this);
-    this.handleCropMouseUp = this.handleCropMouseUp.bind(this);
-    this.handleBack = this.handleBack.bind(this);
-    this.handleNext = this.handleNext.bind(this);
-    this.handleReset = this.handleReset.bind(this);
   }
 
-  // 서버(sendTo)로 body에 bodyData를 넣어서 Fetch 할 때 호출됨
-  sendData = async (bodyData, sendTo) => {
-    this.setState({
-      loading: true
-    });
-
-    await fetch(sendTo, {
-      method: "post",
-      body: bodyData
-    })
-      .then(function(res) {
-        return res.json();
-      })
-      .then(async data => {
-        console.log("Data received");
-
-        console.log(data);
-
-        // 경로별 받은 데이터를 다르게 핸들링함
-        if (sendTo === "/mypage/creator/task/normal") {
-          var counter = 0; // Crop.id 생성을 위한 임시 변수
-
-          this.setState({
-            crop_image: data.data.meta["crop_image"].map(crop => {
-              // 서버에서 인식한 크롭 영역들을 미리 crop_image에 넣어줌
-              const scaleX =
-                this.state.imageRef.naturalWidth / this.state.imageRef.width;
-              const scaleY =
-                this.state.imageRef.naturalHeight / this.state.imageRef.height;
-              //console.log("scaleX: " + scaleX);
-              //console.log("scaleY: " + scaleY);
-
-              return {
-                id: counter++,
-                x: crop.x / scaleX,
-                y: crop.y / scaleY,
-                width: crop.width / scaleX,
-                height: crop.height / scaleY,
-                label: crop.label
-              };
-            }),
-            __nextkey: counter
-          });
-        } else if (sendTo.startsWith("https://")) {
-          this.setState({
-            label: data.label
-          });
-          this.handleOnCropComplete();
-        }
-
-        return new Promise(resolve => {
-          resolve(true);
-        });
-      })
-      .catch(function(ex) {
-        console.log("error occured");
-        console.log(ex);
-      });
-
-    this.setState({
-      loading: false
-    });
-  };
-
   // 업로드된 이미지를 출력하기 위해 Base64로 바꿀 때 호출됨
-  async getBase64(file) {
-    if (file) {
+  async getBase64(files) {
+    const base64s = await files.map(file => {
       // File 을 Base64로 바꿔줌
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -308,296 +260,72 @@ class Body extends Component {
         reader.onload = () => resolve(reader.result);
         reader.onerror = error => reject(error);
       });
-    }
+    });
+
+    const result = await Promise.all(base64s);
+
+    return new Promise(resolve => resolve(result));
   }
 
   // 이미지가 업로드 되었을 때 호출됨
   onFileSelected = async files => {
+    console.log(files);
     // 이미지가 업로드 되었을 때 기존에 크롭된 영역을 초기화함
     //console.log(files[0]);
-    this.setState({
-      orig_image_file: files[0],
-      __nextkey: 0,
-      crop_image: [],
-      crop: {},
-      label: "",
-      imageRef: "",
-      changeMode: false,
-      preId: "",
-      orig_image: null
+    await this.setState({
+      orig_image_files: files
+      // __nextkey: 0,
+      // crop_image: [],
+      // crop: {},
+      // label: "",
+      // imageRef: "",
+      // changeMode: false,
+      // preId: "",
+      // orig_image: null
     });
 
-    await this.getBase64(files[0]).then(
-      data =>
+    await this.getBase64(files).then(
+      base64s =>
         new Promise(resolve => {
           resolve(
             this.setState({
-              orig_image: data
+              orig_image_base64: base64s
             })
           );
         })
     );
+
     // AI를 사용할 경우에만 이미지 데이터를 서버로 전송해줌
-    if (this.state.useAI) {
-      const bodyData = new FormData();
-      bodyData.append("orig_image", this.state.orig_image);
+    // if (this.state.useAI) {
+    //   const bodyData = new FormData();
+    //   bodyData.append("orig_image", this.state.orig_image);
 
-      this.sendData(bodyData, "/mypage/creator/task/normal"); // 서버로 전송( /mypage/task)
-    }
-  };
+    //   this.sendData(bodyData, "/mypage/creator/task/normal"); // 서버로 전송( /mypage/task)
+    // }
 
-  // 입력창의 value가 바뀔 때 변경사항 적용
-  handleChange = e => {
-    if (e.target.name === "useAI") {
-      this.setState({
-        [e.target.name]: !this.state.useAI
-      });
-    } else {
-      this.setState({
-        [e.target.name]: e.target.value
-      });
-    }
-  };
-
-  // 크롭 컨테이너에 이미지가 로드 되었을 때 이미지 값을 저장함
-  handleImageLoaded = async image => {
-    //console.log(image); DOM 요소
-    //console.log(image.width);
-    await this.setState({ imageRef: image });
-  };
-
-  // 크롭 영역이 변경되었을 때 변경사항 적용
-  handleOnCropChange = crop => {
-    this.setState({ crop: crop });
-  };
-
-  // 레이블링과 크롭을 끝냈을 때 호출
-  handleOnCropComplete = async e => {
-    //console.log("Complete");
-    const cropData = this.state.crop;
-    const image = new Image();
-
-    image.src = this.state.orig_image;
-
-    // state의 changeMode 를 보고 크롭된 영역을 추가/수정함
-    if (
-      this.state.orig_image &&
-      this.state.showEdit &&
-      this.state.crop.height
-    ) {
-      //console.log("Complete");
-      if (this.state.changeMode) {
-        // 수정
-        this.setState({
-          crop_image: await this.state.crop_image.map(crop => {
-            if (crop.id === this.state.preId) {
-              return {
-                id: this.state.preId,
-                x: cropData.x,
-                y: cropData.y,
-                width: cropData.width,
-                height: cropData.height,
-                label: this.state.label
-              };
-            } else return crop;
-          }),
-          label: "",
-          crop: {},
-          changeMode: false
-        });
-      } else {
-        // 추가
-        this.setState({
-          crop_image: this.state.crop_image.concat({
-            id: this.state.__nextkey++,
-            x: cropData.x,
-            y: cropData.y,
-            width: cropData.width,
-            height: cropData.height,
-            label: this.state.label
-          }),
-          label: "",
-          crop: {}
-        });
-        //console.log(this.state.crop_image[0].imgSrc);
-      }
-    }
-  };
-
-  // 작업한 내용 전부를 서버로 전송함
-  handleSendAll() {
-    const bodyData = new FormData();
-
-    bodyData.append("orig_image", this.state.orig_image_file);
-
-    // console.log(this.state.orig_image_file);
-    bodyData.append(
-      "meta",
-      JSON.stringify({ crop_image: this.state.crop_image })
-    );
-    bodyData.append("project_id", this.props.project_id);
-
-    this.sendData(bodyData, "/mypage/creator/task/normal/complete"); // 서버로 전송( /mypage/task/complete)
-  }
-
-  // 사용자의 편의를 위해 버튼을 누르지 않아도 (13==enter) 이벤트를 받으면 handleOnCropComplete 를 호출해줌
-  handleKeyPress = e => {
-    if (e.charCode === 13) {
-      e.preventDefault();
-
-      this.handleOnCropComplete();
-    }
-  };
-
-  // 크롭 영역을 변경할 수 있게 현재 crop 정보를 crop.id가 id인 크롭 정보로 바꿔줌
-  handleOnCropModify = id => {
-    const preCrop = this.state.crop_image.find(crop => {
-      return crop.id === id;
-    });
-
-    this.setState({
-      crop: {
-        x: preCrop.x,
-        y: preCrop.y,
-        width: preCrop.width,
-        height: preCrop.height,
-        label: preCrop.label,
-        unit: "px"
-      },
-      label: preCrop.label,
-      changeMode: true,
-      preId: id
-    });
-  };
-
-  // crop.id 가 id인 크롭 데이터를 삭제함
-  handleOnCropRemove = id => {
-    if (this.state.showEdit) {
-      //console.log(id);
-
-      const { crop_image } = this.state;
-
-      this.setState({
-        changeMode: false,
-        crop_image: crop_image.filter(crop => crop.id !== id)
-      });
-    }
-  };
-
-  // 라벨값이 서버로부터 전송되었을 때 crop_image 의 라벨값을 채워준다.
-  handleChangeLabel = (id, label) => {
-    const preCrop = this.state.crop_image.find(crop => {
-      return crop.id === id;
-    });
-
-    //console.log(label);
-
-    this.setState({
-      crop_image: this.state.crop_image.map(crop => {
-        if (crop.id === preCrop.id) {
-          return {
-            id: id,
-            x: crop.x,
-            y: crop.y,
-            width: crop.width,
-            height: crop.height,
-            label: label
-          };
-        } else return crop;
-      })
-    });
-
-    //console.log("label change");
-  };
-
-  // 이미지를 눌렀을 때 좌표를 불러옴
-  handleClickImage = e => {
-    const x = e.nativeEvent.offsetX;
-    const y = e.nativeEvent.offsetY;
-    const crops = this.state.crop_image;
-    var targetId = "nothing";
-    crops.every(function(crop) {
-      if (
-        x > crop.x &&
-        x < crop.x + crop.width &&
-        y > crop.y &&
-        y < crop.y + crop.height
-      ) {
-        targetId = crop.id;
-        return false;
-      } else return true;
-    });
-
-    //console.log(targetId);
-
-    if (targetId !== "nothing") {
-      this.handleOnCropModify(targetId);
-    }
-    this.setState({
-      showEdit: true
-    });
-  };
-
-  // 크롭이 완료되었을 때 이미지화 시켜 서버로 전송시킨다
-  async handleCropMouseUp() {
-    if (this.state.useAI) {
-      //console.log(this.state.crop.height);
-      if (this.state.crop.height)
-        this.setState(
-          {
-            label: ""
-          },
-          () => this.handleOnCropComplete()
+    const bodies = await this.state.orig_image_files.map((file, index) => {
+      return new Promise(resolve => {
+        resolve(
+          <Body
+            info={this.props.info}
+            project_type={this.props.project_type}
+            project_id={this.props.project_id}
+            display="none"
+            index={index}
+            orig_image_file={file}
+            orig_image_base64={this.state.orig_image_base64[index]}
+          />
         );
-    }
-  }
-
-  // 캔버스에 크롭된 영역을 그려주고 캔버스를 Base64 인코딩함
-  getCroppedImg(image, crop) {
-    const canvas = document.createElement("canvas");
-    const scaleX = image.naturalWidth / image.width;
-    const scaleY = image.naturalHeight / image.height;
-
-    canvas.width = crop.width;
-    canvas.height = crop.height;
-
-    const ctx = canvas.getContext("2d");
-
-    ctx.drawImage(
-      image,
-      crop.x * scaleX,
-      crop.y * scaleY,
-      crop.width * scaleX,
-      crop.height * scaleY,
-      0,
-      0,
-      crop.width,
-      crop.height
-    );
-    return new Promise(resolve => {
-      resolve(canvas.toDataURL());
+      });
     });
-  }
 
-  handleNext() {
-    //setActiveStep(prevActiveStep => prevActiveStep + 1);
-    this.setState({
-      step: this.state.step + 1
+    const newBodies = await Promise.all(bodies);
+    await this.setState({
+      bodies: newBodies
     });
-  }
 
-  handleBack() {
-    //setActiveStep(prevActiveStep => prevActiveStep - 1);
-    this.setState({
-      step: this.state.step - 1
-    });
-  }
-
-  handleReset() {
-    this.setState({
-      step: 0
-    });
-  }
+    console.log(this.state);
+  };
 
   render() {
     const info = this.props.info;
@@ -610,7 +338,6 @@ class Body extends Component {
     const minutes = moment.duration(t2.diff(t1)).minutes();
 
     const steps = ["STEP 1", "STEP 2", "STEP 3"];
-
     return (
       <BodyContainer display={this.props.display}>
         {/* 최 상단에 위취한 정보를 보여주는 컨테이너 */}
@@ -635,17 +362,21 @@ class Body extends Component {
         <MainContainer>
           {/* Main Container 의 왼쪽 영역 */}
           <LeftMainContainer>
-            <StepperContainer>
-              <StepperRoot>
-                <StyledStepper activeStep={this.state.step}>
-                  {steps.map(label => (
-                    <Step key={label}>
-                      <StepLabel>{label}</StepLabel>
-                    </Step>
-                  ))}
-                </StyledStepper>
-              </StepperRoot>
-            </StepperContainer>
+            {/* 파일 썸네일 영역 */}
+            {!this.state.orig_image_base64 ? (
+              <FileList>
+                <FileThumbnail />
+                <FileThumbnail />
+                <FileThumbnail />
+              </FileList>
+            ) : (
+              <FileList>
+                {this.state.orig_image_base64.map(base64 => {
+                  return <FileThumbnail base64={base64} />;
+                })}
+              </FileList>
+            )}
+            {this.state.bodies}
             {/* 파일 올리는 DropZone */}
             {!this.state.orig_image_file ? (
               <Dropzone onDrop={this.onFileSelected}>
@@ -719,6 +450,17 @@ class Body extends Component {
           </LeftMainContainer>
           {/* Main Container 의 오른쪽 영역 */}
           <RightDescriptionContainer>
+            <StepperContainer>
+              <StepperRoot>
+                <StyledStepper activeStep={this.state.step}>
+                  {steps.map(label => (
+                    <Step key={label}>
+                      <StepLabel>{label}</StepLabel>
+                    </Step>
+                  ))}
+                </StyledStepper>
+              </StepperRoot>
+            </StepperContainer>
             텍스트 감지 AI 어시스턴트
             <label className="switch">
               <input
@@ -843,4 +585,4 @@ class Body extends Component {
   }
 }
 
-export default Body;
+export default Main;

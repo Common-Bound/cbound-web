@@ -8,6 +8,7 @@ for i in "${!array[@]}"; do
       echo "Deploy project on server ${array[i]}"    
       ssh ubuntu@${array[i]} "cd cbound &&
       git pull origin master &&
+      yarn &&
       yarn build &&
       pm2 start ecosystem.config.js --env production"
 done

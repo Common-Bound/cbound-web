@@ -174,3 +174,7 @@ input:checked+.slider:before {
     opacity: 0.5;
   }
 }
+
+img {
+  max-height: none !important;
+}
