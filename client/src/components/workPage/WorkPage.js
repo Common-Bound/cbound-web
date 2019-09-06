@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import Header from "./Header";
+import Main from "./Main";
 import Body from "./Body";
 import styled from "styled-components";
 import InspectionPage from "../inspectionPage/InspectionPage";
@@ -15,9 +15,8 @@ class WorkPage extends Component {
 
     return (
       <WorkContainer>
-        <Header />
         {this.props.match.params.project_type === "normal" ? (
-          <Body
+          <Main
             info={info}
             project_type={this.props.match.params.project_type}
             project_id={this.props.match.params.project_id}
