@@ -17,7 +17,7 @@ const BodyContainer = styled.div`
   width: 80%;
   margin: 0 auto;
 
-  display: flex;
+  display: ${props => (props.display ? props.display : "flex")};
   flex-direction: column;
   justify-content: flex-start;
   align-items: cneter;
@@ -612,7 +612,7 @@ class Body extends Component {
     const steps = ["STEP 1", "STEP 2", "STEP 3"];
 
     return (
-      <BodyContainer>
+      <BodyContainer display={this.props.display}>
         {/* 최 상단에 위취한 정보를 보여주는 컨테이너 */}
         <EntireTitleContainer>
           <LeftTitleContainer>
