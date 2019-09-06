@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 import Inspect1By1 from "./Inspect1By1";
+import Tooltip from "@material-ui/core/Tooltip";
 
 const Main = styled.div`
   position: relative;
@@ -132,6 +133,7 @@ class Body extends Component {
       );
       rect.setAttribute("name", crop.label);
       rect.onmouseenter = function() {
+        // 크롭 마우스 호버링 했을 때
         console.log(this.getAttribute("name"));
       };
 
@@ -185,6 +187,7 @@ class Body extends Component {
       await this.fetchData();
     } else {
       // 하나하나 봐가면서 Crop OX 해야함
+
       this.setState({
         needCropAll: true
       });
@@ -267,7 +270,6 @@ class Body extends Component {
     await this.sendData(url, option);
     await this.fetchData();
   }
-
   render() {
     const { data, loading } = this.state;
 

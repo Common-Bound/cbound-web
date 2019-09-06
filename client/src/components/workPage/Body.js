@@ -158,7 +158,6 @@ const ShowButton = styled(BoundButton)`
 
 const ImageContainer = styled.div`
   width: 640px;
-  height: ${props => (props.show ? "440px" : "none")};
   max-width: 640px
   position: relative;
 
