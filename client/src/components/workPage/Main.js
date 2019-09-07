@@ -236,7 +236,7 @@ class Main extends Component {
             info={this.props.info}
             project_type={this.props.project_type}
             project_id={this.props.project_id}
-            display="none"
+            display={index === 0 ? 'flex' : 'none'}
             orig_image_file={file}
             orig_image_base64={this.state.orig_image_base64[index]}
           />

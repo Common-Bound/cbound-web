@@ -364,7 +364,7 @@ class Body extends Component {
   handleSendAll() {
     const bodyData = new FormData();
 
-    bodyData.append("orig_image", this.props.orig_image_file_file);
+    bodyData.append("orig_image", this.props.orig_image_file);
 
     // console.log(this.props.orig_image_file_file);
     bodyData.append(
