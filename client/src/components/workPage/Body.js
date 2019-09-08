@@ -22,7 +22,7 @@ const MainContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px;
+  padding-bottom: 10px;
 `;
 
 const LeftMainContainer = styled.div`
@@ -56,7 +56,7 @@ const RightDescriptionContainer = styled.div`
   padding: 20px 20px 0px 20px;
 
   width: 440px;
-  height: 500px;
+  height: 485px;
   background-color: #f0f0f0;
 `;
 
@@ -71,7 +71,7 @@ const DescriptionBoxContainer = styled.div`
 const DescriptionBox = styled.div`
   font-family: SpoqaHanSans;
   font-size: 16px;
-  padding: 10px;
+  padding: 14px;
 `;
 
 const ButtonContainer = styled.div`
@@ -83,16 +83,16 @@ const ButtonContainer = styled.div`
 const BoundButton = styled.button`
   width: 80px;
   height: 80px;
-  background-color: black;
-  color: white;
+  background-color: white;
+  color: black;
   border-radius: 100%;
   transition: 0.3s;
   text-align: center;
   margin: 10px 10px 20px 10px;
 
   :hover {
-    color: black;
-    background-color: white;
+    color: white;
+    background-color: black;
   }
 `;
 
@@ -155,18 +155,18 @@ class Body extends Component {
       changeMode: false, // 현재 크롭된 이미지를 추가해야 할지 수정해야 할지 결정하는 Flag
       preId: "", // ChangeMode 가 true 라면 변경할 이미지의 id
       showEdit: true, // 한 개의 크롭 영역을 변경할 수 있는 이미지를 줄지 크롭된 영역 리스트를 이미지에 그려줄 지
-      useAI: true, // AI를 사용할지 말지 스위치 할 때 변경할 값
+      useAI: false, // AI를 사용할지 말지 스위치 할 때 변경할 값
       loading: false,
-      step: 0 // 현재 STEP 수
+      // step: 0 // 현재 STEP 수
     };
 
     this.handleSendAll = this.handleSendAll.bind(this);
     this.handleOnCropModify = this.handleOnCropModify.bind(this);
     this.handleClickImage = this.handleClickImage.bind(this);
     this.handleCropMouseUp = this.handleCropMouseUp.bind(this);
-    this.handleBack = this.handleBack.bind(this);
-    this.handleNext = this.handleNext.bind(this);
-    this.handleReset = this.handleReset.bind(this);
+    // this.handleBack = this.handleBack.bind(this);
+    // this.handleNext = this.handleNext.bind(this);
+    // this.handleReset = this.handleReset.bind(this);
   }
 
   // 서버(sendTo)로 body에 bodyData를 넣어서 Fetch 할 때 호출됨
@@ -515,25 +515,25 @@ class Body extends Component {
     });
   }
 
-  handleNext() {
-    //setActiveStep(prevActiveStep => prevActiveStep + 1);
-    this.setState({
-      step: this.state.step + 1
-    });
-  }
+  // handleNext() {
+  //   //setActiveStep(prevActiveStep => prevActiveStep + 1);
+  //   this.setState({
+  //     step: this.state.step + 1
+  //   });
+  // }
 
-  handleBack() {
-    //setActiveStep(prevActiveStep => prevActiveStep - 1);
-    this.setState({
-      step: this.state.step - 1
-    });
-  }
+  // handleBack() {
+  //   //setActiveStep(prevActiveStep => prevActiveStep - 1);
+  //   this.setState({
+  //     step: this.state.step - 1
+  //   });
+  // }
 
-  handleReset() {
-    this.setState({
-      step: 0
-    });
-  }
+  // handleReset() {
+  //   this.setState({
+  //     step: 0
+  //   });
+  // }
 
   render() {
     // const info = this.props.info;
@@ -545,7 +545,7 @@ class Body extends Component {
     // const hours = moment.duration(t2.diff(t1)).hours();
     // const minutes = moment.duration(t2.diff(t1)).minutes();
 
-    const steps = ["STEP 1", "STEP 2", "STEP 3"];
+    // const steps = ["STEP 1", "STEP 2", "STEP 3"];
 
     return (
       <BodyContainer display={this.props.display} className={this.props.class}>
@@ -646,7 +646,7 @@ class Body extends Component {
           </LeftMainContainer>
           {/* Main Container 의 오른쪽 영역 */}
           <RightDescriptionContainer>
-            <StepperContainer>
+            {/* <StepperContainer>
               <StepperRoot>
                 <StyledStepper activeStep={this.state.step}>
                   {steps.map(label => (
@@ -656,7 +656,7 @@ class Body extends Component {
                   ))}
                 </StyledStepper>
               </StepperRoot>
-            </StepperContainer>
+            </StepperContainer> */}
             텍스트 감지 AI 어시스턴트
             <label className="switch">
               <input
@@ -667,7 +667,7 @@ class Body extends Component {
               />
               <span className="slider round" />
             </label>
-            {this.state.step === 0 ? (
+            {/* {this.state.step === 0 ? (
               <DescriptionBoxContainer>
                 <DescriptionBox>
                   1. 좌측 [+] 영역을 클릭하여 이미지를 업로드 해 주세요 (단,
@@ -716,7 +716,21 @@ class Body extends Component {
                   확인 시, 검증 후 개당 +10포인트 추가 지급)
                 </DescriptionBox>
               </DescriptionBoxContainer>
-            )}
+            )} */}
+            <DescriptionBoxContainer>
+                <DescriptionBox>
+                  - 이미지를 드래그하여 영역을 지정하세요.
+                  아래의 BOUND 버튼을 누르면 해당 영역이 아래 바구니에 추가됩니다.
+                </DescriptionBox>
+                <DescriptionBox>
+                  - 바구니에 추가된 썸네일을 클릭하여 해당 영역을 수정하고,
+                  불필요한 영역은 오른쪽 위의 X 버튼을 눌러 삭제하세요.
+                </DescriptionBox>
+                <DescriptionBox>
+                  - 썸네일 아래의 블루박스에 라벨 값을 입력하고 ENTER키를 누르세요.
+                  SHOW 버튼을 눌러 라벨링 된 이미지를 확인하세요.
+                </DescriptionBox>
+              </DescriptionBoxContainer>
             <ButtonContainer>
               <BoundButton
                 type="button"
@@ -751,7 +765,7 @@ class Body extends Component {
             onRemove={this.handleOnCropRemove}
             changeLabel={this.handleChangeLabel}
           />
-          <StepButtonContainer>
+          {/* <StepButtonContainer>
             <Button disabled={this.state.step === 0} onClick={this.handleBack}>
               Back
             </Button>
@@ -774,7 +788,7 @@ class Body extends Component {
             ) : (
               ""
             )}
-          </StepButtonContainer>
+          </StepButtonContainer> */}
         </CropListContainer>
       </BodyContainer>
     );

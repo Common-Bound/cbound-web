@@ -140,6 +140,12 @@ const DescriptionBoxContainer = styled.div`
   justify-content: space-between;
 `;
 
+const DescriptionBox = styled.div`
+  font-family: SpoqaHanSans;
+  font-size: 18px;
+  padding: 14px;
+`;
+
 const DropZoneBox = styled.div`
   width: 640px;
   height: 440px;
@@ -340,7 +346,16 @@ class Main extends Component {
               </LeftMainContainer>
               {/* Main Container 의 오른쪽 영역 */}
               <RightDescriptionContainer>
-                <DescriptionBoxContainer />
+                <DescriptionBoxContainer >
+                <DescriptionBox>
+                  좌측 [+] 영역을 클릭하여 이미지를 업로드 해 주세요 (단,
+                  이미지 선명하지 않거나 해상도가 낮으면 업로드 되지 않습니다)
+                </DescriptionBox>
+                {/* <DescriptionBox>
+                  2. 이미지가 정상적으로 업로드 되어 바운드 되면, AI가 자동으로
+                  글자라고 인식하여 이미지들을 아래 썸네일로 보여줍니다.
+                </DescriptionBox> */}
+                </DescriptionBoxContainer>
               </RightDescriptionContainer>
             </BodyContainer>
           ) : (
