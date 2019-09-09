@@ -15,7 +15,6 @@ class MyPage extends Component {
     console.log(this.props.match.url);
     return (
       <Container>
-        <PieChart></PieChart>
         <Header page="mypage" />
         <Switch>
           <Route
