@@ -54,6 +54,13 @@ const MyProjectButton = styled(StyledLink)`
       : "rgba(255, 255, 255, 0.3)"};
 `;
 
+const TaskButton = styled(StyledLink)`
+  color: ${props =>
+    props.pathname.includes('/mypage/creator/task')
+      ? "white"
+      : "rgba(255, 255, 255, 0.3)"};
+`;
+
 const Icon = styled.i`
   transform: scale(1.4, 1.4);
 `;
@@ -90,6 +97,13 @@ class CreatorBody extends Component {
             <Icon className="fas fa-list" />
             <IconTitle>My Projects</IconTitle>
           </MyProjectButton>
+          <TaskButton
+            to={`${this.props.match.url}/task/standalone/none`}
+            pathname={this.props.location.pathname}
+          >
+            <Icon class="fas fa-crop-alt"></Icon>
+            <IconTitle>Workspace</IconTitle>
+          </TaskButton>
           <StyledLink
             to="/auth/signout"
             pathname={this.props.location.pathname}
