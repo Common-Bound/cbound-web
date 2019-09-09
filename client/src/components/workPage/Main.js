@@ -1,10 +1,9 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-
 import Dropzone from "react-dropzone";
 import moment from "moment";
-
 import Body from "./Body";
+import Button from "@material-ui/core/Button";
 
 const Container = styled.div`
   width: 80%;
@@ -73,7 +72,11 @@ const MainContainer = styled.div`
   padding: 10px;
 `;
 
-const FileListContainer = styled.div``;
+const FileListContainer = styled.div`
+  width: 100%;  
+  display: flex;
+  justify-content: space-between;
+`;
 
 const FileList = styled.div`
   width: 640px;
@@ -160,6 +163,10 @@ const DropZoneBox = styled.div`
   line-height: 370px;
 `;
 
+const StyledButton = styled(Button)`
+  height: 60px;
+`;
+
 class Main extends Component {
   constructor(props) {
     super(props);
@@ -178,6 +185,7 @@ class Main extends Component {
       loading: false,
       step: 0 // 현재 STEP 수
     };
+    this.Refs = [];
   }
 
   // 업로드된 이미지를 출력하기 위해 Base64로 바꿀 때 호출됨
@@ -235,9 +243,11 @@ class Main extends Component {
     // }
 
     const bodies = await this.state.orig_image_files.map((file, index) => {
+
       return new Promise(resolve => {
         resolve(
           <Body
+            key={index}
             class="bodies"
             info={this.props.info}
             project_type={this.props.project_type}
@@ -245,6 +255,8 @@ class Main extends Component {
             display={index === 0 ? 'flex' : 'none'}
             orig_image_file={file}
             orig_image_base64={this.state.orig_image_base64[index]}
+            handleSendAll={this.handleSendAll}
+            ref={(ref) => { this.Refs[index] = ref; }}
           />
         );
       });
@@ -254,8 +266,6 @@ class Main extends Component {
     await this.setState({
       bodies: newBodies
     });
-
-    console.log(this.state);
   };
 
   handleClick = e => {
@@ -273,6 +283,14 @@ class Main extends Component {
       } else body.style.display = "none";
     });
   };
+
+  // 작업한 내용 전부를 서버로 전송함
+  handleSendAll = () => {
+    this.Refs.forEach(body => {
+      body.handleSendAll();
+    });
+    alert('작업이 완료되었습니다. 포인트는 검수를 통과하는 즉시 지급되니 잠시 기다려 주시기 바랍니다.');
+  }
 
   render() {
     const info = this.props.info;
@@ -319,6 +337,7 @@ class Main extends Component {
                 {this.state.orig_image_base64.map((base64, index) => {
                   return (
                     <FileThumbnail
+                      key={index}
                       onClick={this.handleClick.bind(this)}
                       base64={base64}
                       data-index={index}
@@ -327,6 +346,7 @@ class Main extends Component {
                 })}
               </FileList>
             )}
+            {this.state.orig_image_files ? <StyledButton variant="contained" color="primary" onClick={this.handleSendAll.bind(this)}>완료하기</StyledButton> : ''}
           </FileListContainer>
           {!this.state.orig_image_files ? (
             <BodyContainer>

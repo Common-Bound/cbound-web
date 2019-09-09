@@ -183,8 +183,6 @@ class Body extends Component {
         return res.json();
       })
       .then(async data => {
-        console.log("Data received");
-
         console.log(data);
 
         // 경로별 받은 데이터를 다르게 핸들링함
@@ -247,40 +245,40 @@ class Body extends Component {
     }
   }
 
-  // 이미지가 업로드 되었을 때 호출됨
-  onFileSelected = async files => {
-    // 이미지가 업로드 되었을 때 기존에 크롭된 영역을 초기화함
-    //console.log(files[0]);
-    this.setState({
-      orig_image_file: files[0],
-      __nextkey: 0,
-      crop_image: [],
-      crop: {},
-      label: "",
-      imageRef: "",
-      changeMode: false,
-      preId: "",
-      orig_image: null
-    });
+  // // 이미지가 업로드 되었을 때 호출됨
+  // onFileSelected = async files => {
+  //   // 이미지가 업로드 되었을 때 기존에 크롭된 영역을 초기화함
+  //   //console.log(files[0]);
+  //   this.setState({
+  //     orig_image_file: files[0],
+  //     __nextkey: 0,
+  //     crop_image: [],
+  //     crop: {},
+  //     label: "",
+  //     imageRef: "",
+  //     changeMode: false,
+  //     preId: "",
+  //     orig_image: null
+  //   });
 
-    await this.getBase64(files[0]).then(
-      data =>
-        new Promise(resolve => {
-          resolve(
-            this.setState({
-              orig_image: data
-            })
-          );
-        })
-    );
-    // AI를 사용할 경우에만 이미지 데이터를 서버로 전송해줌
-    if (this.state.useAI) {
-      const bodyData = new FormData();
-      bodyData.append("orig_image", this.props.orig_image_file);
+  //   await this.getBase64(files[0]).then(
+  //     data =>
+  //       new Promise(resolve => {
+  //         resolve(
+  //           this.setState({
+  //             orig_image: data
+  //           })
+  //         );
+  //       })
+  //   );
+  //   // AI를 사용할 경우에만 이미지 데이터를 서버로 전송해줌
+  //   if (this.state.useAI) {
+  //     const bodyData = new FormData();
+  //     bodyData.append("orig_image", this.props.orig_image_file);
 
-      this.sendData(bodyData, "/mypage/creator/task/normal"); // 서버로 전송( /mypage/task)
-    }
-  };
+  //     this.sendData(bodyData, "/mypage/creator/task/normal"); // 서버로 전송( /mypage/task)
+  //   }
+  // };
 
   // 입력창의 value가 바뀔 때 변경사항 적용
   handleChange = e => {
@@ -361,7 +359,7 @@ class Body extends Component {
   };
 
   // 작업한 내용 전부를 서버로 전송함
-  handleSendAll() {
+  handleSendAll = async () => {
     const bodyData = new FormData();
 
     bodyData.append("orig_image", this.props.orig_image_file);
@@ -373,7 +371,7 @@ class Body extends Component {
     );
     bodyData.append("project_id", this.props.project_id);
 
-    this.sendData(bodyData, "/mypage/creator/task/normal/complete"); // 서버로 전송( /mypage/task/complete)
+    await this.sendData(bodyData, "/mypage/creator/task/normal/complete"); // 서버로 전송( /mypage/task/complete)
   }
 
   // 사용자의 편의를 위해 버튼을 누르지 않아도 (13==enter) 이벤트를 받으면 handleOnCropComplete 를 호출해줌
@@ -723,12 +721,12 @@ class Body extends Component {
                   아래의 BOUND 버튼을 누르면 해당 영역이 아래 바구니에 추가됩니다.
                 </DescriptionBox>
                 <DescriptionBox>
-                  - 바구니에 추가된 썸네일을 클릭하여 해당 영역을 수정하고,
-                  불필요한 영역은 오른쪽 위의 X 버튼을 눌러 삭제하세요.
-                </DescriptionBox>
-                <DescriptionBox>
                   - 썸네일 아래의 블루박스에 라벨 값을 입력하고 ENTER키를 누르세요.
                   SHOW 버튼을 눌러 라벨링 된 이미지를 확인하세요.
+                </DescriptionBox>
+                <DescriptionBox>
+                  - 바구니에 추가된 썸네일을 클릭하여 해당 영역을 수정하고,
+                  불필요한 영역은 오른쪽 위의 X 버튼을 눌러 삭제하세요.
                 </DescriptionBox>
               </DescriptionBoxContainer>
             <ButtonContainer>
