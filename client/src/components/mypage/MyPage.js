@@ -5,7 +5,6 @@ import Header from "../main/Header";
 import CreatorBody from "./CreatorBody";
 import RequesterBody from "./RequesterBody";
 import notFound from "../notFound";
-import PieChart from "./PieChart";
 
 const Container = styled.div`
   width: 100%;
