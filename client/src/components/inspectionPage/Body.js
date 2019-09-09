@@ -106,7 +106,7 @@ const RightDescriptionContainer = styled.div`
   width: 440px;
   background-color: #f0f0f0;
 `;
-``;
+
 const DescriptionBoxContainer = styled.div`
   width: 100%;
 
