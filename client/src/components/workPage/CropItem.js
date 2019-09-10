@@ -63,17 +63,22 @@ class CropItem extends Component {
 
   shouldComponentUpdate(nextProps, nextState) {
     if (
-      nextProps.useAI !== this.props.crop.useAI ||
-      nextProps.crop.height !== this.props.crop.height ||
-      nextProps.crop.x !== this.props.crop.x ||
-      nextProps.crop.y !== this.props.crop.y ||
-      nextProps.crop.width !== this.props.crop.width
+      nextProps.useAI !== this.props.useAI ||
+      nextProps.crop.shape_attributes.height !==
+        this.props.crop.shape_attributes.height ||
+      nextProps.crop.shape_attributes.x !==
+        this.props.crop.shape_attributes.x ||
+      nextProps.crop.shape_attributes.y !==
+        this.props.crop.shape_attributes.y ||
+      nextProps.crop.shape_attributes.width !==
+        this.props.crop.shape_attributes.width
     ) {
       return true;
     }
     if (
       nextProps.crop !== this.props.crop &&
-      nextProps.crop.label === this.props.crop.label
+      nextProps.crop.region_attributes.label ===
+        this.props.crop.region_attributes.label
     ) {
       console.log("a");
 
@@ -127,7 +132,10 @@ class CropItem extends Component {
   // 라벨값을 부모 컴포넌트로부터 바꿔준다.
   changeLabel = e => {
     //console.log(this.state.label);
-    this.props.changeLabel(this.props.crop.id, this.state.label);
+    this.props.changeLabel(
+      this.props.crop.shape_attributes.id,
+      this.state.label
+    );
   };
 
   // 캔버스에 크롭된 영역을 그려주고 캔버스를 Base64 인코딩함
@@ -136,21 +144,21 @@ class CropItem extends Component {
     const scaleX = image.naturalWidth / image.width;
     const scaleY = image.naturalHeight / image.height;
 
-    canvas.width = crop.width;
-    canvas.height = crop.height;
+    canvas.width = crop.shape_attributes.width;
+    canvas.height = crop.shape_attributes.height;
 
     const ctx = canvas.getContext("2d");
 
     ctx.drawImage(
       image,
-      crop.x * scaleX,
-      crop.y * scaleY,
-      crop.width * scaleX,
-      crop.height * scaleY,
+      crop.shape_attributes.x * scaleX,
+      crop.shape_attributes.y * scaleY,
+      crop.shape_attributes.width * scaleX,
+      crop.shape_attributes.height * scaleY,
       0,
       0,
-      crop.width,
-      crop.height
+      crop.shape_attributes.width,
+      crop.shape_attributes.height
     );
     return new Promise(resolve => {
       resolve(canvas.toDataURL());
@@ -161,14 +169,14 @@ class CropItem extends Component {
   handleRemove = e => {
     e.stopPropagation();
 
-    this.props.onRemove(this.props.crop.id);
+    this.props.onRemove(this.props.crop.shape_attributes.id);
   };
 
   // 부모 컴포넌트 Body.js 의 handleOnCropModify 를 호출
   handleChange = e => {
     e.stopPropagation();
 
-    this.props.onChange(this.props.crop.id);
+    this.props.onChange(this.props.crop.shape_attributes.id);
   };
 
   // 처음 컴포넌트가 첫 렌더링을 마쳤을 때 실행됨
@@ -182,7 +190,7 @@ class CropItem extends Component {
 
     const bodyData = JSON.stringify({
       crop_image: this.state.imgSrc,
-      id: this.props.crop.id
+      id: this.props.crop.shape_attributes.id
     });
     console.log(this.props.useAI);
     if (this.props.useAI) {
@@ -199,10 +207,10 @@ class CropItem extends Component {
       const { image, crop } = this.props;
 
       if (
-        crop.x !== prevProps.crop.x ||
-        crop.y !== prevProps.crop.y ||
-        crop.width !== prevProps.crop.width ||
-        crop.height !== prevProps.crop.height
+        crop.shape_attributes.x !== prevProps.crop.shape_attributes.x ||
+        crop.shape_attributes.y !== prevProps.crop.shape_attributes.y ||
+        crop.shape_attributes.width !== prevProps.crop.shape_attributes.width ||
+        crop.shape_attributes.height !== prevProps.crop.shape_attributes.height
       ) {
         await this.setState({
           imgSrc: await this.getCroppedImg(image, crop)
@@ -210,11 +218,14 @@ class CropItem extends Component {
       }
       const bodyData = JSON.stringify({
         crop_image: this.state.imgSrc,
-        id: this.props.crop.id
+        id: this.props.crop.shape_attributes.id
       });
       //console.log(this.props.crop.label, this.state.label);
 
-      if (this.props.useAI && this.props.crop.label !== this.state.label) {
+      if (
+        this.props.useAI &&
+        this.props.crop.region_attributes.label !== this.state.label
+      ) {
         // console.log("UPDATE");
         this.setState({
           editing: true

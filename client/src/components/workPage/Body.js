@@ -191,12 +191,16 @@ class Body extends Component {
               //console.log("scaleY: " + scaleY);
 
               return {
-                id: counter++,
-                x: crop.x / scaleX,
-                y: crop.y / scaleY,
-                width: crop.width / scaleX,
-                height: crop.height / scaleY,
-                label: crop.label
+                shape_attributes: {
+                  id: counter++,
+                  x: crop.shape_attributes.x / scaleX,
+                  y: crop.shape_attributes.y / scaleY,
+                  width: crop.shape_attributes.width / scaleX,
+                  height: crop.shape_attributes.height / scaleY
+                },
+                region_attributes: {
+                  label: crop.region_attributes.label
+                }
               };
             }),
             __nextkey: counter
@@ -315,14 +319,18 @@ class Body extends Component {
         // 수정
         this.setState({
           crop_image: await this.state.crop_image.map(crop => {
-            if (crop.id === this.state.preId) {
+            if (crop.shape_attributes.id === this.state.preId) {
               return {
-                id: this.state.preId,
-                x: cropData.x,
-                y: cropData.y,
-                width: cropData.width,
-                height: cropData.height,
-                label: this.state.label
+                shape_attributes: {
+                  id: this.state.preId,
+                  x: cropData.x,
+                  y: cropData.y,
+                  width: cropData.width,
+                  height: cropData.height
+                },
+                region_attributes: {
+                  label: this.state.label
+                }
               };
             } else return crop;
           }),
@@ -334,12 +342,16 @@ class Body extends Component {
         // 추가
         this.setState({
           crop_image: this.state.crop_image.concat({
-            id: this.state.__nextkey++,
-            x: cropData.x,
-            y: cropData.y,
-            width: cropData.width,
-            height: cropData.height,
-            label: this.state.label
+            shape_attributes: {
+              id: this.state.__nextkey++,
+              x: cropData.x,
+              y: cropData.y,
+              width: cropData.width,
+              height: cropData.height
+            },
+            region_attributes: {
+              label: this.state.label
+            }
           }),
           label: "",
           crop: {}
@@ -357,24 +369,10 @@ class Body extends Component {
 
     // console.log(this.props.orig_image_file_file);
 
-    var tempSendData = [];
-    this.state.crop_image.forEach(data => {
-      tempSendData.push({
-        shape_attributes: {
-          name: "rect",
-          id: data.id,
-          x: data.x,
-          y: data.y,
-          width: data.width,
-          height: data.height
-        },
-        region_attributes: {
-          label: data.label
-        }
-      });
-    });
-
-    bodyData.append("meta", JSON.stringify({ crop_image: tempSendData }));
+    bodyData.append(
+      "meta",
+      JSON.stringify({ crop_image: this.state.crop_image })
+    );
     bodyData.append("project_id", this.props.project_id);
 
     await this.sendData(bodyData, "/mypage/creator/task/normal/complete"); // 서버로 전송( /mypage/task/complete)
@@ -392,19 +390,19 @@ class Body extends Component {
   // 크롭 영역을 변경할 수 있게 현재 crop 정보를 crop.id가 id인 크롭 정보로 바꿔줌
   handleOnCropModify = id => {
     const preCrop = this.state.crop_image.find(crop => {
-      return crop.id === id;
+      return crop.shape_attributes.id === id;
     });
 
     this.setState({
       crop: {
-        x: preCrop.x,
-        y: preCrop.y,
-        width: preCrop.width,
-        height: preCrop.height,
-        label: preCrop.label,
-        unit: "px"
+        x: preCrop.shape_attributes.x,
+        y: preCrop.shape_attributes.y,
+        width: preCrop.shape_attributes.width,
+        height: preCrop.shape_attributes.height,
+        unit: "px",
+        label: preCrop.region_attributes.label
       },
-      label: preCrop.label,
+      label: preCrop.region_attributes.label,
       changeMode: true,
       preId: id
     });
@@ -419,7 +417,7 @@ class Body extends Component {
 
       this.setState({
         changeMode: false,
-        crop_image: crop_image.filter(crop => crop.id !== id)
+        crop_image: crop_image.filter(crop => crop.shape_attributes.id !== id)
       });
     }
   };
@@ -427,21 +425,25 @@ class Body extends Component {
   // 라벨값이 서버로부터 전송되었을 때 crop_image 의 라벨값을 채워준다.
   handleChangeLabel = (id, label) => {
     const preCrop = this.state.crop_image.find(crop => {
-      return crop.id === id;
+      return crop.shape_attributes.id === id;
     });
 
     //console.log(label);
 
     this.setState({
       crop_image: this.state.crop_image.map(crop => {
-        if (crop.id === preCrop.id) {
+        if (crop.shape_attributes.id === preCrop.shape_attributes.id) {
           return {
-            id: id,
-            x: crop.x,
-            y: crop.y,
-            width: crop.width,
-            height: crop.height,
-            label: label
+            shape_attributes: {
+              id: id,
+              x: crop.shape_attributes.x,
+              y: crop.shape_attributes.y,
+              width: crop.shape_attributes.width,
+              height: crop.shape_attributes.height
+            },
+            region_attributes: {
+              label: label
+            }
           };
         } else return crop;
       })
@@ -458,12 +460,12 @@ class Body extends Component {
     var targetId = "nothing";
     crops.every(function(crop) {
       if (
-        x > crop.x &&
-        x < crop.x + crop.width &&
-        y > crop.y &&
-        y < crop.y + crop.height
+        x > crop.shape_attributes.x &&
+        x < crop.shape_attributes.x + crop.shape_attributes.width &&
+        y > crop.shape_attributes.y &&
+        y < crop.shape_attributes.y + crop.shape_attributes.height
       ) {
-        targetId = crop.id;
+        targetId = crop.shape_attributes.id;
         return false;
       } else return true;
     });
@@ -482,7 +484,7 @@ class Body extends Component {
   async handleCropMouseUp() {
     if (this.state.useAI) {
       //console.log(this.state.crop.height);
-      if (this.state.crop.height)
+      if (this.state.crop.shape_attributes.height)
         this.setState(
           {
             label: ""
@@ -490,33 +492,6 @@ class Body extends Component {
           () => this.handleOnCropComplete()
         );
     }
-  }
-
-  // 캔버스에 크롭된 영역을 그려주고 캔버스를 Base64 인코딩함
-  getCroppedImg(image, crop) {
-    const canvas = document.createElement("canvas");
-    const scaleX = image.naturalWidth / image.width;
-    const scaleY = image.naturalHeight / image.height;
-
-    canvas.width = crop.width;
-    canvas.height = crop.height;
-
-    const ctx = canvas.getContext("2d");
-
-    ctx.drawImage(
-      image,
-      crop.x * scaleX,
-      crop.y * scaleY,
-      crop.width * scaleX,
-      crop.height * scaleY,
-      0,
-      0,
-      crop.width,
-      crop.height
-    );
-    return new Promise(resolve => {
-      resolve(canvas.toDataURL());
-    });
   }
 
   getCropImageData() {

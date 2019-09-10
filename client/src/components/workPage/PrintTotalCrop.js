@@ -57,21 +57,21 @@ class PrintTotalCrop extends Component {
     );
 
     crops.forEach(function(crop) {
-      const x = crop.x;
-      const y = crop.y;
-      const width = crop.width;
-      const height = crop.height;
+      const x = crop.shape_attributes.x;
+      const y = crop.shape_attributes.y;
+      const width = crop.shape_attributes.width;
+      const height = crop.shape_attributes.height;
 
       ctx.strokeStyle = "yellow";
       ctx.rect(x, y, width, height);
 
-      if (crop.label) {
+      if (crop.region_attributes.label) {
         ctx.fillStyle = "yellow";
-        ctx.fillRect(x, y - 16, crop.label.length * 10, 16);
+        ctx.fillRect(x, y - 16, crop.region_attributes.label.length * 10, 16);
 
         ctx.fillStyle = "black";
         ctx.font = "16px serif";
-        ctx.fillText(crop.label, x, y);
+        ctx.fillText(crop.region_attributes.label, x, y);
       }
 
       ctx.stroke();

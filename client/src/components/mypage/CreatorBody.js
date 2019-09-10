@@ -56,7 +56,7 @@ const MyProjectButton = styled(StyledLink)`
 
 const TaskButton = styled(StyledLink)`
   color: ${props =>
-    props.pathname.includes('/mypage/creator/task')
+    props.pathname.includes("/mypage/creator/task")
       ? "white"
       : "rgba(255, 255, 255, 0.3)"};
 `;

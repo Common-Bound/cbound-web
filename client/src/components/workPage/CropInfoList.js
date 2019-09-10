@@ -39,7 +39,7 @@ class CropInfoList extends Component {
 
     const cropList = crops.map(crop => (
       <CropItem
-        key={crop.id}
+        key={crop.shape_attributes.id}
         useAI={useAI}
         image={image}
         crop={crop}
