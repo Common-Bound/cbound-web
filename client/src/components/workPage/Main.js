@@ -8,6 +8,7 @@ import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
+import { isNumber } from "util";
 
 const Container = styled.div`
   width: 80%;
@@ -188,17 +189,7 @@ class Main extends Component {
       orig_image_files: undefined,
       orig_image_base64: undefined,
       bodies: undefined,
-      crop_image: [], // 지금까지 크롭한 영역들의 정보 리스트 (x, y, width, height)
-      crop: {}, // ReactCrop 에 사용되는 값으로 크롭 영역이 변경될 때 함께 변경됨. (현재 크롭 영역에 대한 정보를 가지고 있음)
-      label: "", // 작업한 영역에 대해 레이블링 할 때 사용되는 입력창의 변경 사항에 대해 저장함
-      imageRef: null, // 크롭 컨테이너에 이미지가 로드 되었을 때 이미지 값을 저장함
-      changeMode: false, // 현재 크롭된 이미지를 추가해야 할지 수정해야 할지 결정하는 Flag
-      preId: "", // ChangeMode 가 true 라면 변경할 이미지의 id
-      showEdit: true, // 한 개의 크롭 영역을 변경할 수 있는 이미지를 줄지 크롭된 영역 리스트를 이미지에 그려줄 지
-      useAI: true, // AI를 사용할지 말지 스위치 할 때 변경할 값
-      loading: false,
-      step: 0, // 현재 STEP 수,
-      format: undefined // EXPORT 할 때의 데이터 포맷
+      format: "" // EXPORT 할 때의 데이터 포맷
     };
     this.Refs = [];
   }
@@ -225,17 +216,8 @@ class Main extends Component {
   onFileSelected = async files => {
     console.log(files);
     // 이미지가 업로드 되었을 때 기존에 크롭된 영역을 초기화함
-    //console.log(files[0]);
     await this.setState({
       orig_image_files: files
-      // __nextkey: 0,
-      // crop_image: [],
-      // crop: {},
-      // label: "",
-      // imageRef: "",
-      // changeMode: false,
-      // preId: "",
-      // orig_image: null
     });
 
     await this.getBase64(files).then(
@@ -248,14 +230,7 @@ class Main extends Component {
           );
         })
     );
-
-    // AI를 사용할 경우에만 이미지 데이터를 서버로 전송해줌
-    // if (this.state.useAI) {
-    //   const bodyData = new FormData();
-    //   bodyData.append("orig_image", this.state.orig_image);
-
-    //   this.sendData(bodyData, "/mypage/creator/task/normal"); // 서버로 전송( /mypage/task)
-    // }
+    console.log(this.state.orig_image_base64);
 
     const bodies = await this.state.orig_image_files.map((file, index) => {
       return new Promise(resolve => {
@@ -307,7 +282,7 @@ class Main extends Component {
     // Export 형식이 'csv' 인 경우
     if (format === "csv") {
       let content =
-        "data:text/csv;charset=utf-8,file_name,file_size,region_count,region_id,region_attributes\n";
+        "data:text/csv;charset=utf-8,file_name,file_size,region_count,region_id,shape_attributes,region_attributes\n";
 
       const bodyRowsPromises = await this.Refs.map(async (body, index) => {
         let rowArray = [];
@@ -322,19 +297,43 @@ class Main extends Component {
         const region_count = crop_image.length;
 
         const cropPromises = await crop_image.map(async crop => {
-          const crop_id = crop.id;
-          let crop_string = JSON.stringify(crop);
-          crop_string = replaceAll(crop_string, '"', '""');
-          crop_string = '"' + crop_string + '"';
+          const crop_id = crop.shape_attributes.id;
+          let shape_attributes = crop.shape_attributes;
+          let region_attributes = JSON.stringify(crop.region_attributes);
+
+          const naturalWidth = await this.checkImageSize(index);
+
+          // 계산된 naturalWidth 가 숫자라면(640 보다 큰 경우) 좌표를 재조정해준다
+          if (isNumber(naturalWidth)) {
+            shape_attributes = await this.resizeCropLocation(
+              naturalWidth,
+              shape_attributes
+            );
+            shape_attributes = JSON.stringify(shape_attributes);
+          }
+
+          shape_attributes = replaceAll(shape_attributes, '"', '""');
+          shape_attributes = '"' + shape_attributes + '"';
+
+          region_attributes = replaceAll(region_attributes, '"', '""');
+          region_attributes = '"' + region_attributes + '"';
           let row = [];
 
           row.push(file_name);
           row.push(file_size);
           row.push(region_count);
           row.push(crop_id);
-          row.push(crop_string);
+          row.push(shape_attributes);
+          row.push(region_attributes);
 
-          console.log(file_name, file_size, region_count, crop_id, crop_string);
+          console.log(
+            file_name,
+            file_size,
+            region_count,
+            crop_id,
+            shape_attributes,
+            region_attributes
+          );
           row = row.join(",");
           return new Promise(resolve => {
             resolve(row);
@@ -366,18 +365,46 @@ class Main extends Component {
     else if (format === "json") {
       // let content = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(storageObj))
       let JSONobj = {};
-      this.Refs.forEach((body, index) => {
-        const crop_image = body.getCropImageData();
+      const promises = await this.Refs.map(async (body, index) => {
+        let crop_image = body.getCropImageData();
         const file_name = files[index].name;
         const file_size = files[index].size;
         const region_count = crop_image.length;
+
+        const naturalWidth = await this.checkImageSize(index);
+
+        // 계산된 naturalWidth 가 숫자라면(640 보다 큰 경우) 좌표를 재조정해준다
+        if (isNumber(naturalWidth)) {
+          // 각 crop 에 포함된 shape_attributes 를 resize 해준다
+          const resizedShapeAttributesPromises = await crop_image.map(
+            async crop => {
+              let new_shape = await this.resizeCropLocation(
+                naturalWidth,
+                crop.shape_attributes
+              );
+              return new Promise(resolve => resolve(new_shape));
+            }
+          );
+
+          const new_shape_attributes = await Promise.all(
+            resizedShapeAttributesPromises
+          );
+
+          crop_image.forEach((crop, index) => {
+            crop_image[index].shape_attributes = new_shape_attributes[index];
+          });
+        }
 
         JSONobj[file_name] = {};
         JSONobj[file_name]["file_name"] = file_name;
         JSONobj[file_name]["file_size"] = file_size;
         JSONobj[file_name]["region_count"] = region_count;
         JSONobj[file_name]["regions"] = crop_image;
+
+        return new Promise(resolve => resolve(true));
       });
+
+      await Promise.all(promises);
 
       console.log(JSONobj);
       let content =
@@ -407,6 +434,50 @@ class Main extends Component {
       format: e.target.value
     });
   };
+
+  /**
+   *
+   * @param {orig_state_file 을 참조할 인덱스} index
+   * @dev  파일 이미지의 naturalWidth가 640px 보다 크다면 true, 아니면 false를 리턴한다
+   */
+  async checkImageSize(index) {
+    const base64 = this.state.orig_image_base64[index];
+
+    const img = document.createElement("img");
+    img.setAttribute("src", base64);
+    img.setAttribute("alt", "");
+    const naturalWidth = Number(img.naturalWidth);
+    console.log("natural width: " + img.naturalWidth);
+
+    // 이미지의 원래 width가 640px 보다 크다면, 크롭 좌표들을 적절한 비율로 되돌려줘야한다
+    if (naturalWidth > 640) {
+      return new Promise(resolve => {
+        resolve(naturalWidth);
+      });
+    } else return new Promise(resolve => resolve(null));
+  }
+
+  resizeCropLocation(naturalWidth, shape_attributes) {
+    const scale = naturalWidth / 640;
+    console.log("scale: " + scale);
+    const s = shape_attributes;
+
+    const id = s.id;
+    const new_x = s.x * scale;
+    const new_y = s.y * scale;
+    const new_width = s.width * scale;
+    const new_height = s.height * scale;
+
+    return new Promise(resolve => {
+      resolve({
+        id: id,
+        x: Number.parseFloat(new_x).toFixed(0),
+        y: Number.parseFloat(new_y).toFixed(0),
+        width: Number.parseFloat(new_width).toFixed(0),
+        height: Number.parseFloat(new_height).toFixed(0)
+      });
+    });
+  }
 
   render() {
     const { format, orig_image_files, orig_image_base64, bodies } = this.state;
