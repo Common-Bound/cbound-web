@@ -489,6 +489,8 @@ class Body extends Component {
           },
           () => this.handleOnCropComplete()
         );
+    } else {
+      this.handleOnCropComplete();
     }
   }
 

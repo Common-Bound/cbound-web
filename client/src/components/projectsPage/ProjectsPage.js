@@ -8,7 +8,6 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 
 const Container = styled.div`
-  border: 1px solid blue;
   width: 100%;
   height: 100vh;
 `;

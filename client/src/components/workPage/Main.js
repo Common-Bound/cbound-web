@@ -304,6 +304,7 @@ class Main extends Component {
     let format = this.state.format;
     const files = this.state.orig_image_files;
 
+    // Export 형식이 'csv' 인 경우
     if (format === "csv") {
       let content =
         "data:text/csv;charset=utf-8,file_name,file_size,region_count,region_id,region_attributes\n";
@@ -361,6 +362,37 @@ class Main extends Component {
       window.open(encodedUri);
     }
 
+    // Export 형식이 'json' 인 경우
+    else if (format === "json") {
+      // let content = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(storageObj))
+      let JSONobj = {};
+      this.Refs.map((body, index) => {
+        const crop_image = body.getCropImageData();
+        const file_name = files[index].name;
+        const file_size = files[index].size;
+        const region_count = crop_image.length;
+
+        JSONobj[file_name] = {};
+        JSONobj[file_name]["file_name"] = file_name;
+        JSONobj[file_name]["file_size"] = file_size;
+        JSONobj[file_name]["region_count"] = region_count;
+        JSONobj[file_name]["regions"] = crop_image;
+      });
+
+      console.log(JSONobj);
+      let content =
+        "data:text/json;charset=utf-8," +
+        encodeURIComponent(JSON.stringify(JSONobj));
+
+      var downloadJSON = document.createElement("a");
+      downloadJSON.setAttribute("href", content);
+      downloadJSON.setAttribute("download", "dataset.json");
+      document.body.appendChild(downloadJSON); // required for firefox
+      downloadJSON.click();
+      downloadJSON.remove();
+    }
+
+    // 서버로 전송
     this.Refs.forEach(body => {
       body.handleSendAll();
     });
@@ -461,7 +493,6 @@ class Main extends Component {
                     </MenuItem>
                     <MenuItem value="json">JSON</MenuItem>
                     <MenuItem value="csv">CSV</MenuItem>
-                    <MenuItem value="other">Other</MenuItem>
                   </Select>
                 </StyledFormControl>
               ) : (
