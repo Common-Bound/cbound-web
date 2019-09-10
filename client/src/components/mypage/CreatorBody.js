@@ -101,7 +101,7 @@ class CreatorBody extends Component {
             to={`${this.props.match.url}/task/standalone/none`}
             pathname={this.props.location.pathname}
           >
-            <Icon class="fas fa-crop-alt"></Icon>
+            <Icon className="fas fa-crop-alt"></Icon>
             <IconTitle>Workspace</IconTitle>
           </TaskButton>
           <StyledLink
