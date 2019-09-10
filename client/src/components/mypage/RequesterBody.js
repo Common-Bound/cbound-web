@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Route, Switch, Link } from "react-router-dom";
+import { Route, Link } from "react-router-dom";
 // node.js library that concatenates classes (strings)
 import classnames from "classnames";
 // javascipt plugin for creating charts
@@ -14,8 +14,6 @@ import "../../assets/vendor/@fortawesome/fontawesome-free/css/all.min.css";
 import "../../assets/scss/argon-dashboard-react.scss";
 
 import Header from "../../components/Headers/Header.jsx";
-import Sidebar from "../../components/Sidebar/Sidebar.jsx";
-import routes from "routes.js";
 import styled from "styled-components";
 import AdminFooter from "../../components/Footers/AdminFooter.jsx";
 
@@ -77,12 +75,12 @@ const StyledLink = styled(Link)`
   }
 `;
 
-const AllProjectButton = styled(StyledLink)`
-  color: ${props =>
-    props.pathname === "/mypage/creator"
-      ? "white"
-      : "rgba(255, 255, 255, 0.3)"};
-`;
+// const AllProjectButton = styled(StyledLink)`
+//   color: ${props =>
+//     props.pathname === "/mypage/creator"
+//       ? "white"
+//       : "rgba(255, 255, 255, 0.3)"};
+// `;
 
 const MyProjectButton = styled(StyledLink)`
   color: ${props =>

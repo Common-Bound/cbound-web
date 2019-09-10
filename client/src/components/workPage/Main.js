@@ -366,7 +366,7 @@ class Main extends Component {
     else if (format === "json") {
       // let content = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(storageObj))
       let JSONobj = {};
-      this.Refs.map((body, index) => {
+      this.Refs.forEach((body, index) => {
         const crop_image = body.getCropImageData();
         const file_name = files[index].name;
         const file_size = files[index].size;
@@ -384,7 +384,7 @@ class Main extends Component {
         "data:text/json;charset=utf-8," +
         encodeURIComponent(JSON.stringify(JSONobj));
 
-      var downloadJSON = document.createElement("a");
+      const downloadJSON = document.createElement("a");
       downloadJSON.setAttribute("href", content);
       downloadJSON.setAttribute("download", "dataset.json");
       document.body.appendChild(downloadJSON); // required for firefox
@@ -491,8 +491,8 @@ class Main extends Component {
                     <MenuItem value="">
                       <em>None</em>
                     </MenuItem>
-                    <MenuItem value="json">JSON</MenuItem>
-                    <MenuItem value="csv">CSV</MenuItem>
+                    {!info ? <MenuItem value="json">JSON</MenuItem> : ""}
+                    {!info ? <MenuItem value="csv">CSV</MenuItem> : ""}
                   </Select>
                 </StyledFormControl>
               ) : (
