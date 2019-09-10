@@ -156,7 +156,7 @@ class Body extends Component {
       preId: "", // ChangeMode 가 true 라면 변경할 이미지의 id
       showEdit: true, // 한 개의 크롭 영역을 변경할 수 있는 이미지를 줄지 크롭된 영역 리스트를 이미지에 그려줄 지
       useAI: false, // AI를 사용할지 말지 스위치 할 때 변경할 값
-      loading: false,
+      loading: false
       // step: 0 // 현재 STEP 수
     };
 
@@ -372,7 +372,7 @@ class Body extends Component {
     bodyData.append("project_id", this.props.project_id);
 
     await this.sendData(bodyData, "/mypage/creator/task/normal/complete"); // 서버로 전송( /mypage/task/complete)
-  }
+  };
 
   // 사용자의 편의를 위해 버튼을 누르지 않아도 (13==enter) 이벤트를 받으면 handleOnCropComplete 를 호출해줌
   handleKeyPress = e => {
@@ -716,19 +716,19 @@ class Body extends Component {
               </DescriptionBoxContainer>
             )} */}
             <DescriptionBoxContainer>
-                <DescriptionBox>
-                  - 이미지를 드래그하여 영역을 지정하세요.
-                  아래의 BOUND 버튼을 누르면 해당 영역이 아래 바구니에 추가됩니다.
-                </DescriptionBox>
-                <DescriptionBox>
-                  - 썸네일 아래의 블루박스에 라벨 값을 입력하고 ENTER키를 누르세요.
-                  SHOW 버튼을 눌러 라벨링 된 이미지를 확인하세요.
-                </DescriptionBox>
-                <DescriptionBox>
-                  - 바구니에 추가된 썸네일을 클릭하여 해당 영역을 수정하고,
-                  불필요한 영역은 오른쪽 위의 X 버튼을 눌러 삭제하세요.
-                </DescriptionBox>
-              </DescriptionBoxContainer>
+              <DescriptionBox>
+                - 이미지를 드래그하여 영역을 지정하세요. 아래의 BOUND 버튼을
+                누르면 해당 영역이 아래 바구니에 추가됩니다.
+              </DescriptionBox>
+              <DescriptionBox>
+                - 썸네일 아래의 블루박스에 라벨 값을 입력하고 ENTER키를
+                누르세요. SHOW 버튼을 눌러 라벨링 된 이미지를 확인하세요.
+              </DescriptionBox>
+              <DescriptionBox>
+                - 바구니에 추가된 썸네일을 클릭하여 해당 영역을 수정하고,
+                불필요한 영역은 오른쪽 위의 X 버튼을 눌러 삭제하세요.
+              </DescriptionBox>
+            </DescriptionBoxContainer>
             <ButtonContainer>
               <BoundButton
                 type="button"
