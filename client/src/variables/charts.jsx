@@ -1,4 +1,16 @@
 const Chart = require("chart.js");
+
+const url = "/chartData";
+fetch(url, {
+  method: "post"
+})
+  .then(res => res.json())
+  .then(data => {
+    console.log(data);
+  })
+  .catch(err => {
+    console.log(err);
+  });
 //
 // Chart extension for making the bars rounded
 // Code from: https://codepen.io/jedtrow/full/ygRYgo

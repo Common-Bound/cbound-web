@@ -151,13 +151,6 @@ class RequesterBody extends React.Component {
     return (
       <>
         <LeftBanner>
-          <AllProjectButton
-            to={`${this.props.match.url}`}
-            pathname={this.props.location.pathname}
-          >
-            <Icon className="fas fa-search-dollar" />
-            <IconTitle>All Projects</IconTitle>
-          </AllProjectButton>
           <MyProjectButton
             to={`${this.props.match.url}/projects`}
             pathname={this.props.location.pathname}
@@ -294,7 +287,7 @@ class RequesterBody extends React.Component {
                           <td>90%</td>
                           <td>14</td>
                           <td>
-                            <i className="fas fa-arrow-up text-success mr-3" />{" "}
+                            <i className="fas fa-plus text-success mr-3" />{" "}
                             Create
                           </td>
                         </tr>
@@ -303,7 +296,7 @@ class RequesterBody extends React.Component {
                           <td>PERFECT</td>
                           <td>100043</td>
                           <td>
-                            <i className="fas fa-arrow-down text-warning mr-3" />{" "}
+                            <i className="fas fa-check text-warning mr-3" />{" "}
                             Inspect
                           </td>
                         </tr>
@@ -312,7 +305,7 @@ class RequesterBody extends React.Component {
                           <td>94%</td>
                           <td>102</td>
                           <td>
-                            <i className="fas fa-arrow-down text-warning mr-3" />{" "}
+                            <i className="fas fa-check text-warning mr-3" />{" "}
                             Inspect
                           </td>
                         </tr>
@@ -321,7 +314,7 @@ class RequesterBody extends React.Component {
                           <td>40%</td>
                           <td>147</td>
                           <td>
-                            <i className="fas fa-arrow-up text-success mr-3" />{" "}
+                            <i className="fas fa-plus text-success mr-3" />{" "}
                             create
                           </td>
                         </tr>
@@ -330,7 +323,7 @@ class RequesterBody extends React.Component {
                           <td>PERFECT</td>
                           <td>7</td>
                           <td>
-                            <i className="fas fa-arrow-down text-danger mr-3" />{" "}
+                            <i className="fas fa-check text-danger mr-3" />{" "}
                             Inspect
                           </td>
                         </tr>
