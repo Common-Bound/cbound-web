@@ -54,6 +54,8 @@ router.post(
     const date = Date.now(); // UTC 기준으로 1970년 1월 1일 0시 0분 0초부터 현재까지 경과된 밀리 초를 반환
     const file = req.file;
     const project_id = req.body.project_id;
+    console.log(typeof project_id);
+    const schedule_state = project_id === "undefined" ? "reserved" : "queued";
 
     const payload = {
       orig_image: file.location,
@@ -74,7 +76,7 @@ router.post(
         user_id,
         [],
         project_id,
-        "queued"
+        schedule_state
       ],
       (err, result) => {
         if (err) {

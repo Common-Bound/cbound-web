@@ -3,10 +3,6 @@ import ReactCrop from "react-image-crop"; // Cropper Import
 import CropInfoList from "./CropInfoList.js"; // 크롭 리스트를 출력함
 import PrintTotalCrop from "./PrintTotalCrop"; // 크롭 리스트를 한 캔버스에 그려줌
 import styled from "styled-components";
-import Stepper from "@material-ui/core/Stepper";
-import Step from "@material-ui/core/Step";
-import StepLabel from "@material-ui/core/StepLabel";
-import Button from "@material-ui/core/Button";
 
 import "react-image-crop/dist/ReactCrop.css";
 import "./Body.css";
@@ -33,20 +29,20 @@ const LeftMainContainer = styled.div`
   justify-content: flex-start;
 `;
 
-const StepperContainer = styled.div`
-  width: 100%;
-`;
+// const StepperContainer = styled.div`
+//   width: 100%;
+// `;
 
-const StepperRoot = styled.div`
-  width: 100%;
-  margin: 0 auto;
-`;
+// const StepperRoot = styled.div`
+//   width: 100%;
+//   margin: 0 auto;
+// `;
 
-const StyledStepper = styled(Stepper)`
-  height: 20px;
-  padding: 20px 0px 20px 0px !important;
-  background-color: #f0f0f0 !important;
-`;
+// const StyledStepper = styled(Stepper)`
+//   height: 20px;
+//   padding: 20px 0px 20px 0px !important;
+//   background-color: #f0f0f0 !important;
+// `;
 
 const RightDescriptionContainer = styled.div`
   display: flex;
@@ -132,11 +128,6 @@ const LoadingContainer = styled.div`
 const CropListContainer = styled.div`
   display: flex;
   justify-content: space-between;
-`;
-
-const StepButtonContainer = styled.div`
-  display: flex;
-  padding-right: 10px;
 `;
 
 class Body extends Component {
@@ -511,6 +502,10 @@ class Body extends Component {
     return new Promise(resolve => {
       resolve(canvas.toDataURL());
     });
+  }
+
+  getCropImageData() {
+    return this.state.crop_image;
   }
 
   // handleNext() {

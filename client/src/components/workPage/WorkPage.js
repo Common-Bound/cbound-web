@@ -20,13 +20,15 @@ class WorkPage extends Component {
             project_type={this.props.match.params.project_type}
             project_id={this.props.match.params.project_id}
           />
-        ) : (
+        ) : this.props.match.params.project_type === 'inspection'? (
           <InspectionPage
             info={info}
             project_type={this.props.match.params.project_type}
             project_id={this.props.match.params.project_id}
           />
-        )}
+        ) : 
+          <Main />
+        }
       </WorkContainer>
     );
   }
