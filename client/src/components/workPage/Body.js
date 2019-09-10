@@ -356,10 +356,25 @@ class Body extends Component {
     bodyData.append("orig_image", this.props.orig_image_file);
 
     // console.log(this.props.orig_image_file_file);
-    bodyData.append(
-      "meta",
-      JSON.stringify({ crop_image: this.state.crop_image })
-    );
+
+    var tempSendData = [];
+    this.state.crop_image.forEach(data => {
+      tempSendData.push({
+        shape_attributes: {
+          name: "rect",
+          id: data.id,
+          x: data.x,
+          y: data.y,
+          width: data.width,
+          height: data.height
+        },
+        region_attributes: {
+          label: data.label
+        }
+      });
+    });
+
+    bodyData.append("meta", JSON.stringify({ crop_image: tempSendData }));
     bodyData.append("project_id", this.props.project_id);
 
     await this.sendData(bodyData, "/mypage/creator/task/normal/complete"); // 서버로 전송( /mypage/task/complete)

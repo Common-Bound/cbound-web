@@ -284,7 +284,7 @@ class RequesterBody extends React.Component {
                       <tbody>
                         <tr>
                           <th scope="row">EunsuKimme</th>
-                          <td>90%</td>
+                          <td>98%</td>
                           <td>14</td>
                           <td>
                             <i className="fas fa-plus text-success mr-3" />{" "}
@@ -293,8 +293,8 @@ class RequesterBody extends React.Component {
                         </tr>
                         <tr>
                           <th scope="row">HyunSeoCHOI</th>
-                          <td>PERFECT</td>
-                          <td>100043</td>
+                          <td>93%</td>
+                          <td>43</td>
                           <td>
                             <i className="fas fa-check text-warning mr-3" />{" "}
                             Inspect
@@ -310,8 +310,8 @@ class RequesterBody extends React.Component {
                           </td>
                         </tr>
                         <tr>
-                          <th scope="row">GeunHyePARK</th>
-                          <td>40%</td>
+                          <th scope="row">Dr.Stranger</th>
+                          <td>23%</td>
                           <td>147</td>
                           <td>
                             <i className="fas fa-plus text-success mr-3" />{" "}
@@ -319,8 +319,8 @@ class RequesterBody extends React.Component {
                           </td>
                         </tr>
                         <tr>
-                          <th scope="row">MR.JWA</th>
-                          <td>PERFECT</td>
+                          <th scope="row">JungHyun</th>
+                          <td>82%</td>
                           <td>7</td>
                           <td>
                             <i className="fas fa-check text-danger mr-3" />{" "}
