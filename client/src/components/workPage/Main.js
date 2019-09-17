@@ -191,7 +191,7 @@ class Main extends Component {
       bodies: undefined,
       format: "", // EXPORT 할 때의 데이터 포맷
       time_counter: [], // 각 이미지를 작업하는데 걸린 시간
-      timer: "",
+      timer: 0,
       pre_select: 0
     };
     this.Refs = [];
@@ -302,7 +302,7 @@ class Main extends Component {
         pre_select: index
       },
       () => {
-        console.log(this.state.time_counter);
+        //console.log(this.state.time_counter);
       }
     );
   };

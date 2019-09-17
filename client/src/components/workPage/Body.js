@@ -145,9 +145,11 @@ class Body extends Component {
       imageRef: null, // 크롭 컨테이너에 이미지가 로드 되었을 때 이미지 값을 저장함
       changeMode: false, // 현재 크롭된 이미지를 추가해야 할지 수정해야 할지 결정하는 Flag
       preId: "", // ChangeMode 가 true 라면 변경할 이미지의 id
-      showEdit: true, // 한 개의 크롭 영역을 변경할 수 있는 이미지를 줄지 크롭된 영역 리스트를 이미지에 그려줄 지
+      showEdit: true, // 한 개의 크롭 영역을 변경할 수 있는 이미지를 줄지 크롭된 영역 리스트를 캔버스에 그려줄 지
       useAI: false, // AI를 사용할지 말지 스위치 할 때 변경할 값
-      loading: false
+      loading: false,
+      time_counter: [], // 각 크롭 영역을 지정하는데 걸리는 시간
+      timer: 0
       // step: 0 // 현재 STEP 수
     };
 
@@ -155,6 +157,7 @@ class Body extends Component {
     this.handleOnCropModify = this.handleOnCropModify.bind(this);
     this.handleClickImage = this.handleClickImage.bind(this);
     this.handleCropMouseUp = this.handleCropMouseUp.bind(this);
+    this.handleStartTimer = this.handleStartTimer.bind(this);
     // this.handleBack = this.handleBack.bind(this);
     // this.handleNext = this.handleNext.bind(this);
     // this.handleReset = this.handleReset.bind(this);
@@ -189,7 +192,6 @@ class Body extends Component {
                 this.state.imageRef.naturalHeight / this.state.imageRef.height;
               //console.log("scaleX: " + scaleX);
               //console.log("scaleY: " + scaleY);
-
               return {
                 shape_attributes: {
                   id: counter++,
@@ -204,6 +206,17 @@ class Body extends Component {
               };
             }),
             __nextkey: counter
+          });
+
+          var tempTimeCounterArray = [];
+          for (var i = 0; i < counter; i++) {
+            var temp = { index: i, time: 0 };
+            tempTimeCounterArray.push(temp);
+          }
+
+          this.setState({
+            time_counter: tempTimeCounterArray,
+            timer: new Date().getTime()
           });
         } else if (sendTo.startsWith("https://")) {
           this.setState({
@@ -336,26 +349,43 @@ class Body extends Component {
           }),
           label: "",
           crop: {},
-          changeMode: false
+          changeMode: false,
+          time_counter: this.state.time_counter.map(el => {
+            if (this.state.preId === el.index) {
+              return {
+                index: this.state.preId,
+                time: el.time + new Date().getTime() - this.state.timer
+              };
+            } else return el;
+          })
         });
       } else {
         // 추가
-        this.setState({
-          crop_image: this.state.crop_image.concat({
-            shape_attributes: {
-              id: this.state.__nextkey++,
-              x: cropData.x,
-              y: cropData.y,
-              width: cropData.width,
-              height: cropData.height
-            },
-            region_attributes: {
-              label: this.state.label
-            }
-          }),
-          label: "",
-          crop: {}
-        });
+        this.setState(
+          {
+            crop_image: this.state.crop_image.concat({
+              shape_attributes: {
+                id: this.state.__nextkey++,
+                x: cropData.x,
+                y: cropData.y,
+                width: cropData.width,
+                height: cropData.height
+              },
+              region_attributes: {
+                label: this.state.label
+              }
+            }),
+            label: "",
+            crop: {},
+            time_counter: this.state.time_counter.concat({
+              index: this.state.__nextkey - 1,
+              time: new Date().getTime() - this.state.timer
+            })
+          },
+          () => {
+            console.log(this.state.time_counter);
+          }
+        );
         //console.log(this.state.crop_image[0].imgSrc);
       }
     }
@@ -404,7 +434,8 @@ class Body extends Component {
       },
       label: preCrop.region_attributes.label,
       changeMode: true,
-      preId: id
+      preId: id,
+      timer: new Date().getTime()
     });
   };
 
@@ -500,6 +531,11 @@ class Body extends Component {
     return this.state.crop_image;
   }
 
+  handleStartTimer() {
+    this.setState({
+      timer: new Date().getTime()
+    });
+  }
   // handleNext() {
   //   //setActiveStep(prevActiveStep => prevActiveStep + 1);
   //   this.setState({
@@ -577,7 +613,10 @@ class Body extends Component {
               id="image_container"
               show={this.props.orig_image_file}
             >
-              <div onMouseUp={this.handleCropMouseUp}>
+              <div
+                onMouseDown={this.handleStartTimer}
+                onMouseUp={this.handleCropMouseUp}
+              >
                 <ReactCrop
                   src={this.props.orig_image_base64}
                   crop={this.state.crop}
