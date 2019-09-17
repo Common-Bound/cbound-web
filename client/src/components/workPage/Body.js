@@ -448,7 +448,8 @@ class Body extends Component {
 
       this.setState({
         changeMode: false,
-        crop_image: crop_image.filter(crop => crop.shape_attributes.id !== id)
+        crop_image: crop_image.filter(crop => crop.shape_attributes.id !== id),
+        time_counter: this.state.time_counter.filter(el => el.index !== id)
       });
     }
   };
