@@ -54,7 +54,9 @@ class CropImage extends Component {
   };
 
   render() {
-    const { id, x, y, width, height, label } = this.props.crop;
+    const { id, x, y, width, height, label } = this.props.crop.shape_attributes
+      ? this.props.crop.shape_attributes
+      : this.props.crop;
     const { status, labelComponent } = this.state;
 
     return (
