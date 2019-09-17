@@ -309,6 +309,24 @@ class Main extends Component {
 
   // 작업한 내용 전부를 서버로 전송함
   handleSendAll = async () => {
+    // 작업하고 있던 Body 걸린 시간 측정 필요
+    this.setState(
+      {
+        time_counter: this.state.time_counter.map(el => {
+          if (el.index === this.state.pre_select) {
+            return {
+              index: this.state.pre_select,
+              time: el.time + new Date().getTime() - this.state.timer
+            };
+          } else return el;
+        }),
+        timer: new Date().getTime()
+      },
+      () => {
+        //console.log(this.state.time_counter);
+      }
+    );
+
     let format = this.state.format;
     const files = this.state.orig_image_files;
 
