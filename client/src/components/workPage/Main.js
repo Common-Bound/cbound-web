@@ -189,7 +189,10 @@ class Main extends Component {
       orig_image_files: undefined,
       orig_image_base64: undefined,
       bodies: undefined,
-      format: "" // EXPORT 할 때의 데이터 포맷
+      format: "", // EXPORT 할 때의 데이터 포맷
+      time_counter: [], // 각 이미지를 작업하는데 걸린 시간
+      timer: "",
+      pre_select: 0
     };
     this.Refs = [];
   }
@@ -257,6 +260,18 @@ class Main extends Component {
     await this.setState({
       bodies: newBodies
     });
+
+    var tempTimeCounterArray = [];
+    for (var i = 0; i < this.state.bodies.length; i++) {
+      var temp = { index: i, time: 0 };
+      tempTimeCounterArray.push(temp);
+    }
+
+    this.setState({
+      time_counter: tempTimeCounterArray,
+      timer: new Date().getTime(),
+      pre_select: 0
+    });
   };
 
   handleClick = e => {
@@ -272,6 +287,24 @@ class Main extends Component {
         body.style.display = "flex";
       } else body.style.display = "none";
     });
+
+    this.setState(
+      {
+        time_counter: this.state.time_counter.map(el => {
+          if (el.index === this.state.pre_select) {
+            return {
+              index: this.state.pre_select,
+              time: el.time + new Date().getTime() - this.state.timer
+            };
+          } else return el;
+        }),
+        timer: new Date().getTime(),
+        pre_select: index
+      },
+      () => {
+        console.log(this.state.time_counter);
+      }
+    );
   };
 
   // 작업한 내용 전부를 서버로 전송함

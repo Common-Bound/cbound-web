@@ -192,7 +192,6 @@ class CropItem extends Component {
       crop_image: this.state.imgSrc,
       id: this.props.crop.shape_attributes.id
     });
-    console.log(this.props.useAI);
     if (this.props.useAI) {
       this.setState({
         editing: true
