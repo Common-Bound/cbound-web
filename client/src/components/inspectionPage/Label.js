@@ -16,7 +16,13 @@ const Container = styled.div`
 
 class Label extends Component {
   render() {
-    const { id, label } = this.props.crop;
+    const { id } = this.props.crop.shape_attributes
+      ? this.props.crop.shape_attributes
+      : this.props.crop;
+    const { label } = this.props.crop.region_attributes
+      ? this.props.crop.region_attributes
+      : this.props.crop;
+
     console.log(label);
     return (
       <Container id={id} label={label}>

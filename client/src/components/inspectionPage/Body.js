@@ -247,7 +247,7 @@ class Body extends Component {
     console.log(this.state.data.payload.meta.crop_image);
     const new_crop_images = this.state.data.payload.meta.crop_image.map(
       function(crop) {
-        const id = crop.id;
+        let id = crop.shape_attributes ? crop.shape_attributes.id : crop.id;
 
         return <CropImage key={id} crop={crop} />;
       }

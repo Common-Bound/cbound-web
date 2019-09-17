@@ -585,7 +585,7 @@ class Main extends Component {
               </FileList>
             )}
             <ButtonContainer>
-              {orig_image_files ? (
+              {!info && orig_image_files ? (
                 <StyledFormControl variant="outlined">
                   <InputLabel>Export as</InputLabel>
                   <Select
@@ -595,8 +595,8 @@ class Main extends Component {
                     <MenuItem value="">
                       <em>None</em>
                     </MenuItem>
-                    {!info ? <MenuItem value="json">JSON</MenuItem> : ""}
-                    {!info ? <MenuItem value="csv">CSV</MenuItem> : ""}
+                    <MenuItem value="json">JSON</MenuItem>
+                    <MenuItem value="csv">CSV</MenuItem>
                   </Select>
                 </StyledFormControl>
               ) : (
