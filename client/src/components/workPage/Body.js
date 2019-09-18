@@ -3,9 +3,12 @@ import ReactCrop from "react-image-crop"; // Cropper Import
 import CropInfoList from "./CropInfoList.js"; // 크롭 리스트를 출력함
 import PrintTotalCrop from "./PrintTotalCrop"; // 크롭 리스트를 한 캔버스에 그려줌
 import styled from "styled-components";
+import introJS from "intro.js";
+import "intro.js/introjs.css";
 
 import "react-image-crop/dist/ReactCrop.css";
 import "./Body.css";
+import { setTimeout } from "timers";
 
 const BodyContainer = styled.div`
   display: ${props => (props.display ? props.display : "flex")};
@@ -172,6 +175,12 @@ class Body extends Component {
     // this.handleBack = this.handleBack.bind(this);
     // this.handleNext = this.handleNext.bind(this);
     // this.handleReset = this.handleReset.bind(this);
+  }
+
+  componentDidMount() {
+    setTimeout(() => {
+      this.props.index === 0 ? introJS().start() : console.log("");
+    }, 500);
   }
 
   // 서버(sendTo)로 body에 bodyData를 넣어서 Fetch 할 때 호출됨
@@ -583,47 +592,21 @@ class Body extends Component {
     return (
       <BodyContainer display={this.props.display} className={this.props.class}>
         {/* 최 상단에 위취한 정보를 보여주는 컨테이너 */}
-        {/* <EntireTitleContainer>
-          <LeftTitleContainer>
-            <LeftTitleDate>
-              <span style={{ color: "black", fontWeight: "bold" }}>
-                MISSION
-              </span>
-              {` ${moment(info.created_at).format("YYYY-MM-DD")} - ${moment(
-                info.due_date
-              ).format("YYYY-MM-DD")}`}
-            </LeftTitleDate>
-            <LeftTitle>{info.title}</LeftTitle>
-          </LeftTitleContainer>
-          <RightTitleContainer>
-            <RightTitle>DEADLINE</RightTitle>
-            <RightTitleDate>{`${days} DAYS : ${hours} HOURS : ${minutes} MINUTES`}</RightTitleDate>
-          </RightTitleContainer>
-        </EntireTitleContainer> */}
         {/* 이미지 업로드 창과 이미지, 설명을 보여주는 메인 컨테이너 */}
         <MainContainer>
           {/* Main Container 의 왼쪽 영역 */}
           <LeftMainContainer>
-            {/* 파일 올리는 DropZone */}
-            {/* {!this.props.orig_image_file_file ? (
-              <Dropzone onDrop={this.onFileSelected}>
-                {({ getRootProps, getInputProps }) => (
-                  <section>
-                    <div {...getRootProps()}>
-                      <input {...getInputProps()} />
-                      <DropZoneBox>[+] UPLOAD IMAGE</DropZoneBox>
-                    </div>
-                  </section>
-                )}
-              </Dropzone>
-            ) : (
-              ""
-            )} */}
             {/* 크롭할 이미지 영역 */}
-
             <ImageContainer
               id="image_container"
               show={this.props.orig_image_file}
+              data-intro={
+                this.props.index === 0
+                  ? "이미지를 드래그하여 영역을 지정하세요. 해당 영역이 아래리스트에 자동으로 추가됩니다."
+                  : undefined
+              }
+              data-step="1"
+              data-disable-interaction="true"
             >
               <div
                 onMouseDown={this.handleStartTimer}
@@ -777,14 +760,22 @@ class Body extends Component {
                 삭제하세요.
               </DescriptionBox>
             </DescriptionBoxContainer>
-            <ButtonContainer>
-              <BoundButton
+            <ButtonContainer
+              data-intro={
+                this.props.index === 0
+                  ? "라벨링 된 이미지를 확인하려면 SHOW 버튼을 누르세요."
+                  : undefined
+              }
+              data-step="2"
+              data-disable-interaction="true"
+            >
+              {/* <BoundButton
                 type="button"
                 onClick={this.handleOnCropComplete}
                 id="store"
               >
                 BOUND
-              </BoundButton>
+              </BoundButton> */}
               {this.state.showEdit && this.props.orig_image_file ? (
                 <ShowButton
                   type="button"
