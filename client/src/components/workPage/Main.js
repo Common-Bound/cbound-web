@@ -350,6 +350,7 @@ class Main extends Component {
         let rowArray = [];
 
         function replaceAll(str, searchStr, replaceStr) {
+          console.log(str);
           return str.split(searchStr).join(replaceStr);
         }
 
@@ -371,8 +372,8 @@ class Main extends Component {
               naturalWidth,
               shape_attributes
             );
-            shape_attributes = JSON.stringify(shape_attributes);
           }
+          shape_attributes = await JSON.stringify(shape_attributes);
 
           shape_attributes = replaceAll(shape_attributes, '"', '""');
           shape_attributes = '"' + shape_attributes + '"';
@@ -419,8 +420,13 @@ class Main extends Component {
       content += rows.join("\n");
 
       console.log(content);
-      var encodedUri = encodeURI(content);
-      window.open(encodedUri);
+      var encodedURI = encodeURI(content);
+      const downloadCSV = document.createElement("a");
+      downloadCSV.setAttribute("href", encodedURI);
+      downloadCSV.setAttribute("download", "dataset.csv");
+      document.body.appendChild(downloadCSV); // required for firefox
+      downloadCSV.click();
+      downloadCSV.remove();
     }
 
     // Export 형식이 'json' 인 경우
