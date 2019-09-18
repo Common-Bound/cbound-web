@@ -491,9 +491,7 @@ class Main extends Component {
     this.Refs.forEach(body => {
       body.handleSendAll();
     });
-    alert(
-      "작업이 완료되었습니다. 포인트는 검수를 통과하는 즉시 지급되니 잠시 기다려 주시기 바랍니다."
-    );
+    alert("작업이 완료되었습니다.");
   };
 
   handleChange = e => {
