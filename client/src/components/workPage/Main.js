@@ -26,6 +26,8 @@ const EntireTitleContainer = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 40px 0px 10px 10px;
+
+  color: black; !important;
 `;
 
 const LeftTitleContainer = styled.div`
@@ -148,6 +150,7 @@ const RightDescriptionContainer = styled.div`
   flex-basis: auto;
   align-items: flex-end;
   padding: 20px 20px 0px 20px;
+  color: black; !important;
 
   width: 440px;
   height: 440px;
@@ -173,6 +176,7 @@ const DropZoneBox = styled.div`
   height: 440px;
   background-color: white;
   border: 5px solid lightgrey;
+  color: black; !important;
                           
   border-radius: 20px;
   font-family: Avenir;

@@ -50,6 +50,7 @@ const RightDescriptionContainer = styled.div`
   flex-basis: auto;
   align-items: flex-start;
   padding: 20px 20px 0px 20px;
+  color: black; !important;
 
   width: 440px;
   height: 485px;
@@ -70,6 +71,16 @@ const DescriptionBox = styled.div`
   padding: 14px;
 `;
 
+const StyledSpan = styled.span`
+  width: 48px;
+  height: 24px;
+
+  :before {
+    width: 16px !important;
+    height: 16px !important;
+  }
+`;
+
 const ButtonContainer = styled.div`
   display: flex;
   justify-content: space-between;
@@ -77,8 +88,8 @@ const ButtonContainer = styled.div`
 `;
 
 const BoundButton = styled.button`
-  width: 80px;
-  height: 80px;
+  width: 70px;
+  height: 70px;
   background-color: white;
   color: black;
   border-radius: 100%;
@@ -682,16 +693,21 @@ class Body extends Component {
                 </StyledStepper>
               </StepperRoot>
             </StepperContainer> */}
-            텍스트 감지 AI 어시스턴트
-            <label className="switch">
-              <input
-                type="checkbox"
-                name="useAI"
-                onChange={this.handleChange}
-                checked={this.state.useAI}
-              />
-              <span className="slider round" />
-            </label>
+            <DescriptionBoxContainer>
+              <DescriptionBox>
+                텍스트 감지 AI 어시스턴트
+                <label className="switch">
+                  <input
+                    type="checkbox"
+                    name="useAI"
+                    onChange={this.handleChange}
+                    checked={this.state.useAI}
+                    disabled
+                  />
+                  <StyledSpan className="slider round" />
+                </label>
+              </DescriptionBox>
+            </DescriptionBoxContainer>
             {/* {this.state.step === 0 ? (
               <DescriptionBoxContainer>
                 <DescriptionBox>
@@ -744,16 +760,21 @@ class Body extends Component {
             )} */}
             <DescriptionBoxContainer>
               <DescriptionBox>
-                - 이미지를 드래그하여 영역을 지정하세요. 아래의 BOUND 버튼을
-                누르면 해당 영역이 아래 바구니에 추가됩니다.
+                - 이미지를 드래그하여 영역을 지정하세요. 해당 영역이 아래
+                리스트에 자동으로 추가됩니다.
               </DescriptionBox>
               <DescriptionBox>
-                - 썸네일 아래의 블루박스에 라벨 값을 입력하고 ENTER키를
-                누르세요. SHOW 버튼을 눌러 라벨링 된 이미지를 확인하세요.
+                - 썸네일 아래의 <span style={{ color: "blue" }}>블루박스</span>
+                에 라벨 값을 입력하고{" "}
+                <span style={{ fontWeight: "bold" }}>ENTER</span>키를 누르세요.{" "}
+                <span style={{ fontWeight: "bold" }}>SHOW</span> 버튼을 눌러
+                라벨링 된 이미지를 확인하세요.
               </DescriptionBox>
               <DescriptionBox>
                 - 바구니에 추가된 썸네일을 클릭하여 해당 영역을 수정하고,
-                불필요한 영역은 오른쪽 위의 X 버튼을 눌러 삭제하세요.
+                불필요한 영역은 오른쪽 위의{" "}
+                <span style={{ fontWeight: "bold" }}>X</span> 버튼을 눌러
+                삭제하세요.
               </DescriptionBox>
             </DescriptionBoxContainer>
             <ButtonContainer>

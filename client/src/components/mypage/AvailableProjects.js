@@ -15,6 +15,8 @@ const Container = styled.div`
 const TitleContainer = styled.div`
   width: 80%;
   margin: 0 auto;
+
+  color: black; !important;
 `;
 
 const Title = styled.div`
