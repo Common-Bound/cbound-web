@@ -228,6 +228,9 @@ class Main extends Component {
   // 이미지가 업로드 되었을 때 호출됨
   onFileSelected = async files => {
     console.log(files);
+    if (files.length > 10) {
+      return alert("파일은 한 번에 최대 10개 까지 등록할 수 있습니다.");
+    }
     // 이미지가 업로드 되었을 때 기존에 크롭된 영역을 초기화함
     await this.setState({
       orig_image_files: files
@@ -670,7 +673,7 @@ class Main extends Component {
                   {({ getRootProps, getInputProps }) => (
                     <section>
                       <div {...getRootProps()}>
-                        <input {...getInputProps()} />
+                        <input {...getInputProps()} accept="image/*" />
                         <DropZoneBox
                           data-intro="[+] 영역을 클릭해서 이미지를 업로드 하세요"
                           data-step="1"
