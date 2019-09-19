@@ -3,9 +3,12 @@ import ReactCrop from "react-image-crop"; // Cropper Import
 import CropInfoList from "./CropInfoList.js"; // 크롭 리스트를 출력함
 import PrintTotalCrop from "./PrintTotalCrop"; // 크롭 리스트를 한 캔버스에 그려줌
 import styled from "styled-components";
+import introJS from "intro.js";
+import "intro.js/introjs.css";
 
 import "react-image-crop/dist/ReactCrop.css";
 import "./Body.css";
+import { setTimeout } from "timers";
 
 const BodyContainer = styled.div`
   display: ${props => (props.display ? props.display : "flex")};
@@ -50,6 +53,7 @@ const RightDescriptionContainer = styled.div`
   flex-basis: auto;
   align-items: flex-start;
   padding: 20px 20px 0px 20px;
+  color: black; !important;
 
   width: 440px;
   height: 485px;
@@ -70,6 +74,16 @@ const DescriptionBox = styled.div`
   padding: 14px;
 `;
 
+const StyledSpan = styled.span`
+  width: 48px;
+  height: 24px;
+
+  :before {
+    width: 16px !important;
+    height: 16px !important;
+  }
+`;
+
 const ButtonContainer = styled.div`
   display: flex;
   justify-content: space-between;
@@ -77,8 +91,8 @@ const ButtonContainer = styled.div`
 `;
 
 const BoundButton = styled.button`
-  width: 80px;
-  height: 80px;
+  width: 70px;
+  height: 70px;
   background-color: white;
   color: black;
   border-radius: 100%;
@@ -162,6 +176,12 @@ class Body extends Component {
     // this.handleBack = this.handleBack.bind(this);
     // this.handleNext = this.handleNext.bind(this);
     // this.handleReset = this.handleReset.bind(this);
+  }
+
+  componentDidMount() {
+    setTimeout(() => {
+      this.props.index === 0 ? introJS().start() : console.log("");
+    }, 500);
   }
 
   // 서버(sendTo)로 body에 bodyData를 넣어서 Fetch 할 때 호출됨
@@ -577,47 +597,21 @@ class Body extends Component {
     return (
       <BodyContainer display={this.props.display} className={this.props.class}>
         {/* 최 상단에 위취한 정보를 보여주는 컨테이너 */}
-        {/* <EntireTitleContainer>
-          <LeftTitleContainer>
-            <LeftTitleDate>
-              <span style={{ color: "black", fontWeight: "bold" }}>
-                MISSION
-              </span>
-              {` ${moment(info.created_at).format("YYYY-MM-DD")} - ${moment(
-                info.due_date
-              ).format("YYYY-MM-DD")}`}
-            </LeftTitleDate>
-            <LeftTitle>{info.title}</LeftTitle>
-          </LeftTitleContainer>
-          <RightTitleContainer>
-            <RightTitle>DEADLINE</RightTitle>
-            <RightTitleDate>{`${days} DAYS : ${hours} HOURS : ${minutes} MINUTES`}</RightTitleDate>
-          </RightTitleContainer>
-        </EntireTitleContainer> */}
         {/* 이미지 업로드 창과 이미지, 설명을 보여주는 메인 컨테이너 */}
         <MainContainer>
           {/* Main Container 의 왼쪽 영역 */}
           <LeftMainContainer>
-            {/* 파일 올리는 DropZone */}
-            {/* {!this.props.orig_image_file_file ? (
-              <Dropzone onDrop={this.onFileSelected}>
-                {({ getRootProps, getInputProps }) => (
-                  <section>
-                    <div {...getRootProps()}>
-                      <input {...getInputProps()} />
-                      <DropZoneBox>[+] UPLOAD IMAGE</DropZoneBox>
-                    </div>
-                  </section>
-                )}
-              </Dropzone>
-            ) : (
-              ""
-            )} */}
             {/* 크롭할 이미지 영역 */}
-
             <ImageContainer
               id="image_container"
               show={this.props.orig_image_file}
+              data-intro={
+                this.props.index === 0
+                  ? "이미지를 드래그하여 영역을 지정하세요. 해당 영역이 아래리스트에 자동으로 추가됩니다."
+                  : undefined
+              }
+              data-step="1"
+              data-disable-interaction="true"
             >
               <div
                 onMouseDown={this.handleStartTimer}
@@ -687,16 +681,21 @@ class Body extends Component {
                 </StyledStepper>
               </StepperRoot>
             </StepperContainer> */}
-            텍스트 감지 AI 어시스턴트
-            <label className="switch">
-              <input
-                type="checkbox"
-                name="useAI"
-                onChange={this.handleChange}
-                checked={this.state.useAI}
-              />
-              <span className="slider round" />
-            </label>
+            <DescriptionBoxContainer>
+              <DescriptionBox>
+                텍스트 감지 AI 어시스턴트
+                <label className="switch">
+                  <input
+                    type="checkbox"
+                    name="useAI"
+                    onChange={this.handleChange}
+                    checked={this.state.useAI}
+                    disabled
+                  />
+                  <StyledSpan className="slider round" />
+                </label>
+              </DescriptionBox>
+            </DescriptionBoxContainer>
             {/* {this.state.step === 0 ? (
               <DescriptionBoxContainer>
                 <DescriptionBox>
@@ -749,26 +748,39 @@ class Body extends Component {
             )} */}
             <DescriptionBoxContainer>
               <DescriptionBox>
-                - 이미지를 드래그하여 영역을 지정하세요. 아래의 BOUND 버튼을
-                누르면 해당 영역이 아래 바구니에 추가됩니다.
+                - 이미지를 드래그하여 영역을 지정하세요. 해당 영역이 아래
+                리스트에 자동으로 추가됩니다.
               </DescriptionBox>
               <DescriptionBox>
-                - 썸네일 아래의 블루박스에 라벨 값을 입력하고 ENTER키를
-                누르세요. SHOW 버튼을 눌러 라벨링 된 이미지를 확인하세요.
+                - 썸네일 아래의 <span style={{ color: "blue" }}>블루박스</span>
+                에 라벨 값을 입력하고{" "}
+                <span style={{ fontWeight: "bold" }}>ENTER</span>키를 누르세요.{" "}
+                <span style={{ fontWeight: "bold" }}>SHOW</span> 버튼을 눌러
+                라벨링 된 이미지를 확인하세요.
               </DescriptionBox>
               <DescriptionBox>
                 - 바구니에 추가된 썸네일을 클릭하여 해당 영역을 수정하고,
-                불필요한 영역은 오른쪽 위의 X 버튼을 눌러 삭제하세요.
+                불필요한 영역은 오른쪽 위의{" "}
+                <span style={{ fontWeight: "bold" }}>X</span> 버튼을 눌러
+                삭제하세요.
               </DescriptionBox>
             </DescriptionBoxContainer>
-            <ButtonContainer>
-              <BoundButton
+            <ButtonContainer
+              data-intro={
+                this.props.index === 0
+                  ? "라벨링 된 이미지를 확인하려면 SHOW 버튼을 누르세요."
+                  : undefined
+              }
+              data-step="2"
+              data-disable-interaction="true"
+            >
+              {/* <BoundButton
                 type="button"
                 onClick={this.handleOnCropComplete}
                 id="store"
               >
                 BOUND
-              </BoundButton>
+              </BoundButton> */}
               {this.state.showEdit && this.props.orig_image_file ? (
                 <ShowButton
                   type="button"

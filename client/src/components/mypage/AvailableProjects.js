@@ -15,6 +15,8 @@ const Container = styled.div`
 const TitleContainer = styled.div`
   width: 80%;
   margin: 0 auto;
+
+  color: black; !important;
 `;
 
 const Title = styled.div`
@@ -87,7 +89,8 @@ class AvailableProjects extends Component {
       });
 
     // 만약 result가 false가 아니라면 프로젝트 목록이다
-    if (result) {
+    if (result && result.length > 0) {
+      console.log(result);
       const my_proj = result.map(el => {
         return (
           <ProjectOrig

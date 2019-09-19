@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../../../db/index");
+const moment = require("moment");
 
 // path: ~/mypage/creator/projects
 // 내가 참여한 프로젝트 목록을 반환한다
@@ -14,7 +15,24 @@ router.get("/", (req, res, next) => {
         if (err) {
           console.log(err);
           return res.status(500).send(err);
-        } else return res.json({ result: result.rows });
+        }
+        if (result.rows.length > 0) {
+          const available_projects = result.rows.filter(row => {
+            const now = moment();
+            const due_date = moment(row.due_date);
+            const millisec_diff = moment
+              .duration(due_date.diff(now))
+              .asMilliseconds();
+
+            if (millisec_diff > 0) return row;
+          });
+
+          if (available_projects.length > 0)
+            return res.json({ result: available_projects });
+          else {
+            return res.json({ message: "참여한 프로젝트가 존재하지 않습니다" });
+          }
+        }
       }
     );
   }

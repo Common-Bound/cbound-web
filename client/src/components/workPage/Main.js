@@ -9,6 +9,8 @@ import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import { isNumber } from "util";
+import introJS from "intro.js";
+import "intro.js/introjs.css";
 
 const Container = styled.div`
   width: 80%;
@@ -26,6 +28,8 @@ const EntireTitleContainer = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 40px 0px 10px 10px;
+
+  color: black; !important;
 `;
 
 const LeftTitleContainer = styled.div`
@@ -148,6 +152,7 @@ const RightDescriptionContainer = styled.div`
   flex-basis: auto;
   align-items: flex-end;
   padding: 20px 20px 0px 20px;
+  color: black; !important;
 
   width: 440px;
   height: 440px;
@@ -173,6 +178,7 @@ const DropZoneBox = styled.div`
   height: 440px;
   background-color: white;
   border: 5px solid lightgrey;
+  color: black; !important;
                           
   border-radius: 20px;
   font-family: Avenir;
@@ -197,6 +203,10 @@ class Main extends Component {
     this.Refs = [];
   }
 
+  componentDidMount() {
+    introJS().start();
+  }
+
   // 업로드된 이미지를 출력하기 위해 Base64로 바꿀 때 호출됨
   async getBase64(files) {
     const base64s = await files.map(file => {
@@ -218,6 +228,9 @@ class Main extends Component {
   // 이미지가 업로드 되었을 때 호출됨
   onFileSelected = async files => {
     console.log(files);
+    if (files.length > 10) {
+      return alert("파일은 한 번에 최대 10개 까지 등록할 수 있습니다.");
+    }
     // 이미지가 업로드 되었을 때 기존에 크롭된 영역을 초기화함
     await this.setState({
       orig_image_files: files
@@ -251,6 +264,7 @@ class Main extends Component {
             ref={ref => {
               this.Refs[index] = ref;
             }}
+            index={index}
           />
         );
       });
@@ -323,6 +337,7 @@ class Main extends Component {
         let rowArray = [];
 
         function replaceAll(str, searchStr, replaceStr) {
+          console.log(str);
           return str.split(searchStr).join(replaceStr);
         }
 
@@ -360,8 +375,8 @@ class Main extends Component {
               naturalWidth,
               shape_attributes
             );
-            shape_attributes = JSON.stringify(shape_attributes);
           }
+          shape_attributes = await JSON.stringify(shape_attributes);
 
           shape_attributes = replaceAll(shape_attributes, '"', '""');
           shape_attributes = '"' + shape_attributes + '"';
@@ -408,8 +423,13 @@ class Main extends Component {
       content += rows.join("\n");
 
       console.log(content);
-      var encodedUri = encodeURI(content);
-      window.open(encodedUri);
+      var encodedURI = encodeURI(content);
+      const downloadCSV = document.createElement("a");
+      downloadCSV.setAttribute("href", encodedURI);
+      downloadCSV.setAttribute("download", "dataset.csv");
+      document.body.appendChild(downloadCSV); // required for firefox
+      downloadCSV.click();
+      downloadCSV.remove();
     }
 
     // Export 형식이 'json' 인 경우
@@ -496,9 +516,7 @@ class Main extends Component {
     this.Refs.forEach(body => {
       body.handleSendAll();
     });
-    alert(
-      "작업이 완료되었습니다. 포인트는 검수를 통과하는 즉시 지급되니 잠시 기다려 주시기 바랍니다."
-    );
+    alert("작업이 완료되었습니다.");
   };
 
   handleChange = e => {
@@ -605,7 +623,11 @@ class Main extends Component {
           <FileListContainer>
             {/* 파일 썸네일 영역 */}
             {!orig_image_base64 ? (
-              <FileList>
+              <FileList
+                data-intro="이미지를 업로드하면 썸네일이 보여집니다. 각 썸네일을 클릭해서 작업할 이미지를 선택할 수 있습니다."
+                data-step="2"
+                data-disable-interaction="true"
+              >
                 <FileThumbnail />
                 <FileThumbnail />
                 <FileThumbnail />
@@ -624,9 +646,14 @@ class Main extends Component {
                 })}
               </FileList>
             )}
-            <ButtonContainer>
+            <ButtonContainer id="export-button-container">
               {!info && orig_image_files ? (
-                <StyledFormControl variant="outlined">
+                <StyledFormControl
+                  variant="outlined"
+                  data-intro="추출 할 데이터 포맷을 지정할 수 있습니다."
+                  data-step="3"
+                  data-disable-interaction="true"
+                >
                   <InputLabel>Export as</InputLabel>
                   <Select
                     value={format}
@@ -647,6 +674,10 @@ class Main extends Component {
                   variant="contained"
                   color="primary"
                   onClick={this.handleSendAll.bind(this)}
+                  data-intro="완료하기 버튼을 누르면 데이터를 추출합니다."
+                  data-step="4"
+                  data-disable-interaction="true"
+                  data-position="left"
                 >
                   완료하기
                 </StyledButton>
@@ -664,8 +695,14 @@ class Main extends Component {
                   {({ getRootProps, getInputProps }) => (
                     <section>
                       <div {...getRootProps()}>
-                        <input {...getInputProps()} />
-                        <DropZoneBox>[+] UPLOAD IMAGE</DropZoneBox>
+                        <input {...getInputProps()} accept="image/*" />
+                        <DropZoneBox
+                          data-intro="[+] 영역을 클릭해서 이미지를 업로드 하세요"
+                          data-step="1"
+                          data-disable-interaction="true"
+                        >
+                          [+] UPLOAD IMAGE
+                        </DropZoneBox>
                       </div>
                     </section>
                   )}
