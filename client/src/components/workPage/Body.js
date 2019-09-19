@@ -251,7 +251,6 @@ class Body extends Component {
         });
       })
       .catch(function(ex) {
-        console.log("error occured");
         console.log(ex);
       });
 
@@ -325,7 +324,7 @@ class Body extends Component {
   // 크롭 컨테이너에 이미지가 로드 되었을 때 이미지 값을 저장함
   handleImageLoaded = async image => {
     //console.log(image); DOM 요소
-    //console.log(image.width);
+    //console.og(image.width);
     await this.setState({ imageRef: image });
   };
 
@@ -350,7 +349,7 @@ class Body extends Component {
     ) {
       //console.log("Complete");
       if (this.state.changeMode) {
-        // 수정
+        // 정
         this.setState({
           crop_image: await this.state.crop_image.map(crop => {
             if (crop.shape_attributes.id === this.state.preId) {
@@ -381,7 +380,7 @@ class Body extends Component {
           })
         });
       } else {
-        // 추가
+        // 가
         this.setState(
           {
             crop_image: this.state.crop_image.concat({
@@ -415,24 +414,22 @@ class Body extends Component {
   // 작업한 내용 전부를 서버로 전송함
   handleSendAll = async () => {
     const bodyData = new FormData();
+    let new_crop_image = {};
 
     bodyData.append("orig_image", this.props.orig_image_file);
 
     // 이미지 좌표를 원래 이미지 사이즈에 맞게 리사이즈 한 후 저장해야 한다
     if (this.state.imageRef.naturalWidth > 640) {
-      const new_image_crop = await this.resizeCropLocation(
+      new_crop_image = await this.resizeCropLocation(
         this.state.imageRef.naturalWidth,
         this.state.crop_image
       );
-
-      await this.setState({
-        crop_image: new_image_crop
-      });
     }
-    const crop_image = this.state.crop_image;
-    console.log(crop_image);
 
-    bodyData.append("meta", await JSON.stringify({ crop_image: crop_image }));
+    bodyData.append(
+      "meta",
+      await JSON.stringify({ crop_image: new_crop_image })
+    );
     bodyData.append("project_id", this.props.project_id);
 
     await this.sendData(bodyData, "/mypage/creator/task/normal/complete"); // 서버로 전송( /mypage/task/complete)
@@ -445,7 +442,7 @@ class Body extends Component {
     const scale = naturalWidth / 640;
     console.log("scale: " + scale);
 
-    let new_image_crop = await crop_image.map(async crop => {
+    let new_crop_image = await crop_image.map(async crop => {
       const s = crop.shape_attributes;
 
       const id = s.id;
@@ -462,16 +459,18 @@ class Body extends Component {
         height: Number.parseFloat(new_height).toFixed(0)
       };
 
-      crop.shape_attributes = new_shape_attributes;
+      let tmp = {};
+      Object.assign(tmp, crop);
+      tmp.shape_attributes = new_shape_attributes;
 
       return new Promise(resolve => {
-        resolve(crop);
+        resolve(tmp);
       });
     });
 
-    new_image_crop = await Promise.all(new_image_crop);
+    new_crop_image = await Promise.all(new_crop_image);
 
-    return new Promise(resolve => resolve(new_image_crop));
+    return new Promise(resolve => resolve(new_crop_image));
   }
 
   // 사용자의 편의를 위해 버튼을 누르지 않아도 (13==enter) 이벤트를 받으면 handleOnCropComplete 를 호출해줌
@@ -573,6 +572,7 @@ class Body extends Component {
     if (targetId !== "nothing") {
       this.handleOnCropModify(targetId);
     }
+
     this.setState({
       showEdit: true
     });
@@ -582,13 +582,14 @@ class Body extends Component {
   async handleCropMouseUp() {
     if (this.state.useAI) {
       //console.log(this.state.crop.height);
-      if (this.state.crop.shape_attributes.height)
+      if (this.state.crop.shape_attributes.height) {
         this.setState(
           {
             label: ""
           },
           () => this.handleOnCropComplete()
         );
+      }
     } else {
       this.handleOnCropComplete();
     }
@@ -830,7 +831,7 @@ class Body extends Component {
                 <ShowButton
                   type="button"
                   onClick={() => {
-                    this.setState({
+                    this.this.setState({
                       crop: {},
                       showEdit: false
                     });

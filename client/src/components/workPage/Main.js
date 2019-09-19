@@ -246,7 +246,6 @@ class Main extends Component {
           );
         })
     );
-    console.log(this.state.orig_image_base64);
 
     const bodies = await this.state.orig_image_files.map((file, index) => {
       return new Promise(resolve => {
@@ -348,7 +347,6 @@ class Main extends Component {
         let rowArray = [];
 
         function replaceAll(str, searchStr, replaceStr) {
-          console.log(str);
           return str.split(searchStr).join(replaceStr);
         }
 
@@ -375,7 +373,6 @@ class Main extends Component {
             }).time
           });
 
-          console.log("crop time");
           console.log(crop_time);
 
           const naturalWidth = await this.checkImageSize(index);
@@ -403,14 +400,6 @@ class Main extends Component {
           row.push(shape_attributes);
           row.push(region_attributes);
 
-          console.log(
-            file_name,
-            file_size,
-            region_count,
-            crop_id,
-            shape_attributes,
-            region_attributes
-          );
           row = row.join(",");
           return new Promise(resolve => {
             resolve(row);
@@ -419,7 +408,6 @@ class Main extends Component {
 
         let rows = await Promise.all(cropPromises);
         rows = rows.join("\n");
-        console.log(rows);
 
         rowArray.push(rows);
 
@@ -429,11 +417,9 @@ class Main extends Component {
       });
 
       const rows = await Promise.all(bodyRowsPromises);
-      console.log(rows);
 
       content += rows.join("\n");
 
-      console.log(content);
       var encodedURI = encodeURI(content);
       const downloadCSV = document.createElement("a");
       downloadCSV.setAttribute("href", encodedURI);
@@ -447,9 +433,7 @@ class Main extends Component {
     else if (format === "json") {
       // let content = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(storageObj))
       let JSONobj = {};
-      var tempData = [];
       const promises = await this.Refs.map(async (body, index) => {
-        console.log(body);
         var crop_images = body.getCropImageData();
         var crop_time = body.getCropTimeData();
         console.log(this.state.time_counter);
@@ -510,7 +494,6 @@ class Main extends Component {
 
       await Promise.all(promises);
 
-      console.log(JSONobj);
       let content =
         "data:text/json;charset=utf-8," +
         encodeURIComponent(JSON.stringify(JSONobj));
@@ -531,7 +514,6 @@ class Main extends Component {
   };
 
   handleChange = e => {
-    console.log(e.target.value);
     this.setState({
       format: e.target.value
     });
@@ -549,7 +531,6 @@ class Main extends Component {
     img.setAttribute("src", base64);
     img.setAttribute("alt", "");
     const naturalWidth = Number(img.naturalWidth);
-    console.log("natural width: " + img.naturalWidth);
 
     // 이미지의 원래 width가 640px 보다 크다면, 크롭 좌표들을 적절한 비율로 되돌려줘야한다
     if (naturalWidth > 640) {
@@ -561,7 +542,6 @@ class Main extends Component {
 
   resizeCropLocation(naturalWidth, shape_attributes) {
     const scale = naturalWidth / 640;
-    console.log("scale: " + scale);
     const s = shape_attributes;
 
     const id = s.id;
