@@ -158,6 +158,7 @@ class Body extends Component {
     this.handleClickImage = this.handleClickImage.bind(this);
     this.handleCropMouseUp = this.handleCropMouseUp.bind(this);
     this.handleStartTimer = this.handleStartTimer.bind(this);
+
     // this.handleBack = this.handleBack.bind(this);
     // this.handleNext = this.handleNext.bind(this);
     // this.handleReset = this.handleReset.bind(this);
@@ -383,7 +384,7 @@ class Body extends Component {
             })
           },
           () => {
-            console.log(this.state.time_counter);
+            //console.log(this.state.time_counter);
           }
         );
         //console.log(this.state.crop_image[0].imgSrc);
@@ -530,6 +531,10 @@ class Body extends Component {
 
   getCropImageData() {
     return this.state.crop_image;
+  }
+
+  getCropTimeData() {
+    return this.state.time_counter;
   }
 
   handleStartTimer() {

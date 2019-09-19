@@ -302,7 +302,7 @@ class Main extends Component {
         pre_select: index
       },
       () => {
-        //console.log(this.state.time_counter);
+        console.log(this.state.time_counter);
       }
     );
   };
@@ -310,22 +310,6 @@ class Main extends Component {
   // 작업한 내용 전부를 서버로 전송함
   handleSendAll = async () => {
     // 작업하고 있던 Body 걸린 시간 측정 필요
-    this.setState(
-      {
-        time_counter: this.state.time_counter.map(el => {
-          if (el.index === this.state.pre_select) {
-            return {
-              index: this.state.pre_select,
-              time: el.time + new Date().getTime() - this.state.timer
-            };
-          } else return el;
-        }),
-        timer: new Date().getTime()
-      },
-      () => {
-        //console.log(this.state.time_counter);
-      }
-    );
 
     let format = this.state.format;
     const files = this.state.orig_image_files;
@@ -345,12 +329,28 @@ class Main extends Component {
         const crop_image = body.getCropImageData();
         const file_name = files[index].name;
         const file_size = files[index].size;
+        const crop_time = body.getCropTimeData();
         const region_count = crop_image.length;
 
         const cropPromises = await crop_image.map(async crop => {
           const crop_id = crop.shape_attributes.id;
           let shape_attributes = crop.shape_attributes;
-          let region_attributes = JSON.stringify(crop.region_attributes);
+          let region_attributes = JSON.stringify({
+            label: crop.region_attributes.label,
+            image_time: this.state.time_counter.find(el => {
+              if (el.index === index) {
+                return true;
+              } else return false;
+            }).time,
+            crop_time: crop_time.find(time => {
+              if (time.index === crop_id) {
+                return true;
+              } else return false;
+            }).time
+          });
+
+          console.log("crop time");
+          console.log(crop_time);
 
           const naturalWidth = await this.checkImageSize(index);
 
@@ -416,8 +416,30 @@ class Main extends Component {
     else if (format === "json") {
       // let content = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(storageObj))
       let JSONobj = {};
+      var tempData = [];
       const promises = await this.Refs.map(async (body, index) => {
-        let crop_image = body.getCropImageData();
+        console.log(body);
+        var crop_images = body.getCropImageData();
+        var crop_time = body.getCropTimeData();
+
+        let crop_image = crop_images.map(crop => {
+          return {
+            shape_attributes: crop.shape_attributes,
+            region_attributes: {
+              label: crop.region_attributes.label,
+              image_time: this.state.time_counter.find(el => {
+                if (el.index === index) {
+                  return true;
+                } else return false;
+              }).time,
+              crop_time: crop_time.find(time => {
+                if (time.index === crop.shape_attributes.id) {
+                  return true;
+                } else return false;
+              }).time
+            }
+          };
+        });
         const file_name = files[index].name;
         const file_size = files[index].size;
         const region_count = crop_image.length;
