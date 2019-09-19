@@ -831,7 +831,7 @@ class Body extends Component {
                 <ShowButton
                   type="button"
                   onClick={() => {
-                    this.this.setState({
+                    this.setState({
                       crop: {},
                       showEdit: false
                     });
