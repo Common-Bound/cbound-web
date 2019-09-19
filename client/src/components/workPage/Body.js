@@ -418,16 +418,61 @@ class Body extends Component {
 
     bodyData.append("orig_image", this.props.orig_image_file);
 
-    // console.log(this.props.orig_image_file_file);
+    // 이미지 좌표를 원래 이미지 사이즈에 맞게 리사이즈 한 후 저장해야 한다
+    if (this.state.imageRef.naturalWidth > 640) {
+      const new_image_crop = await this.resizeCropLocation(
+        this.state.imageRef.naturalWidth,
+        this.state.crop_image
+      );
 
-    bodyData.append(
-      "meta",
-      JSON.stringify({ crop_image: this.state.crop_image })
-    );
+      await this.setState({
+        crop_image: new_image_crop
+      });
+    }
+    const crop_image = this.state.crop_image;
+    console.log(crop_image);
+
+    bodyData.append("meta", await JSON.stringify({ crop_image: crop_image }));
     bodyData.append("project_id", this.props.project_id);
 
     await this.sendData(bodyData, "/mypage/creator/task/normal/complete"); // 서버로 전송( /mypage/task/complete)
+
+    return new Promise(resolve => resolve(true));
   };
+
+  // 크롭 좌표를 리사이징 한다
+  async resizeCropLocation(naturalWidth, crop_image) {
+    const scale = naturalWidth / 640;
+    console.log("scale: " + scale);
+
+    let new_image_crop = await crop_image.map(async crop => {
+      const s = crop.shape_attributes;
+
+      const id = s.id;
+      const new_x = s.x * scale;
+      const new_y = s.y * scale;
+      const new_width = s.width * scale;
+      const new_height = s.height * scale;
+
+      const new_shape_attributes = {
+        id: id,
+        x: Number.parseFloat(new_x).toFixed(0),
+        y: Number.parseFloat(new_y).toFixed(0),
+        width: Number.parseFloat(new_width).toFixed(0),
+        height: Number.parseFloat(new_height).toFixed(0)
+      };
+
+      crop.shape_attributes = new_shape_attributes;
+
+      return new Promise(resolve => {
+        resolve(crop);
+      });
+    });
+
+    new_image_crop = await Promise.all(new_image_crop);
+
+    return new Promise(resolve => resolve(new_image_crop));
+  }
 
   // 사용자의 편의를 위해 버튼을 누르지 않아도 (13==enter) 이벤트를 받으면 handleOnCropComplete 를 호출해줌
   handleKeyPress = e => {
