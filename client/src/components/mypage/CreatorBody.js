@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Route, Link } from "react-router-dom";
-import ProjectsPage from "./ProjectsPage";
+import CreatorProjectsPage from "./CreatorProjectsPage";
 import WorkPage from "../workPage/WorkPage";
 import AvailableProjects from "./AvailableProjects";
 import styled from "styled-components";
@@ -120,7 +120,7 @@ class CreatorBody extends Component {
           />
           <Route
             path={`${this.props.match.url}/projects`}
-            component={ProjectsPage}
+            component={CreatorProjectsPage}
           />
           <Route
             path={`${this.props.match.url}/task/:project_type/:project_id`}

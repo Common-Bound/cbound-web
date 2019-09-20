@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import ProjectOrig from "../card/CreatorProjectOrig";
+import ProjectOrig from "../card/RequesterProjectOrig";
 import styled from "styled-components";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -50,7 +50,7 @@ const StyledTableCell = styled(TableCell)`
   font-family: Avenir;
 `;
 
-class AvailableProjects extends Component {
+class RequesterProjectsPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -70,7 +70,6 @@ class AvailableProjects extends Component {
   }
 
   async fetchProject() {
-    console.log(this.props.match.path);
     const url = this.props.match.path;
     const result = await fetch(url)
       .then(res => res.json())
@@ -119,27 +118,13 @@ class AvailableProjects extends Component {
    * @description 랜덤 프로젝트 추가 버튼 클릭시 랜덤한 프로젝트를 생성하고
    *              프로젝트 목록을 다시 불러온다
    */
-  handleClick = e => {
-    const url = this.props.match.path;
-    fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      }
-    })
-      .then(res => res.json())
-      .then(data => {
-        console.log(data);
-        this.fetchProject();
-      });
-  };
 
   render() {
     return (
       <Container>
         <TitleContainer>
-          <Title>Available Projects</Title>
-          <SemiTitle>참여 가능한 프로젝트</SemiTitle>
+          <Title>Requested Projects</Title>
+          <SemiTitle>생성한 프로젝트</SemiTitle>
         </TitleContainer>
         <TableContainer>
           <Table>
@@ -150,7 +135,6 @@ class AvailableProjects extends Component {
                 <StyledTableCell align="center">TITLE</StyledTableCell>
                 <StyledTableCell align="center">POINT</StyledTableCell>
                 <StyledTableCell align="center">DUE</StyledTableCell>
-                <StyledTableCell align="center">REMAINED</StyledTableCell>
               </TableRow>
             </StyledTableHead>
             <TableBody>{this.state.projects}</TableBody>
@@ -166,4 +150,4 @@ class AvailableProjects extends Component {
   }
 }
 
-export default AvailableProjects;
+export default RequesterProjectsPage;

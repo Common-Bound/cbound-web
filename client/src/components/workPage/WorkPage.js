@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import Main from "./Main";
+import Main from "./CreatorMain";
 import styled from "styled-components";
 import InspectionPage from "../inspectionPage/InspectionPage";
 
@@ -20,15 +20,15 @@ class WorkPage extends Component {
             project_type={this.props.match.params.project_type}
             project_id={this.props.match.params.project_id}
           />
-        ) : this.props.match.params.project_type === 'inspection'? (
+        ) : this.props.match.params.project_type === "inspection" ? (
           <InspectionPage
             info={info}
             project_type={this.props.match.params.project_type}
             project_id={this.props.match.params.project_id}
           />
-        ) : 
+        ) : (
           <Main />
-        }
+        )}
       </WorkContainer>
     );
   }

@@ -6,8 +6,7 @@ import { Link } from "react-router-dom";
 import moment from "moment";
 
 const StyledTableCell = styled(TableCell)`
-  color: ${props =>
-    props.project_type === "normal" ? "black" : "blue"} !important;
+  color: black !important;
 `;
 
 const StyledTableRow = styled(TableRow)`
@@ -23,7 +22,7 @@ const StyledLink = styled(Link)`
   color: black !important;
 `;
 
-class Project_joined extends Component {
+class CreatorProjectJoined extends Component {
   render() {
     const created_time = moment(this.props.created_at, "YYYY-MM-DD").format(
       "YYYY-MM-DD"
@@ -35,10 +34,6 @@ class Project_joined extends Component {
     const t1 = moment();
     const t2 = moment(this.props.due_date);
 
-    const days = moment.duration(t2.diff(t1)).days();
-    const hours = moment.duration(t2.diff(t1)).hours();
-    const minutes = moment.duration(t2.diff(t1)).minutes();
-
     return (
       <StyledTableRow>
         <TableCell align="center">{created_time}</TableCell>
@@ -49,8 +44,8 @@ class Project_joined extends Component {
           <StyledLink
             to={{
               pathname: this.props.ref_project
-                ? `/mypage/creator/task/${this.props.project_type}/${this.props.ref_project}`
-                : `/mypage/creator/task/${this.props.project_type}/${this.props.id}`,
+                ? `/mypage/requester/insight/${this.props.project_type}/${this.props.ref_project}`
+                : `/mypage/requester/insight/${this.props.project_type}/${this.props.id}`,
               state: {
                 title: this.props.title,
                 created_at: this.props.created_at,
@@ -63,10 +58,9 @@ class Project_joined extends Component {
         </TableCell>
         <TableCell align="center">{this.props.reward}</TableCell>
         <TableCell align="center">{due_date_time}</TableCell>
-        <TableCell align="center">{`${days}일 ${hours}시간 ${minutes}분 뒤 종료`}</TableCell>
       </StyledTableRow>
     );
   }
 }
 
-export default Project_joined;
+export default CreatorProjectJoined;

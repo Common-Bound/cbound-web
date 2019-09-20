@@ -17,7 +17,7 @@ const StyledTableRow = styled(TableRow)`
   }
 `;
 
-class Project_orig extends Component {
+class CreatorProjectOrig extends Component {
   constructor(props) {
     super(props);
     this.handleClick = this.handleClick.bind(this);
@@ -80,4 +80,4 @@ class Project_orig extends Component {
   }
 }
 
-export default Project_orig;
+export default CreatorProjectOrig;

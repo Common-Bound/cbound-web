@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import ProjectJoined from "../card/Project_joined";
+import ProjectJoined from "../card/CreatorProjectJoined";
 import styled from "styled-components";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -50,7 +50,7 @@ const StyledTableCell = styled(TableCell)`
   font-family: Avenir;
 `;
 
-class ProjectsPage extends Component {
+class CreatorProjectsPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -65,7 +65,7 @@ class ProjectsPage extends Component {
   /**
    * @description 내가 참여한 프로젝트 목록을 가져온다
    *
-   * @memberof ProjectsPage
+   * @memberof CreatorProjectsPage
    */
   async fetchProject() {
     const url = `${this.props.match.path}`;
@@ -130,4 +130,4 @@ class ProjectsPage extends Component {
   }
 }
 
-export default ProjectsPage;
+export default CreatorProjectsPage;
