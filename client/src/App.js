@@ -19,7 +19,7 @@ class App extends React.Component {
   render() {
     return (
       <AppContainer>
-        <Router>
+        <Router >
           <Switch>
             <Route path="/" exact component={Main} />
             <Route path="/mypage" component={MyPage} />

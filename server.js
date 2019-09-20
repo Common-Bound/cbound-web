@@ -45,42 +45,46 @@ app.use(passport.session()); // 세션 연결
 app.use("/auth", authRouter);
 app.use("/mypage", mypageRouter);
 
-app.get("/", (req, res, next) => {
+app.get("/*", (req, res, next) => {
   console.log("hello world");
-  res.sendFile(path.join(__dirname, "client/build/index.html"));
+  res.sendFile(path.join(__dirname, "client/build/index.html"), function (err) {
+    if (err) {
+      res.status(500).send(err);
+    }
+  });
 });
 
 /* SSL option */
 const option =
   process.env.NODE_ENV === "production"
     ? {
-        key: fs.readFileSync(
-          __dirname + "/ssl/c-bound.io_2019091776EJ.key.pem"
-        ),
-        cert: fs.readFileSync(
-          __dirname + "/ssl/c-bound.io_2019091776EJ.crt.pem"
-        ),
-        ca: fs.readFileSync(__dirname + "/ssl/ca-chain-bundle.pem")
-      }
+      key: fs.readFileSync(
+        __dirname + "/ssl/c-bound.io_2019091776EJ.key.pem"
+      ),
+      cert: fs.readFileSync(
+        __dirname + "/ssl/c-bound.io_2019091776EJ.crt.pem"
+      ),
+      ca: fs.readFileSync(__dirname + "/ssl/ca-chain-bundle.pem")
+    }
     : undefined;
 
 // https server
 option
   ? https.createServer(option, app).listen(PORT, () => {
-      console.log(`Server is running at port ${PORT}`);
-    })
+    console.log(`Server is running at port ${PORT}`);
+  })
   : undefined;
 
 // http server to redirect to https
 option
   ? http
-      .createServer(function(req, res) {
-        res.writeHead(301, {
-          Location: "https://" + req.headers["host"] + req.url
-        });
-        res.end();
-      })
-      .listen(80)
+    .createServer(function (req, res) {
+      res.writeHead(301, {
+        Location: "https://" + req.headers["host"] + req.url
+      });
+      res.end();
+    })
+    .listen(80)
   : http.createServer(app).listen(PORT, () => {
-      console.log(`Server is running at port ${PORT}`);
-    });
+    console.log(`Server is running at port ${PORT}`);
+  });
