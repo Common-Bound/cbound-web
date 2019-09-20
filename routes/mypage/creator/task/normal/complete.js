@@ -34,7 +34,7 @@ const fileLogger = (req, res, next) => {
   next();
 };
 
-// path: ~/mypage/creator/task/complete
+// path: ~/mypage/creator/task/normal/complete
 // 작업을 최종 제출하는 요청 핸들링
 // s3 에 업로드한 후 해당 URL과 크롭한 이미지 정보를 DB에 함께 저장한다
 router.post(
