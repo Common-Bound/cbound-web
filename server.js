@@ -18,6 +18,8 @@ const mypageRouter = require("./routes/mypageRouter");
 
 /* 외부 라이브러리 미들웨어 사용 */
 app.use("/", express.static(__dirname + "/client/build"));
+/* SSL 인증 파일 접근 */
+app.use(express.static(__dirname + "/.well-known"));
 app.use(morgan("dev"));
 app.use(
   bodyParser.json({
