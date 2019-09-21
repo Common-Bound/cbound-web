@@ -31,9 +31,6 @@ class CreatorProjectJoined extends Component {
       "YYYY-MM-DD"
     );
 
-    const t1 = moment();
-    const t2 = moment(this.props.due_date);
-
     return (
       <StyledTableRow>
         <TableCell align="center">{created_time}</TableCell>

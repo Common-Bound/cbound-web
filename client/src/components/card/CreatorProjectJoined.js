@@ -18,11 +18,6 @@ const StyledTableRow = styled(TableRow)`
   }
 `;
 
-const StyledLink = styled(Link)`
-  text-decoration: none !important;
-  color: black !important;
-`;
-
 class CreatorProjectJoined extends Component {
   constructor(props) {
     super(props);

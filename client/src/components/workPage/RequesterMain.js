@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Route, Link } from "react-router-dom";
+import { Route } from "react-router-dom";
 // node.js library that concatenates classes (strings)
 import classnames from "classnames";
 // react plugin used to create charts
