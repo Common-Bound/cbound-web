@@ -590,8 +590,6 @@ class Body extends Component {
           () => this.handleOnCropComplete()
         );
       }
-    } else {
-      this.handleOnCropComplete();
     }
   }
 
@@ -820,13 +818,13 @@ class Body extends Component {
               data-step="2"
               data-disable-interaction="true"
             >
-              {/* <BoundButton
+              <BoundButton
                 type="button"
                 onClick={this.handleOnCropComplete}
                 id="store"
               >
                 BOUND
-              </BoundButton> */}
+              </BoundButton>
               {this.state.showEdit && this.props.orig_image_file ? (
                 <ShowButton
                   type="button"

@@ -6,6 +6,7 @@ import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
+import Button from "@material-ui/core/Button";
 
 const Container = styled.div`
   width: 100%;
@@ -155,11 +156,10 @@ class AvailableProjects extends Component {
             </StyledTableHead>
             <TableBody>{this.state.projects}</TableBody>
           </Table>
-          {/* 사용성 테스트를 위해 막아놓음 
-          <Button onClick={this.handleClick.bind(this)}>
+          {/* 사용성 테스트를 위해 막아놓음 */}
+          {/* <Button onClick={this.handleClick.bind(this)}>
             랜덤 프로젝트 추가
-          </Button>
-          */}
+          </Button> */}
         </TableContainer>
       </Container>
     );

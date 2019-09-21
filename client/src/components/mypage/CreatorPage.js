@@ -77,7 +77,7 @@ const Section = styled.div`
   padding-top: 64px;
 `;
 
-class CreatorBody extends Component {
+class CreatorPage extends Component {
   render() {
     console.log(this.props.match.url);
     return (
@@ -132,4 +132,4 @@ class CreatorBody extends Component {
   }
 }
 
-export default CreatorBody;
+export default CreatorPage;
