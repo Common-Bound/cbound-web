@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import styled from "styled-components";
 import TableCell from "@material-ui/core/TableCell";
 import TableRow from "@material-ui/core/TableRow";
-import { Redirect, Link } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 import moment from "moment";
 
 const StyledTableCell = styled(TableCell)`
