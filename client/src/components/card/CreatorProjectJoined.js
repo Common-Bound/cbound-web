@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import styled from "styled-components";
 import TableCell from "@material-ui/core/TableCell";
 import TableRow from "@material-ui/core/TableRow";
-import { Link } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 import moment from "moment";
 
 const StyledTableCell = styled(TableCell)`
@@ -18,12 +18,20 @@ const StyledTableRow = styled(TableRow)`
   }
 `;
 
-const StyledLink = styled(Link)`
-  text-decoration: none !important;
-  color: black !important;
-`;
-
 class CreatorProjectJoined extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      clicked: false
+    };
+  }
+
+  handleClick() {
+    this.setState({
+      clicked: true
+    });
+  }
+
   render() {
     const created_time = moment(this.props.created_at, "YYYY-MM-DD").format(
       "YYYY-MM-DD"
@@ -40,13 +48,17 @@ class CreatorProjectJoined extends Component {
     const minutes = moment.duration(t2.diff(t1)).minutes();
 
     return (
-      <StyledTableRow>
+      <StyledTableRow onClick={this.handleClick.bind(this)}>
         <TableCell align="center">{created_time}</TableCell>
         <StyledTableCell align="center" project_type={this.props.project_type}>
           {this.props.project_type === "normal" ? "생성" : "검수"}
         </StyledTableCell>
-        <TableCell align="center">
-          <StyledLink
+        <TableCell align="center">{this.props.title}</TableCell>
+        <TableCell align="center">{this.props.reward}</TableCell>
+        <TableCell align="center">{due_date_time}</TableCell>
+        <TableCell align="center">{`${days}일 ${hours}시간 ${minutes}분 뒤 종료`}</TableCell>
+        {this.state.clicked ? (
+          <Redirect
             to={{
               pathname: this.props.ref_project
                 ? `/mypage/creator/task/${this.props.project_type}/${this.props.ref_project}`
@@ -57,13 +69,10 @@ class CreatorProjectJoined extends Component {
                 due_date: this.props.due_date
               }
             }}
-          >
-            {this.props.title}
-          </StyledLink>
-        </TableCell>
-        <TableCell align="center">{this.props.reward}</TableCell>
-        <TableCell align="center">{due_date_time}</TableCell>
-        <TableCell align="center">{`${days}일 ${hours}시간 ${minutes}분 뒤 종료`}</TableCell>
+          />
+        ) : (
+          undefined
+        )}
       </StyledTableRow>
     );
   }

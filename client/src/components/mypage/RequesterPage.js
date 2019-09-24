@@ -73,7 +73,7 @@ const Section = styled.div`
   padding-top: 64px;
 `;
 
-class RequesterBody extends React.Component {
+class RequesterPage extends React.Component {
   render() {
     return (
       <>
@@ -109,4 +109,4 @@ class RequesterBody extends React.Component {
   }
 }
 
-export default RequesterBody;
+export default RequesterPage;

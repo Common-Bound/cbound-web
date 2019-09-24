@@ -26,6 +26,8 @@ const EntireTitleContainer = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 40px 0px 10px 10px;
+
+  color: black; !important
 `;
 
 const LeftTitleContainer = styled.div`
@@ -122,8 +124,8 @@ const DescriptionBox = styled.div`
 `;
 
 const ImageContainer = styled.div`
-  width: 640px;
-  max-width: 640px
+  width: 650px;
+  max-width: 650px
   min-height: 440px;
   position: relative;
 
@@ -219,6 +221,31 @@ class Body extends Component {
     // 이미지의 가로 길이가 640이 넘으면, 640으로 나눈 비율을 계산한다
     if (image.naturalWidth > 640) {
       scale = image.naturalWidth / 640;
+      console.log(image.naturalWidth);
+
+      const new_shape_attributes_promises = await this.state.data.payload.meta.crop_image.map(
+        crop => {
+          console.log(crop);
+          const new_shape_attributes = this.resizeCropLocation(
+            image.naturalWidth,
+            crop.shape_attributes
+          );
+
+          return new Promise(resolve => resolve(new_shape_attributes));
+        }
+      );
+
+      const new_shape_attributes = await Promise.all(
+        new_shape_attributes_promises
+      );
+      const new_data = this.state.data;
+      new_data.payload.meta.crop_image.forEach((crop, index) => {
+        crop.shape_attributes = new_shape_attributes[index];
+      });
+
+      await this.setState({
+        data: new_data
+      });
     }
 
     // 계샨된 비율만큼 나눠줘서 캔버스 영역의 가로 길이를 640 으로 맞춰준다
@@ -237,6 +264,35 @@ class Body extends Component {
     return new Promise(resolve => {
       console.log("drawImage end");
       return resolve(this.drawCrop());
+    });
+  }
+
+  async resizeCropLocation(naturalWidth, shape_attributes) {
+    console.log("orig_shape_attributes: ");
+    console.log(shape_attributes);
+
+    const scale = naturalWidth / 640;
+    console.log("scale: ", scale);
+    const s = shape_attributes;
+
+    const id = s.id;
+    const new_x = s.x / scale;
+    const new_y = s.y / scale;
+    const new_width = s.width / scale;
+    const new_height = s.height / scale;
+
+    const new_shape_attributes = {
+      id: id,
+      x: Number.parseFloat(new_x).toFixed(0),
+      y: Number.parseFloat(new_y).toFixed(0),
+      width: Number.parseFloat(new_width).toFixed(0),
+      height: Number.parseFloat(new_height).toFixed(0)
+    };
+    console.log("new_shape_attributs: ");
+    console.log(new_shape_attributes);
+
+    return new Promise(resolve => {
+      resolve(new_shape_attributes);
     });
   }
 

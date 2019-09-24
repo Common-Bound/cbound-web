@@ -2,8 +2,8 @@ import React, { Component } from "react";
 import { Switch, Route } from "react-router-dom";
 import styled from "styled-components";
 import Header from "../main/Header";
-import CreatorBody from "./CreatorBody";
-import RequesterBody from "./RequesterBody";
+import CreatorPage from "./CreatorPage";
+import RequesterPage from "./RequesterPage";
 import notFound from "../notFound";
 
 const Container = styled.div`
@@ -19,11 +19,11 @@ class MyPage extends Component {
         <Switch>
           <Route
             path={`${this.props.match.url}/creator`}
-            render={props => <CreatorBody {...props} />}
+            render={props => <CreatorPage {...props} />}
           />
           <Route
             path={`${this.props.match.url}/requester`}
-            render={props => <RequesterBody {...props} />}
+            render={props => <RequesterPage {...props} />}
           />
           <Route component={notFound} />
         </Switch>
