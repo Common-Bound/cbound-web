@@ -25,6 +25,10 @@ router.get("/", (req, res, next) => {
       }
     }
   });
+
+  router.get("/chartData", (req, rews, next) => {
+    const sql = "";
+  });
 });
 
 module.exports = router;
