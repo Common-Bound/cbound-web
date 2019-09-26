@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button, Form, FormGroup, Label, Input, FormText } from "reactstrap";
+import { Button, Form, FormGroup, Label, Input } from "reactstrap";
 import styled from "styled-components";
 
 const SubmitButton = styled(Button)`
@@ -45,7 +45,7 @@ class CreateProjectPage extends Component {
     };
 
     const url = this.props.match.path;
-    const result = await fetch(url, {
+    await fetch(url, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -65,7 +65,7 @@ class CreateProjectPage extends Component {
   };
 
   handleChange = e => {
-    //console.log(e.target.value);
+    //\console.log(e.target.value);
     this.setState({
       [e.target.name]: e.target.value
     });
