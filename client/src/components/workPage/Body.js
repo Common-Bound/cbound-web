@@ -651,7 +651,7 @@ class Body extends Component {
               show={this.props.orig_image_file}
               data-intro={
                 this.props.index === 0
-                  ? "이미지를 드래그하여 영역을 지정하세요. 해당 영역이 아래리스트에 자동으로 추가됩니다."
+                  ? "이미지에서 추출할 영역을 드래그하여 지정하세요."
                   : undefined
               }
               data-step="1"
@@ -792,8 +792,7 @@ class Body extends Component {
             )} */}
             <DescriptionBoxContainer>
               <DescriptionBox>
-                - 이미지를 드래그하여 영역을 지정하세요. 해당 영역이 아래
-                리스트에 자동으로 추가됩니다.
+                - 이미지에서 추출할 영역을 드래그하여 지정하세요.
               </DescriptionBox>
               <DescriptionBox>
                 - 썸네일 아래의 <span style={{ color: "blue" }}>블루박스</span>
