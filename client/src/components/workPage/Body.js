@@ -810,18 +810,25 @@ class Body extends Component {
               </DescriptionBox>
             </DescriptionBoxContainer>
             <ButtonContainer
-              data-intro={
-                this.props.index === 0
-                  ? "라벨링 된 이미지를 확인하려면 SHOW 버튼을 누르세요."
-                  : undefined
-              }
-              data-step="2"
-              data-disable-interaction="true"
+            // data-intro={
+            //   this.props.index === 0
+            //     ? "라벨링 된 이미지를 확인하려면 SHOW 버튼을 누르세요."
+            //     : undefined
+            // }
+            // data-step="2"
+            // data-disable-interaction="true"
             >
               <BoundButton
                 type="button"
                 onClick={this.handleOnCropComplete}
                 id="store"
+                data-intro={
+                  this.props.index === 0
+                    ? "영역을 추가하려면 BOUND 버튼을 누르세요."
+                    : undefined
+                }
+                data-step="2"
+                data-disable-interaction="true"
               >
                 BOUND
               </BoundButton>
@@ -834,6 +841,13 @@ class Body extends Component {
                       showEdit: false
                     });
                   }}
+                  data-intro={
+                    this.props.index === 0
+                      ? "라벨링 된 이미지를 확인하려면 SHOW 버튼을 누르세요."
+                      : undefined
+                  }
+                  data-step="3"
+                  data-disable-interaction="true"
                 >
                   SHOW
                 </ShowButton>

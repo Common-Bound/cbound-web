@@ -188,7 +188,7 @@ const DropZoneBox = styled.div`
   line-height: 370px;
 `;
 
-class Main extends Component {
+class CreatorMain extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -507,9 +507,13 @@ class Main extends Component {
     }
 
     // 서버로 전송
-    this.Refs.forEach(body => {
-      body.handleSendAll();
-    });
+    // 프로젝트 정보가 있어야만 DB에 쌓도록 한다
+    if (this.props.info) {
+      this.Refs.forEach(body => {
+        body.handleSendAll();
+      });
+    }
+
     alert("작업이 완료되었습니다.");
   };
 
@@ -722,4 +726,4 @@ class Main extends Component {
   }
 }
 
-export default Main;
+export default CreatorMain;
