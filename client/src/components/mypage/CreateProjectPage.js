@@ -21,9 +21,58 @@ const ButtonContainer = styled.div`
 `;
 
 class CreateProjectPage extends Component {
+  state = {
+    title: "",
+    simpleDesc: "",
+    detailDesc: "",
+    guidelineURL: "",
+    dueDate: "",
+    type: "image",
+    cost: ""
+  };
+  handleSubmit = async e => {
+    e.preventDefault();
+
+    const data = {
+      title: this.state.title,
+      title_image: null,
+      simple_description: this.state.simpleDesc,
+      detail_description: this.state.detailDesc,
+      due_date: this.state.dueDate,
+      type: this.state.type,
+      guideline_url: this.state.guidelineURL,
+      reward: this.state.cost
+    };
+
+    const url = this.props.match.path;
+    const result = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(data)
+    })
+      .then(res => res.json())
+      .then(data => {
+        console.log(data);
+        if (data.result) {
+          alert("Succeed");
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
+  handleChange = e => {
+    //console.log(e.target.value);
+    this.setState({
+      [e.target.name]: e.target.value
+    });
+  };
   render() {
     return (
-      <CreateProjectForm>
+      <CreateProjectForm onSubmit={this.handleSubmit}>
         <FormGroup>
           <h1>
             <Label>프로젝트 생성</Label>
@@ -34,7 +83,8 @@ class CreateProjectPage extends Component {
           <Input
             type="text"
             name="title"
-            id="title"
+            value={this.state.title}
+            onChange={this.handleChange}
             placeholder="제목"
             required
           />
@@ -44,7 +94,8 @@ class CreateProjectPage extends Component {
           <Input
             type="text"
             name="simpleDesc"
-            id="simpleDesc"
+            value={this.state.simpleDesc}
+            onChange={this.handleChange}
             placeholder="간단한 설명"
             required
           />
@@ -54,7 +105,8 @@ class CreateProjectPage extends Component {
           <Input
             type="textarea"
             name="detailDesc"
-            id="detailDesc"
+            value={this.state.detailDesc}
+            onChange={this.handleChange}
             placeholder="자세한 설명"
             required
           />
@@ -64,7 +116,8 @@ class CreateProjectPage extends Component {
           <Input
             type="url"
             name="guidelineURL"
-            id="guidelineURL"
+            value={this.state.guidelineURL}
+            onChange={this.handleChange}
             placeholder="가이드라인 URL"
             required
           />
@@ -74,18 +127,25 @@ class CreateProjectPage extends Component {
           <Input
             type="date"
             name="dueDate"
-            id="dueDate"
+            value={this.state.dueDate}
+            onChange={this.handleChange}
             placeholder="만기일을 설정하세요"
             required
           />
         </FormGroup>
         <FormGroup>
           <Label for="type">프로젝트 타입</Label>
-          <Input type="select" name="select" id="exampleSelect" required>
-            <option>이미지</option>
-            <option>텍스트</option>
-            <option>음성</option>
-            <option>설문 조사</option>
+          <Input
+            type="select"
+            name="type"
+            value={this.state.type}
+            onChange={this.handleChange}
+            required
+          >
+            <option value="image">이미지</option>
+            <option value="text">텍스트</option>
+            <option value="voice">음성</option>
+            <option value="survey">설문 조사</option>
           </Input>
         </FormGroup>{" "}
         <FormGroup>
@@ -93,7 +153,8 @@ class CreateProjectPage extends Component {
           <Input
             type="number"
             name="cost"
-            id="cost"
+            value={this.state.cost}
+            onChange={this.handleChange}
             placeholder="데이터 가격"
             required
           />
