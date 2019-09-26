@@ -4,6 +4,7 @@ import { Route, Link } from "react-router-dom";
 // node.js library that concatenates classes (strings)
 
 import RequesterProjectsPage from "./RequesterProjectsPage";
+import CreateProjectPage from "./CreateProjectPage";
 import InsightPage from "../workPage/InsightPage";
 
 import styled from "styled-components";
@@ -98,6 +99,10 @@ class RequesterPage extends React.Component {
             exact
             path={`${this.props.match.url}`}
             component={RequesterProjectsPage}
+          />
+          <Route
+            path={`${this.props.match.url}/create`}
+            component={CreateProjectPage}
           />
           <Route
             path={`${this.props.match.url}/insight/:project_id`}

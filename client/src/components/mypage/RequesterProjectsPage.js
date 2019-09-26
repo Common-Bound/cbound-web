@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Button } from "reactstrap";
 import ProjectOrig from "../card/RequesterProjectOrig";
 import styled from "styled-components";
 import Table from "@material-ui/core/Table";
@@ -48,6 +49,10 @@ const StyledTableHead = styled(TableHead)`
 const StyledTableCell = styled(TableCell)`
   color: rgba(255, 255, 255, 0.6) !important;
   font-family: Avenir;
+`;
+
+const CreateProjectButton = styled(Button)`
+  float: right;
 `;
 
 class RequesterProjectsPage extends Component {
@@ -124,8 +129,19 @@ class RequesterProjectsPage extends Component {
       <Container>
         <TitleContainer>
           <Title>Requested Projects</Title>
-          <SemiTitle>생성한 프로젝트</SemiTitle>
+          <SemiTitle>
+            생성한 프로젝트
+            <CreateProjectButton
+              color="primary"
+              onClick={() => {
+                window.open(this.props.location.pathname + "/create");
+              }}
+            >
+              프로젝트 생성
+            </CreateProjectButton>
+          </SemiTitle>
         </TitleContainer>
+
         <TableContainer>
           <Table>
             <StyledTableHead>
@@ -139,11 +155,6 @@ class RequesterProjectsPage extends Component {
             </StyledTableHead>
             <TableBody>{this.state.projects}</TableBody>
           </Table>
-          {/* 사용성 테스트를 위해 막아놓음 
-          <Button onClick={this.handleClick.bind(this)}>
-            랜덤 프로젝트 추가
-          </Button>
-          */}
         </TableContainer>
       </Container>
     );
