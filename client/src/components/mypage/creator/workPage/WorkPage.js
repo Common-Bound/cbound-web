@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Main from "./CreatorMain";
 import styled from "styled-components";
-import InspectionPage from "../inspectionPage/InspectionPage";
+import InspectionPage from "./inspectionPage/InspectionPage";
 
 const WorkContainer = styled.div`
   width: 100%;

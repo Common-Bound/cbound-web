@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import ProjectJoined from "../card/CreatorProjectJoined";
+import ProjectJoined from "../../card/CreatorProjectJoined";
 import styled from "styled-components";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";

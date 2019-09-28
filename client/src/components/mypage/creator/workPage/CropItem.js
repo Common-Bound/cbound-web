@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import endpoint from "../../RecognitionEndpoint";
+import endpoint from "../../../../RecognitionEndpoint";
 import styled from "styled-components";
-import deleteImg from "../../images/close_button.png";
+import deleteImg from "../../../../images/close_button.png";
 
 const CropItemContainer = styled.div`
   max-width: 140px;
