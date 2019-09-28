@@ -28,7 +28,8 @@ CREATE TABLE "data_creator" (
   "created_at" varchar,
   "rank" varchar,
   "point" int,
-  "account" varchar
+  "account" varchar,
+  "reliability" float
 );
 CREATE TABLE "creator_pool" ("project_id" varchar, "creator_id" varchar);
 CREATE TABLE "requester_pool" (

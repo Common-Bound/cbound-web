@@ -45,11 +45,18 @@ router.post(
     const user_id = req.user.id;
     let meta = JSON.parse(req.body.meta);
     let crop_image = meta.crop_image; // [ {x: 0, y: 0, ... }, {}, ... ]
-    new_crop_image = crop_image.map(el => {
-      el.correct = []; // detection된 영역의 O(1), X(0) 여부 검사한 값이 들어가는 필드. 검수자에 의해 수정됨
-      return el;
+    let total_width = 0;
+    let total_height = 0;
+    new_crop_image = crop_image.map(crop => {
+      crop.correct = []; // detection된 영역의 O(1), X(0) 여부 검사한 값이 들어가는 필드. 검수자에 의해 수정됨
+      total_width += Number(crop.shape_attributes.width);
+      total_height += Number(crop.shape_attributes.height);
+
+      return crop;
     });
     meta.crop_image = new_crop_image;
+    meta.total_width = total_width;
+    meta.total_height = total_height;
     const id = uuid();
     const date = Date.now(); // UTC 기준으로 1970년 1월 1일 0시 0분 0초부터 현재까지 경과된 밀리 초를 반환
     const file = req.file;
