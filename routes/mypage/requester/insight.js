@@ -18,23 +18,24 @@ router.get("/:project_id", (req, res, next) => {
     }
     const datas = result.rows;
 
-    const total_count = datas.length;
+    const total_count = datas.length; // 생산된 총 데이터 수
     const now_day = moment().day(); // 현재 요일 (0: 일요일, 1: 월요일, ... 6: 토요일)
-    console.log("now day: ", now_day);
-    // datas.forEach(data => {
-    //   const created_day = Date(data.created_at);
-    //   console.log(created_day);
-    //   console.log(moment(created_day).day());
-    // });
-
     const today_count = datas.filter(data => {
+      // 오늘 생산된 총 데이터 수
       return Number(moment(data.created_at).day()) === Number(now_day);
     }).length;
-    console.log("today_count: ", today_count);
+    // 참여자 수
+    const creator_count = new Set(datas.map(data => data.creator_id)).size;
+    console.log("creator_count: ", creator_count);
+    // 검수된 데이터 수
+    const inspected_count = datas.filter(data => data.status === "done").length;
+
     return res.json({
       result: {
         total_count: total_count,
-        today_count: today_count
+        today_count: today_count,
+        creator_count: creator_count,
+        inspected_count: inspected_count
       }
     });
   });
