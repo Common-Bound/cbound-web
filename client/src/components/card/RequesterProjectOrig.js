@@ -5,10 +5,6 @@ import TableRow from "@material-ui/core/TableRow";
 import { Link } from "react-router-dom";
 import moment from "moment";
 
-const StyledTableCell = styled(TableCell)`
-  color: black !important;
-`;
-
 const StyledTableRow = styled(TableRow)`
   transition: 0.2s;
   cursor: pointer;
@@ -34,15 +30,10 @@ class CreatorProjectJoined extends Component {
     return (
       <StyledTableRow>
         <TableCell align="center">{created_time}</TableCell>
-        <StyledTableCell align="center" project_type={this.props.project_type}>
-          {this.props.project_type === "normal" ? "생성" : "검수"}
-        </StyledTableCell>
         <TableCell align="center">
           <StyledLink
             to={{
-              pathname: this.props.ref_project
-                ? `/mypage/requester/insight/${this.props.project_type}/${this.props.ref_project}`
-                : `/mypage/requester/insight/${this.props.project_type}/${this.props.id}`,
+              pathname: `/mypage/requester/insight/${this.props.project_type}/${this.props.id}`,
               state: {
                 title: this.props.title,
                 created_at: this.props.created_at,

@@ -79,7 +79,6 @@ class RequesterProjectsPage extends Component {
     const result = await fetch(url)
       .then(res => res.json())
       .then(data => {
-        console.log(data);
         if (data.message) {
           return alert(data.message);
         }
@@ -96,11 +95,13 @@ class RequesterProjectsPage extends Component {
     if (result && result.length > 0) {
       console.log(result);
       const my_proj = result.map(el => {
+        if (el.project_type === "inspection") {
+          return null;
+        }
         return (
           <ProjectOrig
             key={el.id}
             id={el.id}
-            ref_project={el.ref_project}
             title={el.title}
             simple_description={el.simple_description}
             detail_description={el.detail_description}
@@ -147,7 +148,6 @@ class RequesterProjectsPage extends Component {
             <StyledTableHead>
               <TableRow>
                 <StyledTableCell align="center">KICK-OFF</StyledTableCell>
-                <StyledTableCell align="center">ROLE</StyledTableCell>
                 <StyledTableCell align="center">TITLE</StyledTableCell>
                 <StyledTableCell align="center">POINT</StyledTableCell>
                 <StyledTableCell align="center">DUE</StyledTableCell>
