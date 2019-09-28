@@ -45,9 +45,22 @@ passport.use(
             // uuid 생성하여 id 필드 부여
             const uid = uuid();
             bcrypt.hash(password, null, null, function(err, hash) {
+              // id, email, password, name, phone_number, gender, date_of_birth, created_at, rank, point, account
               db.query(
                 "insert into data_creator values ($1, $2, $3)",
-                [uid, email, hash],
+                [
+                  uid,
+                  email,
+                  hash,
+                  null,
+                  null,
+                  null,
+                  null,
+                  Date.now(),
+                  "beginner",
+                  0,
+                  null
+                ],
                 function(err, rows) {
                   if (err) {
                     console.log("Error when hashing password", err);

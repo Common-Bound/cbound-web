@@ -1,19 +1,17 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../../db/index");
-
 const uuid = require("uuid/v4");
 const moment = require("moment");
 // path: ~/mypage/requester
 
 // 내가 생성한 프로젝트 목록들을 보여준다
 router.get("/", (req, res, next) => {
+  const user_id = req.user.id;
   const sql =
-    "select * from project where id in (select project_id from requester_pool where requester_id = '" +
-    req.user.id +
-    "')";
+    "select * from project where id in (select project_id from requester_pool where requester_id = $1)";
   console.log(sql);
-  db.query(sql, [], (err, result) => {
+  db.query(sql, [user_id], (err, result) => {
     if (err) {
       console.log(err);
       return res.status(500).send(err);
@@ -24,7 +22,7 @@ router.get("/", (req, res, next) => {
       if (requested_projects.length > 0) {
         return res.json({ result: requested_projects });
       } else {
-        return res.json({ message: "프로젝트가 존재하지 않습니다" });
+        return res.json({ message: "개설한 프로젝트가 존재하지 않습니다" });
       }
     }
   });
@@ -40,6 +38,8 @@ router.post("/create", (req, res, next) => {
 
   var created_at = moment().toISOString();
   var due_date = moment(req.body.due_date).toISOString();
+  // id, ref_project, title, title_image, simple_description, detail_description,
+  // due_date, created_at, type, project_type, guideline_url, reward
 
   db.query(
     "insert into project values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)",
@@ -86,7 +86,7 @@ router.post("/create", (req, res, next) => {
           }
           db.query(
             "insert into requester_pool values($1, $2)",
-            [normal_id, req.user.id],
+            [normal_id, user_id],
             (err, result) => {
               if (err) {
                 console.log(err);
@@ -94,7 +94,7 @@ router.post("/create", (req, res, next) => {
               }
               db.query(
                 "insert into requester_pool values($1, $2)",
-                [inspection_id, req.user.id],
+                [inspection_id, user_id],
                 (err, result) => {
                   if (err) {
                     console.log(err);

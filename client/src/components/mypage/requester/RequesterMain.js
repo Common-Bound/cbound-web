@@ -7,12 +7,12 @@ import Chart from "chart.js";
 import { Line, Bar } from "react-chartjs-2";
 // reactstrap components
 
-import "../../assets/vendor/nucleo/css/nucleo.css";
-import "../../assets/vendor/@fortawesome/fontawesome-free/css/all.min.css";
-import "../../assets/scss/argon-dashboard-react.scss";
+import "../../../assets/vendor/nucleo/css/nucleo.css";
+import "../../../assets/vendor/@fortawesome/fontawesome-free/css/all.min.css";
+import "../../../assets/scss/argon-dashboard-react.scss";
 
-import Header from "../../components/Headers/Header.jsx";
-import AdminFooter from "../../components/Footers/AdminFooter.jsx";
+import Header from "../../../components/Headers/Header.jsx";
+import AdminFooter from "../../../components/Footers/AdminFooter.jsx";
 
 import {
   Button,
@@ -35,7 +35,7 @@ import {
   parseOptions,
   chartExample1,
   chartExample2
-} from "../../variables/charts.jsx";
+} from "../../../variables/charts.jsx";
 
 class RequesterMain extends Component {
   state = {

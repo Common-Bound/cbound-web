@@ -3,9 +3,9 @@ import React from "react";
 import { Route, Link } from "react-router-dom";
 // node.js library that concatenates classes (strings)
 
-import RequesterProjectsPage from "./RequesterProjectsPage";
-import CreateProjectPage from "./CreateProjectPage";
-import InsightPage from "../workPage/InsightPage";
+import RequesterProjectsPage from "./requester/RequesterProjectsPage";
+import CreateProjectPage from "./creator/CreateProjectPage";
+import InsightPage from "./requester/InsightPage";
 
 import styled from "styled-components";
 

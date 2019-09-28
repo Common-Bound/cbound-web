@@ -1,12 +1,12 @@
 import React, { Component } from "react";
-import { Button } from "reactstrap";
-import ProjectOrig from "../card/RequesterProjectOrig";
+import ProjectOrig from "../../card/CreatorProjectOrig";
 import styled from "styled-components";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
+// import Button from "@material-ui/core/Button";
 
 const Container = styled.div`
   width: 100%;
@@ -51,11 +51,7 @@ const StyledTableCell = styled(TableCell)`
   font-family: Avenir;
 `;
 
-const CreateProjectButton = styled(Button)`
-  float: right;
-`;
-
-class RequesterProjectsPage extends Component {
+class AvailableProjects extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -75,10 +71,12 @@ class RequesterProjectsPage extends Component {
   }
 
   async fetchProject() {
+    console.log(this.props.match.path);
     const url = this.props.match.path;
     const result = await fetch(url)
       .then(res => res.json())
       .then(data => {
+        console.log(data);
         if (data.message) {
           return alert(data.message);
         }
@@ -95,13 +93,11 @@ class RequesterProjectsPage extends Component {
     if (result && result.length > 0) {
       console.log(result);
       const my_proj = result.map(el => {
-        if (el.project_type === "inspection") {
-          return null;
-        }
         return (
           <ProjectOrig
             key={el.id}
             id={el.id}
+            ref_project={el.ref_project}
             title={el.title}
             simple_description={el.simple_description}
             detail_description={el.detail_description}
@@ -124,41 +120,50 @@ class RequesterProjectsPage extends Component {
    * @description 랜덤 프로젝트 추가 버튼 클릭시 랜덤한 프로젝트를 생성하고
    *              프로젝트 목록을 다시 불러온다
    */
+  handleClick = e => {
+    const url = this.props.match.path;
+    fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+      .then(res => res.json())
+      .then(data => {
+        console.log(data);
+        this.fetchProject();
+      });
+  };
 
   render() {
     return (
       <Container>
         <TitleContainer>
-          <Title>Requested Projects</Title>
-          <SemiTitle>
-            생성한 프로젝트
-            <CreateProjectButton
-              color="primary"
-              onClick={() => {
-                window.open(this.props.location.pathname + "/create");
-              }}
-            >
-              프로젝트 생성
-            </CreateProjectButton>
-          </SemiTitle>
+          <Title>Available Projects</Title>
+          <SemiTitle>참여 가능한 프로젝트</SemiTitle>
         </TitleContainer>
-
         <TableContainer>
           <Table>
             <StyledTableHead>
               <TableRow>
                 <StyledTableCell align="center">KICK-OFF</StyledTableCell>
+                <StyledTableCell align="center">ROLE</StyledTableCell>
                 <StyledTableCell align="center">TITLE</StyledTableCell>
                 <StyledTableCell align="center">POINT</StyledTableCell>
                 <StyledTableCell align="center">DUE</StyledTableCell>
+                <StyledTableCell align="center">REMAINED</StyledTableCell>
               </TableRow>
             </StyledTableHead>
             <TableBody>{this.state.projects}</TableBody>
           </Table>
+          {/* 사용성 테스트를 위해 막아놓음 */}
+          {/* <Button onClick={this.handleClick.bind(this)}>
+            랜덤 프로젝트 추가
+          </Button> */}
         </TableContainer>
       </Container>
     );
   }
 }
 
-export default RequesterProjectsPage;
+export default AvailableProjects;
