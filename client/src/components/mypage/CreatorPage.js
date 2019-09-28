@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { Route, Link } from "react-router-dom";
-import CreatorProjectsPage from "./creator/CreatorProjectsPage";
+import CreatorProjectsPage from "./creator/ongoingProjectsPage/CreatorProjectsPage";
 import WorkPage from "./creator/workPage/WorkPage";
-import AvailableProjects from "./creator/AvailableProjects";
+import AvailableProjects from "./creator/availableProjectsPage/AvailableProjects";
 import styled from "styled-components";
 
 const LeftBanner = styled.div`

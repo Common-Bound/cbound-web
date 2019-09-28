@@ -30,10 +30,15 @@ class CreatorProjectJoined extends Component {
     return (
       <StyledTableRow>
         <TableCell align="center">{created_time}</TableCell>
+        {/* <StyledTableCell align="center" project_type={this.props.project_type}>
+          {this.props.project_type === "normal" ? "생성" : "검수"}
+        </StyledTableCell> */}
         <TableCell align="center">
           <StyledLink
             to={{
-              pathname: `/mypage/requester/insight/${this.props.project_type}/${this.props.id}`,
+              pathname: this.props.ref_project
+                ? `/mypage/requester/insight/${this.props.ref_project}`
+                : `/mypage/requester/insight/${this.props.id}`,
               state: {
                 title: this.props.title,
                 created_at: this.props.created_at,

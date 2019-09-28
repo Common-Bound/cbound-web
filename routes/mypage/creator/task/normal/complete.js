@@ -5,6 +5,7 @@ const multer = require("multer");
 const multerS3 = require("multer-s3");
 const uuid = require("uuid/v4");
 const db = require("../../../../../db/index");
+const moment = require("moment");
 
 // AWS config 파일 불러오기
 AWS.config.loadFromPath(__dirname + "/../../../../../config/awsConfig.json");
@@ -58,7 +59,7 @@ router.post(
     meta.total_width = total_width;
     meta.total_height = total_height;
     const id = uuid();
-    const date = Date.now(); // UTC 기준으로 1970년 1월 1일 0시 0분 0초부터 현재까지 경과된 밀리 초를 반환
+    const date = moment().toISOString();
     const file = req.file;
     const project_id = req.body.project_id;
     console.log(typeof project_id);

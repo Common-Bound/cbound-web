@@ -148,6 +148,7 @@ class RequesterProjectsPage extends Component {
             <StyledTableHead>
               <TableRow>
                 <StyledTableCell align="center">KICK-OFF</StyledTableCell>
+                {/* <StyledTableCell align="center">ROLE</StyledTableCell> */}
                 <StyledTableCell align="center">TITLE</StyledTableCell>
                 <StyledTableCell align="center">POINT</StyledTableCell>
                 <StyledTableCell align="center">DUE</StyledTableCell>

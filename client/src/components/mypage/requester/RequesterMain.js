@@ -38,10 +38,15 @@ import {
 } from "../../../variables/charts.jsx";
 
 class RequesterMain extends Component {
-  state = {
-    activeNav: 1,
-    chartExample1Data: "data1"
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      activeNav: 1,
+      chartExample1Data: "data1",
+      data: undefined
+    };
+  }
+
   toggleNavs = (e, index) => {
     e.preventDefault();
     this.setState({
@@ -56,11 +61,34 @@ class RequesterMain extends Component {
     setTimeout(() => wow(), 1000);
     // this.chartReference.update();
   };
-  componentWillMount() {
+
+  fetchData = async () => {
+    const url = this.props.match.url;
+    console.log(url);
+
+    const result = await fetch(url)
+      .then(res => res.json())
+      .then(data => {
+        console.log(data);
+
+        return new Promise(resolve => resolve(data.result));
+      })
+      .catch(err => {
+        console.log(err);
+      });
+
+    await this.setState({
+      data: result
+    });
+  };
+
+  componentWillMount = async () => {
     if (window.Chart) {
       parseOptions(Chart, chartOptions());
     }
-  }
+    await this.fetchData();
+  };
+
   getRoutes = routes => {
     return routes.map((prop, key) => {
       if (prop.layout === "/admin") {
@@ -80,7 +108,7 @@ class RequesterMain extends Component {
   render() {
     return (
       <div className="main-content" ref="mainContent">
-        <Header />
+        <Header data={this.state.data} />
         {/* Page content */}
         <Container className="mt--7" fluid>
           <Row>

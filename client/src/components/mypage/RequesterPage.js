@@ -4,7 +4,7 @@ import { Route, Link } from "react-router-dom";
 // node.js library that concatenates classes (strings)
 
 import RequesterProjectsPage from "./requester/RequesterProjectsPage";
-import CreateProjectPage from "./creator/CreateProjectPage";
+import CreateProjectPage from "./requester/CreateProjectPage";
 import InsightPage from "./requester/InsightPage";
 
 import styled from "styled-components";
@@ -77,7 +77,7 @@ const Section = styled.div`
 class RequesterPage extends React.Component {
   render() {
     return (
-      <>
+      <div>
         <LeftBanner>
           <MyProjectButton
             to={`${this.props.match.url}`}
@@ -109,7 +109,7 @@ class RequesterPage extends React.Component {
             component={InsightPage}
           />
         </Section>
-      </>
+      </div>
     );
   }
 }

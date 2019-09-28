@@ -24,7 +24,9 @@ class Header extends React.Component {
                             Total Data
                           </CardTitle>
                           <span className="h2 font-weight-bold mb-0">
-                            350,897
+                            {this.props.data
+                              ? this.props.data.total_count
+                              : "loading.."}
                           </span>
                         </div>
                         <Col className="col-auto">
@@ -54,7 +56,9 @@ class Header extends React.Component {
                             Today Data
                           </CardTitle>
                           <span className="h2 font-weight-bold mb-0">
-                            2,356
+                            {this.props.data
+                              ? this.props.data.today_count
+                              : "loading.."}
                           </span>
                         </div>
                         <Col className="col-auto">

@@ -4,6 +4,7 @@ const LocalStrategy = require("passport-local").Strategy;
 const bcrypt = require("bcrypt-nodejs");
 const db = require("../../../db/index");
 const uuid = require("uuid/v4");
+const moment = require("moment");
 const router = express.Router();
 
 // path: ~/auth/creator/signup
@@ -56,7 +57,7 @@ passport.use(
                   null,
                   null,
                   null,
-                  Date.now(),
+                  moment().toISOString(),
                   "beginner",
                   0,
                   null
