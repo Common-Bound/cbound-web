@@ -413,8 +413,9 @@ class Body extends Component {
 
   // 작업한 내용 전부를 서버로 전송함
   handleSendAll = async () => {
+    console.log(this.state.crop_image);
     const bodyData = new FormData();
-    let new_crop_image = {};
+    let new_crop_image = Array.from(this.state.crop_image);
 
     bodyData.append("orig_image", this.props.orig_image_file);
 
