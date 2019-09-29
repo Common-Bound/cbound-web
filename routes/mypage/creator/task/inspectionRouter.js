@@ -35,9 +35,9 @@ router.get("/", (req, res, next) => {
   returning *;
   commit;`;
 
-  const debug_sql = `
-    select * from data order by created_at asc limit 1
-  `;
+  // const debug_sql = `
+  //   select * from data order by created_at asc limit 1
+  // `;
   db.query(production_sql, [], (err, result) => {
     if (err) {
       console.log(err);
@@ -58,45 +58,131 @@ router.get("/", (req, res, next) => {
 /**
  * @dev new_crop_image 필드를 받아서 data의 payload 부분을 업데이트 해준다
  */
-router.post("/", (req, res, next) => {
+router.post("/", async (req, res, next) => {
   const data = req.body;
-  console.log(data);
+  console.log("data: ", data);
 
-  if (data.reset == true) {
-    return db.query(
-      `
-      update data set schedule_state='queued', inspector='{}'
-      `,
-      [],
-      (err, result) => {
-        if (err) {
-          console.log(err);
-          return res.status(500).send(err);
-        }
-        return res.json({ result: true });
-      }
-    );
-  }
+  // if (data.reset == true) {
+  //   return db.query(
+  //     `
+  //     update data set schedule_state='queued', inspector='{}'
+  //     `,
+  //     [],
+  //     (err, result) => {
+  //       if (err) {
+  //         console.log(err);
+  //         return res.status(500).send(err);
+  //       }
+  //       return res.json({ result: true });
+  //     }
+  //   );
+  // }
 
   const new_crop_image = JSON.stringify(data.new_crop_image);
   const data_id = data.data_id;
-
-  db.query(
-    `
+  // data 테이블에 주어진 id의 data를 업데이트 시킨다
+  const updated_data = await db
+    .query(
+      `
     update data
     set schedule_state='queued', inspector = array_append(inspector, '${req.user.id}'),
     payload = jsonb_set(payload, '{meta, crop_image}', jsonb '${new_crop_image}', true)
-    where id='${data_id}'
+    where id='${data_id}' returning *;
     `,
-    [],
-    (err, result) => {
-      if (err) {
-        console.log(err);
-        return res.status(500).send(err);
-      }
-      return res.json({ result: true });
+      []
+    )
+    .then(res => res.rows[0])
+    .catch(err => {
+      console.log(err);
+      return res.status(500).send(err);
+    });
+
+  console.log("updated_data: ", updated_data);
+  const inspectors = updated_data.inspector;
+  // 검수를 더 진행해야 된다면 그냥 true를 반환한다
+  if (inspectors.length < updated_data.inspector_count)
+    return res.json({ result: true });
+
+  // 검수자 수가 inspector_count 와 같다면
+  // 검수가 종료된 것으로 검수 결과를 확인해야 한다
+  // correct 필드를 검사하여 data의 status를 변경해준다
+  const crop_image = updated_data.payload.meta.crop_image;
+  let inspection_result = []; // 검수 결과 저장
+  let status; // 데이터의 최종 상태
+  // 검수자들의 reliability를 가져온다
+  const inspector_reliability_promises = await inspectors.map(
+    async inspector => {
+      const inspector_id = inspector;
+      const sql = "select reliability from data_creator where id = $1";
+      const inspector_reliability = await db
+        .query(sql, [inspector_id])
+        .then(res => res.rows[0].reliability)
+        .catch(err => {
+          console.log(err);
+          return res.status(500).send(err);
+        });
+      console.log(
+        `reliability of inspector ${inspector_id}: `,
+        inspector_reliability
+      );
+      return new Promise(resolve => resolve(inspector_reliability));
     }
   );
+  const inspector_reliabilities = await Promise.all(
+    inspector_reliability_promises
+  );
+  console.log("inspector_reliabilities: ", inspector_reliabilities);
+
+  // 이미지의 각 crop 영역에 대해
+  let crop_promises = await crop_image.map(async (crop, index) => {
+    let correct_prob = 1; // correct 확률
+    let incorrect_prob = 1; // incorrect 확률
+    // 검수자들의 각 검수 결과를 순회한다
+    let correct_promises = await crop.correct.map(async (is_correct, index) => {
+      const inspector_reliability = inspector_reliabilities[index];
+
+      if (Number(is_correct) === 1) {
+        // 숫자가 커지는 것을 막기 위해 100 으로 나눠서 확률을 계산한다
+        correct_prob *= Number(inspector_reliability) / 100;
+        incorrect_prob *= 1 - Number(inspector_reliability) / 100;
+      } else {
+        correct_prob *= 1 - Number(inspector_reliability) / 100;
+        incorrect_prob *= Number(inspector_reliability) / 100;
+      }
+
+      return new Promise(resolve => resolve(true));
+    });
+    correct_promises = await Promise.all(correct_promises);
+
+    // 계산된 correct 확률을 비교한다
+    // 만약 correct 확률의 비율이 0.5 이상이라면 이는 통과
+    // 그렇지 않으면 반려시킨다
+    console.log("# index : ", index);
+    console.log("crop label: ", crop_image[index].region_attributes.label);
+    console.log("correct_prob: ", correct_prob);
+    console.log("incorrect_prob: ", incorrect_prob);
+    correct_prob / (correct_prob + incorrect_prob) > 0.5
+      ? inspection_result.push("done")
+      : inspection_result.push("failure");
+    return new Promise(resolve => resolve(true));
+  });
+
+  crop_promises = await Promise.all(crop_promises);
+  // inspection_result 에는 각 crop의 검수 결과를 저장하고 있다
+  // 만약 하나라도 failure이 존재한다면 data를 반려시킨다
+  console.log("inspection_result: ", inspection_result);
+  inspection_result.includes("failure")
+    ? (status = "failure")
+    : (status = "done");
+  // DB에 저장된 data의 상태를 update 시킨다
+  const sql = `update data set status = $1 where id = $2`;
+  db.query(sql, [status, data_id], (err, result) => {
+    if (err) {
+      console.log(err);
+      return res.status(500).send(err);
+    }
+    return res.json({ result: true });
+  });
 });
 
 module.exports = router;

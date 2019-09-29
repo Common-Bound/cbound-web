@@ -12,6 +12,7 @@ router.post("/", (req, res, next) => {
   }
   const normal_id = uuid();
   const inspection_id = uuid();
+  const user_id = req.user.id;
 
   var created_at = moment().toISOString();
   var due_date = moment(req.body.due_date).toISOString();

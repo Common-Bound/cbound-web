@@ -59,7 +59,9 @@ CREATE TABLE "data" (
   "creator_id" varchar,
   "inspector" varchar [],
   "project_id" varchar,
-  "schedule_state" schedule_state
+  "schedule_state" schedule_state,
+  "reliability" float,
+  "inspector_count" int
 );
 ALTER TABLE
   "creator_pool"

@@ -265,7 +265,13 @@ class Body extends Component {
     });
   }
 
-  async resizeCropLocation(naturalWidth, shape_attributes) {
+  /**
+   *
+   * @param {이미지의 원본 width 길이} naturalWidth
+   * @param {crop_iamge의 shape_attributes} shape_attributes
+   * @param {축소(reduce) 또는 확대(magnify)} type
+   */
+  async resizeCropLocation(naturalWidth, shape_attributes, type = "reduce") {
     console.log("orig_shape_attributes: ");
     console.log(shape_attributes);
 
@@ -274,10 +280,10 @@ class Body extends Component {
     const s = shape_attributes;
 
     const id = s.id;
-    const new_x = s.x / scale;
-    const new_y = s.y / scale;
-    const new_width = s.width / scale;
-    const new_height = s.height / scale;
+    const new_x = type === "reduce" ? s.x / scale : s.x * scale;
+    const new_y = type === "reduce" ? s.y / scale : s.y * scale;
+    const new_width = type === "reduce" ? s.width / scale : s.width * scale;
+    const new_height = type === "reduce" ? s.height / scale : s.height * scale;
 
     const new_shape_attributes = {
       id: id,
@@ -331,6 +337,38 @@ class Body extends Component {
     // unchecked 영역 존재시 빠져나간다
     if (!check_result) {
       return;
+    }
+    // 이미지의 naturalWidth 가 640px 보다 크다면 resize 해준다
+    const image = document.getElementById("image");
+    let scale = 1;
+    if (image.naturalWidth > 640) {
+      scale = image.naturalWidth / 640;
+      console.log(image.naturalWidth);
+
+      const new_shape_attributes_promises = await this.state.data.payload.meta.crop_image.map(
+        crop => {
+          console.log(crop);
+          const new_shape_attributes = this.resizeCropLocation(
+            image.naturalWidth,
+            crop.shape_attributes,
+            "magnify" // 확대
+          );
+
+          return new Promise(resolve => resolve(new_shape_attributes));
+        }
+      );
+
+      const new_shape_attributes = await Promise.all(
+        new_shape_attributes_promises
+      );
+      const new_data = this.state.data;
+      new_data.payload.meta.crop_image.forEach((crop, index) => {
+        crop.shape_attributes = new_shape_attributes[index];
+      });
+
+      await this.setState({
+        data: new_data
+      });
     }
 
     // 모든 영역이 확인되었다면 각각을 id 순서대로 반영해준다

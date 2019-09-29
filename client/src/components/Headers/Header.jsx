@@ -122,8 +122,9 @@ class Header extends React.Component {
                           <span className="h2 font-weight-bold mb-0">
                             {this.props.data
                               ? this.props.data.total_count !== 0
-                                ? this.props.data.inspected_count /
-                                  this.props.data.total_count
+                                ? (this.props.data.inspected_count /
+                                    this.props.data.total_count) *
+                                  100
                                 : 0
                               : "loading.."}
                             %
