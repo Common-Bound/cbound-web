@@ -340,9 +340,7 @@ class Body extends Component {
     }
     // 이미지의 naturalWidth 가 640px 보다 크다면 resize 해준다
     const image = document.getElementById("image");
-    let scale = 1;
     if (image.naturalWidth > 640) {
-      scale = image.naturalWidth / 640;
       console.log(image.naturalWidth);
 
       const new_shape_attributes_promises = await this.state.data.payload.meta.crop_image.map(
