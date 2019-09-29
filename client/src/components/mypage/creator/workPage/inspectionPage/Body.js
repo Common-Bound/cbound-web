@@ -2,13 +2,14 @@ import React, { Component } from "react";
 import styled from "styled-components";
 import Inspect1By1 from "./Inspect1By1";
 import moment from "moment";
-import Stepper from "@material-ui/core/Stepper";
-import Step from "@material-ui/core/Step";
-import StepLabel from "@material-ui/core/StepLabel";
+// import Stepper from "@material-ui/core/Stepper";
+// import Step from "@material-ui/core/Step";
+// import StepLabel from "@material-ui/core/StepLabel";
 import Button from "@material-ui/core/Button";
 import CropImage from "./CropImage";
-
 import "react-image-crop/dist/ReactCrop.css";
+import introJS from "intro.js";
+import "intro.js/introjs.css";
 
 const BodyContainer = styled.div`
   width: 80%;
@@ -84,26 +85,26 @@ const LeftMainContainer = styled.div`
   justify-content: flex-start;
 `;
 
-const StepperContainer = styled.div`
-  width: 100%;
-`;
+// const StepperContainer = styled.div`
+//   width: 100%;
+// `;
 
-const StepperRoot = styled.div`
-  width: 100%;
-  margin: 0 auto;
-`;
+// const StepperRoot = styled.div`
+//   width: 100%;
+//   margin: 0 auto;
+// `;
 
-const StyledStepper = styled(Stepper)`
-  height: 20px;
-  padding: 20px 0px 20px 0px !important;
-`;
+// const StyledStepper = styled(Stepper)`
+//   height: 20px;
+//   padding: 20px 0px 20px 0px !important;
+// `;
 
 const RightDescriptionContainer = styled.div`
   display: flex;
   flex-direction: column;
   flex-basis: auto;
   align-items: flex-start;
-  padding: 40px 20px 0px 20px;
+  padding: 40px 20px;
 
   width: 440px;
   background-color: #f0f0f0;
@@ -162,16 +163,13 @@ class Body extends Component {
       crop_images: []
     };
     this.handleClick = this.handleClick.bind(this);
-
-    // this.clickO = this.clickO.bind(this);
-    // this.clickX = this.clickX.bind(this);
-    // this.handleEndInspect = this.handleEndInspect.bind(this);
-    this.handleBack = this.handleBack.bind(this);
-    this.handleNext = this.handleNext.bind(this);
-    this.handleReset = this.handleReset.bind(this);
+    // this.handleBack = this.handleBack.bind(this);
+    // this.handleNext = this.handleNext.bind(this);
+    // this.handleReset = this.handleReset.bind(this);
   }
 
   async componentDidMount() {
+    introJS().start();
     await this.fetchData();
   }
 
@@ -323,12 +321,12 @@ class Body extends Component {
     // 하나라도 unchecked 상태이 crop이 존재한다면 이를 확인하라고 알린다
     let check_result = true;
     new_crop_images.some(el => {
-      // attributes는 0:id, 1: class, 2: name, 3: status, 4: style
-      if (el.attributes[3].value === "unchecked") {
+      // attributes는 0:id, 1: class, 2: status
+      if (el.attributes[2].value === "unchecked") {
         alert("확인하지 않은 영역이 있습니다.");
         check_result = false;
       }
-      return el.attributes[3].value === "unchecked";
+      return el.attributes[2].value === "unchecked";
     });
     // unchecked 영역 존재시 빠져나간다
     if (!check_result) {
@@ -395,25 +393,26 @@ class Body extends Component {
       .catch(err => console.log(err));
   };
 
-  handleNext() {
-    //setActiveStep(prevActiveStep => prevActiveStep + 1);
-    this.setState({
-      step: this.state.step + 1
-    });
-  }
+  // handleNext() {
+  //   //setActiveStep(prevActiveStep => prevActiveStep + 1);
+  //   this.setState({
+  //     step: this.state.step + 1
+  //   });
+  // }
 
-  handleBack() {
-    //setActiveStep(prevActiveStep => prevActiveStep - 1);
-    this.setState({
-      step: this.state.step - 1
-    });
-  }
+  // handleBack() {
+  //   //setActiveStep(prevActiveStep => prevActiveStep - 1);
+  //   this.setState({
+  //     step: this.state.step - 1
+  //   });
+  // }
 
-  handleReset() {
-    this.setState({
-      step: 0
-    });
-  }
+  // handleReset() {
+  //   this.setState({
+  //     step: 0
+  //   });
+  // }
+
   render() {
     const { data, loading, width, height, crop_images } = this.state;
     const info = this.props.info;
@@ -425,7 +424,7 @@ class Body extends Component {
     const hours = moment.duration(t2.diff(t1)).hours();
     const minutes = moment.duration(t2.diff(t1)).minutes();
 
-    const steps = ["STEP 1", "STEP 2", "STEP 3"];
+    // const steps = ["STEP 1", "STEP 2", "STEP 3"];
 
     if (this.state.needCropAll) {
       return (
@@ -462,7 +461,7 @@ class Body extends Component {
           <MainContainer>
             {/* Main Container 의 왼쪽 영역 */}
             <LeftMainContainer>
-              <StepperContainer>
+              {/* <StepperContainer>
                 <StepperRoot>
                   <StyledStepper activeStep={this.state.step}>
                     {steps.map(label => (
@@ -472,9 +471,13 @@ class Body extends Component {
                     ))}
                   </StyledStepper>
                 </StepperRoot>
-              </StepperContainer>
+              </StepperContainer> */}
               {/* 크롭할 이미지 영역 */}
-              <ImageContainer>
+              <ImageContainer
+                data-intro="검수할 이미지가 화면에 나타나게 됩니다"
+                data-step="1"
+                data-disable-interaction="true"
+              >
                 {!loading ? (
                   <div
                     style={{
@@ -503,62 +506,32 @@ class Body extends Component {
               </ImageContainer>
             </LeftMainContainer>
             {/* Main Container 의 오른쪽 영역 */}
-            <RightDescriptionContainer>
-              {this.state.step === 0 ? (
-                <DescriptionBoxContainer>
-                  <DescriptionBox>
-                    1. 좌측 [+] 영역을 클릭하여 이미지를 업로드 해 주세요 (단,
-                    이미지 선명하지 않거나 해상도가 낮으면 업로드 되지 않습니다)
-                  </DescriptionBox>
-                  <DescriptionBox>
-                    2. 이미지가 정상적으로 업로드 되어 바운드 되면, AI가
-                    자동으로 글자라고 인식하여 이미지들을 아래 썸네일로
-                    보여줍니다.
-                  </DescriptionBox>
-                  <DescriptionBox>
-                    3. 썸네일 이미지가 정상적으로 로드 되었다면, 하단 우측의
-                    노란색 [NEXT] 버튼을 눌러 다음 단계로 이동하세요.
-                  </DescriptionBox>
-                </DescriptionBoxContainer>
-              ) : this.state.step === 1 ? (
-                <DescriptionBoxContainer>
-                  <DescriptionBox>
-                    4. SHOW 버튼을 누르면, 좌측 이미지에서 AI가 자동으로 인식한
-                    영역들이 보여집니다. 인식되지 않은 영역에서 글자로 생각되는
-                    부분이 있다면 그 영역을 드래그하여 추가하세요. (영역을
-                    드래그하면 영역 이동 가능)
-                  </DescriptionBox>
-                  <DescriptionBox>
-                    5. 선택 후, 아래의 BOUND 버튼 혹은 엔터를 누르면 AI가 추가로
-                    글자를 학습합니다. AI가 활성화 상태면 자동으로 글자를
-                    학습합니다.
-                  </DescriptionBox>
-                  <DescriptionBox>
-                    6. 완료 후 NEXT버튼을 눌러 다음의 마지막 단계(STEP3)로
-                    이동하세요.
-                  </DescriptionBox>
-                </DescriptionBoxContainer>
-              ) : (
-                <DescriptionBoxContainer>
-                  <DescriptionBox>
-                    8. AI가 글자를 제대로 인식했는지 각 썸네일 아래 블루박스를
-                    확인해주세요.
-                  </DescriptionBox>
-                  <DescriptionBox>
-                    9. AI가 글자를 잘못 인식했거나, 바운드 영역이 잘못 선택되어
-                    있다면 아래 바운드 썸네일을 클릭하여 영역을 수정하거나,
-                    블루박스 내용을 수정하여 AI를 학습시켜주세요.
-                  </DescriptionBox>
-                  <DescriptionBox>
-                    * AI의 정확도를 개선한 분에겐 추가 포인트를 드립니다.
-                    (기여도 확인 시, 검증 후 개당 +10포인트 추가 지급)
-                  </DescriptionBox>
-                </DescriptionBoxContainer>
-              )}
+            <RightDescriptionContainer
+              data-intro="가이드를 읽고 검수를 진행하시면 됩니다"
+              data-step="2"
+              data-disable-interaction="true"
+            >
+              <DescriptionBoxContainer>
+                <DescriptionBox>
+                  - <span style={{ fontWeight: "bold" }}>어두운 네모 박스</span>
+                  가 사물에 적절히 위치하고 있는지 확인해 주세요.
+                </DescriptionBox>
+                <DescriptionBox>
+                  - 사물이 네모 박스를 벗어나 있거나, 네모 박스가 너무 크다면
+                  해당 박스를 클릭하여{" "}
+                  <span style={{ color: "red" }}>빨간 테두리</span>로 표시해
+                  주세요.
+                </DescriptionBox>
+                <DescriptionBox>
+                  - 네모 박스가 사물을 잘 둘러싸고 있다면 해당 박스를 클릭하여{" "}
+                  <span style={{ color: "green" }}>초록 테두리</span>로 표시해
+                  주세요.
+                </DescriptionBox>
+              </DescriptionBoxContainer>
             </RightDescriptionContainer>
           </MainContainer>
           <StepButtonContainer>
-            <Button disabled={this.state.step === 0} onClick={this.handleBack}>
+            {/* <Button disabled={this.state.step === 0} onClick={this.handleBack}>
               Back
             </Button>
             <Button
@@ -568,14 +541,14 @@ class Body extends Component {
               onClick={this.handleNext}
             >
               {this.state.step === steps.length - 1 ? "Finish" : "Next"}
-            </Button>
-            {this.state.step === steps.length ? (
-              <div>
-                <Button onClick={this.handleClick}>완료하기</Button>
-              </div>
-            ) : (
+            </Button> */}
+            {/* {this.state.step === steps.length ? ( */}
+            <div>
+              <Button onClick={this.handleClick}>완료하기</Button>
+            </div>
+            {/* ) : (
               ""
-            )}
+            )} */}
           </StepButtonContainer>
         </BodyContainer>
       );
