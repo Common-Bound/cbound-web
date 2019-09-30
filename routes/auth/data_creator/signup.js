@@ -19,7 +19,7 @@ passport.use(
       passReqToCallback: false
     },
     (email, password, done) => {
-      console.log(email, password);
+      // console.log(email, password);
       // 먼저 주어진 email 과 일치하는 유저를 찾는다
       // 이 떄, email은 유일한 식별자라고 가정한다
       db.query(
@@ -48,7 +48,7 @@ passport.use(
             bcrypt.hash(password, null, null, function(err, hash) {
               // id, email, password, name, phone_number, gender, date_of_birth, created_at, rank, point, account
               db.query(
-                "insert into data_creator values ($1, $2, $3)",
+                "insert into data_creator values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)",
                 [
                   uid,
                   email,

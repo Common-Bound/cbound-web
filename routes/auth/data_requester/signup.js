@@ -47,7 +47,7 @@ passport.use(
             bcrypt.hash(password, null, null, function(err, hash) {
               // id, email, password, phone_number, created_at, point, account
               db.query(
-                "insert into data_requester values ($1, $2, $3)",
+                "insert into data_requester values ($1, $2, $3, $4, $5, $6, $7)",
                 [uid, email, hash, null, moment().toISOString(), 0, null],
                 function(err, rows) {
                   if (err) {
