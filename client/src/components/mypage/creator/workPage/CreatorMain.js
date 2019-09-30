@@ -253,6 +253,7 @@ class CreatorMain extends Component {
           <Body
             key={index}
             class="bodies"
+            image_time={this.state.image_time}
             info={this.props.info}
             project_type={this.props.project_type}
             project_id={this.props.project_id}

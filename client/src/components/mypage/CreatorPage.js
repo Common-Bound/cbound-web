@@ -3,6 +3,7 @@ import { Route, Link } from "react-router-dom";
 import CreatorProjectsPage from "./creator/ongoingProjectsPage/CreatorProjectsPage";
 import WorkPage from "./creator/workPage/WorkPage";
 import AvailableProjects from "./creator/availableProjectsPage/AvailableProjects";
+import CreatorInsightPage from "./creator/insightPage/CreatorInsightPage";
 import styled from "styled-components";
 
 const LeftBanner = styled.div`
@@ -61,6 +62,13 @@ const TaskButton = styled(StyledLink)`
       : "rgba(255, 255, 255, 0.3)"};
 `;
 
+const InsightButton = styled(StyledLink)`
+  color: ${props =>
+    props.pathname.includes("/mypage/creator/insight")
+      ? "white"
+      : "rgba(255, 255, 255, 0.3)"};
+`;
+
 const Icon = styled.i`
   transform: scale(1.4, 1.4);
 `;
@@ -104,6 +112,13 @@ class CreatorPage extends Component {
             <Icon className="fas fa-crop-alt"></Icon>
             <IconTitle>Workspace</IconTitle>
           </TaskButton>
+          <InsightButton
+            to={`${this.props.match.url}/insight`}
+            pathname={this.props.location.pathname}
+          >
+            <Icon className="fas fa-analytics"></Icon>
+            <IconTitle>Insight</IconTitle>
+          </InsightButton>
           <StyledLink
             to="/auth/signout"
             pathname={this.props.location.pathname}
@@ -121,6 +136,10 @@ class CreatorPage extends Component {
           <Route
             path={`${this.props.match.url}/projects`}
             component={CreatorProjectsPage}
+          />
+          <Route
+            path={`${this.props.match.url}/insight`}
+            component={CreatorInsightPage}
           />
           <Route
             path={`${this.props.match.url}/task/:project_type/:project_id`}

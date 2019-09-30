@@ -11,6 +11,7 @@ const moment = require("moment");
 // path: ~/mypage/creator
 router.use("/join", joinRouter);
 router.use("/projects", projectsRouter);
+router.use("/insight", projectsRouter);
 router.use("/task", taskRouter);
 
 // 내가 참여 가능한 프로젝트 목록들을 보여준다
