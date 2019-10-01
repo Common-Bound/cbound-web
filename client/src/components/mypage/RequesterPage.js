@@ -105,7 +105,7 @@ class RequesterPage extends React.Component {
             component={CreateProjectPage}
           />
           <Route
-            path={`${this.props.match.url}/insight/:project_type/:project_id`}
+            path={`${this.props.match.url}/insight/:project_id`}
             component={InsightPage}
           />
         </Section>
