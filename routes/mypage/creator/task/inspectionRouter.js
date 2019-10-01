@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../../../../db/index");
+const moment = require("moment");
 
 // path: ~/mypage/creator/task/inspection
 router.use("/", (req, res, next) => {
@@ -92,6 +93,19 @@ router.post("/", async (req, res, next) => {
       []
     )
     .then(res => res.rows[0])
+    .catch(err => {
+      console.log(err);
+      return res.status(500).send(err);
+    });
+  // inspector_pool 에 검수자의 id와 data의 id를 추가한다
+  const inspector_update_query = `insert into inspector_pool values($1, $2, $3)`;
+  await db
+    .query(inspector_update_query, [
+      req.user.id,
+      data_id,
+      moment().toISOString()
+    ])
+    .then(res => res.rows)
     .catch(err => {
       console.log(err);
       return res.status(500).send(err);

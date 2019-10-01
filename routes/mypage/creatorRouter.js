@@ -3,6 +3,7 @@ const router = express.Router();
 const joinRouter = require("./creator/join");
 const projectsRouter = require("./creator/projects");
 const taskRouter = require("./creator/taskRouter");
+const historyRouter = require("./creator/history");
 
 const db = require("../../db/index");
 const uuid = require("uuid/v4");
@@ -13,6 +14,7 @@ router.use("/join", joinRouter);
 router.use("/projects", projectsRouter);
 router.use("/insight", projectsRouter);
 router.use("/task", taskRouter);
+router.use("/history", historyRouter);
 
 // 내가 참여 가능한 프로젝트 목록들을 보여준다
 router.get("/", (req, res, next) => {
