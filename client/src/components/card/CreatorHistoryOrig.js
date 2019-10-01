@@ -12,19 +12,27 @@ const StyledTableRow = styled(TableRow)`
   }
 `;
 
+const StyledTableCell = styled(TableCell)`
+  color: ${props => (props.project_type ? "black" : "blue")} !important;
+`;
+
 class CreatorHistoryOrig extends Component {
   render() {
-    const created_time = moment(this.props.created_at, "YYYY-MM-DD").format(
+    const created_time = moment(this.props.date, "YYYY-MM-DD").format(
       "YYYY-MM-DD"
     );
 
     return (
       <StyledTableRow>
         <TableCell align="center">{created_time}</TableCell>
+        <StyledTableCell align="center" project_type={this.props.project_type}>
+          {this.props.project_type ? "생성" : "검수"}
+        </StyledTableCell>
         <TableCell align="center">{this.props.title}</TableCell>
-        <TableCell align="center">{this.props.point}</TableCell>
-        <TableCell align="center">{this.props.project_type}</TableCell>
-        <TableCell align="center">{this.props.status}</TableCell>
+        <TableCell align="center">{this.props.reward}</TableCell>
+        <TableCell align="center">
+          {this.props.status ? this.props.status : "-"}
+        </TableCell>
       </StyledTableRow>
     );
   }

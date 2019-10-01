@@ -3,7 +3,7 @@ import { Route, Link } from "react-router-dom";
 import CreatorProjectsPage from "./creator/ongoingProjectsPage/CreatorProjectsPage";
 import WorkPage from "./creator/workPage/WorkPage";
 import AvailableProjects from "./creator/availableProjectsPage/AvailableProjects";
-import CreatorHistoryPage from "./creator/insightPage/CreatorHistoryPage";
+import CreatorHistoryPage from "./creator/historyPage/CreatorHistoryPage";
 import styled from "styled-components";
 
 const LeftBanner = styled.div`
@@ -113,11 +113,11 @@ class CreatorPage extends Component {
             <IconTitle>Workspace</IconTitle>
           </TaskButton>
           <InsightButton
-            to={`${this.props.match.url}/insight`}
+            to={`${this.props.match.url}/history`}
             pathname={this.props.location.pathname}
           >
             <Icon className="fas fa-chart-bar"></Icon>
-            <IconTitle>Insight</IconTitle>
+            <IconTitle>History</IconTitle>
           </InsightButton>
           <StyledLink
             to="/auth/signout"

@@ -83,9 +83,9 @@ class CreatorHistoryPage extends Component {
               <ProjectHistory
                 key={el.id}
                 id={el.id}
-                title={el.project_name}
-                created_at={el.created_at}
-                point={el.point}
+                title={el.title}
+                date={el.date}
+                reward={el.reward}
                 project_type={el.project_type}
                 status={el.status}
               />
@@ -102,17 +102,17 @@ class CreatorHistoryPage extends Component {
     return (
       <Container>
         <TitleContainer>
-          <Title>On Going Projects</Title>
-          <SemiTitle>참여한 프로젝트</SemiTitle>
+          <Title>Work History</Title>
+          <SemiTitle>작업 참여 내역</SemiTitle>
         </TitleContainer>
         <TableContainer>
           <Table>
             <StyledTableHead>
               <TableRow>
-                <StyledTableCell align="center">CREATED_AT</StyledTableCell>
+                <StyledTableCell align="center">CREATED</StyledTableCell>
+                <StyledTableCell align="center">ROLE</StyledTableCell>
                 <StyledTableCell align="center">TITLE</StyledTableCell>
                 <StyledTableCell align="center">POINT</StyledTableCell>
-                <StyledTableCell align="center">TYPE</StyledTableCell>
                 <StyledTableCell align="center">STATUS</StyledTableCell>
               </TableRow>
             </StyledTableHead>
