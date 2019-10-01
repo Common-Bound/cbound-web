@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Route, Link } from "react-router-dom";
 import CreatorProjectsPage from "./creator/ongoingProjectsPage/CreatorProjectsPage";
 import WorkPage from "./creator/workPage/WorkPage";
+import ProjectInsightPage from "./creator/insightPage/ProjectInsightPage";
 import AvailableProjects from "./creator/availableProjectsPage/AvailableProjects";
 import CreatorInsightPage from "./creator/insightPage/CreatorInsightPage";
 import styled from "styled-components";
@@ -116,7 +117,7 @@ class CreatorPage extends Component {
             to={`${this.props.match.url}/insight`}
             pathname={this.props.location.pathname}
           >
-            <Icon className="fas fa-analytics"></Icon>
+            <Icon className="fas fa-chart-bar"></Icon>
             <IconTitle>Insight</IconTitle>
           </InsightButton>
           <StyledLink
@@ -138,8 +139,13 @@ class CreatorPage extends Component {
             component={CreatorProjectsPage}
           />
           <Route
+            exact
             path={`${this.props.match.url}/insight`}
             component={CreatorInsightPage}
+          />
+          <Route
+            path={`${this.props.match.url}/insight/:project_type/:project_id`}
+            component={ProjectInsightPage}
           />
           <Route
             path={`${this.props.match.url}/task/:project_type/:project_id`}

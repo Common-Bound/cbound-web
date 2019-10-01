@@ -27,9 +27,9 @@ router.get("/", (req, res, next) => {
         const now = moment();
         const due_date = moment(row.due_date);
         const millisec_diff = moment
+
           .duration(due_date.diff(now))
           .asMilliseconds();
-
         if (millisec_diff > 0) return row;
       });
 
