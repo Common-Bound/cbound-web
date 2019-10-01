@@ -14,23 +14,36 @@ const Container = styled.div`
 
 const TitleContainer = styled.div`
   width: 80%;
+  padding-top: 40px;
+  padding-bottom: 40px;
   margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
 
   color: black; !important;
 `;
 
+const LeftTitleContainer = styled.div``;
+
 const Title = styled.div`
-  padding-top: 40px;
   font-family: Avenir;
   font-size: 20px;
   font-weight: bold;
 `;
 
 const SemiTitle = styled.div`
-  padding-bottom: 40px;
   font-family: SpoqaHanSans;
   font-size: 32px;
   font-weight: bold;
+`;
+
+const RightTitleContainer = styled.div``;
+
+const RightSemiTitle = styled.div`
+  padding-top: 52px;
+  font-family: SpoqaHanSans;
+  font-size: 18px;
+  color: grey;
 `;
 
 const TableContainer = styled.div`
@@ -102,8 +115,15 @@ class CreatorHistoryPage extends Component {
     return (
       <Container>
         <TitleContainer>
-          <Title>Work History</Title>
-          <SemiTitle>작업 참여 내역</SemiTitle>
+          <LeftTitleContainer>
+            <Title>Work History</Title>
+            <SemiTitle>작업 참여 내역</SemiTitle>
+          </LeftTitleContainer>
+          <RightTitleContainer>
+            <RightSemiTitle>
+              최근 30일 동안 작업한 내역이 보여집니다
+            </RightSemiTitle>
+          </RightTitleContainer>
         </TitleContainer>
         <TableContainer>
           <Table>

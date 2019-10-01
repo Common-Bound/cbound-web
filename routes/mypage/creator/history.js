@@ -43,7 +43,7 @@ router.get("/", async (req, res, next) => {
   // 가져온 정보들을 하나의 배열로 묶어서 시간 순으로 정렬한다
   let total_data = created_data_in_30_days.concat(inspected_data_in_30_days);
   total_data.sort(function(obj1, obj2) {
-    return moment(obj1.date).diff(moment(obj2.date));
+    return moment(obj1.date).millisecond() - moment(obj2.date).millisecond();
   });
   total_data = await Promise.all(total_data);
   console.log("total_data: ", total_data);
