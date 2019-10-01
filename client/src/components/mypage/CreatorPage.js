@@ -2,9 +2,8 @@ import React, { Component } from "react";
 import { Route, Link } from "react-router-dom";
 import CreatorProjectsPage from "./creator/ongoingProjectsPage/CreatorProjectsPage";
 import WorkPage from "./creator/workPage/WorkPage";
-import ProjectInsightPage from "./creator/insightPage/ProjectInsightPage";
 import AvailableProjects from "./creator/availableProjectsPage/AvailableProjects";
-import CreatorInsightPage from "./creator/insightPage/CreatorInsightPage";
+import CreatorHistoryPage from "./creator/insightPage/CreatorHistoryPage";
 import styled from "styled-components";
 
 const LeftBanner = styled.div`
@@ -65,7 +64,7 @@ const TaskButton = styled(StyledLink)`
 
 const InsightButton = styled(StyledLink)`
   color: ${props =>
-    props.pathname.includes("/mypage/creator/insight")
+    props.pathname.includes("/mypage/creator/History")
       ? "white"
       : "rgba(255, 255, 255, 0.3)"};
 `;
@@ -139,13 +138,8 @@ class CreatorPage extends Component {
             component={CreatorProjectsPage}
           />
           <Route
-            exact
-            path={`${this.props.match.url}/insight`}
-            component={CreatorInsightPage}
-          />
-          <Route
-            path={`${this.props.match.url}/insight/:project_type/:project_id`}
-            component={ProjectInsightPage}
+            path={`${this.props.match.url}/history`}
+            component={CreatorHistoryPage}
           />
           <Route
             path={`${this.props.match.url}/task/:project_type/:project_id`}

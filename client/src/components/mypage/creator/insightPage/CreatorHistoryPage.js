@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import ProjectJoined from "../../../card/CreatorInsightOrig";
+import ProjectHistory from "../../../card/CreatorHistoryOrig";
 import styled from "styled-components";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -50,7 +50,7 @@ const StyledTableCell = styled(TableCell)`
   font-family: Avenir;
 `;
 
-class CreatorInsightPage extends Component {
+class CreatorHistoryPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -79,23 +79,15 @@ class CreatorInsightPage extends Component {
         if (data.result) {
           console.log(data);
           const new_projects = data.result.map(el => {
-            if (el.ref_project) {
-              return null;
-            }
             return (
-              <ProjectJoined
+              <ProjectHistory
                 key={el.id}
                 id={el.id}
-                ref_project={el.ref_project}
-                title={el.title}
-                simple_description={el.simple_description}
-                detail_description={el.detail_description}
-                due_date={el.due_date}
+                title={el.project_name}
                 created_at={el.created_at}
-                type={el.type}
+                point={el.point}
                 project_type={el.project_type}
-                guideline_url={el.guideline_url}
-                reward={el.reward}
+                status={el.status}
               />
             );
           });
@@ -117,11 +109,11 @@ class CreatorInsightPage extends Component {
           <Table>
             <StyledTableHead>
               <TableRow>
-                <StyledTableCell align="center">KICK-OFF</StyledTableCell>
+                <StyledTableCell align="center">CREATED_AT</StyledTableCell>
                 <StyledTableCell align="center">TITLE</StyledTableCell>
                 <StyledTableCell align="center">POINT</StyledTableCell>
-                <StyledTableCell align="center">DUE</StyledTableCell>
-                <StyledTableCell align="center">REMAINED</StyledTableCell>
+                <StyledTableCell align="center">TYPE</StyledTableCell>
+                <StyledTableCell align="center">STATUS</StyledTableCell>
               </TableRow>
             </StyledTableHead>
             <TableBody>{this.state.projects}</TableBody>
@@ -132,4 +124,4 @@ class CreatorInsightPage extends Component {
   }
 }
 
-export default CreatorInsightPage;
+export default CreatorHistoryPage;
