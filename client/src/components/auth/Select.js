@@ -46,7 +46,26 @@ const SelectMain = styled.div`
     flex-direction: column;
   }
   @media (max-width: 500px) {
-    padding-top: 40px;
+    padding-top: 60px;
+  }
+`;
+
+const LeftCard = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+
+  @media (max-width: 1200px) {
+    margin-rigth: 80px;
+    align-items: flex-start;
+  }
+  @media (max-width: 810px) {
+    padding: 0 20px;
+    margin-bottom: 40px;
+  }
+  @media (max-width: 500px) {
+    align-items: center;
+    padding: 0 10px;
   }
 `;
 
@@ -66,25 +85,6 @@ const RightCard = styled.div`
   @media (max-width: 500px) {
     align-items: center;
     padding: 0 10px;
-  }
-`;
-
-const LeftCard = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-
-  @media (max-width: 1200px) {
-    margin-rigth: 80px;
-    align-items: flex-start;
-  }
-  @media (max-width: 810px) {
-    padding: 0 20px;
-  }
-  @media (max-width: 500px) {
-    align-items: center;
-    padding: 0 10px;
-    margin-bottom: 20px;
   }
 `;
 
@@ -131,7 +131,7 @@ const Button = styled.div`
   }
 
   @media (max-width: 810px) {
-    margin: 20px 0px;
+    margin: 30px 0px;
   }
   @media (max-width: 500px) {
     heigth: 40px;
