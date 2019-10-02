@@ -18,6 +18,7 @@
     "express-session": "^1.16.2",
     "mocha": "^6.2.0",
     "moment": "^2.24.0",
+    "moment-timezone": "^0.5.26",
     "morgan": "^1.9.1",
     "multer": "^1.4.2",
     "multer-s3": "^2.9.0",
@@ -25,7 +26,9 @@
     "passport-local": "^1.0.0",
     "pg": "^7.11.0",
     "redis": "^2.8.0",
-    "uuid": "^3.3.2"
+    "uuid": "^3.3.2",
+    "winston": "^3.2.1",
+    "winston-daily-rotate-file": "^4.2.1"
   },
   "scripts": {
     "client": "cd client && yarn start",

@@ -1,10 +1,10 @@
 const express = require("express");
+const logger = require("../../../config/logger");
 const router = express.Router();
 
 router.get("/", (req, res, next) => {
-  console.log("로그아웃 전 user 세션: ", req.user);
+  logger.info("로그아웃 user: " + req.user.id);
   req.logOut();
-  console.log("로그아웃 후 user 세션: ", req.user);
   res.json({ result: true });
 });
 

@@ -5,7 +5,8 @@ const multer = require("multer");
 const multerS3 = require("multer-s3");
 const uuid = require("uuid/v4");
 const db = require("../../../../../db/index");
-const moment = require("moment");
+const moment = require("moment-timezone");
+const logger = require("../../../../../config/logger");
 
 // AWS config 파일 불러오기
 AWS.config.loadFromPath(__dirname + "/../../../../../config/awsConfig.json");
@@ -59,10 +60,11 @@ router.post(
     meta.total_width = total_width;
     meta.total_height = total_height;
     const id = uuid();
-    const date = moment().toISOString();
+    const date = moment()
+      .tz("Asia/Seoul")
+      .format();
     const file = req.file;
     const project_id = req.body.project_id;
-    console.log(typeof project_id);
     const schedule_state = project_id === "undefined" ? "reserved" : "queued";
 
     const payload = {
@@ -88,7 +90,7 @@ router.post(
       ],
       (err, result) => {
         if (err) {
-          console.log(err);
+          logger.error(err);
           return res.status(500).send(err);
         }
         return res.json({ result: true });

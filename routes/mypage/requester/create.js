@@ -3,6 +3,8 @@ const router = express.Router();
 const db = require("../../../db/index");
 const uuid = require("uuid/v4");
 const moment = require("moment");
+require("moment-timezone");
+const logger = require("../../../config/logger");
 
 // path: ~/mypage/requester/create
 router.post("/", (req, res, next) => {
@@ -14,8 +16,12 @@ router.post("/", (req, res, next) => {
   const inspection_id = uuid();
   const user_id = req.user.id;
 
-  var created_at = moment().toISOString();
-  var due_date = moment(req.body.due_date).toISOString();
+  var created_at = moment()
+    .tz("Asia/Seoul")
+    .format();
+  var due_date = moment(req.body.due_date)
+    .tz("Asia/Seoul")
+    .format();
   // id, ref_project, title, title_image, simple_description, detail_description,
   // due_date, created_at, type, project_type, guideline_url, reward
 
@@ -37,7 +43,7 @@ router.post("/", (req, res, next) => {
     ],
     (err, result) => {
       if (err) {
-        console.log(err);
+        logger.error(err);
         return res.status(500).send(err);
       }
       // 검수 프로젝트 추가
@@ -59,7 +65,7 @@ router.post("/", (req, res, next) => {
         ],
         (err, result) => {
           if (err) {
-            console.log(err);
+            logger.error(err);
             return res.status(500).send(err);
           }
           db.query(
@@ -67,7 +73,7 @@ router.post("/", (req, res, next) => {
             [normal_id, user_id],
             (err, result) => {
               if (err) {
-                console.log(err);
+                logger.error(err);
                 return res.status(500).send(err);
               }
               db.query(
@@ -75,7 +81,7 @@ router.post("/", (req, res, next) => {
                 [inspection_id, user_id],
                 (err, result) => {
                   if (err) {
-                    console.log(err);
+                    logger.error(err);
                     return res.status(500).send(err);
                   }
                   return res.json({ result: true });
@@ -88,5 +94,5 @@ router.post("/", (req, res, next) => {
     }
   );
 });
-//return res.json({ result: true });
+
 module.exports = router;

@@ -1,7 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../../../db/index");
-const moment = require("moment");
+const moment = require("moment-timezone");
+const logger = require("../../../config/logger");
 
 // path: ~/mypage/creator/projects
 // 내가 참여한 프로젝트 목록을 반환한다
@@ -13,12 +14,13 @@ router.get("/", (req, res, next) => {
       [user_id],
       (err, result) => {
         if (err) {
-          console.log(err);
+          logger.error(err);
           return res.status(500).send(err);
         }
         if (result.rows.length > 0) {
           const available_projects = result.rows.filter(row => {
-            const now = moment();
+            const now = moment().tz("Asia/Seoul");
+            console.log("now: ", now);
             const due_date = moment(row.due_date);
             const millisec_diff = moment
               .duration(due_date.diff(now))

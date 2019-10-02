@@ -5,6 +5,7 @@ const axios = require("axios");
 const multer = require("multer");
 const memory = multer.memoryStorage();
 const endpoint = require("../../../DetectionEndpoint");
+const logger = require("../../../../config/logger");
 
 const completeRouter = require("./normal/complete");
 
@@ -34,7 +35,7 @@ router.post("/", upload_mem.single("orig_image"), (req, res, next) => {
       return res.json({ data: data });
     })
     .catch(err => {
-      console.log(err);
+      logger.error(err);
       return res.json(500).json({ error: err });
     });
 });

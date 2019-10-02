@@ -3,6 +3,7 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const bcrypt = require("bcrypt-nodejs");
 const db = require("../../../db/index");
+const logger = require("../../../config/logger");
 const router = express.Router();
 
 // path: ~/auth/creator/signin
@@ -24,19 +25,17 @@ passport.use(
         [email],
         (err, results) => {
           if (err) {
-            console.error("Error when selecting user on login", err);
+            logger.error("Error when selecting user on login", err);
             return done(err);
           }
           // 주어진 email과 일치하는 유저가 존재한다면,
           // 즉, 반환되는 rows 가 적어도 하나 존재한다면(0보다 크다면)
           if (results.rows.length > 0) {
-            console.log("유저 정보 찾음: ");
-            console.log(results.rows[0]);
             const user = results.rows[0]; // 그 row를 user 변수에 저장한다
             // 주어진 password와 db에 저장된 password를 비교한다
             bcrypt.compare(password, user.password, function(err, res) {
               if (err) {
-                console.log("Error when comparing password hash", err);
+                logger.error("Error when comparing password hash", err);
                 return done(err);
               }
               // 결과 값이 참이라면, 로그인이 성공한다
@@ -78,12 +77,12 @@ router.post("/", (req, res, next) => {
   passport.authenticate("signin-local-creator", (err, user, info) => {
     // passport 인증 도중 에러 발생시 콘솔에 찍어준다
     if (err) {
-      console.log(err);
+      logger.error(err);
       return res.status(500).send(err);
     }
     // 인증 실패 메시지를 담은 info 메시지가 존재한다면 해당 메시지를 클라이언트로 전달한다
     if (info !== undefined) {
-      console.log(info.message);
+      logger.info(info.message);
       return res.status(401).json(info);
     }
     // 위 두 상황을 모두 통과하면 로그인 성공
@@ -92,7 +91,7 @@ router.post("/", (req, res, next) => {
         if (err) {
           return res.send(err);
         }
-        console.log("로그인 성공!");
+        logger.info("로그인 성공!");
         return res.json({ result: true });
       });
     }

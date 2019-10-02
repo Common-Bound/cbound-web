@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../../../db/index");
-const uuid = require("uuid/v4");
-const moment = require("moment");
+const moment = require("moment-timezone");
+const logger = require("../../../config/logger");
 
 // path: ~/mypage/requester/insight
 router.get("/:project_id", (req, res, next) => {
@@ -13,13 +13,15 @@ router.get("/:project_id", (req, res, next) => {
   const sql = "select * from data where project_id = $1";
   db.query(sql, [project_id], (err, result) => {
     if (err) {
-      console.log(err);
+      logger.error(err);
       return res.status(500).send(err);
     }
     const datas = result.rows;
 
     const total_count = datas.length; // 생산된 총 데이터 수
-    const now_day = moment().day(); // 현재 요일 (0: 일요일, 1: 월요일, ... 6: 토요일)
+    const now_day = moment()
+      .tz("Asia/Seoul")
+      .day(); // 현재 요일 (0: 일요일, 1: 월요일, ... 6: 토요일)
     const today_count = datas.filter(data => {
       // 오늘 생산된 총 데이터 수
       return Number(moment(data.created_at).day()) === Number(now_day);
