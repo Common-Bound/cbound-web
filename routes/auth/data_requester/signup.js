@@ -4,6 +4,7 @@ const LocalStrategy = require("passport-local").Strategy;
 const bcrypt = require("bcrypt-nodejs");
 const db = require("../../../db/index");
 const uuid = require("uuid/v4");
+const logger = require("../../../config/logger");
 const router = express.Router();
 
 // path: ~/auth/requester/signup
@@ -18,7 +19,6 @@ passport.use(
       passReqToCallback: false
     },
     (email, password, done) => {
-      console.log(email, password);
       // 먼저 주어진 email 과 일치하는 유저를 찾는다
       // 이 떄, email은 유일한 식별자라고 가정한다
       db.query(
@@ -26,22 +26,21 @@ passport.use(
         [email],
         (err, results) => {
           if (err) {
-            console.error("Error when selecting user on login", err);
+            logger.error("Error when selecting user on login", err);
             return done(err);
           }
           // 주어진 email과 일치하는 유저가 존재한다면,
           // 즉, 반환되는 rows 가 적어도 하나 존재한다면(0보다 크다면)
           if (results.rows.length > 0) {
-            console.log(results.rows);
             // 이미 존재하는 email 이므로 회원가입 실패
-            console.log("이미 존재하는 아이디 입니다");
+            logger.info("이미 존재하는 아이디 입니다");
             return done(null, false, {
               message: "이미 존재하는 아이디 입니다"
             });
           }
           // 주어진 email과 일치하는 유저가 존재하지 않는다면 회원가입 가능
           else {
-            console.log("존재하지 않는 아이디 이므로 회원가입 가능합니다");
+            logger.info("존재하지 않는 아이디 이므로 회원가입 가능합니다");
             // uuid 생성하여 id 필드 부여
             const uid = uuid();
             bcrypt.hash(password, null, null, function(err, hash) {
@@ -51,7 +50,7 @@ passport.use(
                 [uid, email, hash, null, moment().toISOString(), 0, null],
                 function(err, rows) {
                   if (err) {
-                    console.log("Error when hashing password", err);
+                    logger.info("Error when hashing password", err);
                     return done(err);
                   }
                   return done(null, rows);
@@ -84,17 +83,17 @@ router.post("/", (req, res, next) => {
   passport.authenticate("signup-local-requester", (err, user, info) => {
     // passport 인증 도중 에러 발생시 콘솔에 찍어준다
     if (err) {
-      console.log(err);
+      logger.error(err);
       return res.status(500).send(err);
     }
     // 인증 실패 메시지를 담은 info 메시지가 존재한다면 해당 메시지를 클라이언트로 전달한다
     if (info !== undefined) {
-      console.log(info.message);
+      logger.info(info.message);
       return res.status(401).json(info);
     }
     // 위 두 상황을 모두 통과하면 로그인 성공
     else {
-      console.log("회원가입 성공!");
+      logger.info("회원가입 성공!");
       return res.json({ result: true });
     }
   })(req, res, next);

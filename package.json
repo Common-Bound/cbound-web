@@ -25,7 +25,9 @@
     "passport-local": "^1.0.0",
     "pg": "^7.11.0",
     "redis": "^2.8.0",
-    "uuid": "^3.3.2"
+    "uuid": "^3.3.2",
+    "winston": "^3.2.1",
+    "winston-daily-rotate-file": "^4.2.1"
   },
   "scripts": {
     "client": "cd client && yarn start",
