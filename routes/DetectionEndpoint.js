@@ -1,5 +1,5 @@
 const endpoint = {
-  url: "http://ec2-34-221-74-220.us-west-2.compute.amazonaws.com"
+  url: "http://116.124.1.169:8080"
 };
 
 module.exports = endpoint;

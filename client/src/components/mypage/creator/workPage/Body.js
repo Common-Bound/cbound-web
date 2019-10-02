@@ -239,7 +239,7 @@ class Body extends Component {
             time_counter: tempTimeCounterArray,
             timer: new Date().getTime()
           });
-        } else if (sendTo.startsWith("https://")) {
+        } else if (sendTo.startsWith("http://")) {
           this.setState({
             label: data.label
           });
@@ -583,7 +583,7 @@ class Body extends Component {
   async handleCropMouseUp() {
     if (this.state.useAI) {
       //console.log(this.state.crop.height);
-      if (this.state.crop.shape_attributes.height) {
+      if (this.state.crop.height) {
         this.setState(
           {
             label: ""
@@ -735,7 +735,6 @@ class Body extends Component {
                     name="useAI"
                     onChange={this.handleChange}
                     checked={this.state.useAI}
-                    disabled
                   />
                   <StyledSpan className="slider round" />
                 </label>

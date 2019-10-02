@@ -196,6 +196,7 @@ class CropItem extends Component {
       this.setState({
         editing: true
       });
+      console.log("a");
       await this.sendData(bodyData, `${endpoint.url}/ocr/recognition/`);
     }
   }
