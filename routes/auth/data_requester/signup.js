@@ -47,7 +47,17 @@ passport.use(
               // id, email, password, phone_number, created_at, point, account
               db.query(
                 "insert into data_requester values ($1, $2, $3, $4, $5, $6, $7)",
-                [uid, email, hash, null, moment().toISOString(), 0, null],
+                [
+                  uid,
+                  email,
+                  hash,
+                  null,
+                  moment()
+                    .tz("Asia/Seoul")
+                    .toISOString(),
+                  0,
+                  null
+                ],
                 function(err, rows) {
                   if (err) {
                     logger.info("Error when hashing password", err);

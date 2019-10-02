@@ -60,7 +60,9 @@ router.post(
     meta.total_width = total_width;
     meta.total_height = total_height;
     const id = uuid();
-    const date = moment().toISOString();
+    const date = moment()
+      .tz("Asia/Seoul")
+      .toISOString();
     const file = req.file;
     const project_id = req.body.project_id;
     const schedule_state = project_id === "undefined" ? "reserved" : "queued";

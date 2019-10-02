@@ -15,7 +15,9 @@ router.post("/", (req, res, next) => {
   const inspection_id = uuid();
   const user_id = req.user.id;
 
-  var created_at = moment().toISOString();
+  var created_at = moment()
+    .tz("Asia/Seoul")
+    .toISOString();
   var due_date = moment(req.body.due_date).toISOString();
   // id, ref_project, title, title_image, simple_description, detail_description,
   // due_date, created_at, type, project_type, guideline_url, reward

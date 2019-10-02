@@ -19,7 +19,7 @@ router.get("/", (req, res, next) => {
         }
         if (result.rows.length > 0) {
           const available_projects = result.rows.filter(row => {
-            const now = moment();
+            const now = moment().tz("Asia/Seoul");
             const due_date = moment(row.due_date);
             const millisec_diff = moment
               .duration(due_date.diff(now))

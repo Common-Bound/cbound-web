@@ -99,7 +99,9 @@ router.post("/", async (req, res, next) => {
     .query(inspector_update_query, [
       req.user.id,
       data_id,
-      moment().toISOString()
+      moment()
+        .tz("Asia/Seoul")
+        .toISOString()
     ])
     .then(res => res.rows)
     .catch(err => {

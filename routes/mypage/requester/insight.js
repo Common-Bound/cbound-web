@@ -19,7 +19,9 @@ router.get("/:project_id", (req, res, next) => {
     const datas = result.rows;
 
     const total_count = datas.length; // 생산된 총 데이터 수
-    const now_day = moment().day(); // 현재 요일 (0: 일요일, 1: 월요일, ... 6: 토요일)
+    const now_day = moment()
+      .tz("Asia/Seoul")
+      .day(); // 현재 요일 (0: 일요일, 1: 월요일, ... 6: 토요일)
     const today_count = datas.filter(data => {
       // 오늘 생산된 총 데이터 수
       return Number(moment(data.created_at).day()) === Number(now_day);

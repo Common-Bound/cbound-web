@@ -58,7 +58,9 @@ passport.use(
                   null,
                   null,
                   null,
-                  moment().toISOString(),
+                  moment()
+                    .tz("Asia/Seoul")
+                    .toISOString(),
                   "beginner",
                   0,
                   null
