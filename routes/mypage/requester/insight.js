@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../../../db/index");
-const uuid = require("uuid/v4");
 const moment = require("moment");
+const logger = require("../../../config/logger");
 
 // path: ~/mypage/requester/insight
 router.get("/:project_id", (req, res, next) => {
@@ -13,7 +13,7 @@ router.get("/:project_id", (req, res, next) => {
   const sql = "select * from data where project_id = $1";
   db.query(sql, [project_id], (err, result) => {
     if (err) {
-      console.log(err);
+      logger.error(err);
       return res.status(500).send(err);
     }
     const datas = result.rows;
