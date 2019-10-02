@@ -3,6 +3,7 @@ const router = express.Router();
 const db = require("../../db/index");
 const createRouter = require("./requester/create");
 const insightRouter = require("./requester/insight");
+const logger = require("../../config/logger");
 // path: ~/mypage/requester
 
 router.use("/create", createRouter);
@@ -13,10 +14,9 @@ router.get("/", (req, res, next) => {
   const user_id = req.user.id;
   const sql =
     "select * from project where id in (select project_id from requester_pool where requester_id = $1)";
-  console.log(sql);
   db.query(sql, [user_id], (err, result) => {
     if (err) {
-      console.log(err);
+      logger.error(err);
       return res.status(500).send(err);
     }
     if (result.rows.length > 0) {

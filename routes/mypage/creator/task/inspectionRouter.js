@@ -2,13 +2,9 @@ const express = require("express");
 const router = express.Router();
 const db = require("../../../../db/index");
 const moment = require("moment");
+const logger = require("../../../../config/logger");
 
 // path: ~/mypage/creator/task/inspection
-router.use("/", (req, res, next) => {
-  console.log("/inspection 라우터 도착");
-  next();
-});
-
 // 검수 큐에 있는 data를 시간이 빠른 순서대로 불러온다
 // 자신이 한번도 참여하지 않았고 상태가 'queued'인 data를 불러온다
 // 그리고 해당 data의 상태를 'reserved' 로 변경한다
@@ -41,7 +37,7 @@ router.get("/", (req, res, next) => {
   // `;
   db.query(production_sql, [], (err, result) => {
     if (err) {
-      console.log(err);
+      logger.error(err);
       return res.status(500).send(err);
     }
 
@@ -94,7 +90,7 @@ router.post("/", async (req, res, next) => {
     )
     .then(res => res.rows[0])
     .catch(err => {
-      console.log(err);
+      logger.error(err);
       return res.status(500).send(err);
     });
   // inspector_pool 에 검수자의 id와 data의 id를 추가한다
@@ -107,7 +103,7 @@ router.post("/", async (req, res, next) => {
     ])
     .then(res => res.rows)
     .catch(err => {
-      console.log(err);
+      logger.error(err);
       return res.status(500).send(err);
     });
 
@@ -132,7 +128,7 @@ router.post("/", async (req, res, next) => {
         .query(sql, [inspector_id])
         .then(res => res.rows[0].reliability)
         .catch(err => {
-          console.log(err);
+          logger.error(err);
           return res.status(500).send(err);
         });
       console.log(
@@ -192,7 +188,7 @@ router.post("/", async (req, res, next) => {
   const sql = `update data set status = $1 where id = $2`;
   db.query(sql, [status, data_id], (err, result) => {
     if (err) {
-      console.log(err);
+      logger.error(err);
       return res.status(500).send(err);
     }
     return res.json({ result: true });

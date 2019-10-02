@@ -3,6 +3,7 @@ const router = express.Router();
 const db = require("../../../db/index");
 const uuid = require("uuid/v4");
 const moment = require("moment");
+const logger = require("../../../config/logger");
 
 // path: ~/mypage/requester/create
 router.post("/", (req, res, next) => {
@@ -37,7 +38,7 @@ router.post("/", (req, res, next) => {
     ],
     (err, result) => {
       if (err) {
-        console.log(err);
+        logger.error(err);
         return res.status(500).send(err);
       }
       // 검수 프로젝트 추가
@@ -59,7 +60,7 @@ router.post("/", (req, res, next) => {
         ],
         (err, result) => {
           if (err) {
-            console.log(err);
+            logger.error(err);
             return res.status(500).send(err);
           }
           db.query(
@@ -67,7 +68,7 @@ router.post("/", (req, res, next) => {
             [normal_id, user_id],
             (err, result) => {
               if (err) {
-                console.log(err);
+                logger.error(err);
                 return res.status(500).send(err);
               }
               db.query(
@@ -75,7 +76,7 @@ router.post("/", (req, res, next) => {
                 [inspection_id, user_id],
                 (err, result) => {
                   if (err) {
-                    console.log(err);
+                    logger.error(err);
                     return res.status(500).send(err);
                   }
                   return res.json({ result: true });
@@ -88,5 +89,5 @@ router.post("/", (req, res, next) => {
     }
   );
 });
-//return res.json({ result: true });
+
 module.exports = router;

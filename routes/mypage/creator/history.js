@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const db = require("../../../db/index");
 const moment = require("moment");
+const logger = require("../../../config/logger");
 
 // path: ~/mypage/creator/history
 router.get("/", async (req, res, next) => {
@@ -13,7 +14,7 @@ router.get("/", async (req, res, next) => {
     .query(sql1, [req.user.id])
     .then(res => res.rows)
     .catch(err => {
-      console.log(err);
+      logger.error(err);
       return res.status(500).send(err);
     });
   // 최근 30일간 생성한 data만을 가져온다
@@ -32,7 +33,7 @@ router.get("/", async (req, res, next) => {
     .query(sql2, [req.user.id])
     .then(res => res.rows)
     .catch(err => {
-      console.log(err);
+      logger.error(err);
       return res.status(500).send(err);
     });
   // 최근 30일간 검수한 데이터만을 가져온다
