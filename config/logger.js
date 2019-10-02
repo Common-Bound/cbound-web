@@ -1,7 +1,6 @@
 const winston = require("winston");
 require("winston-daily-rotate-file");
 const { printf } = winston.format;
-const morgan = require("morgan");
 
 /* logger */
 const transport = new winston.transports.DailyRotateFile({
@@ -10,7 +9,7 @@ const transport = new winston.transports.DailyRotateFile({
   zippedArchive: true,
   maxSize: "20m",
   maxFiles: "14d",
-  dirname: "log/"
+  dirname: "logs/"
 });
 const myFormat = printf(({ level, message, timestamp }) => {
   return `${timestamp} [${level}]: ${message}`;
