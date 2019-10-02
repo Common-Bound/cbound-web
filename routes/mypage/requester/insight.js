@@ -1,8 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../../../db/index");
-const moment = require("moment");
-require("moment-timezone");
+const moment = require("moment-timezone");
 const logger = require("../../../config/logger");
 
 // path: ~/mypage/requester/insight

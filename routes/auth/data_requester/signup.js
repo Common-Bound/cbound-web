@@ -6,8 +6,7 @@ const db = require("../../../db/index");
 const uuid = require("uuid/v4");
 const logger = require("../../../config/logger");
 const router = express.Router();
-const moment = require("moment");
-require("moment-timezone");
+const moment = require("moment-timezone");
 
 // path: ~/auth/requester/signup
 passport.use(
@@ -56,7 +55,7 @@ passport.use(
                   null,
                   moment()
                     .tz("Asia/Seoul")
-                    .toISOString(),
+                    .format(),
                   0,
                   null
                 ],

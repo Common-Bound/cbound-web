@@ -5,8 +5,7 @@ const multer = require("multer");
 const multerS3 = require("multer-s3");
 const uuid = require("uuid/v4");
 const db = require("../../../../../db/index");
-const moment = require("moment");
-require("moment-timezone");
+const moment = require("moment-timezone");
 const logger = require("../../../../../config/logger");
 
 // AWS config 파일 불러오기
@@ -63,7 +62,7 @@ router.post(
     const id = uuid();
     const date = moment()
       .tz("Asia/Seoul")
-      .toISOString();
+      .format();
     const file = req.file;
     const project_id = req.body.project_id;
     const schedule_state = project_id === "undefined" ? "reserved" : "queued";

@@ -18,8 +18,10 @@ router.post("/", (req, res, next) => {
 
   var created_at = moment()
     .tz("Asia/Seoul")
-    .toISOString();
-  var due_date = moment(req.body.due_date).toISOString();
+    .format();
+  var due_date = moment(req.body.due_date)
+    .tz("Asia/Seoul")
+    .format();
   // id, ref_project, title, title_image, simple_description, detail_description,
   // due_date, created_at, type, project_type, guideline_url, reward
 

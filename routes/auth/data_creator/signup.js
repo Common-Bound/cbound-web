@@ -4,8 +4,7 @@ const LocalStrategy = require("passport-local").Strategy;
 const bcrypt = require("bcrypt-nodejs");
 const db = require("../../../db/index");
 const uuid = require("uuid/v4");
-const moment = require("moment");
-require("moment-timezone");
+const moment = require("moment-timezone");
 const router = express.Router();
 const logger = require("../../../config/logger");
 
@@ -61,7 +60,7 @@ passport.use(
                   null,
                   moment()
                     .tz("Asia/Seoul")
-                    .toISOString(),
+                    .format(),
                   "beginner",
                   0,
                   null
