@@ -6,6 +6,7 @@ const multerS3 = require("multer-s3");
 const uuid = require("uuid/v4");
 const db = require("../../../../../db/index");
 const moment = require("moment");
+require("moment-timezone");
 const logger = require("../../../../../config/logger");
 
 // AWS config 파일 불러오기

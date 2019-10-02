@@ -5,6 +5,7 @@ const bcrypt = require("bcrypt-nodejs");
 const db = require("../../../db/index");
 const uuid = require("uuid/v4");
 const moment = require("moment");
+require("moment-timezone");
 const router = express.Router();
 const logger = require("../../../config/logger");
 

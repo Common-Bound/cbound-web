@@ -8,6 +8,7 @@ const logger = require("../../config/logger");
 
 const db = require("../../db/index");
 const moment = require("moment");
+require("moment-timezone");
 
 // path: ~/mypage/creator
 router.use("/join", joinRouter);
