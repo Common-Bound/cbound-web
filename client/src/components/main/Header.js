@@ -14,7 +14,7 @@ const HeaderContainer = styled.div`
   align-items: center;
   background-color: #000000;
   width: 100%;
-  height: 64px;
+  height: 8vh;
 
   z-index: 1;
 
@@ -34,6 +34,8 @@ const Logo = styled(Link)`
 
   @media (max-width: 500px) {
     margin: 0;
+    width: 36px;
+    height: 36px;
   }
 `;
 
@@ -73,7 +75,7 @@ const LoginButton = styled(Link)`
 `;
 
 const ProfileButton = styled.div`
-  margin-right: 24px;
+  margin-right: 10%;
   width: 32px;
   height: 32px;
   border-radius: 100%;
@@ -89,6 +91,10 @@ const ProfileButton = styled.div`
   :hover {
     background-color: white;
     color: black;
+  }
+
+  @media (max-width: 500px) {
+    display: none;
   }
 `;
 

@@ -12,7 +12,7 @@ const BodyContainer = styled.div`
 
 const MainSlideContainer = styled.div`
   position: relative;
-  top: 64px;
+  top: 8vh;
 
   display: flex;
   flex-direction: column;

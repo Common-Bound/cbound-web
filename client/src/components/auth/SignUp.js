@@ -12,7 +12,7 @@ const Container = styled.div`
 
 const SignUpContainer = styled.div`
   position: relative;
-  top: 64px;
+  top: 8vh;
 
   width: 100%;
   height: 600px;
