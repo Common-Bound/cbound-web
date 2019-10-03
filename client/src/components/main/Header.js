@@ -14,29 +14,45 @@ const HeaderContainer = styled.div`
   align-items: center;
   background-color: #000000;
   width: 100%;
-  height: 64px;
+  height: 8vh;
 
   z-index: 1;
+
+  transition: 0.5s;
+
+  @media (max-width: 500px) {
+    justify-content: center;
+  }
 `;
 
-const Logo = styled.div`
-  margin-left: 96px;
+const Logo = styled(Link)`
+  margin-left: 10%;
   background-image: url(${props => props.img});
   width: 48px;
   height: 48px;
   background-size: cover;
+
+  @media (max-width: 500px) {
+    margin: 0;
+    width: 36px;
+    height: 36px;
+  }
 `;
 
-const Title = styled.div`
+const Title = styled(Link)`
   background-image: url(${props => props.img});
   width: 260px;
   height: 32px;
   background-size: contain;
   background-repeat: no-repeat;
+
+  @media (max-width: 500px) {
+    display: none;
+  }
 `;
 
-const LoginButton = styled.div`
-  margin-right: 24px;
+const LoginButton = styled(Link)`
+  margin-right: 7%;
   width: 100px;
   height: 32px;
   border-radius: 20px;
@@ -52,10 +68,14 @@ const LoginButton = styled.div`
     background-color: white;
     color: black;
   }
+
+  @media (max-width: 500px) {
+    display: none;
+  }
 `;
 
 const ProfileButton = styled.div`
-  margin-right: 24px;
+  margin-right: 10%;
   width: 32px;
   height: 32px;
   border-radius: 100%;
@@ -72,22 +92,20 @@ const ProfileButton = styled.div`
     background-color: white;
     color: black;
   }
+
+  @media (max-width: 500px) {
+    display: none;
+  }
 `;
 
 class Header extends Component {
   render() {
     return (
       <HeaderContainer>
-        <Link to="/">
-          <Logo img={logo} />
-        </Link>
-        <Link to="/">
-          <Title img={name} />
-        </Link>
+        <Logo to="/" img={logo} />
+        <Title to="/" img={name} />
         {this.props.page === "main" ? (
-          <Link to="/signin/select">
-            <LoginButton>Sign In</LoginButton>
-          </Link>
+          <LoginButton to="/signin/select">Sign In</LoginButton>
         ) : (
           <ProfileButton />
         )}

@@ -6,19 +6,44 @@ import AvailableProjects from "./creator/availableProjectsPage/AvailableProjects
 import CreatorHistoryPage from "./creator/historyPage/CreatorHistoryPage";
 import styled from "styled-components";
 
-const LeftBanner = styled.div`
-  width: 200px;
-  height: 100vh;
-  position: fixed;
-  top: 64px;
+const Container = styled.div`
+  width: 100%;
+`;
+
+const MainContainer = styled.div`
+  position: relative;
+  top: 8vh;
+
+  width: 100%;
 
   display: flex;
-  flex-flow: column;
+
+  @media (max-width: 1024px) {
+    flex-direction: column-reverse;
+  }
+`;
+
+const LeftBanner = styled.div`
+  min-width: 240px;
+  height: 92vh;
+
+  display: flex;
+  flex-direction: column;
   align-items: center;
 
   background: #353535;
   color: white;
+
   z-index: 1;
+
+  @media (max-width: 1024px) {
+    width: 100%;
+    height: 8vh;
+    bottom: 0px;
+
+    flex-direction: row;
+    justify-content: space-between;
+  }
 `;
 
 const StyledLink = styled(Link)`
@@ -38,6 +63,11 @@ const StyledLink = styled(Link)`
 
   :hover {
     color: white;
+  }
+
+  @media (max-width: 1024px) {
+    margin-top: 0;
+    text-align: center;
   }
 `;
 
@@ -77,76 +107,86 @@ const IconTitle = styled.div`
   width: 100px;
   margin-left: 14px;
   font-family: Avenir;
+
+  @media (max-width: 810px) {
+    display: none;
+  }
 `;
 
 const Section = styled.div`
-  position: relative;
-  padding-left: 200px;
-  padding-top: 64px;
+  width: 100%;
+  height: 92vh;
+
+  @media (max-width: 1024px) {
+    height: 84vh;
+  }
 `;
 
 class CreatorPage extends Component {
   render() {
     console.log(this.props.match.url);
     return (
-      <div>
-        <LeftBanner>
-          <AllProjectButton
-            to={`${this.props.match.url}`}
-            pathname={this.props.location.pathname}
-          >
-            <Icon className="fas fa-search-dollar" />
-            <IconTitle>All Projects</IconTitle>
-          </AllProjectButton>
-          <MyProjectButton
-            to={`${this.props.match.url}/projects`}
-            pathname={this.props.location.pathname}
-          >
-            <Icon className="fas fa-list" />
-            <IconTitle>My Projects</IconTitle>
-          </MyProjectButton>
-          <TaskButton
-            to={`${this.props.match.url}/task/standalone/none`}
-            pathname={this.props.location.pathname}
-          >
-            <Icon className="fas fa-crop-alt"></Icon>
-            <IconTitle>Workspace</IconTitle>
-          </TaskButton>
-          <InsightButton
-            to={`${this.props.match.url}/history`}
-            pathname={this.props.location.pathname}
-          >
-            <Icon className="fas fa-chart-bar"></Icon>
-            <IconTitle>History</IconTitle>
-          </InsightButton>
-          <StyledLink
-            to="/auth/signout"
-            pathname={this.props.location.pathname}
-          >
-            <Icon className="fas fa-sign-in-alt" />
-            <IconTitle>Sign Out</IconTitle>
-          </StyledLink>
-        </LeftBanner>
-        <Section>
-          <Route
-            exact
-            path={`${this.props.match.url}`}
-            component={AvailableProjects}
-          />
-          <Route
-            path={`${this.props.match.url}/projects`}
-            component={CreatorProjectsPage}
-          />
-          <Route
-            path={`${this.props.match.url}/history`}
-            component={CreatorHistoryPage}
-          />
-          <Route
-            path={`${this.props.match.url}/task/:project_type/:project_id`}
-            component={WorkPage}
-          />
-        </Section>
-      </div>
+      <Container>
+        <MainContainer>
+          <LeftBanner>
+            <AllProjectButton
+              to={`${this.props.match.url}`}
+              pathname={this.props.location.pathname}
+            >
+              <Icon className="fas fa-search-dollar" />
+              <IconTitle>All Projects</IconTitle>
+            </AllProjectButton>
+            <MyProjectButton
+              to={`${this.props.match.url}/projects`}
+              pathname={this.props.location.pathname}
+            >
+              <Icon className="fas fa-list" />
+              <IconTitle>My Projects</IconTitle>
+            </MyProjectButton>
+            <TaskButton
+              to={`${this.props.match.url}/task/standalone/none`}
+              pathname={this.props.location.pathname}
+            >
+              <Icon className="fas fa-crop-alt"></Icon>
+              <IconTitle>Workspace</IconTitle>
+            </TaskButton>
+            <InsightButton
+              to={`${this.props.match.url}/history`}
+              pathname={this.props.location.pathname}
+            >
+              <Icon className="fas fa-chart-bar"></Icon>
+              <IconTitle>History</IconTitle>
+            </InsightButton>
+            <StyledLink
+              to="/auth/signout"
+              pathname={this.props.location.pathname}
+            >
+              <Icon className="fas fa-sign-in-alt" />
+              <IconTitle>Sign Out</IconTitle>
+            </StyledLink>
+          </LeftBanner>
+
+          <Section>
+            <Route
+              exact
+              path={`${this.props.match.url}`}
+              component={AvailableProjects}
+            />
+            <Route
+              path={`${this.props.match.url}/projects`}
+              component={CreatorProjectsPage}
+            />
+            <Route
+              path={`${this.props.match.url}/history`}
+              component={CreatorHistoryPage}
+            />
+            <Route
+              path={`${this.props.match.url}/task/:project_type/:project_id`}
+              component={WorkPage}
+            />
+          </Section>
+        </MainContainer>
+      </Container>
     );
   }
 }

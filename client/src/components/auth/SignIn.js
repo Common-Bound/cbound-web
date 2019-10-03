@@ -12,16 +12,23 @@ const Container = styled.div`
 
 const SignInContainer = styled.div`
   position: relative;
-  top: 64px;
+  top: 8vh;
+
   width: 100%;
   height: 600px;
   text-align: center;
   background-image: url(${background});
+  background-color: black;
   background-size: 100% 100%;
 
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+
+  @media (max-width: 500px) {
+    justify-content: flex-start;
+  }
 `;
 
 const SignInMain = styled.div`
@@ -31,6 +38,15 @@ const SignInMain = styled.div`
   display: flex;
   justify-content: space-around;
   align-items: flex-start;
+
+  @media (max-width: 850px) {
+    flex-direction: column;
+    align-items: center;
+  }
+  @media (max-width: 500px) {
+    width: 100%;
+    padding-top: 80px;
+  }
 `;
 
 const LeftCard = styled.div`
@@ -43,21 +59,38 @@ const RightCard = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+
+  @media (max-width: 500px) {
+    width: 90%;
+  }
 `;
 
-const SubTitle = styled.div`
+const MainTitle = styled.div`
   font-size: 80px;
   font-weight: bold;
   font-family: SpoqaHanSans;
   color: ${props => (props.color ? props.color : "white")};
 
-  margin-bottom: 40px;
+  margin-bottom: 50px;
+
+  @media (max-width: 850px) {
+    font-size: 56px;
+    margin-bottom: 24px;
+  }
+  @media (max-width: 500px) {
+    font-size: 46px;
+    margin-bottom: 10px;
+  }
 `;
 
 const LeftDescription = styled.div`
   font-size: 18px;
   color: rgba(255, 255, 255, 0.7);
   text-align: right;
+
+  @media (max-width: 1024px) {
+    display: none;
+  }
 `;
 
 const StyledForm = styled.form`
@@ -71,6 +104,10 @@ const StyledForm = styled.form`
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  @media (max-width: 500px) {
+    width: 100%;
+  }
 `;
 
 const StyledInput = styled.input`
@@ -104,7 +141,7 @@ const StyledInput = styled.input`
 const StyledButtonContainer = styled.div`
   display: flex;
   justify-content: space-between;
-  align-items: flex-end;
+  align-items: center;
   width: 80%;
   margin-top: 10px;
 `;
@@ -188,9 +225,9 @@ class SignIn extends Component {
         <SignInContainer>
           <SignInMain className="animated fadeInUp ">
             <LeftCard>
-              <SubTitle>
+              <MainTitle>
                 Sign <span style={{ color: "#00d8ff" }}>In</span>
-              </SubTitle>
+              </MainTitle>
               <LeftDescription>
                 일상을 관찰하는 것에 흥미가 있는
               </LeftDescription>
@@ -220,7 +257,7 @@ class SignIn extends Component {
                   <Link
                     to={`/auth/${this.props.match.params.user_type}/signup`}
                   >
-                    아직 회원이 아니신가요?
+                    회원가입
                   </Link>
                 </StyledButtonContainer>
               </StyledForm>

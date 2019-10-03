@@ -1,27 +1,25 @@
 import React, { Component } from "react";
 import ProjectOrig from "../../../card/CreatorProjectOrig";
 import styled from "styled-components";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
 // import Button from "@material-ui/core/Button";
 
 const Container = styled.div`
   width: 100%;
-  height: 100vh;
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
 `;
 
 const TitleContainer = styled.div`
   width: 80%;
+  padding-top: 40px;
   margin: 0 auto;
 
   color: black; !important;
 `;
 
 const Title = styled.div`
-  padding-top: 40px;
   font-family: Avenir;
   font-size: 20px;
   font-weight: bold;
@@ -36,20 +34,34 @@ const SemiTitle = styled.div`
 
 const TableContainer = styled.div`
   width: 80%;
-  height: 600px;
+  max-height: 80%;
+
+  display: flex;
+  flex-wrap: wrap;
+
   margin: 0 auto;
   overflow: scroll;
-  text-align: center;
+
+  @media (max-width: 500px) {
+    flex-direction: column;
+    flex-wrap: nowrap;
+  }
 `;
 
-const StyledTableHead = styled(TableHead)`
-  background-color: black;
-`;
+// const StyledTableHead = styled(TableHead)`
+//   background-color: black;
+// `;
 
-const StyledTableCell = styled(TableCell)`
-  color: rgba(255, 255, 255, 0.6) !important;
-  font-family: Avenir;
-`;
+// const StyledTableCell = styled(TableCell)`
+//   color: rgba(255, 255, 255, 0.6) !important;
+//   font-family: Avenir;
+// `;
+
+// const ResponsiveStyledTableCell = styled(StyledTableCell)`
+//   @media (max-width: 810px) {
+//     display: none !important;
+//   }
+// `;
 
 class AvailableProjects extends Component {
   constructor(props) {
@@ -99,6 +111,7 @@ class AvailableProjects extends Component {
             id={el.id}
             ref_project={el.ref_project}
             title={el.title}
+            title_image={el.title_image}
             simple_description={el.simple_description}
             detail_description={el.detail_description}
             due_date={el.due_date}
@@ -143,23 +156,28 @@ class AvailableProjects extends Component {
           <SemiTitle>참여 가능한 프로젝트</SemiTitle>
         </TitleContainer>
         <TableContainer>
-          <Table>
+          {/* <Table>
             <StyledTableHead>
               <TableRow>
-                <StyledTableCell align="center">KICK-OFF</StyledTableCell>
+                <ResponsiveStyledTableCell align="center">
+                  KICK-OFF
+                </ResponsiveStyledTableCell>
                 <StyledTableCell align="center">ROLE</StyledTableCell>
                 <StyledTableCell align="center">TITLE</StyledTableCell>
                 <StyledTableCell align="center">POINT</StyledTableCell>
                 <StyledTableCell align="center">DUE</StyledTableCell>
-                <StyledTableCell align="center">REMAINED</StyledTableCell>
+                <ResponsiveStyledTableCell align="center">
+                  REMAINED
+                </ResponsiveStyledTableCell>
               </TableRow>
             </StyledTableHead>
             <TableBody>{this.state.projects}</TableBody>
-          </Table>
+          </Table> */}
           {/* 사용성 테스트를 위해 막아놓음 */}
           {/* <Button onClick={this.handleClick.bind(this)}>
             랜덤 프로젝트 추가
           </Button> */}
+          {this.state.projects}
         </TableContainer>
       </Container>
     );

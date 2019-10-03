@@ -5,11 +5,14 @@ import background from "../../images/BackGround.png";
 
 const BodyContainer = styled.div`
   width: 100%;
+
+  display: flex;
+  flex-direction: column;
 `;
 
 const MainSlideContainer = styled.div`
   position: relative;
-  top: 64px;
+  top: 8vh;
 
   display: flex;
   flex-direction: column;
@@ -23,23 +26,31 @@ const MainSlideContainer = styled.div`
 
   background-size: 100% 100%;
   background-position: center;
+
+  @media (max-width: 500px) {
+    justify-content: flex-start;
+  }
 `;
 
 const MainSlide = styled.div`
   width: 80%;
-  height: 300px;
+  padding: 40px;
   margin: 0 auto;
 
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-around;
+
+  @media (max-width: 500px) {
+    margin-top: 80px;
+    padding: 0px;
+  }
 `;
 
 const MainTitle = styled.div`
   width: 500px;
-  height: 240px;
   padding: 30px;
-  margin-left: 60px;
 
   text-align: right;
   font-family: SpoqaHanSans;
@@ -47,13 +58,18 @@ const MainTitle = styled.div`
   font-weight: bold;
   line-height: 80px;
   color: #ffffff;
+
+  @media (max-width: 500px) {
+    font-size: 46px;
+    text-align: center;
+    line-height: 46px;
+    padding: 0px 0px 30px 0px;
+  }
 `;
 
 const SubTitle = styled.div`
-  width: 420px;
-  height: 180px;
+  width: 500px;
   padding: 30px;
-  margin-right: 140px;
 
   text-align: left;
   font-family: SpoqaHanSans;
@@ -61,6 +77,17 @@ const SubTitle = styled.div`
   font-size: 20px;
   font-weight: bold;
   line-height: 30px;
+  word-break: keep-all;
+
+  @media (max-width: 500px) {
+    width: 100%;
+    text-align: center;
+    font-family: SpoqaHanSans;
+    font-size: 18px;
+    font-weight: normal;
+    line-height: 24px;
+    padding: 0px;
+  }
 `;
 
 const TestButton = styled(Link)`
@@ -126,8 +153,9 @@ class Body extends Component {
               <span style={{ color: "#00d8ff" }}>ge</span>
             </MainTitle>
             <SubTitle>
-              모든 이미지에는 의미가 있습니다. 일상의 이미지를 우리 모두의
-              지식으로 바꾸는 일. 커먼 바운드가 함께 합니다.
+              모든 이미지에는 의미가 있습니다.
+              <br /> 일상의 이미지를 우리 모두의 지식으로 바꾸는 일.
+              <br /> 커먼 바운드가 함께 합니다.
             </SubTitle>
           </MainSlide>
           <TestButton
