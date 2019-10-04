@@ -510,13 +510,14 @@ class CreatorMain extends Component {
     // 서버로 전송
     // 프로젝트 정보가 있어야만 DB에 쌓도록 한다
     if (this.props.info) {
-      this.Refs.forEach(body => {
-        body.handleSendAll();
+      const bodyPromises = await this.Refs.map(async body => {
+        return new Promise(resolve => resolve(body.handleSendAll()));
       });
+      await Promise.all(bodyPromises);
+      window.location.reload();
     }
 
     alert("작업이 완료되었습니다.");
-    window.location.reload();
   };
 
   handleChange = e => {

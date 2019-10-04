@@ -201,7 +201,7 @@ class Body extends Component {
         console.log(data);
 
         // 경로별 받은 데이터를 다르게 핸들링함
-        if (sendTo === "/mypage/creator/task/normal") {
+        if (sendTo === "/api/mypage/creator/task/normal") {
           var counter = 0; // Crop.id 생성을 위한 임시 변수
 
           this.setState({
@@ -272,41 +272,6 @@ class Body extends Component {
       });
     }
   }
-
-  // // 이미지가 업로드 되었을 때 호출됨
-  // onFileSelected = async files => {
-  //   // 이미지가 업로드 되었을 때 기존에 크롭된 영역을 초기화함
-  //   //console.log(files[0]);
-  //   this.setState({
-  //     orig_image_file: files[0],
-  //     __nextkey: 0,
-  //     crop_image: [],
-  //     crop: {},
-  //     label: "",
-  //     imageRef: "",
-  //     changeMode: false,
-  //     preId: "",
-  //     orig_image: null
-  //   });
-
-  //   await this.getBase64(files[0]).then(
-  //     data =>
-  //       new Promise(resolve => {
-  //         resolve(
-  //           this.setState({
-  //             orig_image: data
-  //           })
-  //         );
-  //       })
-  //   );
-  //   // AI를 사용할 경우에만 이미지 데이터를 서버로 전송해줌
-  //   if (this.state.useAI) {
-  //     const bodyData = new FormData();
-  //     bodyData.append("orig_image", this.props.orig_image_file);
-
-  //     this.sendData(bodyData, "/mypage/creator/task/normal"); // 서버로 전송( /mypage/task)
-  //   }
-  // };
 
   // 입력창의 value가 바뀔 때 변경사항 적용
   handleChange = e => {
@@ -433,7 +398,7 @@ class Body extends Component {
     );
     bodyData.append("project_id", this.props.project_id);
 
-    await this.sendData(bodyData, "/mypage/creator/task/normal/complete"); // 서버로 전송( /mypage/task/complete)
+    await this.sendData(bodyData, "/api/mypage/creator/task/normal/complete"); // 서버로 전송( /mypage/task/complete)
 
     return new Promise(resolve => resolve(true));
   };
