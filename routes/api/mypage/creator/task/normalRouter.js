@@ -4,8 +4,8 @@ const uuid = require("uuid/v4");
 const axios = require("axios");
 const multer = require("multer");
 const memory = multer.memoryStorage();
-const endpoint = require("../../../DetectionEndpoint");
-const logger = require("../../../../config/logger");
+const endpoint = require("../../../../DetectionEndpoint");
+const logger = require("../../../../../config/logger");
 
 const completeRouter = require("./normal/complete");
 
@@ -16,7 +16,7 @@ const upload_mem = multer({
 
 router.use("/complete", completeRouter);
 
-// path: ~/mypage/creator/task/normal
+// path: ~/api/mypage/creator/task/normal
 // 파일 최초 업로드 요청 핸들링
 router.post("/", upload_mem.single("orig_image"), (req, res, next) => {
   const imageSrc = req.body.orig_image;

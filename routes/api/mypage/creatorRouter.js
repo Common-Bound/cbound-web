@@ -4,13 +4,13 @@ const joinRouter = require("./creator/join");
 const projectsRouter = require("./creator/projects");
 const taskRouter = require("./creator/taskRouter");
 const historyRouter = require("./creator/history");
-const logger = require("../../config/logger");
+const logger = require("../../../config/logger");
 
-const db = require("../../db/index");
+const db = require("../../../db/index");
 const moment = require("moment");
 require("moment-timezone");
 
-// path: ~/mypage/creator
+// path: ~/api/mypage/creator
 router.use("/join", joinRouter);
 router.use("/projects", projectsRouter);
 router.use("/task", taskRouter);

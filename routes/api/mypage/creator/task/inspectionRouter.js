@@ -1,10 +1,10 @@
 const express = require("express");
 const router = express.Router();
-const db = require("../../../../db/index");
+const db = require("../../../../../db/index");
 const moment = require("moment-timezone");
-const logger = require("../../../../config/logger");
+const logger = require("../../../../../config/logger");
 
-// path: ~/mypage/creator/task/inspection
+// path: ~/api/mypage/creator/task/inspection
 // 검수 큐에 있는 data를 시간이 빠른 순서대로 불러온다
 // 자신이 한번도 참여하지 않았고 상태가 'queued'인 data를 불러온다
 // 그리고 해당 data의 상태를 'reserved' 로 변경한다

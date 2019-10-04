@@ -184,8 +184,8 @@ class CreatorProjectJoined extends Component {
           <Redirect
             to={{
               pathname: this.props.ref_project
-                ? `/mypage/creator/task/${this.props.project_type}/${this.props.ref_project}`
-                : `/mypage/creator/task/${this.props.project_type}/${this.props.id}`,
+                ? `api/mypage/creator/task/${this.props.project_type}/${this.props.ref_project}`
+                : `api/mypage/creator/task/${this.props.project_type}/${this.props.id}`,
               state: {
                 title: this.props.title,
                 created_at: this.props.created_at,

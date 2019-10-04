@@ -8,7 +8,6 @@ const RedisStore = require("connect-redis")(session);
 const http = require("http");
 const https = require("https");
 const fs = require("fs");
-const history = require('connect-history-api-fallback');
 let client = redis.createClient();
 
 const PORT = process.env.PORT || 4000;
@@ -16,8 +15,7 @@ const PORT = process.env.PORT || 4000;
 const app = express();
 
 /* 라우터 */
-const authRouter = require("./routes/authRouter");
-const mypageRouter = require("./routes/mypageRouter");
+const apiRouter = require("./routes/apiRouter");
 /* logger */
 // winston 과 morgan 을 이어준다
 const logger = require("./config/logger");
@@ -53,16 +51,10 @@ app.use(passport.initialize()); // passport 구동
 app.use(passport.session()); // 세션 연결
 
 /* 사용자 작성 라우터 사용 */
-app.use("/auth", authRouter);
-app.use("/mypage", mypageRouter);
-
-/* history */
-app.use(history({
-  index: path.join(__dirname, 'client/build/index.html')
-}));
+app.use("/api", apiRouter);
 
 app.get("/*", (req, res, next) => {
-  res.sendFile(path.join(__dirname, "client/build/index.html"), function (err) {
+  res.sendFile(path.join(__dirname, "client/build/index.html"), function(err) {
     if (err) {
       logger.error(err);
       res.status(500).send(err);
@@ -73,17 +65,34 @@ app.get("/*", (req, res, next) => {
 const option =
   process.env.NODE_ENV === "production"
     ? {
-      key: fs.readFileSync(
-        __dirname + "/ssl/c-bound.io_2019091776EJ.key.pem"
-      ),
-      cert: fs.readFileSync(
-        __dirname + "/ssl/c-bound.io_2019091776EJ.crt.pem"
-      ),
-      ca: fs.readFileSync(__dirname + "/ssl/ca-chain-bundle.pem")
-    }
+        key: fs.readFileSync(
+          __dirname + "/ssl/c-bound.io_2019091776EJ.key.pem"
+        ),
+        cert: fs.readFileSync(
+          __dirname + "/ssl/c-bound.io_2019091776EJ.crt.pem"
+        ),
+        ca: fs.readFileSync(__dirname + "/ssl/ca-chain-bundle.pem")
+      }
     : undefined;
 
-// https server
-https.createServer(option, app).listen(PORT, () => {
-  logger.info(`HTTPS Server is running at port ${PORT}`);
-})
+// HTTPS 서버
+option
+  ? https.createServer(option, app).listen(PORT, () => {
+      console.log(`Server is running at port ${PORT}`);
+    })
+  : undefined;
+
+// HTTPS 서버로 요청을 전달하여 자동으로 SSL 연결을 해주는 HTTP 서버
+// SSL option 이 존재하지 않는 development 단계에서는 그냥 HTTP 서버만이 존재하게 됩니다.
+option
+  ? http
+      .createServer(function(req, res) {
+        res.writeHead(301, {
+          Location: "https://" + req.headers["host"] + req.url
+        });
+        res.end();
+      })
+      .listen(80)
+  : http.createServer(app).listen(PORT, () => {
+      console.log(`Server is running at port ${PORT}`);
+    });

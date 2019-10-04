@@ -71,8 +71,8 @@ class AvailableProjects extends Component {
   }
 
   async fetchProject() {
-    console.log(this.props.match.path);
-    const url = this.props.match.path;
+    console.log(`/api${this.props.match.path}`);
+    const url = `/api${this.props.match.path}`;
     const result = await fetch(url)
       .then(res => res.json())
       .then(data => {
@@ -122,7 +122,7 @@ class AvailableProjects extends Component {
    *              프로젝트 목록을 다시 불러온다
    */
   handleClick = e => {
-    const url = this.props.match.path;
+    const url = `/api${this.props.match.path}`;
     fetch(url, {
       method: "POST",
       headers: {

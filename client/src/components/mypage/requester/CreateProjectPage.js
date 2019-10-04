@@ -44,7 +44,7 @@ class CreateProjectPage extends Component {
       reward: this.state.cost
     };
 
-    const url = this.props.match.path;
+    const url = `/api${this.props.match.path}`;
     await fetch(url, {
       method: "POST",
       headers: {

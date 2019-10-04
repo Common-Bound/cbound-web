@@ -1,9 +1,9 @@
 const express = require("express");
 const router = express.Router();
-const db = require("../../../db/index");
-const logger = require("../../../config/logger");
+const db = require("../../../../db/index");
+const logger = require("../../../../config/logger");
 
-// path: ~/mypage/creator/join
+// path: ~/api/mypage/creator/join
 // 프로젝트 참여 요청 핸들링
 router.post("/", (req, res, next) => {
   const user_id = req.user.id;

@@ -81,7 +81,7 @@ class CreatorHistoryPage extends Component {
    * @memberof CreatorProjectsPage
    */
   async fetchProject() {
-    const url = `${this.props.match.path}`;
+    const url = `/api${this.props.match.path}`;
     console.log(url);
     await fetch(url)
       .then(res => res.json())

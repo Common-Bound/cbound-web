@@ -63,7 +63,7 @@ class RequesterMain extends Component {
   };
 
   fetchData = async () => {
-    const url = this.props.match.url;
+    const url = `/api${this.props.match.url}`;
     console.log(url);
 
     const result = await fetch(url)

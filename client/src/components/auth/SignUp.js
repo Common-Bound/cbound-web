@@ -198,7 +198,7 @@ class SignUp extends Component {
     if (this.state.PasswordError) {
       return alert("비밀번호가 서로 다릅니다");
     } else {
-      const url = this.props.match.url; // /:user_type/auth/signup
+      const url = `/api${this.props.match.url}`; // /:user_type/auth/signup
       fetch(url, {
         method: "POST",
         headers: {

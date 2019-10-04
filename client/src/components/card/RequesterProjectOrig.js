@@ -37,8 +37,8 @@ class CreatorProjectJoined extends Component {
           <StyledLink
             to={{
               pathname: this.props.ref_project
-                ? `/mypage/requester/insight/${this.props.ref_project}`
-                : `/mypage/requester/insight/${this.props.id}`,
+                ? `api/mypage/requester/insight/${this.props.ref_project}`
+                : `api/mypage/requester/insight/${this.props.id}`,
               state: {
                 title: this.props.title,
                 created_at: this.props.created_at,
