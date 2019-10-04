@@ -661,6 +661,7 @@ class Body extends Component {
               <div
                 onMouseDown={this.handleStartTimer}
                 onMouseUp={this.handleCropMouseUp}
+                onTouchEnd={this.handleCropMouseUp}
               >
                 <ReactCrop
                   src={this.props.orig_image_base64}
