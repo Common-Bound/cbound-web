@@ -1,33 +1,34 @@
 import React, { Component } from "react";
 import ProjectJoined from "../../../card/CreatorProjectJoined";
 import styled from "styled-components";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
 
 const Container = styled.div`
   width: 100%;
-  height: 100vh;
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
 `;
 
 const TitleContainer = styled.div`
   width: 80%;
+  padding-top: 40px;
   margin: 0 auto;
 
   color: black; !important;
+
+  @media(max-width: 500px){
+    padding-top: 24px;
+  }
 `;
 
 const Title = styled.div`
-  padding-top: 40px;
   font-family: Avenir;
   font-size: 20px;
   font-weight: bold;
 `;
 
 const SemiTitle = styled.div`
-  padding-bottom: 40px;
   font-family: SpoqaHanSans;
   font-size: 32px;
   font-weight: bold;
@@ -35,19 +36,19 @@ const SemiTitle = styled.div`
 
 const TableContainer = styled.div`
   width: 80%;
-  height: 600px;
+  max-height: 80%;
+
+  display: flex;
+  flex-wrap: wrap;
+
+  padding-top: 40px;
   margin: 0 auto;
   overflow: scroll;
-  text-align: center;
-`;
 
-const StyledTableHead = styled(TableHead)`
-  background-color: black;
-`;
-
-const StyledTableCell = styled(TableCell)`
-  color: rgba(255, 255, 255, 0.6) !important;
-  font-family: Avenir;
+  @media (max-width: 500px) {
+    flex-direction: column;
+    flex-wrap: nowrap;
+  }
 `;
 
 class CreatorProjectsPage extends Component {
@@ -85,6 +86,7 @@ class CreatorProjectsPage extends Component {
                 id={el.id}
                 ref_project={el.ref_project}
                 title={el.title}
+                title_image={el.title_image}
                 simple_description={el.simple_description}
                 detail_description={el.detail_description}
                 due_date={el.due_date}
@@ -110,21 +112,7 @@ class CreatorProjectsPage extends Component {
           <Title>On Going Projects</Title>
           <SemiTitle>참여한 프로젝트</SemiTitle>
         </TitleContainer>
-        <TableContainer>
-          <Table>
-            <StyledTableHead>
-              <TableRow>
-                <StyledTableCell align="center">KICK-OFF</StyledTableCell>
-                <StyledTableCell align="center">ROLE</StyledTableCell>
-                <StyledTableCell align="center">TITLE</StyledTableCell>
-                <StyledTableCell align="center">POINT</StyledTableCell>
-                <StyledTableCell align="center">DUE</StyledTableCell>
-                <StyledTableCell align="center">REMAINED</StyledTableCell>
-              </TableRow>
-            </StyledTableHead>
-            <TableBody>{this.state.projects}</TableBody>
-          </Table>
-        </TableContainer>
+        <TableContainer>{this.state.projects}</TableContainer>
       </Container>
     );
   }

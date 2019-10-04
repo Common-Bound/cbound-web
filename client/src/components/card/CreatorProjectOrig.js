@@ -172,13 +172,6 @@ class CreatorProjectOrig extends Component {
       "YYYY-MM-DD"
     );
 
-    // const t1 = moment();
-    // const t2 = moment(this.props.due_date);
-
-    // const days = moment.duration(t2.diff(t1)).days();
-    // const hours = moment.duration(t2.diff(t1)).hours();
-    // const minutes = moment.duration(t2.diff(t1)).minutes();
-
     return (
       <Card>
         <MainContainer>

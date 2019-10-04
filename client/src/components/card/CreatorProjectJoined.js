@@ -1,20 +1,134 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-import TableCell from "@material-ui/core/TableCell";
-import TableRow from "@material-ui/core/TableRow";
 import { Redirect } from "react-router-dom";
 import moment from "moment";
 
-const StyledTableCell = styled(TableCell)`
-  color: ${props =>
-    props.project_type === "normal" ? "black" : "blue"} !important;
+const Card = styled.div`
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  max-width: 300px;
+  margin: 0px 30px 30px 0px;
+  text-align: center;
+
+  display: flex;
+  flex-direction: column;
+
+  @media (max-width: 1024px) {
+    max-width: 240px;
+  }
+
+  @media (max-width: 500px) {
+    max-width: 100%;
+    margin: 0px 0px 30px 0px;
+  }
 `;
 
-const StyledTableRow = styled(TableRow)`
-  transition: 0.2s;
+const MainContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  @media (max-width: 500px) {
+    flex-direction: row;
+    height: 120px;
+  }
+`;
+
+const SubContainer = styled.div`
+  width: 100%;
+  padding: 10px;
+  overflow: scroll;
+
+  @media (max-width: 500px) {
+    width: 60%;
+    padding: 4px;
+  }
+`;
+
+const ButtonContainer = styled.div``;
+
+const Image = styled.div`
+  width: 100%;
+  height: 200px;
+  background-image: url(${props => props.src});
+  background-size: 100% 100%;
+
+  @media (max-width: 1024px) {
+    height: 160px;
+  }
+  @media (max-width: 500px) {
+    width: 40%;
+    height: 100%;
+  }
+`;
+
+const Title = styled.div`
+  padding: 10px;
+  font-size: 24px;
+  font-weight: bold;
+  color: black;
+
+  @media (max-width: 1024px) {
+    padding: 8px;
+    font-size: 20px;
+  }
+  @media (max-width: 500px) {
+    padding: 4px;
+    font-size: 16px;
+  }
+`;
+
+const Description = styled.div`
+  padding: 8px;
+  color: grey;
+  font-size: 18px;
+  word-break: keep-all;
+
+  @media (max-width: 1024px) {
+    padding: 6px;
+    font-size: 16px;
+  }
+  @media (max-width: 500px) {
+    padding: 2px;
+    font-size: 12px;
+  }
+`;
+
+const Info = styled.div`
+  padding: 8px;
+  color: ${props => (props.color === "red" ? "red" : "grey")};
+  font-size: 16px;
+  word-break: keep-all;
+
+  @media (max-width: 1024px) {
+    padding: 6px;
+    font-size: 14px;
+  }
+  @media (max-width: 500px) {
+    padding: 2px;
+    font-size: 10px;
+  }
+`;
+
+const Button = styled.div`
+  border: none;
+  outline: 0;
+  display: inline-block;
+  padding: 8px;
+  color: white;
+  background-color: #000;
+  text-align: center;
   cursor: pointer;
+  width: 100%;
+  font-size: 18px;
+
   :hover {
-    background-color: lightgrey;
+    opacity: 0.7;
+  }
+
+  @media (max-width: 1024px) {
+    font-size: 16px;
+  }
+  @media (max-width: 500px) {
+    font-size: 14px;
   }
 `;
 
@@ -40,23 +154,32 @@ class CreatorProjectJoined extends Component {
       "YYYY-MM-DD"
     );
 
-    const t1 = moment();
-    const t2 = moment(this.props.due_date);
+    // const t1 = moment();
+    // const t2 = moment(this.props.due_date);
 
-    const days = moment.duration(t2.diff(t1)).days();
-    const hours = moment.duration(t2.diff(t1)).hours();
-    const minutes = moment.duration(t2.diff(t1)).minutes();
+    // const days = moment.duration(t2.diff(t1)).days();
+    // const hours = moment.duration(t2.diff(t1)).hours();
+    // const minutes = moment.duration(t2.diff(t1)).minutes();
 
     return (
-      <StyledTableRow onClick={this.handleClick.bind(this)}>
-        <TableCell align="center">{created_time}</TableCell>
-        <StyledTableCell align="center" project_type={this.props.project_type}>
-          {this.props.project_type === "normal" ? "생성" : "검수"}
-        </StyledTableCell>
-        <TableCell align="center">{this.props.title}</TableCell>
-        <TableCell align="center">{this.props.reward}</TableCell>
-        <TableCell align="center">{due_date_time}</TableCell>
-        <TableCell align="center">{`${days}일 ${hours}시간 ${minutes}분 뒤 종료`}</TableCell>
+      <Card>
+        <MainContainer>
+          <Image src={this.props.title_image}></Image>
+          <SubContainer>
+            <Title>
+              {this.props.title} (
+              {this.props.project_type === "normal" ? "생성" : "검수"})
+            </Title>
+            <Description>{this.props.simple_description}</Description>
+            <Info>
+              {created_time} ~ {due_date_time}
+            </Info>
+            <Info color="red">{this.props.reward} P</Info>
+          </SubContainer>
+        </MainContainer>
+        <ButtonContainer>
+          <Button onClick={this.handleClick.bind(this)}>참여하기</Button>
+        </ButtonContainer>
         {this.state.clicked ? (
           <Redirect
             to={{
@@ -73,7 +196,7 @@ class CreatorProjectJoined extends Component {
         ) : (
           undefined
         )}
-      </StyledTableRow>
+      </Card>
     );
   }
 }

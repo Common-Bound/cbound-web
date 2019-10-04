@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import ProjectOrig from "../../../card/CreatorProjectOrig";
 import styled from "styled-components";
-// import Button from "@material-ui/core/Button";
 
 const Container = styled.div`
   width: 100%;
