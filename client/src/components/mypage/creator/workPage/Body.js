@@ -349,7 +349,7 @@ class Body extends Component {
     ) {
       //console.log("Complete");
       if (this.state.changeMode) {
-        // 정
+        // 수정
         this.setState({
           crop_image: await this.state.crop_image.map(crop => {
             if (crop.shape_attributes.id === this.state.preId) {
@@ -380,7 +380,7 @@ class Body extends Component {
           })
         });
       } else {
-        // 가
+        // 추가
         this.setState(
           {
             crop_image: this.state.crop_image.concat({
