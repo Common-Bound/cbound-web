@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import endpoint from "../../../../RecognitionEndpoint";
 import styled from "styled-components";
 import deleteImg from "../../../../images/close_button.png";
 
@@ -94,7 +93,10 @@ class CropItem extends Component {
     });
 
     await fetch(sendTo, {
-      method: "post",
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
       body: bodyData
     })
       .then(res => {
@@ -103,10 +105,10 @@ class CropItem extends Component {
       .then(data => {
         console.log("Data received");
         console.log(data);
-
+        console.log("label: ", data.data.label[0]);
         // 경로별 받은 데이터를 다르게 핸들링함
         this.setState({
-          label: data.label
+          label: data.data.label[0]
         });
       })
       .catch(function(ex) {
@@ -192,11 +194,15 @@ class CropItem extends Component {
       crop_image: this.state.imgSrc,
       id: this.props.crop.shape_attributes.id
     });
+
     if (this.props.useAI) {
       this.setState({
         editing: true
       });
-      await this.sendData(bodyData, `${endpoint.url}/ocr/recognition/`);
+      await this.sendData(
+        bodyData,
+        `/api/mypage/creator/task/normal/recognition`
+      );
     }
   }
 
@@ -229,7 +235,10 @@ class CropItem extends Component {
         this.setState({
           editing: true
         });
-        await this.sendData(bodyData, `${endpoint.url}/ocr/recognition/`);
+        await this.sendData(
+          bodyData,
+          `/api/mypage/creator/task/normal/recognition`
+        );
       }
     }
     document.getElementById(this.props.crop.shape_attributes.id).focus();

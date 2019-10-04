@@ -4,7 +4,7 @@ const uuid = require("uuid/v4");
 const axios = require("axios");
 const multer = require("multer");
 const memory = multer.memoryStorage();
-const endpoint = require("../../../../DetectionEndpoint");
+const endpoint = require("../../../../AIserverEndpoint");
 const logger = require("../../../../../config/logger");
 
 const completeRouter = require("./normal/complete");
@@ -37,6 +37,27 @@ router.post("/", upload_mem.single("orig_image"), (req, res, next) => {
     .catch(err => {
       logger.error(err);
       return res.json(500).json({ error: err });
+    });
+});
+
+router.post("/recognition", (req, res, next) => {
+  const imageSrc = req.body.crop_image;
+  const id = req.body.id;
+  const url = `${endpoint.url}/ocr/recognition/`;
+  axios
+    .post(url, {
+      id: id,
+      crop_image: imageSrc,
+      method: "post"
+    })
+    .then(res => res.data)
+    .then(data => {
+      console.log(data);
+      return res.json({ data: data });
+    })
+    .catch(err => {
+      logger.error(err);
+      return res.status(500).json({ error: err });
     });
 });
 
