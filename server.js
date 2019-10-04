@@ -80,19 +80,6 @@ option
   ? https.createServer(option, app).listen(PORT, () => {
       console.log(`Server is running at port ${PORT}`);
     })
-  : undefined;
-
-// HTTPS 서버로 요청을 전달하여 자동으로 SSL 연결을 해주는 HTTP 서버
-// SSL option 이 존재하지 않는 development 단계에서는 그냥 HTTP 서버만이 존재하게 됩니다.
-option
-  ? http
-      .createServer(function(req, res) {
-        res.writeHead(301, {
-          Location: "https://" + req.headers["host"] + req.url
-        });
-        res.end();
-      })
-      .listen(80)
   : http.createServer(app).listen(PORT, () => {
       console.log(`Server is running at port ${PORT}`);
     });
