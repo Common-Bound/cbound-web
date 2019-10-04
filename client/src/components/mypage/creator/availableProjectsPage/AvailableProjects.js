@@ -17,6 +17,10 @@ const TitleContainer = styled.div`
   margin: 0 auto;
 
   color: black; !important;
+
+  @media(max-width: 500px){
+    padding-top: 24px;
+  }
 `;
 
 const Title = styled.div`
@@ -26,7 +30,6 @@ const Title = styled.div`
 `;
 
 const SemiTitle = styled.div`
-  padding-bottom: 40px;
   font-family: SpoqaHanSans;
   font-size: 32px;
   font-weight: bold;
@@ -39,6 +42,7 @@ const TableContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
 
+  padding-top: 40px;
   margin: 0 auto;
   overflow: scroll;
 
@@ -47,21 +51,6 @@ const TableContainer = styled.div`
     flex-wrap: nowrap;
   }
 `;
-
-// const StyledTableHead = styled(TableHead)`
-//   background-color: black;
-// `;
-
-// const StyledTableCell = styled(TableCell)`
-//   color: rgba(255, 255, 255, 0.6) !important;
-//   font-family: Avenir;
-// `;
-
-// const ResponsiveStyledTableCell = styled(StyledTableCell)`
-//   @media (max-width: 810px) {
-//     display: none !important;
-//   }
-// `;
 
 class AvailableProjects extends Component {
   constructor(props) {
@@ -155,30 +144,7 @@ class AvailableProjects extends Component {
           <Title>Available Projects</Title>
           <SemiTitle>참여 가능한 프로젝트</SemiTitle>
         </TitleContainer>
-        <TableContainer>
-          {/* <Table>
-            <StyledTableHead>
-              <TableRow>
-                <ResponsiveStyledTableCell align="center">
-                  KICK-OFF
-                </ResponsiveStyledTableCell>
-                <StyledTableCell align="center">ROLE</StyledTableCell>
-                <StyledTableCell align="center">TITLE</StyledTableCell>
-                <StyledTableCell align="center">POINT</StyledTableCell>
-                <StyledTableCell align="center">DUE</StyledTableCell>
-                <ResponsiveStyledTableCell align="center">
-                  REMAINED
-                </ResponsiveStyledTableCell>
-              </TableRow>
-            </StyledTableHead>
-            <TableBody>{this.state.projects}</TableBody>
-          </Table> */}
-          {/* 사용성 테스트를 위해 막아놓음 */}
-          {/* <Button onClick={this.handleClick.bind(this)}>
-            랜덤 프로젝트 추가
-          </Button> */}
-          {this.state.projects}
-        </TableContainer>
+        <TableContainer>{this.state.projects}</TableContainer>
       </Container>
     );
   }

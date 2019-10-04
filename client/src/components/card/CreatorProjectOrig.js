@@ -21,9 +21,28 @@ const Card = styled.div`
   }
 `;
 
-const MainContainer = styled.div``;
+const MainContainer = styled.div`
+  display: flex;
+  flex-direction: column;
 
-const SubContainer = styled.div``;
+  @media (max-width: 500px) {
+    flex-direction: row;
+    height: 120px;
+  }
+`;
+
+const SubContainer = styled.div`
+  width: 100%;
+  padding: 10px;
+  overflow: scroll;
+
+  @media (max-width: 500px) {
+    width: 60%;
+    padding: 4px;
+  }
+`;
+
+const ButtonContainer = styled.div``;
 
 const Image = styled.div`
   width: 100%;
@@ -35,7 +54,8 @@ const Image = styled.div`
     height: 160px;
   }
   @media (max-width: 500px) {
-    height: 120px;
+    width: 40%;
+    height: 100%;
   }
 `;
 
@@ -44,6 +64,15 @@ const Title = styled.div`
   font-size: 24px;
   font-weight: bold;
   color: black;
+
+  @media (max-width: 1024px) {
+    padding: 8px;
+    font-size: 20px;
+  }
+  @media (max-width: 500px) {
+    padding: 4px;
+    font-size: 16px;
+  }
 `;
 
 const Description = styled.div`
@@ -51,6 +80,15 @@ const Description = styled.div`
   color: grey;
   font-size: 18px;
   word-break: keep-all;
+
+  @media (max-width: 1024px) {
+    padding: 6px;
+    font-size: 16px;
+  }
+  @media (max-width: 500px) {
+    padding: 2px;
+    font-size: 12px;
+  }
 `;
 
 const Info = styled.div`
@@ -58,6 +96,15 @@ const Info = styled.div`
   color: ${props => (props.color === "red" ? "red" : "grey")};
   font-size: 16px;
   word-break: keep-all;
+
+  @media (max-width: 1024px) {
+    padding: 6px;
+    font-size: 14px;
+  }
+  @media (max-width: 500px) {
+    padding: 2px;
+    font-size: 10px;
+  }
 `;
 
 const Button = styled.div`
@@ -72,29 +119,17 @@ const Button = styled.div`
   width: 100%;
   font-size: 18px;
 
-  hover {
+  :hover {
     opacity: 0.7;
   }
+
+  @media (max-width: 1024px) {
+    font-size: 16px;
+  }
+  @media (max-width: 500px) {
+    font-size: 14px;
+  }
 `;
-
-// const StyledTableCell = styled(TableCell)`
-//   color: ${props =>
-//     props.project_type === "normal" ? "black" : "blue"} !important;
-// `;
-
-// const StyledTableRow = styled(TableRow)`
-//   transition: 0.2s;
-//   cursor: pointer;
-//   :hover {
-//     background-color: lightgrey;
-//   }
-// `;
-
-// const ResponsiveStyledTableCell = styled(TableCell)`
-//   @media (max-width: 810px) {
-//     display: none !important;
-//   }
-// `;
 
 class CreatorProjectOrig extends Component {
   constructor(props) {
@@ -148,40 +183,21 @@ class CreatorProjectOrig extends Component {
       <Card>
         <MainContainer>
           <Image src={this.props.title_image}></Image>
+          <SubContainer>
+            <Title>
+              {this.props.title} (
+              {this.props.project_type === "normal" ? "생성" : "검수"})
+            </Title>
+            <Description>{this.props.simple_description}</Description>
+            <Info>
+              {created_time} ~ {due_date_time}
+            </Info>
+            <Info color="red">{this.props.reward} P</Info>
+          </SubContainer>
         </MainContainer>
-        <SubContainer>
-          <Title>
-            {this.props.title} (
-            {this.props.project_type === "normal" ? "생성" : "검수"})
-          </Title>
-          <Description>{this.props.simple_description}</Description>
-          <Info>
-            {created_time} ~ {due_date_time}
-          </Info>
-          <Info color="red">{this.props.reward} P</Info>
-          {/* <a href="#"><i class="fa fa-dribbble"></i></a> 
-        <a href="#"><i class="fa fa-twitter"></i></a> 
-        <a href="#"><i class="fa fa-linkedin"></i></a> 
-        <a href="#"><i class="fa fa-facebook"></i></a>  */}
-
+        <ButtonContainer>
           <Button onClick={this.handleClick}>참여하기</Button>
-        </SubContainer>
-
-        {/* <StyledTableRow onClick={this.handleClick}>
-          <ResponsiveStyledTableCell align="center">
-            {created_time}
-          </ResponsiveStyledTableCell>
-          <StyledTableCell
-            align="center"
-            project_type={this.props.project_type}
-          >
-            {this.props.project_type === "normal" ? "생성" : "검수"}
-          </StyledTableCell>
-          <TableCell align="center">{this.props.title}</TableCell>
-          <TableCell align="center">{this.props.reward}</TableCell>
-          <TableCell align="center">{due_date_time}</TableCell>
-          <ResponsiveStyledTableCell align="center">{`${days}일 ${hours}시간 ${minutes}분 뒤 종료`}</ResponsiveStyledTableCell>
-        </StyledTableRow> */}
+        </ButtonContainer>
       </Card>
     );
   }
