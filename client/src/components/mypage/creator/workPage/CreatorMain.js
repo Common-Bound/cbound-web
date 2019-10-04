@@ -516,6 +516,7 @@ class CreatorMain extends Component {
     }
 
     alert("작업이 완료되었습니다.");
+    window.location.reload();
   };
 
   handleChange = e => {

@@ -349,7 +349,7 @@ class Body extends Component {
     ) {
       //console.log("Complete");
       if (this.state.changeMode) {
-        // 정
+        // 수정
         this.setState({
           crop_image: await this.state.crop_image.map(crop => {
             if (crop.shape_attributes.id === this.state.preId) {
@@ -380,7 +380,7 @@ class Body extends Component {
           })
         });
       } else {
-        // 가
+        // 추가
         this.setState(
           {
             crop_image: this.state.crop_image.concat({
@@ -580,18 +580,38 @@ class Body extends Component {
   };
 
   // 크롭이 완료되었을 때 이미지화 시켜 서버로 전송시킨다
-  async handleCropMouseUp() {
-    if (this.state.useAI) {
-      //console.log(this.state.crop.height);
-      if (this.state.crop.height) {
-        this.setState(
-          {
-            label: ""
-          },
-          () => this.handleOnCropComplete()
-        );
+  async handleCropMouseUp(e) {
+    var button = document.createElement("Button");
+    button.style.position = "fixed";
+    button.style.left = e.clientX - 35 + "px";
+    button.style.top = e.clientY - 35 + "px";
+    button.style.width = "70px";
+    button.style.height = "70px";
+    button.style.backgroundColor = "white";
+    button.style.color = "black";
+    button.style.borderRadius = "100%";
+    button.style.transition = "0.3s";
+    button.style.textAlign = "center";
+
+    button.onclick = () => {
+      this.handleOnCropComplete();
+      document.body.removeChild(button);
+    };
+
+    button.onmouseout = () => {
+      document.body.removeChild(button);
+    };
+    button.innerHTML = "BOUND";
+
+    document.body.appendChild(button);
+
+    setTimeout(function() {
+      try {
+        document.body.removeChild(button);
+      } catch {
+        //console.log('timeout')
       }
-    }
+    }, 5000);
   }
 
   getCropImageData() {
@@ -661,6 +681,7 @@ class Body extends Component {
               <div
                 onMouseDown={this.handleStartTimer}
                 onMouseUp={this.handleCropMouseUp}
+                onTouchEnd={this.handleCropMouseUp}
               >
                 <ReactCrop
                   src={this.props.orig_image_base64}
@@ -674,7 +695,7 @@ class Body extends Component {
                   <PrintTotalCrop
                     crops={this.state.crop_image}
                     image={this.state.imageRef}
-                    onClick={this.handleClickImage.bind(this)}
+                    onClick={this.handleClickImage}
                     showEdit={this.state.showEdit}
                   />
                 ) : null}

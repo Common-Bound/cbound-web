@@ -196,7 +196,6 @@ class CropItem extends Component {
       this.setState({
         editing: true
       });
-      console.log("a");
       await this.sendData(bodyData, `${endpoint.url}/ocr/recognition/`);
     }
   }
@@ -233,6 +232,7 @@ class CropItem extends Component {
         await this.sendData(bodyData, `${endpoint.url}/ocr/recognition/`);
       }
     }
+    document.getElementById(this.props.crop.shape_attributes.id).focus();
   }
 
   handleKeyPress = e => {
@@ -283,6 +283,7 @@ class CropItem extends Component {
         </ImageContainer>
         <BlueInput
           type="text"
+          id={this.props.crop.shape_attributes.id}
           value={this.state.label}
           onChange={this.handleLabelChange}
           onKeyPress={this.handleKeyPress}
