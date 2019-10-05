@@ -151,15 +151,15 @@ const BoundButton = styled.button`
   }
 `;
 
-const ShowButton = styled(BoundButton)`
-  color: black;
-  background-color: white;
+// const ShowButton = styled(BoundButton)`
+//   color: black;
+//   background-color: white;
 
-  :hover {
-    color: white;
-    background-color: black;
-  }
-`;
+//   :hover {
+//     color: white;
+//     background-color: black;
+//   }
+// `;
 
 const ImageContainer = styled.div`
   width: 100%;

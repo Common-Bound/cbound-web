@@ -8,7 +8,6 @@ import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
-import { isNumber } from "util";
 import introJS from "intro.js";
 import "intro.js/introjs.css";
 
@@ -657,22 +656,22 @@ class CreatorMain extends Component {
     const { format, orig_image_files, orig_image_base64, bodies } = this.state;
 
     let info = this.props.info;
-    let t1;
-    let t2;
-    let days;
-    let hours;
-    let minutes;
+    // let t1;
+    // let t2;
+    // let days;
+    // let hours;
+    // let minutes;
 
     // 만약 프로젝트 정보가 주어졌다면, 시간을 계산하고 그렇지 않다면(standalone 이라면) 건너 뛴다
     if (info) {
       info = this.props.info;
 
-      t1 = moment();
-      t2 = moment(info.due_date);
+      // t1 = moment();
+      // t2 = moment(info.due_date);
 
-      days = moment.duration(t2.diff(t1)).days();
-      hours = moment.duration(t2.diff(t1)).hours();
-      minutes = moment.duration(t2.diff(t1)).minutes();
+      // days = moment.duration(t2.diff(t1)).days();
+      // hours = moment.duration(t2.diff(t1)).hours();
+      // minutes = moment.duration(t2.diff(t1)).minutes();
     }
 
     return (
