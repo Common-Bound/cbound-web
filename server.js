@@ -8,6 +8,7 @@ const RedisStore = require("connect-redis")(session);
 const http = require("http");
 const https = require("https");
 const fs = require("fs");
+const cors = require("cors");
 let client = redis.createClient();
 
 const PORT = process.env.PORT || 4000;
@@ -49,6 +50,8 @@ app.use(
 // passport.js 모듈 사용
 app.use(passport.initialize()); // passport 구동
 app.use(passport.session()); // 세션 연결
+/* cors 허용 */
+app.use(cors());
 
 /* 사용자 작성 라우터 사용 */
 app.use("/api", apiRouter);
@@ -78,8 +81,8 @@ const option =
 // proudction 에서는 HTTPS 서버를, development 에서는 HTTP 서버를 사용한다.
 option
   ? https.createServer(option, app).listen(PORT, () => {
-      console.log(`HTTPS Server is running at port ${PORT}`);
+      logger.info(`HTTPS Server is running at port ${PORT}`);
     })
   : http.createServer(app).listen(PORT, () => {
-      console.log(`HTTP Server is running at port ${PORT}`);
+      logger.info(`HTTP Server is running at port ${PORT}`);
     });

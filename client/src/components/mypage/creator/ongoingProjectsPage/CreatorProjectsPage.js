@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import ProjectJoined from "../../../card/CreatorProjectJoined";
+import LoadingPlaceholder from "../../../card/LoadingPlaceholder";
+import AlarmCard from "../../../card/AlarmCard";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -55,6 +57,7 @@ class CreatorProjectsPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      loading: true,
       projects: []
     };
   }
@@ -103,6 +106,10 @@ class CreatorProjectsPage extends Component {
           });
         }
       });
+
+    await this.setState({
+      loading: false
+    });
   }
 
   render() {
@@ -112,7 +119,15 @@ class CreatorProjectsPage extends Component {
           <Title>On Going Projects</Title>
           <SemiTitle>참여한 프로젝트</SemiTitle>
         </TitleContainer>
-        <TableContainer>{this.state.projects}</TableContainer>
+        <TableContainer>
+          {this.state.loading ? (
+            [<LoadingPlaceholder key={1} />, <LoadingPlaceholder key={2} />]
+          ) : this.state.projects.length === 0 ? (
+            <AlarmCard message="참여한 프로젝트가 아직 없어요!" />
+          ) : (
+            this.state.projects
+          )}
+        </TableContainer>
       </Container>
     );
   }
