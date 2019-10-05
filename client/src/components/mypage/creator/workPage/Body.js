@@ -135,21 +135,21 @@ const IconTitle = styled.div`
 //   }
 // `;
 
-const BoundButton = styled.button`
-  width: 70px;
-  height: 70px;
-  background-color: white;
-  color: black;
-  border-radius: 100%;
-  transition: 0.3s;
-  text-align: center;
-  margin: 10px 10px 20px 10px;
+// const BoundButton = styled.button`
+//   width: 70px;
+//   height: 70px;
+//   background-color: white;
+//   color: black;
+//   border-radius: 100%;
+//   transition: 0.3s;
+//   text-align: center;
+//   margin: 10px 10px 20px 10px;
 
-  :hover {
-    color: white;
-    background-color: black;
-  }
-`;
+//   :hover {
+//     color: white;
+//     background-color: black;
+//   }
+// `;
 
 // const ShowButton = styled(BoundButton)`
 //   color: black;
