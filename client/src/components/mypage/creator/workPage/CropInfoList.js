@@ -3,10 +3,13 @@ import CropItem from "./CropItem";
 import styled from "styled-components";
 
 const List = styled.div`
+  width: 100%;
+  max-width: 1024px;
+
   display: flex;
   flex-flow: row;
   justify-content: flex-start;
-  width: 100%;
+
   border: 1px solid lightgrey;
   overflow: scroll;
 `;
@@ -16,6 +19,17 @@ const EmptyBox = styled.div`
   height: 100px;
   border: 1px solid lightgrey;
   margin: 5px;
+
+  @media (max-width: 1024px) {
+    width: 100px;
+    height: 80px;
+    margin: 4px;
+  }
+  @media (max-width: 500px) {
+    width: 100px;
+    height: 48px;
+    margin: 2px;
+  }
 `;
 
 class CropInfoList extends Component {

@@ -20,16 +20,27 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   align-items: cneter;
+
+  @media (max-width: 1024px) {
+    width: 85%;
+  }
+  @media (max-width: 500px) {
+    width: 90%;
+  }
 `;
 
 const EntireTitleContainer = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-end;
   padding: 40px 0px 10px 10px;
 
   color: black; !important;
+
+  @media(max-width: 500px){
+    padding-top: 24px;
+  }
 `;
 
 const LeftTitleContainer = styled.div`
@@ -42,6 +53,10 @@ const LeftTitleDate = styled.div`
   text-align: left;
   color: #8d8d8d;
   font-size: 16px;
+
+  @media (max-width: 500px) {
+    font-size: 12px;
+  }
 `;
 
 const LeftTitle = styled.div`
@@ -49,143 +64,213 @@ const LeftTitle = styled.div`
   text-align: left;
   font-weight: bold;
   font-size: 32px;
+
+  @media (max-width: 500px) {
+    font-size: 24px;
+  }
 `;
 
 const RightTitleContainer = styled.div`
   font-family: Avenir;
   display: flex;
   flex-direction: column;
-
-  padding: 10px;
+  padding-right: 10px;
 `;
 
-const RightTitle = styled.div`
-  font-weight: bold;
-  font-size: 18px;
-  text-align: right;
-`;
+// const RightTitle = styled.div`
+//   font-weight: bold;
+//   font-size: 18px;
+//   text-align: right;
+// `;
 
-const RightTitleDate = styled.div`
-  font-size: 16px;
-  text-align: right;
-  color: #8d8d8d;
-`;
+// const RightTitleDate = styled.div`
+//   font-size: 16px;
+//   text-align: right;
+//   color: #8d8d8d;
+// `;
 
 const MainContainer = styled.div`
   width: 100%;
 
   display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  flex-direction: row;
+  justify-content: flex-start;
   align-items: flex-start;
+
   padding: 10px;
+
+  @media (max-width: 1024px) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  @media (max-width: 500px) {
+    padding: 0px 10px;
+  }
 `;
 
 const FileListContainer = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
+  width: 64px;
+  height: 48vh;
 
-  padding-bottom: 10px;
+  margin-right: 10px;
+
+  @media (max-width: 1024px) {
+    height: 48px;
+    width: 100%;
+    margin-bottom: 10px;
+  }
+  @media (max-width: 500px) {
+    height: 36px;
+    margin-bottom: 2px;
+  }
 `;
 
 const FileList = styled.div`
-  width: 640px;
-  height: 64px;
+  width: 100%;
+  height: 100%;
 
   display: flex;
+  flex-direction: column;
 
   justify-content: flex-start;
   align-items: center;
 
   overflow: scroll;
   border: 1px solid lightgrey;
+
+  @media (max-width: 1024px) {
+    flex-direction: row;
+  }
 `;
 
 const FileThumbnail = styled.div`
   min-width: 50px;
   height: 50px;
-  margin: 0px 5px;
+  margin: 2px auto;
 
   border: 1px solid lightgrey;
 
   background-image: url(${props => props.base64});
   background-size: 100% 100%;
+
+  @media (max-width: 1024px) {
+    margin: 2px;
+  }
+  @media (max-width: 500px) {
+    min-width: 26px;
+    height: 26px;
+  }
 `;
 
 const ButtonContainer = styled.div`
   display: flex;
   jusify-content: flex-end;
+  align-items: flex-end;
+  @media (max-width: 500px) {
+  }
 `;
 
 const StyledFormControl = styled(FormControl)`
   width: 200px;
+  @media (max-width: 1024px) {
+    width: 160px;
+  }
+  @media (max-width: 500px) {
+    width: 60px;
+    font-size: 10px;
+  }
 `;
 
 const StyledButton = styled(Button)`
   height: 60px;
+  @media (max-width: 1024px) {
+    height: 46px;
+  }
+  @media (max-width: 500px) {
+    font-size: 12px;
+    height: 36px;
+  }
 `;
 
-const BodyContainer = styled.div`
+const WorkContainer = styled.div`
   width: 100%;
 
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
 `;
 
 const BodyMainContainer = styled.div`
-  width: 100%;
+  width: 95%;
+
+  @media (max-width: 1024px) {
+    width: 100%;
+  }
 `;
 
-const LeftMainContainer = styled.div`
+const WorkMainContainer = styled.div`
+  width: 100%;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   flex-basis: auto;
   align-items: center;
   justify-content: flex-start;
 `;
 
-const RightDescriptionContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex-basis: auto;
-  align-items: flex-end;
-  padding: 20px 20px 0px 20px;
-  color: black; !important;
+// const RightDescriptionContainer = styled.div`
+//   display: flex;
+//   flex-direction: column;
+//   flex-basis: auto;
+//   align-items: flex-end;
+//   padding: 20px 20px 0px 20px;
+//   color: black; !important;
 
-  width: 440px;
-  height: 440px;
-  background-color: #f0f0f0;
-`;
+//   width: 440px;
+//   height: 440px;
+//   background-color: #f0f0f0;
+// `;
 
-const DescriptionBoxContainer = styled.div`
-  width: 100%;
+// const DescriptionBoxContainer = styled.div`
+//   width: 100%;
 
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-`;
+//   display: flex;
+//   flex-direction: column;
+//   justify-content: space-between;
+// `;
 
-const DescriptionBox = styled.div`
-  font-family: SpoqaHanSans;
-  font-size: 18px;
-  padding: 14px;
-`;
+// const DescriptionBox = styled.div`
+//   font-family: SpoqaHanSans;
+//   font-size: 18px;
+//   padding: 14px;
+// `;
 
-const DropZoneBox = styled.div`
-  width: 640px;
-  height: 440px;
+const DropZoneBox = styled.section`
+  width: 85%;
+  height: 48vh;
+
   background-color: white;
   border: 5px solid lightgrey;
-  color: black; !important;
+  color: black;
                           
-  border-radius: 20px;
   font-family: Avenir;
   font-size: 25px
   font-weight: bold;
+  line-height: 400px;
   text-align: center;
-  line-height: 370px;
+
+  cursor: pointer;
+  transition: 0.5s;
+
+  :active {
+    background-color: grey;
+    color: white;
+  }
+
+  @media(max-width: 1024px){
+    width: 100%;
+  }
+  @media(max-width: 500px){
+    line-height: 300px;
+  }
 `;
 
 class CreatorMain extends Component {
@@ -376,15 +461,15 @@ class CreatorMain extends Component {
 
           console.log(crop_time);
 
-          const naturalWidth = await this.checkImageSize(index);
+          // const naturalWidth = await this.checkImageSize(index);
 
-          // 계산된 naturalWidth 가 숫자라면(640 보다 큰 경우) 좌표를 재조정해준다
-          if (isNumber(naturalWidth)) {
-            shape_attributes = await this.resizeCropLocation(
-              naturalWidth,
-              shape_attributes
-            );
-          }
+          // // 계산된 naturalWidth 가 숫자라면(640 보다 큰 경우) 좌표를 재조정해준다
+          // if (isNumber(naturalWidth)) {
+          //   shape_attributes = await this.resizeCropLocation(
+          //     naturalWidth,
+          //     shape_attributes
+          //   );
+          // }
           shape_attributes = await JSON.stringify(shape_attributes);
 
           shape_attributes = replaceAll(shape_attributes, '"', '""');
@@ -460,29 +545,29 @@ class CreatorMain extends Component {
         const file_size = files[index].size;
         const region_count = crop_image.length;
 
-        const naturalWidth = await this.checkImageSize(index);
+        // const naturalWidth = await this.checkImageSize(index);
 
-        // 계산된 naturalWidth 가 숫자라면(640 보다 큰 경우) 좌표를 재조정해준다
-        if (isNumber(naturalWidth)) {
-          // 각 crop 에 포함된 shape_attributes 를 resize 해준다
-          const resizedShapeAttributesPromises = await crop_image.map(
-            async crop => {
-              let new_shape = await this.resizeCropLocation(
-                naturalWidth,
-                crop.shape_attributes
-              );
-              return new Promise(resolve => resolve(new_shape));
-            }
-          );
+        // // 계산된 naturalWidth 가 숫자라면(640 보다 큰 경우) 좌표를 재조정해준다
+        // if (isNumber(naturalWidth)) {
+        //   // 각 crop 에 포함된 shape_attributes 를 resize 해준다
+        //   const resizedShapeAttributesPromises = await crop_image.map(
+        //     async crop => {
+        //       let new_shape = await this.resizeCropLocation(
+        //         naturalWidth,
+        //         crop.shape_attributes
+        //       );
+        //       return new Promise(resolve => resolve(new_shape));
+        //     }
+        //   );
 
-          const new_shape_attributes = await Promise.all(
-            resizedShapeAttributesPromises
-          );
+        //   const new_shape_attributes = await Promise.all(
+        //     resizedShapeAttributesPromises
+        //   );
 
-          crop_image.forEach((crop, index) => {
-            crop_image[index].shape_attributes = new_shape_attributes[index];
-          });
-        }
+        //   crop_image.forEach((crop, index) => {
+        //     crop_image[index].shape_attributes = new_shape_attributes[index];
+        //   });
+        // }
 
         JSONobj[file_name] = {};
         JSONobj[file_name]["file_name"] = file_name;
@@ -608,42 +693,6 @@ class CreatorMain extends Component {
             <LeftTitle>{info ? info.title : "이미지 라벨링"}</LeftTitle>
           </LeftTitleContainer>
           <RightTitleContainer>
-            <RightTitle>DEADLINE</RightTitle>
-            <RightTitleDate>
-              {info
-                ? `${days} DAYS : ${hours} HOURS : ${minutes} MINUTES`
-                : "UNLIMITED"}
-            </RightTitleDate>
-          </RightTitleContainer>
-        </EntireTitleContainer>
-        {/* 이미지 업로드 창과 이미지, 설명을 보여주는 메인 컨테이너 */}
-        <MainContainer>
-          <FileListContainer>
-            {/* 파일 썸네일 영역 */}
-            {!orig_image_base64 ? (
-              <FileList
-                data-intro="이미지를 업로드하면 썸네일이 보여집니다. 각 썸네일을 클릭해서 작업할 이미지를 선택할 수 있습니다."
-                data-step="2"
-                data-disable-interaction="true"
-              >
-                <FileThumbnail />
-                <FileThumbnail />
-                <FileThumbnail />
-              </FileList>
-            ) : (
-              <FileList>
-                {orig_image_base64.map((base64, index) => {
-                  return (
-                    <FileThumbnail
-                      key={index}
-                      onClick={this.handleClick.bind(this)}
-                      base64={base64}
-                      data-index={index}
-                    />
-                  );
-                })}
-              </FileList>
-            )}
             <ButtonContainer id="export-button-container">
               {!info && orig_image_files ? (
                 <StyledFormControl
@@ -683,43 +732,77 @@ class CreatorMain extends Component {
                 ""
               )}
             </ButtonContainer>
+            {/* <RightTitle>DEADLINE</RightTitle>
+            <RightTitleDate>
+              {info
+                ? `${days} DAYS : ${hours} HOURS : ${minutes} MINUTES`
+                : "UNLIMITED"}
+            </RightTitleDate> */}
+          </RightTitleContainer>
+        </EntireTitleContainer>
+        {/* 이미지 업로드 창과 이미지, 설명을 보여주는 메인 컨테이너 */}
+        <MainContainer>
+          <FileListContainer>
+            {/* 파일 썸네일 영역 */}
+            {!orig_image_base64 ? (
+              <FileList
+                data-intro="이미지를 업로드하면 썸네일이 보여집니다. 각 썸네일을 클릭해서 작업할 이미지를 선택할 수 있습니다."
+                data-step="2"
+                data-disable-interaction="true"
+              >
+                <FileThumbnail />
+                <FileThumbnail />
+                <FileThumbnail />
+              </FileList>
+            ) : (
+              <FileList>
+                {orig_image_base64.map((base64, index) => {
+                  return (
+                    <FileThumbnail
+                      key={index}
+                      onClick={this.handleClick.bind(this)}
+                      base64={base64}
+                      data-index={index}
+                    />
+                  );
+                })}
+              </FileList>
+            )}
           </FileListContainer>
           {!orig_image_files ? (
-            <BodyContainer>
+            <WorkContainer>
               {/* Main Container 의 왼쪽 영역 */}
-              <LeftMainContainer>
+              <WorkMainContainer>
                 {/* 파일 올리는 DropZone */}
                 <Dropzone onDrop={this.onFileSelected}>
                   {({ getRootProps, getInputProps }) => (
-                    <section>
+                    <DropZoneBox
+                      data-intro="[+] 영역을 클릭해서 이미지를 업로드 하세요"
+                      data-step="1"
+                      data-disable-interaction="true"
+                    >
                       <div {...getRootProps()}>
                         <input {...getInputProps()} accept="image/*" />
-                        <DropZoneBox
-                          data-intro="[+] 영역을 클릭해서 이미지를 업로드 하세요"
-                          data-step="1"
-                          data-disable-interaction="true"
-                        >
-                          [+] UPLOAD IMAGE
-                        </DropZoneBox>
+                        [+] UPLOAD IMAGE
                       </div>
-                    </section>
+                    </DropZoneBox>
                   )}
                 </Dropzone>
-              </LeftMainContainer>
+              </WorkMainContainer>
               {/* Main Container 의 오른쪽 영역 */}
-              <RightDescriptionContainer>
+              {/* <RightDescriptionContainer>
                 <DescriptionBoxContainer>
                   <DescriptionBox>
                     좌측 [+] 영역을 클릭하여 이미지를 업로드 해 주세요 (단,
                     이미지 선명하지 않거나 해상도가 낮으면 업로드 되지 않습니다)
                   </DescriptionBox>
-                  {/* <DescriptionBox>
+                  <DescriptionBox>
                   2. 이미지가 정상적으로 업로드 되어 바운드 되면, AI가 자동으로
                   글자라고 인식하여 이미지들을 아래 썸네일로 보여줍니다.
-                </DescriptionBox> */}
+                </DescriptionBox>
                 </DescriptionBoxContainer>
-              </RightDescriptionContainer>
-            </BodyContainer>
+              </RightDescriptionContainer> */}
+            </WorkContainer>
           ) : (
             <BodyMainContainer>{bodies}</BodyMainContainer>
           )}

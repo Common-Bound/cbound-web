@@ -5,12 +5,14 @@ import PrintTotalCrop from "./PrintTotalCrop"; // 크롭 리스트를 한 캔버
 import styled from "styled-components";
 import introJS from "intro.js";
 import "intro.js/introjs.css";
-
 import "react-image-crop/dist/ReactCrop.css";
 import "./Body.css";
 import { setTimeout } from "timers";
 
 const BodyContainer = styled.div`
+  width: 100%;
+  height: 64vh;
+
   display: ${props => (props.display ? props.display : "flex")};
   flex-direction: column;
   justify-content: flex-start;
@@ -19,76 +21,119 @@ const BodyContainer = styled.div`
 
 const MainContainer = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
   padding-bottom: 10px;
+
+  @media (max-width: 500px) {
+    flex-direction: column;
+    padding-bottom: 0px;
+  }
 `;
 
 const LeftMainContainer = styled.div`
+  width: 90%;
+
   display: flex;
   flex-direction: column;
   flex-basis: auto;
   align-items: center;
   justify-content: flex-start;
+
+  @media (max-width: 1024px) {
+    width: 100%;
+  }
 `;
-
-// const StepperContainer = styled.div`
-//   width: 100%;
-// `;
-
-// const StepperRoot = styled.div`
-//   width: 100%;
-//   margin: 0 auto;
-// `;
-
-// const StyledStepper = styled(Stepper)`
-//   height: 20px;
-//   padding: 20px 0px 20px 0px !important;
-//   background-color: #f0f0f0 !important;
-// `;
 
 const RightDescriptionContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex-basis: auto;
-  align-items: flex-start;
-  padding: 20px 20px 0px 20px;
-  color: black; !important;
-
-  width: 440px;
-  height: 485px;
-  background-color: #f0f0f0;
-`;
-
-const DescriptionBoxContainer = styled.div`
-  width: 100%;
+  min-width: 64px;
+  height: 48vh;
 
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
-`;
+  justify-content: flex-start;
+  align-items: center;
+  
+  color: white; !important;
+  background-color: black;
 
-const DescriptionBox = styled.div`
-  font-family: SpoqaHanSans;
-  font-size: 16px;
-  padding: 14px;
-`;
+  @media(max-width: 500px){
+    height: 32px;
+    width: 100%;
 
-const StyledSpan = styled.span`
-  width: 48px;
-  height: 24px;
-
-  :before {
-    width: 16px !important;
-    height: 16px !important;
+    flex-direction: row;
+    align-items: center;
   }
 `;
 
 const ButtonContainer = styled.div`
+  width: 50px;
+  height: 50px;
+  margin: 5px;
+
+  background-color: black;
+  color: white;
+
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
+
+  transition: 0.3s;
+
+  border-radius: 5px;
+  cursor: pointer;
+
+  :hover {
+    background-color: white;
+    color: black;
+  }
+  @media (max-width: 500px) {
+    width: 28px;
+    height: 28px;
+    margin-left: 8px;
+  }
 `;
+
+const Icon = styled.i`
+  transform: scale(1.4, 1.4);
+
+  @media (max-width: 500px) {
+    transform: scale(1.3, 1.3);
+  }
+`;
+
+const IconTitle = styled.div`
+  font-family: Avenir;
+
+  @media (max-width: 810px) {
+    display: none;
+  }
+`;
+
+// const DescriptionBoxContainer = styled.div`
+//   width: 100%;
+
+//   display: flex;
+//   flex-direction: column;
+//   justify-content: space-around;
+// `;
+
+// const DescriptionBox = styled.div`
+//   font-family: SpoqaHanSans;
+//   font-size: 16px;
+//   padding: 14px;
+// `;
+
+// const StyledSpan = styled.span`
+//   width: 48px;
+//   height: 24px;
+
+//   :before {
+//     width: 16px !important;
+//     height: 16px !important;
+//   }
+// `;
 
 const BoundButton = styled.button`
   width: 70px;
@@ -117,15 +162,17 @@ const ShowButton = styled(BoundButton)`
 `;
 
 const ImageContainer = styled.div`
-  width: 650px;
-  max-width: 650px
-  min-height: 480px;
+  width: 100%;
+  height: 48vh;
   position: relative;
 
   display: flex;
   justify-content: center;
   align-items: center;
   border: ${props => (props.show ? "5px solid lightgrey" : "none")};
+
+  @media (max-width: 500px) {
+  }
 `;
 
 const LoadingContainer = styled.div`
@@ -140,6 +187,7 @@ const LoadingContainer = styled.div`
 `;
 
 const CropListContainer = styled.div`
+  width: 100%;
   display: flex;
   justify-content: space-between;
 `;
@@ -167,15 +215,12 @@ class Body extends Component {
       // step: 0 // 현재 STEP 수
     };
 
+    this.ImageContainerRef = React.createRef();
     this.handleSendAll = this.handleSendAll.bind(this);
     this.handleOnCropModify = this.handleOnCropModify.bind(this);
     this.handleClickImage = this.handleClickImage.bind(this);
     this.handleCropMouseUp = this.handleCropMouseUp.bind(this);
     this.handleStartTimer = this.handleStartTimer.bind(this);
-
-    // this.handleBack = this.handleBack.bind(this);
-    // this.handleNext = this.handleNext.bind(this);
-    // this.handleReset = this.handleReset.bind(this);
   }
 
   componentDidMount() {
@@ -260,18 +305,18 @@ class Body extends Component {
   };
 
   // 업로드된 이미지를 출력하기 위해 Base64로 바꿀 때 호출됨
-  async getBase64(file) {
-    if (file) {
-      // File 을 Base64로 바꿔줌
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
+  // async getBase64(file) {
+  //   if (file) {
+  //     // File 을 Base64로 바꿔줌
+  //     return new Promise((resolve, reject) => {
+  //       const reader = new FileReader();
 
-        reader.readAsDataURL(file);
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = error => reject(error);
-      });
-    }
-  }
+  //       reader.readAsDataURL(file);
+  //       reader.onload = () => resolve(reader.result);
+  //       reader.onerror = error => reject(error);
+  //     });
+  //   }
+  // }
 
   // 입력창의 value가 바뀔 때 변경사항 적용
   handleChange = e => {
@@ -288,8 +333,12 @@ class Body extends Component {
 
   // 크롭 컨테이너에 이미지가 로드 되었을 때 이미지 값을 저장함
   handleImageLoaded = async image => {
-    //console.log(image); DOM 요소
-    //console.og(image.width);
+    // console.log(image); DOM 요소
+    console.log("image.width: ", image.width);
+    console.log("image.naturalWidth: ", image.naturalWidth);
+    console.log("image.height: ", image.height);
+    console.log("image.naturalHeight: ", image.naturalHeight);
+
     await this.setState({ imageRef: image });
   };
 
@@ -302,6 +351,21 @@ class Body extends Component {
   handleOnCropComplete = async e => {
     //console.log("Complete");
     const cropData = this.state.crop;
+    const scaleX = this.state.imageRef.naturalWidth / this.state.imageRef.width;
+    const scaleY =
+      this.state.imageRef.naturalHeight / this.state.imageRef.height;
+
+    console.log("cropData: ", cropData);
+    console.log("scaleX: ", scaleX);
+    console.log("scaleY: ", scaleY);
+    const resizedCropData = {
+      x: cropData.x * scaleX,
+      y: cropData.y * scaleY,
+      width: cropData.width * scaleX,
+      height: cropData.height * scaleY,
+      label: cropData.label
+    };
+    console.log("resizedCropData: ", resizedCropData);
     const image = new Image();
 
     image.src = this.props.orig_image_file;
@@ -321,10 +385,10 @@ class Body extends Component {
               return {
                 shape_attributes: {
                   id: this.state.preId,
-                  x: cropData.x,
-                  y: cropData.y,
-                  width: cropData.width,
-                  height: cropData.height
+                  x: cropData.x * scaleX,
+                  y: cropData.y * scaleY,
+                  width: cropData.width * scaleX,
+                  height: cropData.height * scaleY
                 },
                 region_attributes: {
                   label: this.state.label
@@ -351,10 +415,10 @@ class Body extends Component {
             crop_image: this.state.crop_image.concat({
               shape_attributes: {
                 id: this.state.__nextkey++,
-                x: cropData.x,
-                y: cropData.y,
-                width: cropData.width,
-                height: cropData.height
+                x: cropData.x * scaleX,
+                y: cropData.y * scaleY,
+                width: cropData.width * scaleX,
+                height: cropData.height * scaleY
               },
               region_attributes: {
                 label: this.state.label
@@ -385,12 +449,13 @@ class Body extends Component {
     bodyData.append("orig_image", this.props.orig_image_file);
 
     // 이미지 좌표를 원래 이미지 사이즈에 맞게 리사이즈 한 후 저장해야 한다
-    if (this.state.imageRef.naturalWidth > 640) {
-      new_crop_image = await this.resizeCropLocation(
-        this.state.imageRef.naturalWidth,
-        this.state.crop_image
-      );
-    }
+    // 만약
+    // if (this.state.imageRef.naturalWidth > 640) {
+    //   new_crop_image = await this.resizeCropLocation(
+    //     this.state.imageRef.naturalWidth,
+    //     this.state.crop_image
+    //   );
+    // }
 
     bodyData.append(
       "meta",
@@ -453,13 +518,18 @@ class Body extends Component {
     const preCrop = this.state.crop_image.find(crop => {
       return crop.shape_attributes.id === id;
     });
+    console.log("preCrop: ", preCrop);
+    // 화면에 보여지려면 다시 작게 스케일링 해주어야 한다.
+    const scaleX = this.state.imageRef.naturalWidth / this.state.imageRef.width;
+    const scaleY =
+      this.state.imageRef.naturalHeight / this.state.imageRef.height;
 
     this.setState({
       crop: {
-        x: preCrop.shape_attributes.x,
-        y: preCrop.shape_attributes.y,
-        width: preCrop.shape_attributes.width,
-        height: preCrop.shape_attributes.height,
+        x: preCrop.shape_attributes.x / scaleX,
+        y: preCrop.shape_attributes.y / scaleY,
+        width: preCrop.shape_attributes.width / scaleX,
+        height: preCrop.shape_attributes.height / scaleY,
         unit: "px",
         label: preCrop.region_attributes.label
       },
@@ -592,38 +662,8 @@ class Body extends Component {
       timer: new Date().getTime()
     });
   }
-  // handleNext() {
-  //   //setActiveStep(prevActiveStep => prevActiveStep + 1);
-  //   this.setState({
-  //     step: this.state.step + 1
-  //   });
-  // }
-
-  // handleBack() {
-  //   //setActiveStep(prevActiveStep => prevActiveStep - 1);
-  //   this.setState({
-  //     step: this.state.step - 1
-  //   });
-  // }
-
-  // handleReset() {
-  //   this.setState({
-  //     step: 0
-  //   });
-  // }
 
   render() {
-    // const info = this.props.info;
-
-    // const t1 = moment();
-    // const t2 = moment(info.due_date);
-
-    // const days = moment.duration(t2.diff(t1)).days();
-    // const hours = moment.duration(t2.diff(t1)).hours();
-    // const minutes = moment.duration(t2.diff(t1)).minutes();
-
-    // const steps = ["STEP 1", "STEP 2", "STEP 3"];
-
     return (
       <BodyContainer display={this.props.display} className={this.props.class}>
         {/* 최 상단에 위취한 정보를 보여주는 컨테이너 */}
@@ -633,8 +673,12 @@ class Body extends Component {
           <LeftMainContainer>
             {/* 크롭할 이미지 영역 */}
             <ImageContainer
+              ref={this.ImageContainerRef}
               id="image_container"
               show={this.props.orig_image_file}
+              onMouseDown={this.handleStartTimer}
+              onMouseUp={this.handleCropMouseUp}
+              onTouchEnd={this.handleCropMouseUp}
               data-intro={
                 this.props.index === 0
                   ? "이미지에서 추출할 영역을 드래그하여 지정하세요."
@@ -643,28 +687,30 @@ class Body extends Component {
               data-step="1"
               data-disable-interaction="true"
             >
-              <div
-                onMouseDown={this.handleStartTimer}
-                onMouseUp={this.handleCropMouseUp}
-                onTouchEnd={this.handleCropMouseUp}
-              >
-                <ReactCrop
-                  src={this.props.orig_image_base64}
-                  crop={this.state.crop}
-                  onChange={this.handleOnCropChange}
-                  onImageLoaded={this.handleImageLoaded}
-                  style={{ display: this.state.showEdit ? "" : "none" }}
-                />
+              <ReactCrop
+                src={this.props.orig_image_base64}
+                crop={this.state.crop}
+                onChange={this.handleOnCropChange}
+                onImageLoaded={this.handleImageLoaded}
+                style={{
+                  display: this.state.showEdit ? "" : "none",
+                  width: "100%"
+                }}
+                imageStyle={{
+                  width: "100%",
+                  height: "48vh",
+                  objectFit: "fill"
+                }}
+              />
 
-                {this.state.imageRef ? (
-                  <PrintTotalCrop
-                    crops={this.state.crop_image}
-                    image={this.state.imageRef}
-                    onClick={this.handleClickImage}
-                    showEdit={this.state.showEdit}
-                  />
-                ) : null}
-              </div>
+              {this.state.imageRef ? (
+                <PrintTotalCrop
+                  crops={this.state.crop_image}
+                  image={this.state.imageRef}
+                  onClick={this.handleClickImage}
+                  showEdit={this.state.showEdit}
+                />
+              ) : null}
 
               {this.state.loading && this.state.imageRef ? (
                 <LoadingContainer
@@ -701,18 +747,7 @@ class Body extends Component {
           </LeftMainContainer>
           {/* Main Container 의 오른쪽 영역 */}
           <RightDescriptionContainer>
-            {/* <StepperContainer>
-              <StepperRoot>
-                <StyledStepper activeStep={this.state.step}>
-                  {steps.map(label => (
-                    <Step key={label}>
-                      <StepLabel>{label}</StepLabel>
-                    </Step>
-                  ))}
-                </StyledStepper>
-              </StepperRoot>
-            </StepperContainer> */}
-            <DescriptionBoxContainer>
+            {/* <DescriptionBoxContainer>
               <DescriptionBox>
                 텍스트 감지 AI 어시스턴트
                 <label className="switch">
@@ -726,56 +761,6 @@ class Body extends Component {
                 </label>
               </DescriptionBox>
             </DescriptionBoxContainer>
-            {/* {this.state.step === 0 ? (
-              <DescriptionBoxContainer>
-                <DescriptionBox>
-                  1. 좌측 [+] 영역을 클릭하여 이미지를 업로드 해 주세요 (단,
-                  이미지 선명하지 않거나 해상도가 낮으면 업로드 되지 않습니다)
-                </DescriptionBox>
-                <DescriptionBox>
-                  2. 이미지가 정상적으로 업로드 되어 바운드 되면, AI가 자동으로
-                  글자라고 인식하여 이미지들을 아래 썸네일로 보여줍니다.
-                </DescriptionBox>
-                <DescriptionBox>
-                  3. 썸네일 이미지가 정상적으로 로드 되었다면, 하단 우측의
-                  노란색 [NEXT] 버튼을 눌러 다음 단계로 이동하세요.
-                </DescriptionBox>
-              </DescriptionBoxContainer>
-            ) : this.state.step === 1 ? (
-              <DescriptionBoxContainer>
-                <DescriptionBox>
-                  4. SHOW 버튼을 누르면, 좌측 이미지에서 AI가 자동으로 인식한
-                  영역들이 보여집니다. 인식되지 않은 영역에서 글자로 생각되는
-                  부분이 있다면 그 영역을 드래그하여 추가하세요. (영역을
-                  드래그하면 영역 이동 가능)
-                </DescriptionBox>
-                <DescriptionBox>
-                  5. 선택 후, 아래의 BOUND 버튼 혹은 엔터를 누르면 AI가 추가로
-                  글자를 학습합니다. AI가 활성화 상태면 자동으로 글자를
-                  학습합니다.
-                </DescriptionBox>
-                <DescriptionBox>
-                  6. 완료 후 NEXT버튼을 눌러 다음의 마지막 단계(STEP3)로
-                  이동하세요.
-                </DescriptionBox>
-              </DescriptionBoxContainer>
-            ) : (
-              <DescriptionBoxContainer>
-                <DescriptionBox>
-                  8. AI가 글자를 제대로 인식했는지 각 썸네일 아래 블루박스를
-                  확인해주세요.
-                </DescriptionBox>
-                <DescriptionBox>
-                  9. AI가 글자를 잘못 인식했거나, 바운드 영역이 잘못 선택되어
-                  있다면 아래 바운드 썸네일을 클릭하여 영역을 수정하거나,
-                  블루박스 내용을 수정하여 AI를 학습시켜주세요.
-                </DescriptionBox>
-                <DescriptionBox>
-                  * AI의 정확도를 개선한 분에겐 추가 포인트를 드립니다. (기여도
-                  확인 시, 검증 후 개당 +10포인트 추가 지급)
-                </DescriptionBox>
-              </DescriptionBoxContainer>
-            )} */}
             <DescriptionBoxContainer>
               <DescriptionBox>
                 - 이미지에서 추출할 영역을 드래그하여 지정하세요.
@@ -794,15 +779,7 @@ class Body extends Component {
                 삭제하세요.
               </DescriptionBox>
             </DescriptionBoxContainer>
-            <ButtonContainer
-            // data-intro={
-            //   this.props.index === 0
-            //     ? "라벨링 된 이미지를 확인하려면 SHOW 버튼을 누르세요."
-            //     : undefined
-            // }
-            // data-step="2"
-            // data-disable-interaction="true"
-            >
+            <ButtonContainer>
               <BoundButton
                 type="button"
                 onClick={this.handleOnCropComplete}
@@ -837,6 +814,24 @@ class Body extends Component {
                   SHOW
                 </ShowButton>
               ) : null}
+            </ButtonContainer> */}
+            <ButtonContainer
+              onClick={() => {
+                this.setState({
+                  crop: {},
+                  showEdit: false
+                });
+              }}
+              data-intro={
+                this.props.index === 0
+                  ? "라벨링 된 이미지를 확인하려면 SHOW 버튼을 누르세요."
+                  : undefined
+              }
+              data-step="3"
+              data-disable-interaction="true"
+            >
+              <Icon className="far fa-eye"></Icon>
+              <IconTitle>SHOW</IconTitle>
             </ButtonContainer>
           </RightDescriptionContainer>
         </MainContainer>
@@ -850,30 +845,6 @@ class Body extends Component {
             onRemove={this.handleOnCropRemove}
             changeLabel={this.handleChangeLabel}
           />
-          {/* <StepButtonContainer>
-            <Button disabled={this.state.step === 0} onClick={this.handleBack}>
-              Back
-            </Button>
-            <Button
-              disabled={
-                this.props.orig_image_file === "" ||
-                this.state.loading === true ||
-                this.state.step > steps.length - 1
-              }
-              variant="contained"
-              color="primary"
-              onClick={this.handleNext}
-            >
-              {this.state.step === steps.length - 1 ? "Finish" : "Next"}
-            </Button>
-            {this.state.step === steps.length ? (
-              <div>
-                <Button onClick={this.handleSendAll}>완료하기</Button>
-              </div>
-            ) : (
-              ""
-            )}
-          </StepButtonContainer> */}
         </CropListContainer>
       </BodyContainer>
     );

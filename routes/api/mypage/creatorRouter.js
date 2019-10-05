@@ -40,6 +40,8 @@ router.get("/", (req, res, next) => {
       } else {
         return res.json({ message: "프로젝트가 존재하지 않습니다" });
       }
+    } else {
+      return res.json({ message: "프로젝트가 존재하지 않습니다" });
     }
   });
 });
