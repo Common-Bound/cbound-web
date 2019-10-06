@@ -125,15 +125,15 @@ const IconTitle = styled.div`
 //   padding: 14px;
 // `;
 
-// const StyledSpan = styled.span`
-//   width: 48px;
-//   height: 24px;
+const StyledSpan = styled.span`
+  width: 48px;
+  height: 24px;
 
-//   :before {
-//     width: 16px !important;
-//     height: 16px !important;
-//   }
-// `;
+  :before {
+    width: 16px !important;
+    height: 16px !important;
+  }
+`;
 
 // const BoundButton = styled.button`
 //   width: 70px;
@@ -815,6 +815,17 @@ class Body extends Component {
                 </ShowButton>
               ) : null}
             </ButtonContainer> */}
+            <ButtonContainer>
+              <Icon className="fas fa-robot"></Icon>
+              <input
+                type="checkbox"
+                name="useAI"
+                onChange={this.handleChange}
+                checked={this.state.useAI}
+              />
+
+              <IconTitle>AI</IconTitle>
+            </ButtonContainer>
             <ButtonContainer
               onClick={() => {
                 this.setState({
