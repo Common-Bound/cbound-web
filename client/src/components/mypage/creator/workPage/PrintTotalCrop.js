@@ -35,7 +35,7 @@ class PrintTotalCrop extends Component {
   async startWork() {
     const canvas = document.createElement("canvas");
     const { crops, image } = this.props;
-    console.log("crops: ", crops);
+    //console.log("crops: ", crops);
 
     const scaleX = image.naturalWidth / image.width;
     const scaleY = image.naturalHeight / image.height;
@@ -58,7 +58,7 @@ class PrintTotalCrop extends Component {
     );
 
     const promises = await crops.map(function(crop) {
-      console.log("crop: ", crop);
+      //console.log("crop: ", crop);
       const x = crop.shape_attributes.x / scaleX;
       const y = crop.shape_attributes.y / scaleY;
       const width = crop.shape_attributes.width / scaleX;

@@ -95,15 +95,13 @@ class CropItem extends Component {
       nextProps.crop.region_attributes.label ===
         this.props.crop.region_attributes.label
     ) {
-      console.log("a");
-
       return false;
     } else return true;
   }
 
   // 서버(sendTo)로 body에 bodyData를 넣어서 Fetch 할 때 호출됨
   sendData = async (bodyData, sendTo) => {
-    console.log(sendTo);
+    //console.log(sendTo);
     this.setState({
       loading: true
     });
