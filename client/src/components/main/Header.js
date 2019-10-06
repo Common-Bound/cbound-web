@@ -2,8 +2,8 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
-import logo from "../../images/logo_2.png";
-import name from "../../images/COMMONBOUND.png";
+import logo from "../../images/logo_2.webp";
+import name from "../../images/COMMONBOUND.webp";
 
 const HeaderContainer = styled.div`
   position: fixed;

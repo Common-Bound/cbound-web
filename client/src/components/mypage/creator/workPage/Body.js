@@ -334,10 +334,6 @@ class Body extends Component {
   // 크롭 컨테이너에 이미지가 로드 되었을 때 이미지 값을 저장함
   handleImageLoaded = async image => {
     // console.log(image); DOM 요소
-    console.log("image.width: ", image.width);
-    console.log("image.naturalWidth: ", image.naturalWidth);
-    console.log("image.height: ", image.height);
-    console.log("image.naturalHeight: ", image.naturalHeight);
 
     await this.setState({ imageRef: image });
   };
@@ -355,9 +351,6 @@ class Body extends Component {
     const scaleY =
       this.state.imageRef.naturalHeight / this.state.imageRef.height;
 
-    console.log("cropData: ", cropData);
-    console.log("scaleX: ", scaleX);
-    console.log("scaleY: ", scaleY);
     const resizedCropData = {
       x: cropData.x * scaleX,
       y: cropData.y * scaleY,
@@ -365,7 +358,6 @@ class Body extends Component {
       height: cropData.height * scaleY,
       label: cropData.label
     };
-    console.log("resizedCropData: ", resizedCropData);
     const image = new Image();
 
     image.src = this.props.orig_image_file;
@@ -616,6 +608,9 @@ class Body extends Component {
 
   // 크롭이 완료되었을 때 이미지화 시켜 서버로 전송시킨다
   async handleCropMouseUp(e) {
+    if (!this.state.crop.height) {
+      return;
+    }
     var button = document.createElement("Button");
     button.style.position = "fixed";
     button.style.left = e.clientX - 35 + "px";
