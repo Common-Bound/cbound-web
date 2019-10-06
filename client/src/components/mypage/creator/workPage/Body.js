@@ -208,7 +208,7 @@ class Body extends Component {
       changeMode: false, // 현재 크롭된 이미지를 추가해야 할지 수정해야 할지 결정하는 Flag
       preId: "", // ChangeMode 가 true 라면 변경할 이미지의 id
       showEdit: true, // 한 개의 크롭 영역을 변경할 수 있는 이미지를 줄지 크롭된 영역 리스트를 캔버스에 그려줄 지
-      useAI: true, // AI를 사용할지 말지 스위치 할 때 변경할 값
+      useAI: false, // AI를 사용할지 말지 스위치 할 때 변경할 값
       loading: false,
       time_counter: [], // 각 크롭 영역을 지정하는데 걸리는 시간
       timer: 0
@@ -249,7 +249,7 @@ class Body extends Component {
       method: "post",
       body: bodyData
     })
-      .then(function(res) {
+      .then(function (res) {
         return res.json();
       })
       .then(async data => {
@@ -305,7 +305,7 @@ class Body extends Component {
           resolve(true);
         });
       })
-      .catch(function(ex) {
+      .catch(function (ex) {
         console.log(ex);
       });
 
@@ -601,7 +601,7 @@ class Body extends Component {
     const y = e.nativeEvent.offsetY;
     const crops = this.state.crop_image;
     var targetId = "nothing";
-    crops.every(function(crop) {
+    crops.every(function (crop) {
       if (
         x > crop.shape_attributes.x &&
         x < crop.shape_attributes.x + crop.shape_attributes.width &&
@@ -650,7 +650,7 @@ class Body extends Component {
 
     document.body.appendChild(button);
 
-    setTimeout(function() {
+    setTimeout(function () {
       try {
         document.body.removeChild(button);
       } catch {
