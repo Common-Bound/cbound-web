@@ -351,13 +351,13 @@ class Body extends Component {
     const scaleY =
       this.state.imageRef.naturalHeight / this.state.imageRef.height;
 
-    const resizedCropData = {
+    /*const resizedCropData = {
       x: cropData.x * scaleX,
       y: cropData.y * scaleY,
       width: cropData.width * scaleX,
       height: cropData.height * scaleY,
       label: cropData.label
-    };
+    };*/
     const image = new Image();
 
     image.src = this.props.orig_image_file;
@@ -461,7 +461,7 @@ class Body extends Component {
   };
 
   // 크롭 좌표를 리사이징 한다
-  async resizeCropLocation(naturalWidth, crop_image) {
+  /*async resizeCropLocation(naturalWidth, crop_image) {
     const scale = naturalWidth / 640;
     console.log("scale: " + scale);
 
@@ -494,7 +494,7 @@ class Body extends Component {
     new_crop_image = await Promise.all(new_crop_image);
 
     return new Promise(resolve => resolve(new_crop_image));
-  }
+  }*/
 
   // 사용자의 편의를 위해 버튼을 누르지 않아도 (13==enter) 이벤트를 받으면 handleOnCropComplete 를 호출해줌
   handleKeyPress = e => {

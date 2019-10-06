@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 import Header from "./main/Header";
-import background from "../images/BackGround.png";
+import background from "../images/BackGround.webp";
 
 const Container = styled.div`
   width: 100%;

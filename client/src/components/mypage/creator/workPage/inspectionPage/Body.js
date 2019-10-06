@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-import Inspect1By1 from "./Inspect1By1";
 import moment from "moment";
 // import Stepper from "@material-ui/core/Stepper";
 // import Step from "@material-ui/core/Step";
@@ -154,7 +153,6 @@ class Body extends Component {
       data: null,
       loading: true,
       correct: [],
-      needCropAll: false,
       nowCropImgId: 0,
       is_crops_correct: [],
       step: 3,
@@ -306,7 +304,7 @@ class Body extends Component {
   drawCrop() {
     console.log(this.state.data.payload.meta.crop_image);
     const new_crop_images = this.state.data.payload.meta.crop_image.map(
-      function (crop) {
+      function(crop) {
         let id = crop.shape_attributes ? crop.shape_attributes.id : crop.id;
 
         return <CropImage key={id} crop={crop} />;
@@ -447,42 +445,29 @@ class Body extends Component {
 
     // const steps = ["STEP 1", "STEP 2", "STEP 3"];
 
-    if (this.state.needCropAll) {
-      return (
-        <Inspect1By1
-          clickO={this.clickO}
-          clickX={this.clickX}
-          handleEndInspect={this.handleEndInspect}
-          id={this.state.nowCropImgId}
-          data={data.payload.orig_image}
-          ammountCropImage={this.state.correct.length}
-          crop_image={data.payload.meta.crop_image}
-        />
-      );
-    } else {
-      return (
-        <BodyContainer>
-          <EntireTitleContainer>
-            <LeftTitleContainer>
-              <LeftTitleDate>
-                <span style={{ color: "black", fontWeight: "bold" }}>
-                  MISSION
-                </span>
-                {` ${moment(info.created_at).format("YYYY-MM-DD")} - ${moment(
-                  info.due_date
-                ).format("YYYY-MM-DD")}`}
-              </LeftTitleDate>
-              <LeftTitle>{info.title}</LeftTitle>
-            </LeftTitleContainer>
-            <RightTitleContainer>
-              <RightTitle>DEADLINE</RightTitle>
-              <RightTitleDate>{`${days} DAYS : ${hours} HOURS : ${minutes} MINUTES`}</RightTitleDate>
-            </RightTitleContainer>
-          </EntireTitleContainer>
-          <MainContainer>
-            {/* Main Container 의 왼쪽 영역 */}
-            <LeftMainContainer>
-              {/* <StepperContainer>
+    return (
+      <BodyContainer>
+        <EntireTitleContainer>
+          <LeftTitleContainer>
+            <LeftTitleDate>
+              <span style={{ color: "black", fontWeight: "bold" }}>
+                MISSION
+              </span>
+              {` ${moment(info.created_at).format("YYYY-MM-DD")} - ${moment(
+                info.due_date
+              ).format("YYYY-MM-DD")}`}
+            </LeftTitleDate>
+            <LeftTitle>{info.title}</LeftTitle>
+          </LeftTitleContainer>
+          <RightTitleContainer>
+            <RightTitle>DEADLINE</RightTitle>
+            <RightTitleDate>{`${days} DAYS : ${hours} HOURS : ${minutes} MINUTES`}</RightTitleDate>
+          </RightTitleContainer>
+        </EntireTitleContainer>
+        <MainContainer>
+          {/* Main Container 의 왼쪽 영역 */}
+          <LeftMainContainer>
+            {/* <StepperContainer>
                 <StepperRoot>
                   <StyledStepper activeStep={this.state.step}>
                     {steps.map(label => (
@@ -493,66 +478,66 @@ class Body extends Component {
                   </StyledStepper>
                 </StepperRoot>
               </StepperContainer> */}
-              {/* 크롭할 이미지 영역 */}
-              <ImageContainer
-                data-intro="검수할 이미지가 화면에 나타나게 됩니다"
-                data-step="1"
-                data-disable-interaction="true"
-              >
-                {!loading ? (
-                  <div
-                    style={{
-                      position: "relative",
-                      width: this.state.data ? `${width}px` : "0px",
-                      height: this.state.data ? `${height}px` : "0px"
-                    }}
-                  >
-                    <canvas id="canvas" style={{ position: "absolute" }}>
-                      <div style={{ display: "none" }}>
-                        <img
-                          id="image"
-                          src={data.payload.orig_image}
-                          alt=""
-                          onLoad={this.drawImage.bind(this)}
-                        />
-                      </div>
-                    </canvas>
-                    <CropImageContainer id="crop_image_container">
-                      {crop_images}
-                    </CropImageContainer>
-                  </div>
-                ) : (
-                    "검수 할 작업을 가져오는 중..."
-                  )}
-              </ImageContainer>
-            </LeftMainContainer>
-            {/* Main Container 의 오른쪽 영역 */}
-            <RightDescriptionContainer
-              data-intro="가이드를 읽고 검수를 진행하시면 됩니다"
-              data-step="2"
+            {/* 크롭할 이미지 영역 */}
+            <ImageContainer
+              data-intro="검수할 이미지가 화면에 나타나게 됩니다"
+              data-step="1"
               data-disable-interaction="true"
             >
-              <DescriptionBoxContainer>
-                <DescriptionBox>
-                  - <span style={{ fontWeight: "bold" }}>어두운 네모 박스</span>
-                  가 사물에 적절히 위치하고 있는지 확인해 주세요.
-                </DescriptionBox>
-                <DescriptionBox>
-                  - 사물이 네모 박스를 벗어나 있거나, 네모 박스가 너무 크다면
-                  해당 박스를 클릭하여{" "}
-                  <span style={{ color: "red" }}>빨간 테두리</span>로 표시해
-                  주세요.
-                </DescriptionBox>
-                <DescriptionBox>
-                  - 네모 박스가 사물을 잘 둘러싸고 있다면 해당 박스를 클릭하여{" "}
-                  <span style={{ color: "green" }}>초록 테두리</span>로 표시해
-                  주세요.
-                </DescriptionBox>
-              </DescriptionBoxContainer>
-            </RightDescriptionContainer>
-          </MainContainer>
-          <StepButtonContainer>
-            {/* <Button disabled={this.state.step === 0} onClick={this.handleBack}>
+              {!loading ? (
+                <div
+                  style={{
+                    position: "relative",
+                    width: this.state.data ? `${width}px` : "0px",
+                    height: this.state.data ? `${height}px` : "0px"
+                  }}
+                >
+                  <canvas id="canvas" style={{ position: "absolute" }}>
+                    <div style={{ display: "none" }}>
+                      <img
+                        id="image"
+                        src={data.payload.orig_image}
+                        alt=""
+                        onLoad={this.drawImage.bind(this)}
+                      />
+                    </div>
+                  </canvas>
+                  <CropImageContainer id="crop_image_container">
+                    {crop_images}
+                  </CropImageContainer>
+                </div>
+              ) : (
+                "검수 할 작업을 가져오는 중..."
+              )}
+            </ImageContainer>
+          </LeftMainContainer>
+          {/* Main Container 의 오른쪽 영역 */}
+          <RightDescriptionContainer
+            data-intro="가이드를 읽고 검수를 진행하시면 됩니다"
+            data-step="2"
+            data-disable-interaction="true"
+          >
+            <DescriptionBoxContainer>
+              <DescriptionBox>
+                - <span style={{ fontWeight: "bold" }}>어두운 네모 박스</span>가
+                사물에 적절히 위치하고 있는지 확인해 주세요.
+              </DescriptionBox>
+              <DescriptionBox>
+                - 사물이 네모 박스를 벗어나 있거나, 네모 박스가 너무 크다면 해당
+                박스를 클릭하여{" "}
+                <span style={{ color: "red" }}>빨간 테두리</span>로 표시해
+                주세요.
+              </DescriptionBox>
+              <DescriptionBox>
+                - 네모 박스가 사물을 잘 둘러싸고 있다면 해당 박스를 클릭하여{" "}
+                <span style={{ color: "green" }}>초록 테두리</span>로 표시해
+                주세요.
+              </DescriptionBox>
+            </DescriptionBoxContainer>
+          </RightDescriptionContainer>
+        </MainContainer>
+        <StepButtonContainer>
+          {/* <Button disabled={this.state.step === 0} onClick={this.handleBack}>
               Back
             </Button>
             <Button
@@ -563,17 +548,16 @@ class Body extends Component {
             >
               {this.state.step === steps.length - 1 ? "Finish" : "Next"}
             </Button> */}
-            {/* {this.state.step === steps.length ? ( */}
-            <div>
-              <Button onClick={this.handleClick}>완료하기</Button>
-            </div>
-            {/* ) : (
+          {/* {this.state.step === steps.length ? ( */}
+          <div>
+            <Button onClick={this.handleClick}>완료하기</Button>
+          </div>
+          {/* ) : (
               ""
             )} */}
-          </StepButtonContainer>
-        </BodyContainer>
-      );
-    }
+        </StepButtonContainer>
+      </BodyContainer>
+    );
   }
 }
 
