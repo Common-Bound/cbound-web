@@ -3,19 +3,19 @@ import styled from "styled-components";
 import deleteImg from "../../../../images/close_button.png";
 
 const CropItemContainer = styled.div`
-  width: 140px;
-  height: 100px;
+  min-width: 140px;
+  min-height: 100px;
   border: 1px solid lightgrey;
   margin: 5px;
 
   @media (max-width: 1024px) {
-    width: 100px;
-    height: 80px;
+    min-width: 100px;
+    min-height: 80px;
     margin: 4px;
   }
   @media (max-width: 500px) {
-    width: 100px;
-    height: 62px;
+    min-width: 100px;
+    min-height: 62px;
     margin: 2px;
   }
 `;

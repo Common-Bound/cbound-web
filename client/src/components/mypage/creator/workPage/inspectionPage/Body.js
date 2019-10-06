@@ -217,34 +217,34 @@ class Body extends Component {
 
     let scale = 1;
     // 이미지의 가로 길이가 640이 넘으면, 640으로 나눈 비율을 계산한다
-    if (image.naturalWidth > 640) {
-      scale = image.naturalWidth / 640;
-      console.log(image.naturalWidth);
+    // if (image.naturalWidth > 640) {
+    //   scale = image.naturalWidth / 640;
+    //   console.log(image.naturalWidth);
 
-      const new_shape_attributes_promises = await this.state.data.payload.meta.crop_image.map(
-        crop => {
-          console.log(crop);
-          const new_shape_attributes = this.resizeCropLocation(
-            image.naturalWidth,
-            crop.shape_attributes
-          );
+    //   const new_shape_attributes_promises = await this.state.data.payload.meta.crop_image.map(
+    //     crop => {
+    //       console.log(crop);
+    //       const new_shape_attributes = this.resizeCropLocation(
+    //         image.naturalWidth,
+    //         crop.shape_attributes
+    //       );
 
-          return new Promise(resolve => resolve(new_shape_attributes));
-        }
-      );
+    //       return new Promise(resolve => resolve(new_shape_attributes));
+    //     }
+    //   );
 
-      const new_shape_attributes = await Promise.all(
-        new_shape_attributes_promises
-      );
-      const new_data = this.state.data;
-      new_data.payload.meta.crop_image.forEach((crop, index) => {
-        crop.shape_attributes = new_shape_attributes[index];
-      });
+    //   const new_shape_attributes = await Promise.all(
+    //     new_shape_attributes_promises
+    //   );
+    //   const new_data = this.state.data;
+    //   new_data.payload.meta.crop_image.forEach((crop, index) => {
+    //     crop.shape_attributes = new_shape_attributes[index];
+    //   });
 
-      await this.setState({
-        data: new_data
-      });
-    }
+    //   await this.setState({
+    //     data: new_data
+    //   });
+    // }
 
     // 계샨된 비율만큼 나눠줘서 캔버스 영역의 가로 길이를 640 으로 맞춰준다
     // 또한 세로 길이도 이와 같은 비율로 조정해준다
@@ -306,7 +306,7 @@ class Body extends Component {
   drawCrop() {
     console.log(this.state.data.payload.meta.crop_image);
     const new_crop_images = this.state.data.payload.meta.crop_image.map(
-      function(crop) {
+      function (crop) {
         let id = crop.shape_attributes ? crop.shape_attributes.id : crop.id;
 
         return <CropImage key={id} crop={crop} />;
@@ -522,8 +522,8 @@ class Body extends Component {
                     </CropImageContainer>
                   </div>
                 ) : (
-                  "검수 할 작업을 가져오는 중..."
-                )}
+                    "검수 할 작업을 가져오는 중..."
+                  )}
               </ImageContainer>
             </LeftMainContainer>
             {/* Main Container 의 오른쪽 영역 */}

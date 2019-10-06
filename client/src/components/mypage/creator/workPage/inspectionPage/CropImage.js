@@ -8,8 +8,8 @@ const Container = styled.div`
     props["data-status"] === "unchecked"
       ? "1px solid grey"
       : props["data-status"] === "true"
-      ? "2px solid lime"
-      : "2px solid red"}
+        ? "2px solid lime"
+        : "2px solid red"}
   background-color: rgba(0, 0, 0, 0.3);
   position: absolute;
   top: ${props => props.y}px;
