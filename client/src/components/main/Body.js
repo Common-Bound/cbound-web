@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import background from "../../images/BackGround.png";
+import background from "../../images/BackGround.webp";
 
 const BodyContainer = styled.div`
   width: 100%;
