@@ -223,10 +223,20 @@ class Body extends Component {
     this.handleStartTimer = this.handleStartTimer.bind(this);
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     setTimeout(() => {
       this.props.index === 0 ? introJS().start() : console.log("");
     }, 500);
+    if (this.state.useAI) {
+      const formData = new FormData();
+      formData.append(
+        "orig_image",
+        await this.getBase64(this.props.orig_image_file)
+      );
+      console.log(this.props.orig_image_file);
+
+      await this.sendData(formData, `/api/mypage/creator/task/normal`);
+    }
   }
 
   // 서버(sendTo)로 body에 bodyData를 넣어서 Fetch 할 때 호출됨
@@ -250,24 +260,24 @@ class Body extends Component {
           var counter = 0; // Crop.id 생성을 위한 임시 변수
 
           this.setState({
-            crop_image: data.data.meta["crop_image"].map(crop => {
+            crop_image: data.data.meta[0]["crop_image"].map(crop => {
               // 서버에서 인식한 크롭 영역들을 미리 crop_image에 넣어줌
-              const scaleX =
-                this.state.imageRef.naturalWidth / this.state.imageRef.width;
-              const scaleY =
-                this.state.imageRef.naturalHeight / this.state.imageRef.height;
+              // const scaleX =
+              //   this.state.imageRef.naturalWidth / this.state.imageRef.width;
+              // const scaleY =
+              //   this.state.imageRef.naturalHeight / this.state.imageRef.height;
               //console.log("scaleX: " + scaleX);
               //console.log("scaleY: " + scaleY);
               return {
                 shape_attributes: {
                   id: counter++,
-                  x: crop.shape_attributes.x / scaleX,
-                  y: crop.shape_attributes.y / scaleY,
-                  width: crop.shape_attributes.width / scaleX,
-                  height: crop.shape_attributes.height / scaleY
+                  x: crop.x,
+                  y: crop.y,
+                  width: crop.width,
+                  height: crop.height
                 },
                 region_attributes: {
-                  label: crop.region_attributes.label
+                  label: crop.label
                 }
               };
             }),
@@ -299,24 +309,24 @@ class Body extends Component {
         console.log(ex);
       });
 
-    this.setState({
+    await this.setState({
       loading: false
     });
   };
 
   // 업로드된 이미지를 출력하기 위해 Base64로 바꿀 때 호출됨
-  // async getBase64(file) {
-  //   if (file) {
-  //     // File 을 Base64로 바꿔줌
-  //     return new Promise((resolve, reject) => {
-  //       const reader = new FileReader();
+  async getBase64(file) {
+    if (file) {
+      // File 을 Base64로 바꿔줌
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
 
-  //       reader.readAsDataURL(file);
-  //       reader.onload = () => resolve(reader.result);
-  //       reader.onerror = error => reject(error);
-  //     });
-  //   }
-  // }
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+      });
+    }
+  }
 
   // 입력창의 value가 바뀔 때 변경사항 적용
   handleChange = e => {
