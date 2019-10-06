@@ -75,7 +75,7 @@ class RequesterProjectsPage extends Component {
   }
 
   async fetchProject() {
-    const url = this.props.match.path;
+    const url = `/api${this.props.match.path}`;
     const result = await fetch(url)
       .then(res => res.json())
       .then(data => {

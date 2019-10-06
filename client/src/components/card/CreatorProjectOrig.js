@@ -138,7 +138,7 @@ class CreatorProjectOrig extends Component {
   }
 
   handleClick = e => {
-    const url = "/mypage/creator/join";
+    const url = "/api/mypage/creator/join";
     fetch(url, {
       method: "POST",
       headers: {

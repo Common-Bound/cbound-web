@@ -3,13 +3,13 @@ module.exports = {
     {
       name: "server",
       script: "./server.js",
-      watch: true,
-      env: {
-        PORT: 4000,
+      watch: ['./*'],
+      env_development: {
+        PORT: 3000,
         NODE_ENV: "development"
       },
       env_production: {
-        PORT: 443,
+        PORT: 4000,
         NODE_ENV: "production"
       }
     }

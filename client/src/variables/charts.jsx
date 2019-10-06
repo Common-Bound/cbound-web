@@ -1,6 +1,6 @@
 const Chart = require("chart.js");
 
-const url = "/mypage/requester/chartData";
+const url = "/api/mypage/requester/chartData";
 fetch(url, {
   method: "post"
 })

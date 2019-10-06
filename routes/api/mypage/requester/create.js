@@ -1,12 +1,12 @@
 const express = require("express");
 const router = express.Router();
-const db = require("../../../db/index");
+const db = require("../../../../db/index");
 const uuid = require("uuid/v4");
 const moment = require("moment");
 require("moment-timezone");
-const logger = require("../../../config/logger");
+const logger = require("../../../../config/logger");
 
-// path: ~/mypage/requester/create
+// path: ~/api/mypage/requester/create
 router.post("/", (req, res, next) => {
   console.log(req.body);
   if (!req.user) {

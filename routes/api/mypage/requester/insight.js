@@ -1,10 +1,10 @@
 const express = require("express");
 const router = express.Router();
-const db = require("../../../db/index");
+const db = require("../../../../db/index");
 const moment = require("moment-timezone");
-const logger = require("../../../config/logger");
+const logger = require("../../../../config/logger");
 
-// path: ~/mypage/requester/insight
+// path: ~/api/mypage/requester/insight
 router.get("/:project_id", (req, res, next) => {
   // 주어진 project_id 와 관련된 데이터를 가져온다
   const project_id = req.params.project_id;

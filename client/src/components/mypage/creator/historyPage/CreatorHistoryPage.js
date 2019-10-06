@@ -29,12 +29,20 @@ const Title = styled.div`
   font-family: Avenir;
   font-size: 20px;
   font-weight: bold;
+
+  @media (max-width: 500px) {
+    font-size: 16px;
+  }
 `;
 
 const SemiTitle = styled.div`
   font-family: SpoqaHanSans;
   font-size: 32px;
   font-weight: bold;
+
+  @media (max-width: 500px) {
+    font-size: 24px;
+  }
 `;
 
 const RightTitleContainer = styled.div``;
@@ -81,7 +89,7 @@ class CreatorHistoryPage extends Component {
    * @memberof CreatorProjectsPage
    */
   async fetchProject() {
-    const url = `${this.props.match.path}`;
+    const url = `/api${this.props.match.path}`;
     console.log(url);
     await fetch(url)
       .then(res => res.json())

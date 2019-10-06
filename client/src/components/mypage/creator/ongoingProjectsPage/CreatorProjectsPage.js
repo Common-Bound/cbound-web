@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import ProjectJoined from "../../../card/CreatorProjectJoined";
+import LoadingPlaceholder from "../../../card/LoadingPlaceholder";
+import AlarmCard from "../../../card/AlarmCard";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -26,12 +28,20 @@ const Title = styled.div`
   font-family: Avenir;
   font-size: 20px;
   font-weight: bold;
+
+  @media (max-width: 500px) {
+    font-size: 16px;
+  }
 `;
 
 const SemiTitle = styled.div`
   font-family: SpoqaHanSans;
   font-size: 32px;
   font-weight: bold;
+
+  @media (max-width: 500px) {
+    font-size: 24px;
+  }
 `;
 
 const TableContainer = styled.div`
@@ -55,6 +65,7 @@ class CreatorProjectsPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      loading: true,
       projects: []
     };
   }
@@ -69,7 +80,7 @@ class CreatorProjectsPage extends Component {
    * @memberof CreatorProjectsPage
    */
   async fetchProject() {
-    const url = `${this.props.match.path}`;
+    const url = `/api${this.props.match.path}`;
     console.log(url);
     await fetch(url)
       .then(res => res.json())
@@ -103,6 +114,10 @@ class CreatorProjectsPage extends Component {
           });
         }
       });
+
+    await this.setState({
+      loading: false
+    });
   }
 
   render() {
@@ -112,7 +127,15 @@ class CreatorProjectsPage extends Component {
           <Title>On Going Projects</Title>
           <SemiTitle>참여한 프로젝트</SemiTitle>
         </TitleContainer>
-        <TableContainer>{this.state.projects}</TableContainer>
+        <TableContainer>
+          {this.state.loading ? (
+            [<LoadingPlaceholder key={1} />, <LoadingPlaceholder key={2} />]
+          ) : this.state.projects.length === 0 ? (
+            <AlarmCard message="참여한 프로젝트가 아직 없어요!" />
+          ) : (
+            this.state.projects
+          )}
+        </TableContainer>
       </Container>
     );
   }

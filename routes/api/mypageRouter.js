@@ -3,7 +3,7 @@ const router = express.Router();
 const creatorRouter = require("./mypage/creatorRouter");
 const requesterRouter = require("./mypage/requesterRouter");
 
-// path: ~/mypage
+// path: ~/api/mypage
 // 사용자 로그인 여부 검사
 const isAuthenticated = (req, res, next) => {
   if (!req.user) {

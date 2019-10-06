@@ -182,7 +182,7 @@ class Body extends Component {
     this.setState({
       loading: true
     });
-    const url = `/mypage/creator/task/inspection?project_id=${this.props.project_id}`;
+    const url = `/api/mypage/creator/task/inspection?project_id=${this.props.project_id}`;
 
     await fetch(url)
       .then(res => res.json())
@@ -381,7 +381,7 @@ class Body extends Component {
 
     console.log(crop_image);
 
-    const url = "/mypage/creator/task/inspection";
+    const url = "/api/mypage/creator/task/inspection";
     const option = {
       method: "POST",
       headers: {
@@ -396,21 +396,6 @@ class Body extends Component {
     await this.sendData(url, option);
     await this.fetchData();
   };
-
-  // handleReset = async e => {
-  //   const url = "/mypage/task/inspection";
-  //   await fetch(url, {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json"
-  //     },
-  //     body: JSON.stringify({ reset: true })
-  //   })
-  //     .then(res => res.json())
-  //     .then(data => {
-  //       return new Promise(resolve => resolve(console.log(data)));
-  //     });
-  // };
 
   /**
    * @dev 서버 url로 데이터(option) 전송

@@ -1,10 +1,10 @@
 const express = require("express");
 const router = express.Router();
-const db = require("../../../db/index");
+const db = require("../../../../db/index");
 const moment = require("moment");
-const logger = require("../../../config/logger");
+const logger = require("../../../../config/logger");
 
-// path: ~/mypage/creator/history
+// path: ~/api/mypage/creator/history
 router.get("/", async (req, res, next) => {
   // 자신이 생성한 데이터 목록을 가져온다
   // 이 때 프로젝트 정보도 함께 가져오기 위해 join 된 결과를 가져온다

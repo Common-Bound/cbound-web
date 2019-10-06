@@ -13,7 +13,7 @@ class Projects extends Component {
   }
 
   componentDidMount() {
-    const url = this.props.match.path;
+    const url = `/api${this.props.match.path}`;
     fetch(url)
       .then(res => res.json())
       .then(data => {

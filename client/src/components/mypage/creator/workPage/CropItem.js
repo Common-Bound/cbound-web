@@ -1,18 +1,30 @@
 import React, { Component } from "react";
-import endpoint from "../../../../RecognitionEndpoint";
 import styled from "styled-components";
 import deleteImg from "../../../../images/close_button.png";
 
 const CropItemContainer = styled.div`
-  max-width: 140px;
+  width: 140px;
+  height: 100px;
+  border: 1px solid lightgrey;
+  margin: 5px;
+
+  @media (max-width: 1024px) {
+    width: 100px;
+    height: 80px;
+    margin: 4px;
+  }
+  @media (max-width: 500px) {
+    width: 100px;
+    height: 62px;
+    margin: 2px;
+  }
 `;
 
 const ImageContainer = styled.div`
-  width: 140px;
-  height: 100px;
+  width: 100%;
+  height: 70%;
   position: relative;
   text-align: center;
-  border: 1px solid lightgrey;
 
   display: flex;
   flex-direction: column;
@@ -22,8 +34,8 @@ const ImageContainer = styled.div`
 
 const Image = styled.img`
   src: ${props => props.img};
-  max-width: 140px;
-  max-height: 100px;
+  max-width: 100%;
+  max-height: 100% !important;
 `;
 
 const LoadingContainer = styled.div`
@@ -47,8 +59,11 @@ const DeleteButton = styled.div`
 
 const BlueInput = styled.input`
   background-color: lightblue;
-  width: 140px;
+  width: 100%;
+  height: 30%;
   text-align: center;
+  margin: 0 !important;
+  padding: 0 !important;
 `;
 
 class CropItem extends Component {
@@ -94,7 +109,10 @@ class CropItem extends Component {
     });
 
     await fetch(sendTo, {
-      method: "post",
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
       body: bodyData
     })
       .then(res => {
@@ -103,10 +121,10 @@ class CropItem extends Component {
       .then(data => {
         console.log("Data received");
         console.log(data);
-
+        console.log("label: ", data.data.label[0]);
         // 경로별 받은 데이터를 다르게 핸들링함
         this.setState({
-          label: data.label
+          label: data.data.label[0]
         });
       })
       .catch(function(ex) {
@@ -141,8 +159,9 @@ class CropItem extends Component {
   // 캔버스에 크롭된 영역을 그려주고 캔버스를 Base64 인코딩함
   getCroppedImg(image, crop) {
     const canvas = document.createElement("canvas");
-    const scaleX = image.naturalWidth / image.width;
-    const scaleY = image.naturalHeight / image.height;
+    // 이미 리사이징 된 거라 다시 리사이즈 할 필요 없음
+    // const scaleX = image.naturalWidth / image.width;
+    // const scaleY = image.naturalHeight / image.height;
 
     canvas.width = crop.shape_attributes.width;
     canvas.height = crop.shape_attributes.height;
@@ -151,10 +170,10 @@ class CropItem extends Component {
 
     ctx.drawImage(
       image,
-      crop.shape_attributes.x * scaleX,
-      crop.shape_attributes.y * scaleY,
-      crop.shape_attributes.width * scaleX,
-      crop.shape_attributes.height * scaleY,
+      crop.shape_attributes.x,
+      crop.shape_attributes.y,
+      crop.shape_attributes.width,
+      crop.shape_attributes.height,
       0,
       0,
       crop.shape_attributes.width,
@@ -192,11 +211,15 @@ class CropItem extends Component {
       crop_image: this.state.imgSrc,
       id: this.props.crop.shape_attributes.id
     });
+
     if (this.props.useAI) {
       this.setState({
         editing: true
       });
-      await this.sendData(bodyData, `${endpoint.url}/ocr/recognition/`);
+      await this.sendData(
+        bodyData,
+        `/api/mypage/creator/task/normal/recognition`
+      );
     }
   }
 
@@ -229,7 +252,10 @@ class CropItem extends Component {
         this.setState({
           editing: true
         });
-        await this.sendData(bodyData, `${endpoint.url}/ocr/recognition/`);
+        await this.sendData(
+          bodyData,
+          `/api/mypage/creator/task/normal/recognition`
+        );
       }
     }
     document.getElementById(this.props.crop.shape_attributes.id).focus();

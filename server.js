@@ -8,6 +8,7 @@ const RedisStore = require("connect-redis")(session);
 const http = require("http");
 const https = require("https");
 const fs = require("fs");
+const cors = require("cors");
 let client = redis.createClient();
 
 const PORT = process.env.PORT || 4000;
@@ -15,8 +16,7 @@ const PORT = process.env.PORT || 4000;
 const app = express();
 
 /* 라우터 */
-const authRouter = require("./routes/authRouter");
-const mypageRouter = require("./routes/mypageRouter");
+const apiRouter = require("./routes/apiRouter");
 /* logger */
 // winston 과 morgan 을 이어준다
 const logger = require("./config/logger");
@@ -43,15 +43,18 @@ app.use(
   session({
     store: new RedisStore({ client }),
     secret: "myKey",
-    resave: false
+    resave: false,
+    saveUninitialized: true
   })
 ); // 세션 활성화
 // passport.js 모듈 사용
 app.use(passport.initialize()); // passport 구동
 app.use(passport.session()); // 세션 연결
+/* cors 허용 */
+app.use(cors());
+
 /* 사용자 작성 라우터 사용 */
-app.use("/auth", authRouter);
-app.use("/mypage", mypageRouter);
+app.use("/api", apiRouter);
 
 app.get("/*", (req, res, next) => {
   res.sendFile(path.join(__dirname, "client/build/index.html"), function(err) {
@@ -61,7 +64,6 @@ app.get("/*", (req, res, next) => {
     }
   });
 });
-
 /* SSL option */
 const option =
   process.env.NODE_ENV === "production"
@@ -76,23 +78,11 @@ const option =
       }
     : undefined;
 
-// https server
+// proudction 에서는 HTTPS 서버를, development 에서는 HTTP 서버를 사용한다.
 option
   ? https.createServer(option, app).listen(PORT, () => {
-      logger.info(`Server is running at port ${PORT}`);
+      logger.info(`HTTPS Server is running at port ${PORT}`);
     })
-  : undefined;
-
-// http server to redirect to https
-option
-  ? http
-      .createServer(function(req, res) {
-        res.writeHead(301, {
-          Location: "https://" + req.headers["host"] + req.url
-        });
-        res.end();
-      })
-      .listen(80)
   : http.createServer(app).listen(PORT, () => {
-      logger.info(`Server is running at port ${PORT}`);
+      logger.info(`HTTP Server is running at port ${PORT}`);
     });

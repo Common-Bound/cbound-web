@@ -4,7 +4,7 @@ const signupRouter = require("./data_requester/signup");
 const signinRouter = require("./data_requester/signin");
 const signoutRouter = require("./data_requester/signout");
 
-// path: ~/auth/requester
+// path: ~/api/auth/requester
 router.use("/signup", signupRouter);
 router.use("/signin", signinRouter);
 router.use("/signout", signoutRouter);

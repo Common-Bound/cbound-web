@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import ProjectOrig from "../../../card/CreatorProjectOrig";
+import LoadingPlaceholder from "../../../card/LoadingPlaceholder";
+import AlarmCard from "../../../card/AlarmCard";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -26,12 +28,20 @@ const Title = styled.div`
   font-family: Avenir;
   font-size: 20px;
   font-weight: bold;
+
+  @media (max-width: 500px) {
+    font-size: 16px;
+  }
 `;
 
 const SemiTitle = styled.div`
   font-family: SpoqaHanSans;
   font-size: 32px;
   font-weight: bold;
+
+  @media (max-width: 500px) {
+    font-size: 24px;
+  }
 `;
 
 const TableContainer = styled.div`
@@ -71,8 +81,9 @@ class AvailableProjects extends Component {
   }
 
   async fetchProject() {
-    console.log(this.props.match.path);
-    const url = this.props.match.path;
+    console.log(`/api${this.props.match.path}`);
+    const url = `/api${this.props.match.path}`;
+
     const result = await fetch(url)
       .then(res => res.json())
       .then(data => {
@@ -80,7 +91,7 @@ class AvailableProjects extends Component {
         if (data.message) {
           return alert(data.message);
         }
-        this.setState({ session: data.result, loading: false });
+        this.setState({ session: data.result });
         return new Promise(resolve => {
           resolve(data.result);
         });
@@ -115,6 +126,10 @@ class AvailableProjects extends Component {
         projects: my_proj
       });
     }
+
+    await this.setState({
+      loading: false
+    });
   }
 
   /**
@@ -122,7 +137,7 @@ class AvailableProjects extends Component {
    *              프로젝트 목록을 다시 불러온다
    */
   handleClick = e => {
-    const url = this.props.match.path;
+    const url = `/api${this.props.match.path}`;
     fetch(url, {
       method: "POST",
       headers: {
@@ -143,7 +158,15 @@ class AvailableProjects extends Component {
           <Title>Available Projects</Title>
           <SemiTitle>참여 가능한 프로젝트</SemiTitle>
         </TitleContainer>
-        <TableContainer>{this.state.projects}</TableContainer>
+        <TableContainer>
+          {this.state.loading ? (
+            [<LoadingPlaceholder key={1} />, <LoadingPlaceholder key={2} />]
+          ) : this.state.projects.length === 0 ? (
+            <AlarmCard message="참여 가능한 프로젝트가 아직 없어요!" />
+          ) : (
+            this.state.projects
+          )}
+        </TableContainer>
       </Container>
     );
   }

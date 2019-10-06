@@ -2,13 +2,13 @@ const express = require("express");
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const bcrypt = require("bcrypt-nodejs");
-const db = require("../../../db/index");
-const logger = require("../../../config/logger");
+const db = require("../../../../db/index");
+const logger = require("../../../../config/logger");
 const router = express.Router();
 
-// path: ~/auth/creator/signin
+// path: ~/api/auth/requester/signin
 passport.use(
-  "signin-local-creator",
+  "signin-local-requester",
   new LocalStrategy(
     {
       // local 전략을 세움
@@ -21,7 +21,7 @@ passport.use(
       // 먼저 주어진 email 과 일치하는 유저를 찾는다
       // 이 떄, email은 유일한 식별자라고 가정한다
       db.query(
-        "SELECT * FROM data_creator WHERE email=$1",
+        "SELECT * FROM data_requester WHERE email=$1",
         [email],
         (err, results) => {
           if (err) {
@@ -74,7 +74,7 @@ passport.deserializeUser((user, done) => {
 
 // 로그인 요청 핸들링 라우트
 router.post("/", (req, res, next) => {
-  passport.authenticate("signin-local-creator", (err, user, info) => {
+  passport.authenticate("signin-local-requester", (err, user, info) => {
     // passport 인증 도중 에러 발생시 콘솔에 찍어준다
     if (err) {
       logger.error(err);

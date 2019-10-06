@@ -190,7 +190,7 @@ class SignIn extends Component {
   handleSubmit = e => {
     e.preventDefault();
 
-    const url = this.props.match.url; // /:user_type/auth/signin
+    const url = `/api${this.props.match.url}`; // /:user_type/auth/signin
     fetch(url, {
       method: "POST",
       headers: {

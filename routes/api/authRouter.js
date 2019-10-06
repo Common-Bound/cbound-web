@@ -3,7 +3,7 @@ const router = express.Router();
 const creatorRouter = require("./auth/creatorRouter");
 const requesterrouter = require("./auth/requesterRouter");
 
-// path: ~/auth
+// path: ~/api/auth
 router.use("/creator", creatorRouter);
 router.use("/requester", requesterrouter);
 

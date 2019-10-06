@@ -35,6 +35,7 @@ class PrintTotalCrop extends Component {
   async startWork() {
     const canvas = document.createElement("canvas");
     const { crops, image } = this.props;
+    console.log("crops: ", crops);
 
     const scaleX = image.naturalWidth / image.width;
     const scaleY = image.naturalHeight / image.height;
@@ -56,12 +57,14 @@ class PrintTotalCrop extends Component {
       image.height
     );
 
-    crops.forEach(function(crop) {
-      const x = crop.shape_attributes.x;
-      const y = crop.shape_attributes.y;
-      const width = crop.shape_attributes.width;
-      const height = crop.shape_attributes.height;
+    const promises = await crops.map(function(crop) {
+      console.log("crop: ", crop);
+      const x = crop.shape_attributes.x / scaleX;
+      const y = crop.shape_attributes.y / scaleY;
+      const width = crop.shape_attributes.width / scaleX;
+      const height = crop.shape_attributes.height / scaleY;
 
+      ctx.beginPath();
       ctx.strokeStyle = "yellow";
       ctx.rect(x, y, width, height);
 
@@ -75,7 +78,10 @@ class PrintTotalCrop extends Component {
       }
 
       ctx.stroke();
+      return new Promise(resolve => resolve(true));
     });
+
+    await Promise.all(promises);
 
     await this.setState(
       {

@@ -2,13 +2,13 @@ const express = require("express");
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const bcrypt = require("bcrypt-nodejs");
-const db = require("../../../db/index");
+const db = require("../../../../db/index");
 const uuid = require("uuid/v4");
-const logger = require("../../../config/logger");
+const logger = require("../../../../config/logger");
 const router = express.Router();
 const moment = require("moment-timezone");
 
-// path: ~/auth/requester/signup
+// path: ~/api/auth/requester/signup
 passport.use(
   "signup-local-requester",
   new LocalStrategy(

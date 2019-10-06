@@ -1,10 +1,10 @@
 const express = require("express");
 const router = express.Router();
-const db = require("../../db/index");
+const db = require("../../../db/index");
 const createRouter = require("./requester/create");
 const insightRouter = require("./requester/insight");
-const logger = require("../../config/logger");
-// path: ~/mypage/requester
+const logger = require("../../../config/logger");
+// path: ~/api/mypage/requester
 
 router.use("/create", createRouter);
 router.use("/insight", insightRouter);
