@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-import deleteImg from "../../../../images/close_button.png";
+import deleteImg from "../../../../images/close_button.webp";
 
 const CropItemContainer = styled.div`
   min-width: 140px;

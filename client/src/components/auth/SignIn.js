@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Redirect, Link } from "react-router-dom";
 import styled from "styled-components";
-import background from "../../images/BackGround.png";
+import background from "../../images/BackGround.webp";
 import Header from "../main/Header";
 
 const Container = styled.div`
