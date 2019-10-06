@@ -125,16 +125,6 @@ const IconTitle = styled.div`
 //   padding: 14px;
 // `;
 
-const StyledSpan = styled.span`
-  width: 48px;
-  height: 24px;
-
-  :before {
-    width: 16px !important;
-    height: 16px !important;
-  }
-`;
-
 // const BoundButton = styled.button`
 //   width: 70px;
 //   height: 70px;
@@ -249,7 +239,7 @@ class Body extends Component {
       method: "post",
       body: bodyData
     })
-      .then(function (res) {
+      .then(function(res) {
         return res.json();
       })
       .then(async data => {
@@ -305,7 +295,7 @@ class Body extends Component {
           resolve(true);
         });
       })
-      .catch(function (ex) {
+      .catch(function(ex) {
         console.log(ex);
       });
 
@@ -601,7 +591,7 @@ class Body extends Component {
     const y = e.nativeEvent.offsetY;
     const crops = this.state.crop_image;
     var targetId = "nothing";
-    crops.every(function (crop) {
+    crops.every(function(crop) {
       if (
         x > crop.shape_attributes.x &&
         x < crop.shape_attributes.x + crop.shape_attributes.width &&
@@ -650,7 +640,7 @@ class Body extends Component {
 
     document.body.appendChild(button);
 
-    setTimeout(function () {
+    setTimeout(function() {
       try {
         document.body.removeChild(button);
       } catch {
