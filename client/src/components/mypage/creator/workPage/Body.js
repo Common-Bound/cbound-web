@@ -729,12 +729,8 @@ class Body extends Component {
                     top: "50%",
                     left: "50%",
                     transform: "translateX(-50%) translateY(-50%)",
-                    width: `${
-                      document.getElementById("image_container").style.width
-                    }px`,
-                    height: `${
-                      document.getElementById("image_container").style.width
-                    }px`,
+                    width: "100%",
+                    height: "100%",
                     zIndex: 1,
                     backgroundColor: "rgba(0, 0, 0, 0.7)"
                   }}
