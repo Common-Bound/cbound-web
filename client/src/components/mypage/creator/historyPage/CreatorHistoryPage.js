@@ -9,7 +9,7 @@ import TableRow from "@material-ui/core/TableRow";
 
 const Container = styled.div`
   width: 100%;
-  height: 100vh;
+  height: 100%;
 `;
 
 const TitleContainer = styled.div`
@@ -69,10 +69,16 @@ const RightSemiTitle = styled.div`
 
 const TableContainer = styled.div`
   width: 80%;
-  height: 600px;
+  height: 60vh;
+
   margin: 0 auto;
+
   overflow: scroll;
   text-align: center;
+
+  @media (max-width: 500px) {
+    height: 56vh;
+  }
 `;
 
 const StyledTableHead = styled(TableHead)`
