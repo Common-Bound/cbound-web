@@ -11,8 +11,8 @@ import "../../../assets/vendor/nucleo/css/nucleo.css";
 import "../../../assets/vendor/@fortawesome/fontawesome-free/css/all.min.css";
 import "../../../assets/scss/argon-dashboard-react.scss";
 
-import Header from "../../../components/Headers/Header.jsx";
-import AdminFooter from "../../../components/Footers/AdminFooter.jsx";
+import Header from "../../../components/Headers/Header.js";
+import AdminFooter from "../../../components/Footers/AdminFooter.js";
 
 import {
   Button,
