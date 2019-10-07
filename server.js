@@ -11,7 +11,7 @@ const fs = require("fs");
 const cors = require("cors");
 let client = redis.createClient();
 
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 443;
 
 const app = express();
 
