@@ -15,6 +15,7 @@ const Container = styled.div`
 const TitleContainer = styled.div`
   width: 80%;
   padding-top: 40px;
+  padding-bottom: 40px;
   margin: 0 auto;
 
   color: black; !important;
@@ -51,7 +52,6 @@ const TableContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
 
-  padding-top: 40px;
   margin: 0 auto;
   overflow: scroll;
 

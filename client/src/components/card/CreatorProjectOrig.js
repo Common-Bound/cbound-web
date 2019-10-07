@@ -4,6 +4,7 @@ import moment from "moment";
 
 const Card = styled.div`
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  min-width: 300px;
   max-width: 300px;
   margin: 0px 30px 30px 0px;
   text-align: center;
@@ -13,6 +14,7 @@ const Card = styled.div`
 
   @media (max-width: 1024px) {
     max-width: 240px;
+    min-width: 240px;
   }
 
   @media (max-width: 500px) {
@@ -60,6 +62,8 @@ const Image = styled.div`
 `;
 
 const Title = styled.div`
+  width: 100%;
+  height: auto;
   padding: 10px;
   font-size: 24px;
   font-weight: bold;
