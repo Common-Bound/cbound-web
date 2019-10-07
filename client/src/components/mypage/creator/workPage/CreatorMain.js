@@ -268,6 +268,7 @@ const DropZoneBox = styled.section`
     width: 100%;
   }
   @media(max-width: 500px){
+    border: 3px solid lightgrey;
     line-height: 300px;
   }
 `;

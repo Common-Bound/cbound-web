@@ -4,18 +4,24 @@ import deleteImg from "../../../../images/close_button.webp";
 
 const CropItemContainer = styled.div`
   min-width: 140px;
+  max-width: 140px;
   min-height: 100px;
+  max-width: 100px;
   border: 1px solid lightgrey;
   margin: 5px;
 
   @media (max-width: 1024px) {
     min-width: 100px;
+    max-width: 100px;
     min-height: 80px;
+    max-height: 80px;
     margin: 4px;
   }
   @media (max-width: 500px) {
     min-width: 100px;
+    max-width: 100px;
     min-height: 62px;
+    max-height: 62px;
     margin: 2px;
   }
 `;
@@ -280,8 +286,8 @@ class CropItem extends Component {
                 position: "absolute",
                 top: "0px",
                 left: "0px",
-                width: `140px`,
-                height: `100px`,
+                width: `100%`,
+                height: `100%`,
                 zIndex: 1,
                 backgroundColor: "rgba(0, 0, 0, 0.7)"
               }}

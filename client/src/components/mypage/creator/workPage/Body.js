@@ -71,9 +71,6 @@ const ButtonContainer = styled.div`
   height: 50px;
   margin: 5px;
 
-  background-color: black;
-  color: white;
-
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -84,15 +81,21 @@ const ButtonContainer = styled.div`
   border-radius: 5px;
   cursor: pointer;
 
-  :hover {
-    background-color: white;
-    color: black;
-  }
   @media (max-width: 500px) {
     width: 28px;
     height: 28px;
     margin-left: 8px;
   }
+`;
+
+const ShowButtonContainer = styled(ButtonContainer)`
+  background-color: ${props => (props.isShow ? "black" : "white")};
+  color: ${props => (props.isShow ? "white" : "black")};
+`;
+
+const AIButtonContainer = styled(ButtonContainer)`
+  background-color: ${props => (props.isAI ? "white" : "black")};
+  color: ${props => (props.isAI ? "black" : "white")};
 `;
 
 const Icon = styled.i`
@@ -162,6 +165,7 @@ const ImageContainer = styled.div`
   border: ${props => (props.show ? "5px solid lightgrey" : "none")};
 
   @media (max-width: 500px) {
+    border: ${props => (props.show ? "3px solid lightgrey" : "none")};
   }
 `;
 
@@ -677,6 +681,12 @@ class Body extends Component {
     }
   }
 
+  toggleAI() {
+    this.setState({
+      useAI: !this.state.useAI
+    });
+  }
+
   render() {
     return (
       <BodyContainer display={this.props.display} className={this.props.class}>
@@ -825,18 +835,16 @@ class Body extends Component {
                 </ShowButton>
               ) : null}
             </ButtonContainer> */}
-            <ButtonContainer>
+            <AIButtonContainer
+              isAI={this.state.useAI}
+              onClick={this.toggleAI.bind(this)}
+            >
               <Icon className="fas fa-robot"></Icon>
-              <input
-                type="checkbox"
-                name="useAI"
-                onChange={this.handleChange}
-                checked={this.state.useAI}
-              />
 
               <IconTitle>AI</IconTitle>
-            </ButtonContainer>
-            <ButtonContainer
+            </AIButtonContainer>
+            <ShowButtonContainer
+              isShow={this.state.showEdit}
               onClick={() => {
                 this.setState({
                   crop: {},
@@ -853,7 +861,7 @@ class Body extends Component {
             >
               <Icon className="far fa-eye"></Icon>
               <IconTitle>SHOW</IconTitle>
-            </ButtonContainer>
+            </ShowButtonContainer>
           </RightDescriptionContainer>
         </MainContainer>
         {/* 크롭된 이미지가 보여지는 영역 */}
