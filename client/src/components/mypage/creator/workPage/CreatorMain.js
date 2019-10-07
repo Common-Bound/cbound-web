@@ -594,8 +594,10 @@ class CreatorMain extends Component {
     // 서버로 전송
     // 프로젝트 정보가 있어야만 DB에 쌓도록 한다
     if (this.props.info) {
-      const bodyPromises = await this.Refs.map(async body => {
-        return new Promise(resolve => resolve(body.handleSendAll()));
+      const bodyPromises = await this.Refs.map(async (body, index) => {
+        return new Promise(resolve =>
+          resolve(body.handleSendAll(this.state.time_counter[index]))
+        );
       });
       await Promise.all(bodyPromises);
       window.location.reload();

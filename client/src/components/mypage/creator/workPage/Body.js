@@ -402,6 +402,8 @@ class Body extends Component {
         });
       } else {
         // 추가
+
+        console.log(new Date().getTime() - this.state.timer);
         this.setState(
           {
             crop_image: this.state.crop_image.concat({
@@ -433,10 +435,25 @@ class Body extends Component {
   };
 
   // 작업한 내용 전부를 서버로 전송함
-  handleSendAll = async () => {
+  handleSendAll = async image_time => {
     console.log(this.state.crop_image);
     const bodyData = new FormData();
-    let new_crop_image = Array.from(this.state.crop_image);
+    let new_crop_image = Array.from(
+      this.state.crop_image.map(crop => {
+        return {
+          shape_attributes: crop.shape_attributes,
+          region_attributes: {
+            label: crop.region_attributes.label,
+            image_time: image_time.time,
+            crop_time: this.state.time_counter.find(time => {
+              if (time.index === crop.shape_attributes.id) {
+                return true;
+              } else return false;
+            }).time
+          }
+        };
+      })
+    );
 
     bodyData.append("orig_image", this.props.orig_image_file);
 
@@ -653,9 +670,11 @@ class Body extends Component {
   }
 
   handleStartTimer() {
-    this.setState({
-      timer: new Date().getTime()
-    });
+    if (!this.state.crop.height) {
+      this.setState({
+        timer: new Date().getTime()
+      });
+    }
   }
 
   render() {
