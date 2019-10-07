@@ -7,13 +7,38 @@ import moment from "moment";
 const StyledTableRow = styled(TableRow)`
   transition: 0.2s;
   cursor: pointer;
+
   :hover {
     background-color: lightgrey;
   }
 `;
 
 const StyledTableCell = styled(TableCell)`
+  word-break: keep-all;
+
+  @media (max-width: 500px) {
+    padding: 8px !important;
+    font-size: 12px !important;
+  }
+`;
+
+const StyledDateTableCell = styled(StyledTableCell)`
+  @media(max-width: 500px){
+    font-size: 10px !important;
+  })
+`;
+
+const StyledTitleTableCell = styled(StyledTableCell)`
   color: ${props => (props.project_type ? "black" : "blue")} !important;
+`;
+
+const StyledStatusTableCell = styled(StyledTableCell)`
+  color: ${props =>
+    props.status === "created"
+      ? "blue"
+      : props.status === "done"
+      ? "green"
+      : "red"} !important;
 `;
 
 class CreatorHistoryOrig extends Component {
@@ -24,15 +49,17 @@ class CreatorHistoryOrig extends Component {
 
     return (
       <StyledTableRow>
-        <TableCell align="center">{created_time}</TableCell>
-        <StyledTableCell align="center" project_type={this.props.project_type}>
-          {this.props.project_type ? "생성" : "검수"}
-        </StyledTableCell>
-        <TableCell align="center">{this.props.title}</TableCell>
-        <TableCell align="center">{this.props.reward}</TableCell>
-        <TableCell align="center">
+        <StyledDateTableCell align="center">{created_time}</StyledDateTableCell>
+        <StyledTitleTableCell
+          align="center"
+          project_type={this.props.project_type}
+        >
+          {this.props.title}({this.props.project_type ? "생성" : "검수"})
+        </StyledTitleTableCell>
+        <StyledTableCell align="center">{this.props.reward}</StyledTableCell>
+        <StyledStatusTableCell align="center" status={this.props.status}>
           {this.props.status ? this.props.status : "-"}
-        </TableCell>
+        </StyledStatusTableCell>
       </StyledTableRow>
     );
   }
