@@ -21,6 +21,14 @@ const TitleContainer = styled.div`
   justify-content: space-between;
 
   color: black; !important;
+
+  @media(max-width: 810px){
+    flex-direction: column;
+    padding-top: 24px;
+    padding-bottom: 24px;
+  }
+
+  border: 2px solid red;
 `;
 
 const LeftTitleContainer = styled.div``;
@@ -52,6 +60,13 @@ const RightSemiTitle = styled.div`
   font-family: SpoqaHanSans;
   font-size: 18px;
   color: grey;
+
+  @media (max-width: 810px) {
+    padding-top: 10px;
+  }
+  @media (max-width: 500px) {
+    font-size: 14px;
+  }
 `;
 
 const TableContainer = styled.div`
@@ -69,6 +84,13 @@ const StyledTableHead = styled(TableHead)`
 const StyledTableCell = styled(TableCell)`
   color: rgba(255, 255, 255, 0.6) !important;
   font-family: Avenir;
+  word-break: keep-all;
+  font-size: 14px !important;
+
+  @media (max-width: 500px) {
+    padding: 8px !important;
+    font-size: 12px !important;
+  }
 `;
 
 class CreatorHistoryPage extends Component {
@@ -137,11 +159,10 @@ class CreatorHistoryPage extends Component {
           <Table>
             <StyledTableHead>
               <TableRow>
-                <StyledTableCell align="center">CREATED</StyledTableCell>
-                <StyledTableCell align="center">ROLE</StyledTableCell>
-                <StyledTableCell align="center">TITLE</StyledTableCell>
-                <StyledTableCell align="center">POINT</StyledTableCell>
-                <StyledTableCell align="center">STATUS</StyledTableCell>
+                <StyledTableCell align="center">날짜</StyledTableCell>
+                <StyledTableCell align="center">제목</StyledTableCell>
+                <StyledTableCell align="center">포인트</StyledTableCell>
+                <StyledTableCell align="center">상태</StyledTableCell>
               </TableRow>
             </StyledTableHead>
             <TableBody>{this.state.projects}</TableBody>
