@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Redirect, Link } from "react-router-dom";
 import styled from "styled-components";
-import background from "../../images/BackGround.webp";
+//import background from "../../images/BackGround.webp";
 import Header from "../main/Header";
 
 const Container = styled.div`
@@ -17,7 +17,7 @@ const SignInContainer = styled.div`
   width: 100%;
   height: 600px;
   text-align: center;
-  background-image: url(${background});
+  background-image: url("https://task-data-bucket.s3.ap-northeast-2.amazonaws.com/BackGround.webp");
   background-color: black;
   background-size: 100% 100%;
 

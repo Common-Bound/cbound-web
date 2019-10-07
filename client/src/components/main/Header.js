@@ -2,8 +2,8 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
-import logo from "../../images/logo_2.webp";
-import name from "../../images/COMMONBOUND.webp";
+//import logo from "../../images/logo_2.webp";
+//import name from "../../images/COMMONBOUND.webp";
 
 const HeaderContainer = styled.div`
   position: fixed;
@@ -102,8 +102,18 @@ class Header extends Component {
   render() {
     return (
       <HeaderContainer>
-        <Logo to="/" img={logo} />
-        <Title to="/" img={name} />
+        <Logo
+          to="/"
+          img={
+            "https://task-data-bucket.s3.ap-northeast-2.amazonaws.com/logo_2.webp"
+          }
+        />
+        <Title
+          to="/"
+          img={
+            "https://task-data-bucket.s3.ap-northeast-2.amazonaws.com/COMMONBOUND.webp"
+          }
+        />
         {this.props.page === "main" ? (
           <LoginButton to="/signin/select">Sign In</LoginButton>
         ) : (

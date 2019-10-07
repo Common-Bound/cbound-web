@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 import Header from "./main/Header";
-import background from "../images/BackGround.webp";
+//import background from "../images/BackGround.webp";
 
 const Container = styled.div`
   width: 100%;
@@ -17,7 +17,7 @@ const MainContainer = styled.div`
   justify-content: center;
   align-items: center;
 
-  background-image: url(${background});
+  background-image: url("https://task-data-bucket.s3.ap-northeast-2.amazonaws.com/BackGround.webp");
   background-repeat: no-repeat;
   width: 100%;
   height: 600px;
