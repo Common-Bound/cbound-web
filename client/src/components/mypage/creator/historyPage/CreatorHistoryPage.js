@@ -27,8 +27,6 @@ const TitleContainer = styled.div`
     padding-top: 24px;
     padding-bottom: 24px;
   }
-
-  border: 2px solid red;
 `;
 
 const LeftTitleContainer = styled.div``;
