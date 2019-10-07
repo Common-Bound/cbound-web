@@ -15,7 +15,6 @@ install_dependencies:
   stage: build
   tags:
     - my-tag
-    - hyunseo
   script:
     - yarn
     - yarn build
