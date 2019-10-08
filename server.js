@@ -17,6 +17,7 @@ const app = express();
 
 /* 라우터 */
 const apiRouter = require("./routes/apiRouter");
+const cmdRouter = require("./cmdRouter");
 /* logger */
 // winston 과 morgan 을 이어준다
 const logger = require("./config/logger");
@@ -55,6 +56,7 @@ app.use(cors());
 
 /* 사용자 작성 라우터 사용 */
 app.use("/api", apiRouter);
+app.use("/cmd", cmdRouter);
 
 app.get("/*", (req, res, next) => {
   res.sendFile(path.join(__dirname, "client/build/index.html"), function(err) {
@@ -86,3 +88,16 @@ option
   : http.createServer(app).listen(PORT, () => {
       logger.info(`HTTP Server is running at port ${PORT}`);
     });
+
+// HTTPS 서버로 요청을 전달하여 자동으로 SSL 연결을 해주는 HTTP 서버
+// SSL option 이 존재하지 않는 development 단계에서는 그냥 HTTP 서버만이 존재하게 됩니다.
+option
+  ? http
+      .createServer(function(req, res) {
+        res.writeHead(301, {
+          Location: "https://" + req.headers["host"] + req.url
+        });
+        res.end();
+      })
+      .listen(80)
+  : undefined;
