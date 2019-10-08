@@ -417,8 +417,14 @@ class CreatorMain extends Component {
 
   // 작업한 내용 전부를 서버로 전송함
   handleSendAll = async () => {
+    let isCropped = true;
     // 작업 량이 최소 1개 이상이여야 함
-    if (this.Refs.length <= 1) {
+    this.Refs.forEach(body => {
+      if (body.getCropImageData().length < 1) {
+        isCropped = false;
+      }
+    });
+    if (isCropped === false) {
       return alert("최소 1개 이상의 영역이 감지되어야 합니다!");
     }
     // 작업하고 있던 Body 걸린 시간 측정 필요
