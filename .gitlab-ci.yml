@@ -35,7 +35,8 @@ deploying:
   tags:
     - my-tag
   script:
-    - curl https://c-bound.io/cmd/deploy
+    # 최대 요청 대기시간은 5분
+    - curl --connect-timeout 300 https://c-bound.io/cmd/deploy
   environment:
     name: production
     url: http://c-bound.io
