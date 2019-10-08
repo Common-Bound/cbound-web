@@ -70,11 +70,11 @@ class PrintTotalCrop extends Component {
 
       if (crop.region_attributes.label) {
         ctx.fillStyle = "yellow";
-        ctx.fillRect(x, y - 16, crop.region_attributes.label.length * 10, 16);
+        ctx.fillRect(x, y - 18, crop.region_attributes.label.length * 10, 18);
 
         ctx.fillStyle = "black";
-        ctx.font = "16px serif";
-        ctx.fillText(crop.region_attributes.label, x, y);
+        ctx.font = "16px Helvetica";
+        ctx.fillText(crop.region_attributes.label, x, y - 2);
       }
 
       ctx.stroke();

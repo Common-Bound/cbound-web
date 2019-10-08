@@ -33,7 +33,6 @@ const MainContainer = styled.div`
 const SubContainer = styled.div`
   width: 100%;
   padding: 10px;
-  overflow: scroll;
 
   @media (max-width: 500px) {
     width: 60%;

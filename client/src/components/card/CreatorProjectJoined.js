@@ -37,7 +37,6 @@ const MainContainer = styled.div`
 const SubContainer = styled.div`
   width: 100%;
   padding: 10px;
-  overflow: scroll;
 
   @media (max-width: 500px) {
     width: 60%;
@@ -67,6 +66,7 @@ const Title = styled.div`
   font-size: 24px;
   font-weight: bold;
   color: black;
+  word-break: keep-all;
 
   @media (max-width: 1024px) {
     padding: 8px;
