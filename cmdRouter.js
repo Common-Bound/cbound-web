@@ -8,15 +8,16 @@ router.get("/deploy", (req, res, next) => {
   const child = exec(
     "git pull origin master && yarn && yarn build && pm2 start ecosystem.config.js --env production",
     function(error, stdout, stderr) {
-      console.log("stdout: " + stdout);
-      console.log("stderr: " + stderr);
-      if (error !== null) {
+      if (error) {
         console.log("exec error: " + error);
         return res.status(500).send(error);
       }
-      return res.send(true);
+      console.log("stdout: " + stdout);
+      console.log("stderr: " + stderr);
+      return res.send(stdout);
     }
   );
+  return res.status(200).json({ result: true });
 });
 
 module.exports = router;
