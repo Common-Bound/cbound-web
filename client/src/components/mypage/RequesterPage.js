@@ -1,27 +1,48 @@
 import React from "react";
-
 import { Route, Link } from "react-router-dom";
-// node.js library that concatenates classes (strings)
-
 import RequesterProjectsPage from "./requester/RequesterProjectsPage";
 import CreateProjectPage from "./requester/CreateProjectPage";
 import InsightPage from "./requester/InsightPage";
-
 import styled from "styled-components";
 
-const LeftBanner = styled.div`
-  width: 200px;
-  height: 100vh;
-  position: fixed;
-  top: 64px;
+const Container = styled.div`
+  width: 100%;
+`;
+
+const MainContainer = styled.div`
+  position: relative;
+  top: 8vh;
+
+  width: 100%;
 
   display: flex;
-  flex-flow: column;
+
+  @media (max-width: 1024px) {
+    flex-direction: column-reverse;
+  }
+`;
+
+const LeftBanner = styled.div`
+  min-width: 240px;
+  height: 92vh;
+
+  display: flex;
+  flex-direction: column;
   align-items: center;
 
   background: #353535;
   color: white;
+
   z-index: 1;
+
+  @media (max-width: 1024px) {
+    width: 100%;
+    height: 8vh;
+    bottom: 0px;
+
+    flex-direction: row;
+    justify-content: space-between;
+  }
 `;
 
 const StyledLink = styled(Link)`
@@ -42,14 +63,12 @@ const StyledLink = styled(Link)`
   :hover {
     color: white;
   }
-`;
 
-// const AllProjectButton = styled(StyledLink)`
-//   color: ${props =>
-//     props.pathname === "/mypage/creator"
-//       ? "white"
-//       : "rgba(255, 255, 255, 0.3)"};
-// `;
+  @media (max-width: 1024px) {
+    margin-top: 0;
+    text-align: center;
+  }
+`;
 
 const MyProjectButton = styled(StyledLink)`
   color: ${props =>
@@ -66,50 +85,59 @@ const IconTitle = styled.div`
   width: 100px;
   margin-left: 14px;
   font-family: Avenir;
+
+  @media (max-width: 810px) {
+    display: none;
+  }
 `;
 
 const Section = styled.div`
-  position: relative;
-  padding-left: 200px;
-  padding-top: 64px;
+  width: 100%;
+  height: 92vh;
+
+  @media (max-width: 1024px) {
+    height: 84vh;
+  }
 `;
 
 class RequesterPage extends React.Component {
   render() {
     return (
-      <div>
-        <LeftBanner>
-          <MyProjectButton
-            to={`${this.props.match.url}`}
-            pathname={this.props.location.pathname}
-          >
-            <Icon className="fas fa-list" />
-            <IconTitle>My Projects</IconTitle>
-          </MyProjectButton>
-          <StyledLink
-            to="/auth/signout"
-            pathname={this.props.location.pathname}
-          >
-            <Icon className="fas fa-sign-in-alt" />
-            <IconTitle>Sign Out</IconTitle>
-          </StyledLink>
-        </LeftBanner>
-        <Section>
-          <Route
-            exact
-            path={`${this.props.match.url}`}
-            component={RequesterProjectsPage}
-          />
-          <Route
-            path={`${this.props.match.url}/create`}
-            component={CreateProjectPage}
-          />
-          <Route
-            path={`${this.props.match.url}/insight/:project_id`}
-            component={InsightPage}
-          />
-        </Section>
-      </div>
+      <Container>
+        <MainContainer>
+          <LeftBanner>
+            <MyProjectButton
+              to={`${this.props.match.url}`}
+              pathname={this.props.location.pathname}
+            >
+              <Icon className="fas fa-list" />
+              <IconTitle>My Projects</IconTitle>
+            </MyProjectButton>
+            <StyledLink
+              to="/auth/signout"
+              pathname={this.props.location.pathname}
+            >
+              <Icon className="fas fa-sign-in-alt" />
+              <IconTitle>Sign Out</IconTitle>
+            </StyledLink>
+          </LeftBanner>
+          <Section>
+            <Route
+              exact
+              path={`${this.props.match.url}`}
+              component={RequesterProjectsPage}
+            />
+            <Route
+              path={`${this.props.match.url}/create`}
+              component={CreateProjectPage}
+            />
+            <Route
+              path={`${this.props.match.url}/insight/:project_id`}
+              component={InsightPage}
+            />
+          </Section>
+        </MainContainer>
+      </Container>
     );
   }
 }
