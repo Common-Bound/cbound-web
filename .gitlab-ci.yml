@@ -34,15 +34,8 @@ deploying:
   stage: deploy
   tags:
     - my-tag
-  before_script:
-    #generate ssh key
-    - mkdir -p ~/.ssh
-    - echo -e "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
-    - chmod 600 ~/.ssh/id_rsa
-    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
-    - cat ~/.ssh/config
   script:
-    - bash .gitlab-deploy.sh
+    - curl https://c-bound.io/cmd/deploy
   environment:
     name: production
     url: http://c-bound.io
