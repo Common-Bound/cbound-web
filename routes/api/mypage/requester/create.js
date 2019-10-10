@@ -5,9 +5,40 @@ const uuid = require("uuid/v4");
 const moment = require("moment");
 require("moment-timezone");
 const logger = require("../../../../config/logger");
+const AWS = require("aws-sdk");
+const multer = require("multer");
+const multerS3 = require("multer-s3");
+
+// AWS config 파일 불러오기
+AWS.config.loadFromPath(__dirname + "/../../../../../../config/awsConfig.json");
+let s3 = new AWS.S3();
+
+// S3에 올리는 모듈
+const upload_s3 = multer({
+  storage: multerS3({
+    s3: s3,
+    bucket: "proj-data-bucket",
+    metadata: function(req, file, cb) {
+      cb(null, { fieldName: file.fieldname });
+    },
+    key: function(req, file, cb) {
+      cb(null, `${req.user.id}/${Date.now().toString()}-${file.originalname}`);
+    },
+    acl: "public-read-write"
+  })
+});
+
+/* 파일 로깅 모듈 */
+const fileLogger = (req, res, next) => {
+  const file = req.file;
+  console.log("========== 전달 받은 파일 정보 ==========");
+  console.log(file);
+  console.log("=====================================");
+  next();
+};
 
 // path: ~/api/mypage/requester/create
-router.post("/", (req, res, next) => {
+router.post("/", upload_s3("title_image"), fileLogger, (req, res, next) => {
   console.log(req.body);
   if (!req.user) {
     return res.status(401).json({ message: "로그인 해주세요" });
@@ -15,6 +46,7 @@ router.post("/", (req, res, next) => {
   const normal_id = uuid();
   const inspection_id = uuid();
   const user_id = req.user.id;
+  const title_image = req.file.location;
 
   var created_at = moment()
     .tz("Asia/Seoul")
@@ -31,7 +63,7 @@ router.post("/", (req, res, next) => {
       normal_id,
       null,
       req.body.title,
-      req.body.title_image,
+      title_image,
       req.body.simple_description,
       req.body.detail_description,
       due_date,
