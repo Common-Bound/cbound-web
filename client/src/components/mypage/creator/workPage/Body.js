@@ -625,6 +625,7 @@ class Body extends Component {
 
   // 크롭이 완료되었을 때 이미지화 시켜 서버로 전송시킨다
   async handleCropMouseUp(e) {
+    console.log(this.state.crop.height);
     if (!this.state.crop.height) {
       return;
     }
@@ -692,7 +693,7 @@ class Body extends Component {
               show={this.props.orig_image_file}
               onMouseDown={this.handleStartTimer}
               onMouseUp={this.handleCropMouseUp}
-              onTouchEnd={this.handleCropMouseUp}
+              onTouchStart={this.handleStartTimer}
               data-intro={
                 this.props.index === 0
                   ? "이미지에서 추출할 영역을 드래그하여 지정하세요."
