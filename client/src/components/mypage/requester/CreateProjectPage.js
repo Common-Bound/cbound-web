@@ -36,14 +36,15 @@ class CreateProjectPage extends Component {
     guidelineURL: "",
     dueDate: "",
     type: "image",
-    cost: ""
+    cost: "",
+    iamge: ""
   };
   handleSubmit = async e => {
     e.preventDefault();
 
     const data = {
       title: this.state.title,
-      title_image: null,
+      title_image: this.state.image,
       simple_description: this.state.simpleDesc,
       detail_description: this.state.detailDesc,
       due_date: this.state.dueDate,
@@ -70,6 +71,12 @@ class CreateProjectPage extends Component {
       .catch(err => {
         console.log(err);
       });
+  };
+
+  onFileUpload = e => {
+    this.setState({
+      image: e.target.files[0]
+    });
   };
 
   handleChange = e => {
@@ -120,6 +127,17 @@ class CreateProjectPage extends Component {
               required
             />
           </FormGroup>
+          <FormGroup for="image">
+            <Label for="image">대표 이미지</Label>
+            <Input
+              type="file"
+              onChange={this.onFileUpload}
+              name="image"
+              id="image"
+              required
+              accept="image/*"
+            ></Input>
+          </FormGroup>
           <FormGroup>
             <Label for="guidelineURL">가이드라인</Label>
             <Input
@@ -168,9 +186,6 @@ class CreateProjectPage extends Component {
               required
             />
           </FormGroup>
-          <label for="image">
-            <input type="file" name="image" id="image"></input>
-          </label>
           <ButtonContainer>
             <SubmitButton color="primary" type="submit">
               생성
