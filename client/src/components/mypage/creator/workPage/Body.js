@@ -169,9 +169,6 @@ const ImageContainer = styled.div`
   height: 48vh;
   position: relative;
 
-  display: flex;
-  justify-content: center;
-  align-items: center;
   border: ${props => (props.show ? "5px solid lightgrey" : "none")};
 
   @media (max-width: 500px) {
@@ -756,6 +753,9 @@ class Body extends Component {
                   image={this.state.imageRef}
                   onClick={this.handleClickImage}
                   showEdit={this.state.showEdit}
+                  style={{
+                    display: this.state.showEdit ? "block" : "none"
+                  }}
                 />
               ) : null}
 
@@ -810,7 +810,7 @@ class Body extends Component {
               onClick={() => {
                 this.setState({
                   crop: {},
-                  showEdit: false
+                  showEdit: !this.state.showEdit
                 });
               }}
               data-intro={

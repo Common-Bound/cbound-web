@@ -1,4 +1,9 @@
 import React, { Component } from "react";
+import styled from "styled-components";
+
+const Container = styled.div`
+  width: 100%;
+`;
 
 class PrintTotalCrop extends Component {
   state = {
@@ -35,10 +40,13 @@ class PrintTotalCrop extends Component {
   async startWork() {
     const canvas = document.createElement("canvas");
     const { crops, image } = this.props;
+    console.log(image);
     //console.log("crops: ", crops);
 
     const scaleX = image.naturalWidth / image.width;
     const scaleY = image.naturalHeight / image.height;
+    console.log("scaleX: ", scaleX);
+    console.log("scaleY: ", scaleY);
 
     canvas.width = image.width;
     canvas.height = image.height;
@@ -95,17 +103,16 @@ class PrintTotalCrop extends Component {
 
   render() {
     return (
-      <div>
+      <Container>
         <img
           src={this.state.imgSrc}
           alt="crop"
           style={{
-            maxWidth: "640px",
             display: this.props.showEdit ? "none" : ""
           }}
           onClick={this.props.onClick}
         />
-      </div>
+      </Container>
     );
   }
 }
