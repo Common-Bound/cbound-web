@@ -168,6 +168,9 @@ class CreateProjectPage extends Component {
               required
             />
           </FormGroup>
+          <label for="image">
+            <input type="file" name="image" id="image"></input>
+          </label>
           <ButtonContainer>
             <SubmitButton color="primary" type="submit">
               생성
