@@ -54,7 +54,7 @@ const LeftTitleDate = styled.div`
   font-size: 16px;
 
   @media (max-width: 500px) {
-    font-size: 12px;
+    font-size: 10px;
   }
 `;
 
@@ -74,6 +74,15 @@ const RightTitleContainer = styled.div`
   display: flex;
   flex-direction: column;
   padding-right: 10px;
+`;
+
+const StyledInputLabel = styled(InputLabel)`
+  word-break: keep-all;
+
+  @media (max-width: 500px) {
+    font-size: 12px !important;
+    padding-right: 16px !important;
+  }
 `;
 
 // const RightTitle = styled.div`
@@ -268,6 +277,7 @@ const DropZoneBox = styled.section`
     width: 100%;
   }
   @media(max-width: 500px){
+    border: 3px solid lightgrey;
     line-height: 300px;
   }
 `;
@@ -407,6 +417,16 @@ class CreatorMain extends Component {
 
   // 작업한 내용 전부를 서버로 전송함
   handleSendAll = async () => {
+    let isCropped = true;
+    // 작업 량이 최소 1개 이상이여야 함
+    this.Refs.forEach(body => {
+      if (body.getCropImageData().length < 1) {
+        isCropped = false;
+      }
+    });
+    if (isCropped === false) {
+      return alert("최소 1개 이상의 영역이 감지되어야 합니다!");
+    }
     // 작업하고 있던 Body 걸린 시간 측정 필요
     await this.setState({
       time_counter: this.state.time_counter.map(el => {
@@ -699,10 +719,10 @@ class CreatorMain extends Component {
                 <StyledFormControl
                   variant="outlined"
                   data-intro="추출 할 데이터 포맷을 지정할 수 있습니다."
-                  data-step="3"
+                  data-step="5"
                   data-disable-interaction="true"
                 >
-                  <InputLabel>Export as</InputLabel>
+                  <StyledInputLabel>Export as</StyledInputLabel>
                   <Select
                     value={format}
                     onChange={this.handleChange.bind(this)}
@@ -722,12 +742,12 @@ class CreatorMain extends Component {
                   variant="contained"
                   color="primary"
                   onClick={this.handleSendAll.bind(this)}
-                  data-intro="완료하기 버튼을 누르면 데이터를 추출합니다."
-                  data-step="4"
+                  data-intro="완료 버튼을 누르면 작업한 데이터를 제출합니다."
+                  data-step="6"
                   data-disable-interaction="true"
                   data-position="left"
                 >
-                  완료하기
+                  완료
                 </StyledButton>
               ) : (
                 ""

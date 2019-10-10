@@ -4,19 +4,25 @@ import deleteImg from "../../../../images/close_button.webp";
 
 const CropItemContainer = styled.div`
   min-width: 140px;
+  max-width: 140px;
   min-height: 100px;
+  max-height: 100px;
   border: 1px solid lightgrey;
-  margin: 5px;
+
+  display: flex;
+  flex-direction: column;
 
   @media (max-width: 1024px) {
     min-width: 100px;
+    max-width: 100px;
     min-height: 80px;
-    margin: 4px;
+    max-height: 80px;
   }
   @media (max-width: 500px) {
     min-width: 100px;
-    min-height: 62px;
-    margin: 2px;
+    max-width: 100px;
+    min-height: 64px;
+    max-height: 64px;
   }
 `;
 
@@ -25,6 +31,9 @@ const ImageContainer = styled.div`
   height: 70%;
   position: relative;
   text-align: center;
+
+  padding: 0px !important;
+  margin: 0px !important;
 
   display: flex;
   flex-direction: column;
@@ -36,6 +45,9 @@ const Image = styled.img`
   src: ${props => props.img};
   max-width: 100%;
   max-height: 100% !important;
+
+  padding: 0px !important;
+  margin: 0px !important;
 `;
 
 const LoadingContainer = styled.div`
@@ -61,9 +73,19 @@ const BlueInput = styled.input`
   background-color: lightblue;
   width: 100%;
   height: 30%;
+
+  padding: 0px !important;
+  margin: 0px !important;
+
   text-align: center;
-  margin: 0 !important;
-  padding: 0 !important;
+
+  border-width: 0px;
+  border-style: none;
+
+  @media (max-width: 500px) {
+    line-height: 0px;
+    font-size: 12px;
+  }
 `;
 
 class CropItem extends Component {
@@ -280,8 +302,8 @@ class CropItem extends Component {
                 position: "absolute",
                 top: "0px",
                 left: "0px",
-                width: `140px`,
-                height: `100px`,
+                width: `100%`,
+                height: `100%`,
                 zIndex: 1,
                 backgroundColor: "rgba(0, 0, 0, 0.7)"
               }}

@@ -92,9 +92,9 @@ const TaskButton = styled(StyledLink)`
       : "rgba(255, 255, 255, 0.3)"};
 `;
 
-const InsightButton = styled(StyledLink)`
+const HistoryButton = styled(StyledLink)`
   color: ${props =>
-    props.pathname.includes("/mypage/creator/History")
+    props.pathname.includes("/mypage/creator/history")
       ? "white"
       : "rgba(255, 255, 255, 0.3)"};
 `;
@@ -150,13 +150,13 @@ class CreatorPage extends Component {
               <Icon className="fas fa-crop-alt"></Icon>
               <IconTitle>Workspace</IconTitle>
             </TaskButton>
-            <InsightButton
+            <HistoryButton
               to={`${this.props.match.url}/history`}
               pathname={this.props.location.pathname}
             >
               <Icon className="fas fa-chart-bar"></Icon>
               <IconTitle>History</IconTitle>
-            </InsightButton>
+            </HistoryButton>
             <StyledLink
               to="/auth/signout"
               pathname={this.props.location.pathname}

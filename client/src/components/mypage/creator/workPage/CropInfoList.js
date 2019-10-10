@@ -4,7 +4,7 @@ import styled from "styled-components";
 
 const List = styled.div`
   width: 100%;
-  max-width: 1024px;
+  height: 100%;
 
   display: flex;
   flex-flow: row;
@@ -18,17 +18,15 @@ const EmptyBox = styled.div`
   width: 140px;
   height: 100px;
   border: 1px solid lightgrey;
-  margin: 5px;
 
   @media (max-width: 1024px) {
     width: 100px;
     height: 80px;
-    margin: 4px;
   }
   @media (max-width: 500px) {
     width: 100px;
-    height: 48px;
-    margin: 2px;
+    height: 60px;
+    margin: 0px;
   }
 `;
 
@@ -67,7 +65,7 @@ class CropInfoList extends Component {
     // CropItem 요소를 하나씩 화면에 출력해줌
     return (
       <List>
-        {cropList.length > 0 ? cropList : Array(5).fill(<EmptyBox />)}
+        {cropList.length > 0 ? cropList : Array(3).fill(<EmptyBox />)}
       </List>
     );
   }

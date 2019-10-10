@@ -28,17 +28,15 @@ const StyledDateTableCell = styled(StyledTableCell)`
   })
 `;
 
-const StyledTitleTableCell = styled(StyledTableCell)`
-  color: ${props => (props.project_type ? "black" : "blue")} !important;
-`;
-
 const StyledStatusTableCell = styled(StyledTableCell)`
   color: ${props =>
-    props.status === "created"
-      ? "blue"
-      : props.status === "done"
-      ? "green"
-      : "red"} !important;
+    props.status
+      ? props.status === "created"
+        ? "blue"
+        : props.status === "done"
+        ? "green"
+        : "red"
+      : "black"} !important;
 `;
 
 class CreatorHistoryOrig extends Component {
@@ -50,12 +48,9 @@ class CreatorHistoryOrig extends Component {
     return (
       <StyledTableRow>
         <StyledDateTableCell align="center">{created_time}</StyledDateTableCell>
-        <StyledTitleTableCell
-          align="center"
-          project_type={this.props.project_type}
-        >
+        <StyledTableCell align="center" project_type={this.props.project_type}>
           {this.props.title}({this.props.project_type ? "생성" : "검수"})
-        </StyledTitleTableCell>
+        </StyledTableCell>
         <StyledTableCell align="center">{this.props.reward}</StyledTableCell>
         <StyledStatusTableCell align="center" status={this.props.status}>
           {this.props.status ? this.props.status : "-"}

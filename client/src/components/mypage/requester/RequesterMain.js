@@ -6,6 +6,8 @@ import classnames from "classnames";
 import Chart from "chart.js";
 import { Line, Bar } from "react-chartjs-2";
 // reactstrap components
+import styled from "styled-components";
+import moment from "moment";
 
 import "../../../assets/vendor/nucleo/css/nucleo.css";
 import "../../../assets/vendor/@fortawesome/fontawesome-free/css/all.min.css";
@@ -36,6 +38,66 @@ import {
   chartExample1,
   chartExample2
 } from "../../../variables/charts.jsx";
+
+const EntireContainer = styled.div`
+  width: 100%;
+`;
+
+const EntireTitleBackground = styled.div`
+  width: 100%;
+
+  background: linear-gradient(87deg, #212529 0, #212229 100%) !important;
+`;
+
+const EntireTitleContainer = styled.div`
+  width: 92%;
+  margin: 0 auto;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding: 40px 0px;
+
+  color: black; !important;
+
+  @media(max-width: 810px){
+    width: 90%;
+  }
+  @media(max-width: 500px){
+    width: 85%;
+    padding: 24px 0px;
+  }
+`;
+
+const LeftTitleContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const LeftTitleDate = styled.div`
+  font-family: Avenir;
+  text-align: left;
+  color: #8d8d8d;
+  font-size: 16px;
+  color: white;
+
+  @media (max-width: 500px) {
+    font-size: 14px;
+  }
+`;
+
+const LeftTitle = styled.div`
+  font-family: SpoqaHanSans;
+  text-align: left;
+  font-weight: bold;
+  font-size: 32px;
+  color: white;
+
+  @media (max-width: 500px) {
+    font-size: 28px;
+  }
+`;
 
 class RequesterMain extends Component {
   constructor(props) {
@@ -106,8 +168,27 @@ class RequesterMain extends Component {
   };
 
   render() {
+    const info = this.props.info;
+
     return (
-      <div className="main-content" ref="mainContent">
+      <EntireContainer className="main-content" ref="mainContent">
+        <EntireTitleBackground>
+          <EntireTitleContainer>
+            <LeftTitleContainer>
+              <LeftTitleDate>
+                <span style={{ color: "white", fontWeight: "bold" }}>
+                  {info ? "MISSION" : "STANDALONE"}
+                </span>
+                {info
+                  ? ` ${moment(info.created_at).format(
+                      "YYYY-MM-DD"
+                    )} - ${moment(info.due_date).format("YYYY-MM-DD")}`
+                  : ""}
+              </LeftTitleDate>
+              <LeftTitle>{info ? info.title : "이미지 라벨링"}</LeftTitle>
+            </LeftTitleContainer>
+          </EntireTitleContainer>
+        </EntireTitleBackground>
         <Header data={this.state.data} />
         {/* Page content */}
         <Container className="mt--7" fluid>
@@ -376,7 +457,7 @@ class RequesterMain extends Component {
         <Container fluid>
           <AdminFooter />
         </Container>
-      </div>
+      </EntireContainer>
     );
   }
 }

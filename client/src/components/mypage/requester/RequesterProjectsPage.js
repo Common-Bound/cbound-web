@@ -10,36 +10,63 @@ import TableRow from "@material-ui/core/TableRow";
 
 const Container = styled.div`
   width: 100%;
-  height: 100vh;
+  height: 100%;
 `;
 
 const TitleContainer = styled.div`
   width: 80%;
+  padding-top: 40px;
+  padding-bottom: 40px;
   margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
 
   color: black; !important;
+
+  @media(max-width: 810px){
+    padding-top: 24px;
+    padding-bottom: 24px;
+  }
 `;
 
+const LeftTitleContainer = styled.div``;
+
 const Title = styled.div`
-  padding-top: 40px;
   font-family: Avenir;
   font-size: 20px;
   font-weight: bold;
+
+  @media (max-width: 500px) {
+    font-size: 16px;
+  }
 `;
 
 const SemiTitle = styled.div`
-  padding-bottom: 40px;
   font-family: SpoqaHanSans;
   font-size: 32px;
   font-weight: bold;
+  word-break: keep-all;
+
+  @media (max-width: 500px) {
+    font-size: 24px;
+  }
 `;
+
+const RightTitleContainer = styled.div``;
 
 const TableContainer = styled.div`
   width: 80%;
-  height: 600px;
+  height: 60vh;
+
   margin: 0 auto;
+
   overflow: scroll;
   text-align: center;
+
+  @media (max-width: 500px) {
+    height: 56vh;
+  }
 `;
 
 const StyledTableHead = styled(TableHead)`
@@ -49,10 +76,20 @@ const StyledTableHead = styled(TableHead)`
 const StyledTableCell = styled(TableCell)`
   color: rgba(255, 255, 255, 0.6) !important;
   font-family: Avenir;
+  word-break: keep-all;
+  font-size: 14px !important;
+
+  @media (max-width: 500px) {
+    padding: 8px !important;
+    font-size: 12px !important;
+  }
 `;
 
 const CreateProjectButton = styled(Button)`
-  float: right;
+  @media (max-width: 500px) {
+    padding: 0.5rem 1rem !important;
+    font-size: 12px !important;
+  }
 `;
 
 class RequesterProjectsPage extends Component {
@@ -129,9 +166,11 @@ class RequesterProjectsPage extends Component {
     return (
       <Container>
         <TitleContainer>
-          <Title>Requested Projects</Title>
-          <SemiTitle>
-            생성한 프로젝트
+          <LeftTitleContainer>
+            <Title>Requested Projects</Title>
+            <SemiTitle>생성한 프로젝트</SemiTitle>
+          </LeftTitleContainer>
+          <RightTitleContainer>
             <CreateProjectButton
               color="primary"
               onClick={() => {
@@ -140,18 +179,17 @@ class RequesterProjectsPage extends Component {
             >
               프로젝트 생성
             </CreateProjectButton>
-          </SemiTitle>
+          </RightTitleContainer>
         </TitleContainer>
 
         <TableContainer>
           <Table>
             <StyledTableHead>
               <TableRow>
-                <StyledTableCell align="center">KICK-OFF</StyledTableCell>
-                {/* <StyledTableCell align="center">ROLE</StyledTableCell> */}
-                <StyledTableCell align="center">TITLE</StyledTableCell>
-                <StyledTableCell align="center">POINT</StyledTableCell>
-                <StyledTableCell align="center">DUE</StyledTableCell>
+                <StyledTableCell align="center">날짜</StyledTableCell>
+                <StyledTableCell align="center">제목</StyledTableCell>
+                <StyledTableCell align="center">포인트</StyledTableCell>
+                <StyledTableCell align="center">마감</StyledTableCell>
               </TableRow>
             </StyledTableHead>
             <TableBody>{this.state.projects}</TableBody>

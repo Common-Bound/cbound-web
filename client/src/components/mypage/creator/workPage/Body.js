@@ -32,7 +32,7 @@ const MainContainer = styled.div`
 `;
 
 const LeftMainContainer = styled.div`
-  width: 90%;
+  width: 100%;
 
   display: flex;
   flex-direction: column;
@@ -71,9 +71,6 @@ const ButtonContainer = styled.div`
   height: 50px;
   margin: 5px;
 
-  background-color: black;
-  color: white;
-
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -84,15 +81,31 @@ const ButtonContainer = styled.div`
   border-radius: 5px;
   cursor: pointer;
 
-  :hover {
-    background-color: white;
-    color: black;
-  }
   @media (max-width: 500px) {
     width: 28px;
     height: 28px;
     margin-left: 8px;
   }
+`;
+
+const CropButtonContainer = styled(ButtonContainer)`
+  background-color: black;
+  color: white;
+
+  :hover {
+    background-color: white;
+    color: black;
+  }
+`;
+
+const ShowButtonContainer = styled(ButtonContainer)`
+  background-color: ${props => (props.isShow ? "black" : "white")};
+  color: ${props => (props.isShow ? "white" : "black")};
+`;
+
+const AIButtonContainer = styled(ButtonContainer)`
+  background-color: ${props => (props.isAI ? "white" : "black")};
+  color: ${props => (props.isAI ? "black" : "white")};
 `;
 
 const Icon = styled.i`
@@ -162,6 +175,7 @@ const ImageContainer = styled.div`
   border: ${props => (props.show ? "5px solid lightgrey" : "none")};
 
   @media (max-width: 500px) {
+    border: none;
   }
 `;
 
@@ -178,8 +192,17 @@ const LoadingContainer = styled.div`
 
 const CropListContainer = styled.div`
   width: 100%;
+  min-height: 100px;
+
   display: flex;
   justify-content: space-between;
+
+  @media (max-width: 1024px) {
+    min-height: 80px;
+  }
+  @media (max-width: 500px) {
+    min-height: 60px;
+  }
 `;
 
 class Body extends Component {
@@ -629,17 +652,20 @@ class Body extends Component {
     if (!this.state.crop.height) {
       return;
     }
-    var button = document.createElement("Button");
+
+    const crop_button = document.getElementById("crop_button");
+    const button = crop_button.cloneNode(true);
+
     button.style.position = "fixed";
     button.style.left = e.clientX - 35 + "px";
     button.style.top = e.clientY - 35 + "px";
-    button.style.width = "70px";
-    button.style.height = "70px";
-    button.style.backgroundColor = "white";
-    button.style.color = "black";
-    button.style.borderRadius = "100%";
+    button.style.width = "50px";
+    button.style.height = "50px";
+    // button.style.backgroundColor = "black";
+    // button.style.color = "white";
+    // button.style.borderRadius = "100%";
     button.style.transition = "0.3s";
-    button.style.textAlign = "center";
+    // button.style.textAlign = "center";
 
     button.onclick = () => {
       this.handleOnCropComplete();
@@ -649,7 +675,7 @@ class Body extends Component {
     button.onmouseout = () => {
       document.body.removeChild(button);
     };
-    button.innerHTML = "BOUND";
+    // button.innerHTML = "BOUND";
 
     document.body.appendChild(button);
 
@@ -676,6 +702,12 @@ class Body extends Component {
         timer: new Date().getTime()
       });
     }
+  }
+
+  toggleAI() {
+    this.setState({
+      useAI: !this.state.useAI
+    });
   }
 
   render() {
@@ -758,86 +790,23 @@ class Body extends Component {
           </LeftMainContainer>
           {/* Main Container 의 오른쪽 영역 */}
           <RightDescriptionContainer>
-            {/* <DescriptionBoxContainer>
-              <DescriptionBox>
-                텍스트 감지 AI 어시스턴트
-                <label className="switch">
-                  <input
-                    type="checkbox"
-                    name="useAI"
-                    onChange={this.handleChange}
-                    checked={this.state.useAI}
-                  />
-                  <StyledSpan className="slider round" />
-                </label>
-              </DescriptionBox>
-            </DescriptionBoxContainer>
-            <DescriptionBoxContainer>
-              <DescriptionBox>
-                - 이미지에서 추출할 영역을 드래그하여 지정하세요.
-              </DescriptionBox>
-              <DescriptionBox>
-                - 썸네일 아래의 <span style={{ color: "blue" }}>블루박스</span>
-                에 라벨 값을 입력하고{" "}
-                <span style={{ fontWeight: "bold" }}>ENTER</span>키를 누르세요.{" "}
-                <span style={{ fontWeight: "bold" }}>SHOW</span> 버튼을 눌러
-                라벨링 된 이미지를 확인하세요.
-              </DescriptionBox>
-              <DescriptionBox>
-                - 바구니에 추가된 썸네일을 클릭하여 해당 영역을 수정하고,
-                불필요한 영역은 오른쪽 위의{" "}
-                <span style={{ fontWeight: "bold" }}>X</span> 버튼을 눌러
-                삭제하세요.
-              </DescriptionBox>
-            </DescriptionBoxContainer>
-            <ButtonContainer>
-              <BoundButton
-                type="button"
-                onClick={this.handleOnCropComplete}
-                id="store"
-                data-intro={
-                  this.props.index === 0
-                    ? "영역을 추가하려면 BOUND 버튼을 누르세요."
-                    : undefined
-                }
-                data-step="2"
-                data-disable-interaction="true"
-              >
-                BOUND
-              </BoundButton>
-              {this.state.showEdit && this.props.orig_image_file ? (
-                <ShowButton
-                  type="button"
-                  onClick={() => {
-                    this.setState({
-                      crop: {},
-                      showEdit: false
-                    });
-                  }}
-                  data-intro={
-                    this.props.index === 0
-                      ? "라벨링 된 이미지를 확인하려면 SHOW 버튼을 누르세요."
-                      : undefined
-                  }
-                  data-step="3"
-                  data-disable-interaction="true"
-                >
-                  SHOW
-                </ShowButton>
-              ) : null}
-            </ButtonContainer> */}
-            <ButtonContainer>
+            <AIButtonContainer
+              isAI={this.state.useAI}
+              onClick={this.toggleAI.bind(this)}
+              data-intro={
+                this.props.index === 0
+                  ? "AI 버튼을 누르면 AI 어시스턴트가 텍스트를 자동으로 인식합니다"
+                  : undefined
+              }
+              data-step="4"
+              data-disable-interaction="true"
+            >
               <Icon className="fas fa-robot"></Icon>
-              <input
-                type="checkbox"
-                name="useAI"
-                onChange={this.handleChange}
-                checked={this.state.useAI}
-              />
 
               <IconTitle>AI</IconTitle>
-            </ButtonContainer>
-            <ButtonContainer
+            </AIButtonContainer>
+            <ShowButtonContainer
+              isShow={this.state.showEdit}
               onClick={() => {
                 this.setState({
                   crop: {},
@@ -854,7 +823,22 @@ class Body extends Component {
             >
               <Icon className="far fa-eye"></Icon>
               <IconTitle>SHOW</IconTitle>
-            </ButtonContainer>
+            </ShowButtonContainer>
+            <CropButtonContainer
+              id="crop_button"
+              isShow={this.state.showEdit}
+              onClick={this.handleOnCropComplete.bind(this)}
+              data-intro={
+                this.props.index === 0
+                  ? "드래그한 영역을 추가하려면 CROP 버튼을 누르세요."
+                  : undefined
+              }
+              data-step="2"
+              data-disable-interaction="true"
+            >
+              <Icon className="fas fa-crop-alt"></Icon>
+              <IconTitle>CROP</IconTitle>
+            </CropButtonContainer>
           </RightDescriptionContainer>
         </MainContainer>
         {/* 크롭된 이미지가 보여지는 영역 */}

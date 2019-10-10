@@ -5,6 +5,11 @@ import styled from "styled-components";
 
 const WorkContainer = styled.div`
   width: 100%;
+  height: 100%;
+
+  overflow: scroll;
+
+  border: 2px solid black;
 `;
 
 class InsightPage extends Component {
