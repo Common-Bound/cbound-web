@@ -44,7 +44,6 @@ class CreateProjectPage extends Component {
 
     const data = {
       title: this.state.title,
-      title_image: this.state.image,
       simple_description: this.state.simpleDesc,
       detail_description: this.state.detailDesc,
       due_date: this.state.dueDate,
@@ -53,13 +52,14 @@ class CreateProjectPage extends Component {
       reward: this.state.cost
     };
 
+    const formData = new FormData();
+    formData.append("title_image", this.state.image);
+    formData.append("info", data);
+
     const url = `/api${this.props.match.path}`;
     await fetch(url, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(data)
+      body: formData
     })
       .then(res => res.json())
       .then(data => {
