@@ -54,7 +54,7 @@ class CreateProjectPage extends Component {
 
     const formData = new FormData();
     formData.append("title_image", this.state.image);
-    formData.append("info", data);
+    formData.append("info", JSON.stringify(data));
 
     const url = `/api${this.props.match.path}`;
     await fetch(url, {

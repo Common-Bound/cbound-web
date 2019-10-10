@@ -49,8 +49,8 @@ router.post(
     }
     const normal_id = uuid();
     const inspection_id = uuid();
-    const info = req.info;
-    const user_id = info.user.id;
+    const info = JSON.parse(req.body.info);
+    const user_id = req.user.id;
     const title_image = req.file.location;
 
     var created_at = moment()
@@ -90,7 +90,7 @@ router.post(
             inspection_id,
             normal_id,
             info.title,
-            info.title_image,
+            title_image,
             info.simple_description,
             info.detail_description,
             due_date,
