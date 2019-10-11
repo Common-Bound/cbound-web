@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import "./Header.css";
 
 //import logo from "../../images/logo_2.webp";
 //import name from "../../images/COMMONBOUND.webp";
@@ -74,30 +75,6 @@ const LoginButton = styled(Link)`
   }
 `;
 
-const ProfileButton = styled.div`
-  margin-right: 10%;
-  width: 32px;
-  height: 32px;
-  border-radius: 100%;
-  border: 1px solid white;
-
-  font-size: 18px;
-  text-align: center;
-  color: white;
-
-  transition: 0.5s;
-
-  text-decoration: none !important;
-  :hover {
-    background-color: white;
-    color: black;
-  }
-
-  @media (max-width: 500px) {
-    display: none;
-  }
-`;
-
 class Header extends Component {
   render() {
     return (
@@ -117,7 +94,14 @@ class Header extends Component {
         {this.props.page === "main" ? (
           <LoginButton to="/signin/select">Sign In</LoginButton>
         ) : (
-          <ProfileButton />
+          <div class="dropdown">
+            <button class="dropbtn"></button>
+            <div class="dropdown-content">
+              <a href="#">프로필</a>
+              <a href="#">포인트</a>
+              <a href="#">개인정보 변경</a>
+            </div>
+          </div>
         )}
       </HeaderContainer>
     );

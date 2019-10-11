@@ -5,6 +5,7 @@ import WorkPage from "./creator/workPage/WorkPage";
 import AvailableProjects from "./creator/availableProjectsPage/AvailableProjects";
 import CreatorHistoryPage from "./creator/historyPage/CreatorHistoryPage";
 import styled from "styled-components";
+import Header from "../main/Header";
 
 const Container = styled.div`
   width: 100%;
@@ -127,6 +128,7 @@ class CreatorPage extends Component {
     console.log(this.props.match.url);
     return (
       <Container>
+        <Header page="creator" />
         <MainContainer>
           <LeftBanner>
             <AllProjectButton

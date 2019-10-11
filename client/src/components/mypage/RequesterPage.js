@@ -3,6 +3,8 @@ import { Route, Link } from "react-router-dom";
 import RequesterProjectsPage from "./requester/RequesterProjectsPage";
 import CreateProjectPage from "./requester/CreateProjectPage";
 import InsightPage from "./requester/InsightPage";
+
+import Header from "../main/Header";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -104,6 +106,7 @@ class RequesterPage extends React.Component {
   render() {
     return (
       <Container>
+        <Header page="requester" />
         <MainContainer>
           <LeftBanner>
             <MyProjectButton

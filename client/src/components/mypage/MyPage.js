@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { Switch, Route } from "react-router-dom";
 import styled from "styled-components";
-import Header from "../main/Header";
 import CreatorPage from "./CreatorPage";
 import RequesterPage from "./RequesterPage";
 import notFound from "../notFound";
@@ -15,7 +14,6 @@ class MyPage extends Component {
     console.log(this.props.match.url);
     return (
       <Container>
-        <Header page="mypage" />
         <Switch>
           <Route
             path={`${this.props.match.url}/creator`}
