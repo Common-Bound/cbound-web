@@ -38,9 +38,12 @@ const LeftBanner = styled.div`
   z-index: 1;
 
   @media (max-width: 1024px) {
+    position: relative;
     width: 100%;
     height: 8vh;
     bottom: 0px;
+
+    z-index: 0;
 
     flex-direction: row;
     justify-content: space-between;

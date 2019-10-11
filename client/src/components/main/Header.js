@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import "./Header.css";
 
 //import logo from "../../images/logo_2.webp";
 //import name from "../../images/COMMONBOUND.webp";
@@ -75,42 +74,212 @@ const LoginButton = styled(Link)`
   }
 `;
 
+const ProfileButton = styled.div`
+  position: relative;
+  margin-right: 10%;
+
+  font-size: 18px;
+  text-align: center;
+
+  transition: 0.5s;
+
+  text-decoration: none !important;
+
+  @media (max-width: 500px) {
+    position: absolute;
+    top: 1vh;
+    right: 1vh;
+
+    margin-right: 0;
+  }
+`;
+
+const Identicon = styled.svg`
+  width: 48px;
+  height: 48px;
+
+  background-color: white;
+
+  @media (max-width: 500px) {
+    display: none;
+  }
+`;
+
+const MobileIdenticon = styled.svg`
+  width: 96px;
+  height: 96px;
+
+  background-color: white;
+`;
+
+const DropDown = styled.div`
+  position: absolute;
+  top: 48px;
+  right: 0;
+  width: 200px;
+
+  display: ${props => (props.show ? "flex" : "none")};
+  flex-direction: column;
+
+  background-color: #f1f1f1;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+
+  transition: 0.5s;
+
+  @media (max-width: 500px) {
+    display: none;
+  }
+`;
+
+const DropDownContent = styled.div`
+  width: 100%;
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+
+  :hover {
+    background-color: #ddd;
+  }
+`;
+
+const MobileProfileButtonContainer = styled.div`
+  width: 36px;
+  height: 36px;
+  display: none;
+
+  @media (max-width: 500px) {
+    display: block;
+  }
+`;
+
+const MobileProfileButton = styled.div`
+  width: 28px;
+  height: 2px;
+  background-color: white;
+  margin: 8px 0;
+`;
+
+const MobileMenuBackground = styled.div`
+  position: absolute;
+  display: none;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: 2 !important;
+
+  background-color: rgba(0, 0, 0, 0.7);
+  @media (max-width: 500px) {
+    display: ${props => (props.show ? "block" : "none")};
+  }
+`;
+
+const MobileMenuContainer = styled.div`
+  position: absolute;
+  top: 0;
+  right: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  width: 70%;
+  height: 100vh;
+
+  opacity: 1;
+  z-index: 3 !important;
+`;
+
+const MobileInfoContainer = styled.div`
+  width: 100%;
+  height: 30vh;
+  padding: 20px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+
+  background-color: black;
+  color: white;
+`;
+
+const MobileButtonContainer = styled.div`
+  width: 100%;
+  height: 70vh;
+
+  background-color: white;
+  color: black;
+`;
+
+const MobileButton = styled.div`
+  padding: 20px;
+
+  text-decoration: none;
+
+  :hover {
+    background-color: #ddd;
+  }
+`;
+
+const XButton = styled.div`
+  position: absolute;
+  top: 1vh;
+  right: 1vh;
+  text-align: center;
+
+  color: white;
+
+  width: 36px;
+  height: 36px;
+`;
+
 class Header extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: undefined
+      user_id: "",
+      email: "",
+      point: undefined,
+      showDropDown: false
     };
   }
 
   fetchData = async () => {
-    const url = `/api${this.props.location}/point`;
+    const url = `/api${this.props.location.pathname}/point`;
     console.log(this.props);
 
     const result = await fetch(url)
       .then(res => res.json())
       .then(data => {
-        console.log(data);
-
         return new Promise(resolve => resolve(data.result));
       })
       .catch(err => {
         console.log(err);
       });
 
-    await this.setState(
-      {
-        data: result
-      },
-      console.log(this.state.data)
-    );
+    await this.setState({
+      user_id: result.id,
+      email: result.email,
+      point: result.point
+    });
+    console.log(this.state.user_id, this.state.email, this.state.point);
   };
 
   componentWillMount = async () => {
-    await this.fetchData();
+    if (this.props.page === "creator") {
+      await this.fetchData();
+    }
+  };
+
+  handleClick = () => {
+    this.setState({
+      showDropDown: !this.state.showDropDown
+    });
   };
 
   render() {
+    const { user_id, email, point, showDropDown } = this.state;
     return (
       <HeaderContainer>
         <Logo
@@ -128,16 +297,37 @@ class Header extends Component {
         {this.props.page === "main" ? (
           <LoginButton to="/signin/select">Sign In</LoginButton>
         ) : (
-          <div class="dropdown">
-            <button class="dropbtn"></button>
-            <div class="dropdown-content">
-              <a href="#">프로필</a>
-              <a href="#">포인트</a>
-              <a href="#">개인정보 변경</a>
-            </div>
-            {this.state.data}
-          </div>
+          <ProfileButton>
+            <MobileProfileButtonContainer onClick={this.handleClick.bind(this)}>
+              <MobileProfileButton></MobileProfileButton>
+              <MobileProfileButton></MobileProfileButton>
+              <MobileProfileButton></MobileProfileButton>
+            </MobileProfileButtonContainer>
+            <Identicon
+              onClick={this.handleClick.bind(this)}
+              data-jdenticon-value={user_id}
+            ></Identicon>
+            <DropDown show={showDropDown}>
+              <DropDownContent>프로필</DropDownContent>
+              <DropDownContent>{point} P</DropDownContent>
+              <DropDownContent>개인정보 변경</DropDownContent>
+            </DropDown>
+          </ProfileButton>
         )}
+        <MobileMenuBackground show={showDropDown}>
+          <MobileMenuContainer className="animated slideInRight fast">
+            <XButton onClick={this.handleClick.bind(this)}>&#10005;</XButton>
+            <MobileInfoContainer>
+              <MobileIdenticon data-jdenticon-value={user_id}></MobileIdenticon>
+              {email}
+            </MobileInfoContainer>
+            <MobileButtonContainer>
+              <MobileButton>프로필</MobileButton>
+              <MobileButton>{point} P</MobileButton>
+              <MobileButton>개인정보 변경</MobileButton>
+            </MobileButtonContainer>
+          </MobileMenuContainer>
+        </MobileMenuBackground>
       </HeaderContainer>
     );
   }

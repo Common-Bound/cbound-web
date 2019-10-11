@@ -59,10 +59,6 @@ app.use("/api", apiRouter);
 app.use("/cmd", cmdRouter);
 
 app.get("/*", (req, res, next) => {
-  console.log(
-    "만약 이 코드가 Gitlab CI deploy 이후 반영이 되어있다면 이는 제대로 배포가 되었음을 의미한다."
-  );
-  console.log("deploy test");
   res.sendFile(path.join(__dirname, "client/build/index.html"), function(err) {
     if (err) {
       logger.error(err);
