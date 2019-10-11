@@ -76,6 +76,40 @@ const LoginButton = styled(Link)`
 `;
 
 class Header extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      data: undefined
+    };
+  }
+
+  fetchData = async () => {
+    const url = `/api${this.props.location}/point`;
+    console.log(this.props);
+
+    const result = await fetch(url)
+      .then(res => res.json())
+      .then(data => {
+        console.log(data);
+
+        return new Promise(resolve => resolve(data.result));
+      })
+      .catch(err => {
+        console.log(err);
+      });
+
+    await this.setState(
+      {
+        data: result
+      },
+      console.log(this.state.data)
+    );
+  };
+
+  componentWillMount = async () => {
+    await this.fetchData();
+  };
+
   render() {
     return (
       <HeaderContainer>
@@ -101,6 +135,7 @@ class Header extends Component {
               <a href="#">포인트</a>
               <a href="#">개인정보 변경</a>
             </div>
+            {this.state.data}
           </div>
         )}
       </HeaderContainer>

@@ -128,7 +128,7 @@ class CreatorPage extends Component {
     console.log(this.props.match.url);
     return (
       <Container>
-        <Header page="creator" />
+        <Header page="creator" location={this.props.location} />
         <MainContainer>
           <LeftBanner>
             <AllProjectButton
