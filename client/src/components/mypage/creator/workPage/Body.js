@@ -9,6 +9,7 @@ import "react-image-crop/dist/ReactCrop.css";
 import "./Body.css";
 import { setTimeout } from "timers";
 import uuid from "uuid/v4";
+import AIServerEndpoint from "../../../../AIServerEndpoint";
 
 const BodyContainer = styled.div`
   width: 100%;
@@ -487,7 +488,7 @@ class Body extends Component {
       loading: true
     });
 
-    const detectionEndpoint = "http://c-bound.io:8000/ocr/detection/";
+    const detectionEndpoint = `${AIServerEndpoint.url}/ocr/detection/`;
     await fetch(detectionEndpoint, {
       method: "POST",
       body: JSON.stringify({
@@ -524,7 +525,7 @@ class Body extends Component {
     );
     console.log(crop_image_base64_encodings);
 
-    const recognitionEndpoint = "http://c-bound.io:8000/ocr/recognition/";
+    const recognitionEndpoint = `${AIServerEndpoint.url}/ocr/recognition/`;
     const recognitionResult = await fetch(recognitionEndpoint, {
       method: "POST",
       body: JSON.stringify({
@@ -555,7 +556,7 @@ class Body extends Component {
     });
 
     // STEP 3: label값과 ai_label값의 유사도를 가져온다
-    const compareStringEndpoint = "http://c-bound.io:8000/ocr/compare_string/";
+    const compareStringEndpoint = `${AIServerEndpoint.url}/ocr/compare_string/`;
     await fetch(compareStringEndpoint, {
       method: "POST",
       body: JSON.stringify({
