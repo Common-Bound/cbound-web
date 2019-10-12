@@ -227,11 +227,11 @@ class CropItem extends Component {
     await this.setState({ imgSrc: await this.getCroppedImg(image, crop) });
     //console.log("crop!" + crop.x);
 
-    const bodyData = JSON.stringify({
-      crop_image: this.state.imgSrc,
-      id: this.props.crop.shape_attributes.id,
-      label: this.props.crop.region_attributes.label
-    });
+    // const bodyData = JSON.stringify({
+    //   crop_image: this.state.imgSrc,
+    //   id: this.props.crop.shape_attributes.id,
+    //   label: this.props.crop.region_attributes.label
+    // });
 
     /*if (this.props.useAI) {
       this.setState({
