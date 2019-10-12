@@ -46,7 +46,7 @@ router.post(
   (req, res, next) => {
     const user_id = req.user.id;
     let meta = JSON.parse(req.body.meta);
-    let ai_total_size = req.body.ai_total_size;
+    let ai_total_size = Number(req.body.ai_total_size);
     let crop_image = meta.crop_image; // [ {x: 0, y: 0, ... }, {}, ... ]
     let total_size = 0;
     // let total_width = 0;

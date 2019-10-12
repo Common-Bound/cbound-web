@@ -227,13 +227,13 @@ class CropItem extends Component {
     await this.setState({ imgSrc: await this.getCroppedImg(image, crop) });
     //console.log("crop!" + crop.x);
 
-    // const bodyData = JSON.stringify({
-    //   crop_image: this.state.imgSrc,
-    //   id: this.props.crop.shape_attributes.id,
-    //   label: this.props.crop.region_attributes.label
-    // });
+    const bodyData = JSON.stringify({
+      crop_image: this.state.imgSrc,
+      id: this.props.crop.shape_attributes.id,
+      label: this.props.crop.region_attributes.label
+    });
 
-    /*if (this.props.useAI) {
+    if (this.props.useAI) {
       this.setState({
         editing: true
       });
@@ -241,7 +241,7 @@ class CropItem extends Component {
         bodyData,
         `/api/mypage/creator/task/normal/recognition`
       );
-    }*/
+    }
   }
 
   // 크롭 변경 대상이고 새로 변경할 영역이 들어왔다면 imgSrc 를 바꿔줌
