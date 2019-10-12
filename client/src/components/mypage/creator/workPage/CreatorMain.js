@@ -292,7 +292,8 @@ class CreatorMain extends Component {
       format: "", // EXPORT 할 때의 데이터 포맷
       time_counter: [], // 각 이미지를 작업하는데 걸린 시간
       timer: 0,
-      pre_select: 0
+      pre_select: 0,
+      loading: false
     };
     this.Refs = [];
   }
@@ -418,6 +419,10 @@ class CreatorMain extends Component {
 
   // 작업한 내용 전부를 서버로 전송함
   handleSendAll = async () => {
+    await this.setState({
+      loading: true
+    });
+
     let isCropped = true;
     // 작업 량이 최소 1개 이상이여야 함
     this.Refs.forEach(body => {
@@ -621,6 +626,9 @@ class CreatorMain extends Component {
         );
       });
       await Promise.all(bodyPromises);
+      await this.setState({
+        loading: false
+      });
       window.location.reload();
     }
 
@@ -747,6 +755,7 @@ class CreatorMain extends Component {
                   data-step="6"
                   data-disable-interaction="true"
                   data-position="left"
+                  disabled={this.state.loading}
                 >
                   완료
                 </StyledButton>

@@ -9,6 +9,7 @@ import "react-image-crop/dist/ReactCrop.css";
 import "./Body.css";
 import { setTimeout } from "timers";
 import uuid from "uuid/v4";
+import AIServerEndpoint from "../../../../AIServerEndpoint";
 
 const BodyContainer = styled.div`
   width: 100%;
@@ -487,9 +488,12 @@ class Body extends Component {
       loading: true
     });
 
-    const detectionEndpoint = "http://c-bound.io:8000/ocr/detection/";
+    const detectionEndpoint = `/api/mypage/creator/task/normal`;
     await fetch(detectionEndpoint, {
       method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
       body: JSON.stringify({
         orig_image: this.props.orig_image_base64,
         id: uuid()
@@ -498,7 +502,7 @@ class Body extends Component {
       .then(res => res.json())
       .then(async data => {
         console.log(data);
-        const ai_total_size = data.meta[0].ai_total_size;
+        const ai_total_size = data.data.meta[0].ai_total_size;
 
         await this.setState({
           ai_total_size: ai_total_size
@@ -524,9 +528,12 @@ class Body extends Component {
     );
     console.log(crop_image_base64_encodings);
 
-    const recognitionEndpoint = "http://c-bound.io:8000/ocr/recognition/";
+    const recognitionEndpoint = `/api/mypage/creator/task/normal/recognition`;
     const recognitionResult = await fetch(recognitionEndpoint, {
       method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
       body: JSON.stringify({
         id: uuid(),
         crop_image: crop_image_base64_encodings
@@ -536,7 +543,7 @@ class Body extends Component {
       .then(data => {
         console.log(data);
 
-        return new Promise(resolve => resolve(data));
+        return new Promise(resolve => resolve(data.data));
       })
       .catch(err => {
         console.log(err);
@@ -555,9 +562,12 @@ class Body extends Component {
     });
 
     // STEP 3: label값과 ai_label값의 유사도를 가져온다
-    const compareStringEndpoint = "http://c-bound.io:8000/ocr/compare_string/";
+    const compareStringEndpoint = `/api/mypage/creator/task/normal/compare_string`;
     await fetch(compareStringEndpoint, {
       method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
       body: JSON.stringify({
         label: this.state.crop_image.map(crop => crop.region_attributes.label),
         ai_label: this.state.crop_image.map(
@@ -571,7 +581,7 @@ class Body extends Component {
         new_crop_image = this.state.crop_image;
         let new_crop_image_promises = await new_crop_image.map(
           (crop, index) => {
-            crop.region_attributes.similarity = data.similarity[index];
+            crop.region_attributes.similarity = data.data.similarity[index];
             return new Promise(resolve => resolve(crop));
           }
         );
@@ -590,16 +600,6 @@ class Body extends Component {
 
     console.log("new_crop_image: ", this.state.crop_image);
     bodyData.append("orig_image", this.props.orig_image_file);
-
-    // 이미지 좌표를 원래 이미지 사이즈에 맞게 리사이즈 한 후 저장해야 한다
-    // 만약
-    // if (this.state.imageRef.naturalWidth > 640) {
-    //   new_crop_image = await this.resizeCropLocation(
-    //     this.state.imageRef.naturalWidth,
-    //     this.state.crop_image
-    //   );
-    // }
-
     bodyData.append(
       "meta",
       await JSON.stringify({ crop_image: this.state.crop_image })

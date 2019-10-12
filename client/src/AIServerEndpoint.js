@@ -5,4 +5,4 @@ const endpoint = {
       : "http://c-bound.io:8000"
 };
 
-module.exports = endpoint;
+export default endpoint;
