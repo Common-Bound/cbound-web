@@ -621,7 +621,7 @@ class CreatorMain extends Component {
         );
       });
       await Promise.all(bodyPromises);
-      window.location.reload();
+      // window.location.reload();
     }
 
     alert("작업이 완료되었습니다.");

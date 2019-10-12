@@ -19,6 +19,7 @@ router.use("/complete", completeRouter);
 // path: ~/api/mypage/creator/task/normal
 // 파일 최초 업로드 요청 핸들링
 router.post("/", upload_mem.single("orig_image"), (req, res, next) => {
+  console.log("body: ", req.body);
   const imageSrc = req.body.orig_image;
   const id = uuid();
   const url = `${endpoint.url}/ocr/detection/`;
@@ -35,7 +36,7 @@ router.post("/", upload_mem.single("orig_image"), (req, res, next) => {
     })
     .catch(err => {
       logger.error(err);
-      return res.json(500).json({ error: err });
+      return res.status(500).json({ error: err });
     });
 });
 
@@ -49,6 +50,28 @@ router.post("/recognition", (req, res, next) => {
       id: id,
       crop_image: imageSrc,
       method: "post"
+    })
+    .then(res => res.data)
+    .then(data => {
+      console.log(data);
+      return res.json({ data: data });
+    })
+    .catch(err => {
+      logger.error(err);
+      return res.status(500).json({ error: err });
+    });
+});
+
+router.post("/compare_string", (req, res, next) => {
+  const label = req.body.label;
+  const ai_label = req.body.ai_label;
+  const url = `${endpoint.url}/ocr/compare_string/`;
+
+  axios
+    .post(url, {
+      method: "post",
+      label: label,
+      ai_label: ai_label
     })
     .then(res => res.data)
     .then(data => {

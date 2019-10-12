@@ -40,13 +40,10 @@ class PrintTotalCrop extends Component {
   async startWork() {
     const canvas = document.createElement("canvas");
     const { crops, image } = this.props;
-    console.log(image);
     //console.log("crops: ", crops);
 
     const scaleX = image.naturalWidth / image.width;
     const scaleY = image.naturalHeight / image.height;
-    console.log("scaleX: ", scaleX);
-    console.log("scaleY: ", scaleY);
 
     canvas.width = image.width;
     canvas.height = image.height;
