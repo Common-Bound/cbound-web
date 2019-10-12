@@ -405,7 +405,7 @@ class Body extends Component {
                   height: cropData.height * scaleY
                 },
                 region_attributes: {
-                  label: this.state.label
+                  label: ""
                 }
               };
             } else return crop;

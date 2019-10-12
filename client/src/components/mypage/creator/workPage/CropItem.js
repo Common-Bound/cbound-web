@@ -248,7 +248,6 @@ class CropItem extends Component {
   async componentDidUpdate(prevProps) {
     if (prevProps.crop !== this.props.crop) {
       const { image, crop } = this.props;
-
       if (
         crop.shape_attributes.x !== prevProps.crop.shape_attributes.x ||
         crop.shape_attributes.y !== prevProps.crop.shape_attributes.y ||
@@ -267,7 +266,8 @@ class CropItem extends Component {
 
       if (
         this.props.useAI &&
-        this.props.crop.region_attributes.label !== this.state.label
+        (this.props.crop.region_attributes.label !== this.state.label ||
+          this.state.label === "")
       ) {
         // console.log("UPDATE");
         this.setState({
