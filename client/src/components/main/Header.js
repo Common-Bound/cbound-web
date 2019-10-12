@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
+import { Redirect, Link } from "react-router-dom";
 import styled from "styled-components";
 
 //import logo from "../../images/logo_2.webp";
@@ -241,17 +241,25 @@ class Header extends Component {
       user_id: "",
       email: "",
       point: undefined,
-      showDropDown: false
+      showDropDown: false,
+      redirect: false
     };
   }
 
   fetchData = async () => {
-    const url = `/api${this.props.location.pathname}/point`;
+    const url = `/api/mypage/creator/point`;
     console.log(this.props);
 
     const result = await fetch(url)
       .then(res => res.json())
-      .then(data => {
+      .then(async data => {
+        console.log("data: ", data);
+        if (data.result === false) {
+          alert("로그인 해주세요");
+          await this.setState({
+            redirect: true
+          });
+        }
         return new Promise(resolve => resolve(data.result));
       })
       .catch(err => {
@@ -263,7 +271,6 @@ class Header extends Component {
       email: result.email,
       point: result.point
     });
-    console.log(this.state.user_id, this.state.email, this.state.point);
   };
 
   componentWillMount = async () => {
@@ -328,6 +335,7 @@ class Header extends Component {
             </MobileButtonContainer>
           </MobileMenuContainer>
         </MobileMenuBackground>
+        {this.state.redirect ? <Redirect to="/auth/select" /> : undefined}
       </HeaderContainer>
     );
   }

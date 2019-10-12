@@ -46,6 +46,7 @@ router.post(
   (req, res, next) => {
     const user_id = req.user.id;
     let meta = JSON.parse(req.body.meta);
+    let ai_total_size = req.body.ai_total_size;
     let crop_image = meta.crop_image; // [ {x: 0, y: 0, ... }, {}, ... ]
     let total_size = 0;
     // let total_width = 0;
@@ -65,6 +66,8 @@ router.post(
     // meta.total_width = total_width;
     // meta.total_height = total_height;
     meta.total_size = total_size;
+    meta.ai_total_size = ai_total_size;
+    meta.compare_size = total_size / ai_total_size;
     const id = uuid();
     const date = moment()
       .tz("Asia/Seoul")

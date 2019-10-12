@@ -20,7 +20,6 @@ router.use("/complete", completeRouter);
 // 파일 최초 업로드 요청 핸들링
 router.post("/", upload_mem.single("orig_image"), (req, res, next) => {
   const imageSrc = req.body.orig_image;
-  console.log(req.body);
   const id = uuid();
   const url = `${endpoint.url}/ocr/detection/`;
   axios

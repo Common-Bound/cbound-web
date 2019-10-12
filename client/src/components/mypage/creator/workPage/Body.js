@@ -8,6 +8,7 @@ import "intro.js/introjs.css";
 import "react-image-crop/dist/ReactCrop.css";
 import "./Body.css";
 import { setTimeout } from "timers";
+import uuid from "uuid/v4";
 
 const BodyContainer = styled.div`
   width: 100%;
@@ -221,7 +222,8 @@ class Body extends Component {
       useAI: false, // AI를 사용할지 말지 스위치 할 때 변경할 값
       loading: false,
       time_counter: [], // 각 크롭 영역을 지정하는데 걸리는 시간
-      timer: 0
+      timer: 0,
+      ai_total_size: 0
       // step: 0 // 현재 STEP 수
     };
 
@@ -458,9 +460,9 @@ class Body extends Component {
   handleSendAll = async image_time => {
     console.log(this.state.crop_image);
     const bodyData = new FormData();
-    let new_crop_image = Array.from(
-      this.state.crop_image.map(crop => {
-        return {
+    let new_crop_image_promises = await this.state.crop_image.map(crop => {
+      return new Promise(resolve =>
+        resolve({
           shape_attributes: crop.shape_attributes,
           region_attributes: {
             label: crop.region_attributes.label,
@@ -471,10 +473,122 @@ class Body extends Component {
               } else return false;
             }).time
           }
-        };
-      })
-    );
+        })
+      );
+    });
+    let new_crop_image = await Promise.all(new_crop_image_promises);
 
+    await this.setState({
+      crop_image: new_crop_image
+    });
+
+    // STEP 1: ai가 감지한 영역의 total_size를 가져온다
+    this.setState({
+      loading: true
+    });
+
+    const detectionEndpoint = "http://c-bound.io:8000/ocr/detection/";
+    await fetch(detectionEndpoint, {
+      method: "POST",
+      body: JSON.stringify({
+        orig_image: this.props.orig_image_base64,
+        id: uuid()
+      })
+    })
+      .then(res => res.json())
+      .then(async data => {
+        console.log(data);
+        const ai_total_size = data.meta[0].ai_total_size;
+
+        await this.setState({
+          ai_total_size: ai_total_size
+        });
+
+        return new Promise(resolve => resolve(ai_total_size));
+      })
+      .catch(err => {
+        console.log(err);
+      });
+
+    // STEP 2: recognition 정확도와 유사도를 가져와서 저장한다
+    // 각 crop 이미지를 base64로 인코딩한 것을 배열로 가져온다
+    const crop_image_base64_encodings_promises = await this.state.crop_image.map(
+      crop => {
+        return new Promise(async resolve =>
+          resolve(await this.getCroppedImg(crop))
+        );
+      }
+    );
+    let crop_image_base64_encodings = await Promise.all(
+      crop_image_base64_encodings_promises
+    );
+    console.log(crop_image_base64_encodings);
+
+    const recognitionEndpoint = "http://c-bound.io:8000/ocr/recognition/";
+    const recognitionResult = await fetch(recognitionEndpoint, {
+      method: "POST",
+      body: JSON.stringify({
+        id: uuid(),
+        crop_image: crop_image_base64_encodings
+      })
+    })
+      .then(res => res.json())
+      .then(data => {
+        console.log(data);
+
+        return new Promise(resolve => resolve(data));
+      })
+      .catch(err => {
+        console.log(err);
+      });
+
+    new_crop_image = this.state.crop_image;
+    new_crop_image_promises = await new_crop_image.map((crop, index) => {
+      crop.region_attributes.ai_label = recognitionResult.label[index];
+      crop.region_attributes.prob = recognitionResult.prob[index];
+
+      return new Promise(resolve => resolve(crop));
+    });
+    new_crop_image = await Promise.all(new_crop_image_promises);
+    await this.setState({
+      crop_image: new_crop_image
+    });
+
+    // STEP 3: label값과 ai_label값의 유사도를 가져온다
+    const compareStringEndpoint = "http://c-bound.io:8000/ocr/compare_string/";
+    await fetch(compareStringEndpoint, {
+      method: "POST",
+      body: JSON.stringify({
+        label: this.state.crop_image.map(crop => crop.region_attributes.label),
+        ai_label: this.state.crop_image.map(
+          crop => crop.region_attributes.ai_label
+        )
+      })
+    })
+      .then(res => res.json())
+      .then(async data => {
+        console.log("data: ", data);
+        new_crop_image = this.state.crop_image;
+        let new_crop_image_promises = await new_crop_image.map(
+          (crop, index) => {
+            crop.region_attributes.similarity = data.similarity[index];
+            return new Promise(resolve => resolve(crop));
+          }
+        );
+
+        new_crop_image = await Promise.all(new_crop_image_promises);
+
+        await this.setState({
+          crop_image: new_crop_image
+        });
+
+        return new Promise(resolve => resolve(data));
+      })
+      .catch(err => {
+        console.log(err);
+      });
+
+    console.log("new_crop_image: ", this.state.crop_image);
     bodyData.append("orig_image", this.props.orig_image_file);
 
     // 이미지 좌표를 원래 이미지 사이즈에 맞게 리사이즈 한 후 저장해야 한다
@@ -488,50 +602,43 @@ class Body extends Component {
 
     bodyData.append(
       "meta",
-      await JSON.stringify({ crop_image: new_crop_image })
+      await JSON.stringify({ crop_image: this.state.crop_image })
     );
     bodyData.append("project_id", this.props.project_id);
+    bodyData.append("ai_total_size", this.state.ai_total_size);
 
     await this.sendData(bodyData, "/api/mypage/creator/task/normal/complete"); // 서버로 전송( /mypage/task/complete)
 
     return new Promise(resolve => resolve(true));
   };
 
-  // 크롭 좌표를 리사이징 한다
-  /*async resizeCropLocation(naturalWidth, crop_image) {
-    const scale = naturalWidth / 640;
-    console.log("scale: " + scale);
+  async getCroppedImg(crop) {
+    const canvas = document.createElement("canvas");
+    const image = this.state.imageRef;
+    // 이미 리사이징 된 거라 다시 리사이즈 할 필요 없음
+    // const scaleX = image.naturalWidth / image.width;
+    // const scaleY = image.naturalHeight / image.height;
 
-    let new_crop_image = await crop_image.map(async crop => {
-      const s = crop.shape_attributes;
+    canvas.width = crop.shape_attributes.width;
+    canvas.height = crop.shape_attributes.height;
 
-      const id = s.id;
-      const new_x = s.x * scale;
-      const new_y = s.y * scale;
-      const new_width = s.width * scale;
-      const new_height = s.height * scale;
+    const ctx = canvas.getContext("2d");
 
-      const new_shape_attributes = {
-        id: id,
-        x: Number.parseFloat(new_x).toFixed(0),
-        y: Number.parseFloat(new_y).toFixed(0),
-        width: Number.parseFloat(new_width).toFixed(0),
-        height: Number.parseFloat(new_height).toFixed(0)
-      };
-
-      let tmp = {};
-      Object.assign(tmp, crop);
-      tmp.shape_attributes = new_shape_attributes;
-
-      return new Promise(resolve => {
-        resolve(tmp);
-      });
+    ctx.drawImage(
+      image,
+      crop.shape_attributes.x,
+      crop.shape_attributes.y,
+      crop.shape_attributes.width,
+      crop.shape_attributes.height,
+      0,
+      0,
+      crop.shape_attributes.width,
+      crop.shape_attributes.height
+    );
+    return new Promise(resolve => {
+      resolve(canvas.toDataURL());
     });
-
-    new_crop_image = await Promise.all(new_crop_image);
-
-    return new Promise(resolve => resolve(new_crop_image));
-  }*/
+  }
 
   // 사용자의 편의를 위해 버튼을 누르지 않아도 (13==enter) 이벤트를 받으면 handleOnCropComplete 를 호출해줌
   handleKeyPress = e => {
