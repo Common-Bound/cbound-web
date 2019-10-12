@@ -43,6 +43,7 @@ router.post("/recognition", (req, res, next) => {
   const imageSrc = req.body.crop_image;
   const id = req.body.id;
   const url = `${endpoint.url}/ocr/recognition/`;
+
   axios
     .post(url, {
       id: id,
