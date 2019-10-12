@@ -21,7 +21,12 @@ const upload_s3 = multer({
       cb(null, { fieldName: file.fieldname });
     },
     key: function(req, file, cb) {
-      cb(null, `${req.user.id}/${Date.now().toString()}-${file.originalname}`);
+      cb(
+        null,
+        `${req.body.title}_${req.body.project_id}/${
+          req.user.id
+        }/${Date.now().toString()}-${file.originalname}`
+      );
     },
     acl: "public-read-write"
   })
@@ -80,8 +85,8 @@ router.post(
       orig_image: file.location,
       meta: meta
     };
-    console.log("payload: ");
-    console.log(payload);
+    // console.log("payload: ");
+    // console.log(payload);
     // id, type, payload(json), created_at, status,
     // creator_id, inspector, project_id, schedule_state
     db.query(
