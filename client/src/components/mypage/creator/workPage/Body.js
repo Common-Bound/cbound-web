@@ -562,9 +562,12 @@ class Body extends Component {
     });
 
     // STEP 3: label값과 ai_label값의 유사도를 가져온다
-    const compareStringEndpoint = `${AIServerEndpoint.url}/ocr/compare_string/`;
+    const compareStringEndpoint = `/api/mypage/creator/task/normal/compare_string`;
     await fetch(compareStringEndpoint, {
       method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
       body: JSON.stringify({
         label: this.state.crop_image.map(crop => crop.region_attributes.label),
         ai_label: this.state.crop_image.map(
@@ -578,7 +581,7 @@ class Body extends Component {
         new_crop_image = this.state.crop_image;
         let new_crop_image_promises = await new_crop_image.map(
           (crop, index) => {
-            crop.region_attributes.similarity = data.similarity[index];
+            crop.region_attributes.similarity = data.data.similarity[index];
             return new Promise(resolve => resolve(crop));
           }
         );
