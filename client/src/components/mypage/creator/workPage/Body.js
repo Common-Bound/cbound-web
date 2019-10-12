@@ -693,6 +693,12 @@ class Body extends Component {
     return this.state.time_counter;
   }
 
+  resetTimer() {
+    this.setState({
+      timer: new Date().getTime()
+    });
+  }
+
   handleStartTimer() {
     if (!this.state.crop.height) {
       this.setState({

@@ -392,6 +392,7 @@ class CreatorMain extends Component {
 
     bodyNodes.forEach((body, _id) => {
       if (_id === index) {
+        this.Refs[_id].resetTimer();
         body.style.display = "flex";
       } else body.style.display = "none";
     });
