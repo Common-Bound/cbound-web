@@ -599,12 +599,13 @@ class Body extends Component {
       });
 
     console.log("new_crop_image: ", this.state.crop_image);
+    bodyData.append("project_id", this.props.project_id);
+    bodyData.append("title", this.props.info.title);
     bodyData.append("orig_image", this.props.orig_image_file);
     bodyData.append(
       "meta",
       await JSON.stringify({ crop_image: this.state.crop_image })
     );
-    bodyData.append("project_id", this.props.project_id);
     bodyData.append("ai_total_size", this.state.ai_total_size);
 
     await this.sendData(bodyData, "/api/mypage/creator/task/normal/complete"); // 서버로 전송( /mypage/task/complete)
