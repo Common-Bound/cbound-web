@@ -335,7 +335,7 @@ class Header extends Component {
             </MobileButtonContainer>
           </MobileMenuContainer>
         </MobileMenuBackground>
-        {this.state.redirect ? <Redirect to="/auth/select" /> : undefined}
+        {this.state.redirect ? <Redirect to="/signin/select" /> : undefined}
       </HeaderContainer>
     );
   }

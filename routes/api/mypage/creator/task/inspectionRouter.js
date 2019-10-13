@@ -111,6 +111,7 @@ router.post("/", async (req, res, next) => {
 
   console.log("updated_data: ", updated_data);
   const inspectors = updated_data.inspector;
+  console.log("inspectors: ", inspectors);
   // 검수를 더 진행해야 된다면 그냥 true를 반환한다
   if (inspectors.length < updated_data.inspector_count)
     return res.json({ result: true });

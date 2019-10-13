@@ -1,9 +1,6 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 import moment from "moment";
-// import Stepper from "@material-ui/core/Stepper";
-// import Step from "@material-ui/core/Step";
-// import StepLabel from "@material-ui/core/StepLabel";
 import Button from "@material-ui/core/Button";
 import CropImage from "./CropImage";
 import "react-image-crop/dist/ReactCrop.css";
@@ -27,7 +24,7 @@ const EntireTitleContainer = styled.div`
   align-items: center;
   padding: 40px 0px 10px 10px;
 
-  color: black; !important
+  color: black !important;
 `;
 
 const LeftTitleContainer = styled.div`
@@ -54,19 +51,26 @@ const RightTitleContainer = styled.div`
   display: flex;
   flex-direction: column;
 
-  padding: 10px;
+  padding-right: 10px;
 `;
 
-const RightTitle = styled.div`
-  font-weight: bold;
-  font-size: 18px;
-  text-align: right;
+const ButtonContainer = styled.div`
+  display: flex;
+  jusify-content: flex-end;
+  align-items: flex-end;
+  @media (max-width: 500px) {
+  }
 `;
 
-const RightTitleDate = styled.div`
-  font-size: 16px;
-  text-align: right;
-  color: #8d8d8d;
+const StyledButton = styled(Button)`
+  height: 60px;
+  @media (max-width: 1024px) {
+    height: 46px;
+  }
+  @media (max-width: 500px) {
+    font-size: 12px;
+    height: 36px;
+  }
 `;
 
 const MainContainer = styled.div`
@@ -74,29 +78,18 @@ const MainContainer = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 10px;
+  height: 48vh;
 `;
 
 const LeftMainContainer = styled.div`
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   flex-basis: auto;
   align-items: center;
   justify-content: flex-start;
 `;
-
-// const StepperContainer = styled.div`
-//   width: 100%;
-// `;
-
-// const StepperRoot = styled.div`
-//   width: 100%;
-//   margin: 0 auto;
-// `;
-
-// const StyledStepper = styled(Stepper)`
-//   height: 20px;
-//   padding: 20px 0px 20px 0px !important;
-// `;
 
 const RightDescriptionContainer = styled.div`
   display: flex;
@@ -105,7 +98,8 @@ const RightDescriptionContainer = styled.div`
   align-items: flex-start;
   padding: 40px 20px;
 
-  width: 440px;
+  min-width: 440px;
+  height: 100%;
   background-color: #f0f0f0;
 `;
 
@@ -124,15 +118,19 @@ const DescriptionBox = styled.div`
 `;
 
 const ImageContainer = styled.div`
-  width: 650px;
-  max-width: 650px
-  min-height: 440px;
+  width: 100%;
+  height: 100%;
   position: relative;
 
   display: flex;
   justify-content: center;
   align-items: center;
+
   border: 5px solid lightgrey;
+
+  @media (max-width: 500px) {
+    border: none;
+  }
 `;
 
 const CropImageContainer = styled.div`
@@ -156,14 +154,11 @@ class Body extends Component {
       nowCropImgId: 0,
       is_crops_correct: [],
       step: 3,
-      width: 0,
-      height: 0,
+      // width: 0,
+      // height: 0,
       crop_images: []
     };
     this.handleClick = this.handleClick.bind(this);
-    // this.handleBack = this.handleBack.bind(this);
-    // this.handleNext = this.handleNext.bind(this);
-    // this.handleReset = this.handleReset.bind(this);
   }
 
   async componentDidMount() {
@@ -205,126 +200,32 @@ class Body extends Component {
   }
 
   /**
-   * @dev 가져온 data의 payload 부분을 참조하여 원본 이미지를
-   *      canvas 위에 그려준다
-   */
-  async drawImage() {
-    const canvas = document.getElementById("canvas");
-    const image = document.getElementById("image");
-    const ctx = canvas.getContext("2d");
-
-    let scale = 1;
-    // 이미지의 가로 길이가 640이 넘으면, 640으로 나눈 비율을 계산한다
-    // if (image.naturalWidth > 640) {
-    //   scale = image.naturalWidth / 640;
-    //   console.log(image.naturalWidth);
-
-    //   const new_shape_attributes_promises = await this.state.data.payload.meta.crop_image.map(
-    //     crop => {
-    //       console.log(crop);
-    //       const new_shape_attributes = this.resizeCropLocation(
-    //         image.naturalWidth,
-    //         crop.shape_attributes
-    //       );
-
-    //       return new Promise(resolve => resolve(new_shape_attributes));
-    //     }
-    //   );
-
-    //   const new_shape_attributes = await Promise.all(
-    //     new_shape_attributes_promises
-    //   );
-    //   const new_data = this.state.data;
-    //   new_data.payload.meta.crop_image.forEach((crop, index) => {
-    //     crop.shape_attributes = new_shape_attributes[index];
-    //   });
-
-    //   await this.setState({
-    //     data: new_data
-    //   });
-    // }
-
-    // 계샨된 비율만큼 나눠줘서 캔버스 영역의 가로 길이를 640 으로 맞춰준다
-    // 또한 세로 길이도 이와 같은 비율로 조정해준다
-    canvas.width = image.width / scale;
-    canvas.height = image.height / scale;
-
-    // 이미지의 크기도 조절해서 그려준다
-    ctx.drawImage(image, 0, 0, image.width / scale, image.height / scale);
-
-    await this.setState({
-      width: canvas.width,
-      height: canvas.height
-    });
-
-    return new Promise(resolve => {
-      console.log("drawImage end");
-      return resolve(this.drawCrop());
-    });
-  }
-
-  /**
-   *
-   * @param {이미지의 원본 width 길이} naturalWidth
-   * @param {crop_iamge의 shape_attributes} shape_attributes
-   * @param {축소(reduce) 또는 확대(magnify)} type
-   */
-  async resizeCropLocation(naturalWidth, shape_attributes, type = "reduce") {
-    console.log("orig_shape_attributes: ");
-    console.log(shape_attributes);
-
-    const scale = naturalWidth / 640;
-    console.log("scale: ", scale);
-    const s = shape_attributes;
-
-    const id = s.id;
-    const new_x = type === "reduce" ? s.x / scale : s.x * scale;
-    const new_y = type === "reduce" ? s.y / scale : s.y * scale;
-    const new_width = type === "reduce" ? s.width / scale : s.width * scale;
-    const new_height = type === "reduce" ? s.height / scale : s.height * scale;
-
-    const new_shape_attributes = {
-      id: id,
-      x: Number.parseFloat(new_x).toFixed(0),
-      y: Number.parseFloat(new_y).toFixed(0),
-      width: Number.parseFloat(new_width).toFixed(0),
-      height: Number.parseFloat(new_height).toFixed(0)
-    };
-    console.log("new_shape_attributs: ");
-    console.log(new_shape_attributes);
-
-    return new Promise(resolve => {
-      resolve(new_shape_attributes);
-    });
-  }
-
-  /**
    * @dev 원본 이미지를 그린 다음 그 위에 크롭 영역을 그려준다
    */
-  drawCrop() {
+  async drawCrop() {
     console.log(this.state.data.payload.meta.crop_image);
-    const new_crop_images = this.state.data.payload.meta.crop_image.map(
-      function(crop) {
-        let id = crop.shape_attributes ? crop.shape_attributes.id : crop.id;
+    const crop_items = this.state.data.payload.meta.crop_image.map(function(
+      crop
+    ) {
+      let id = crop.shape_attributes ? crop.shape_attributes.id : crop.id;
 
-        return <CropImage key={id} crop={crop} />;
-      }
-    );
+      return <CropImage key={id} crop={crop} />;
+    });
 
-    this.setState({
-      crop_images: new_crop_images
+    await this.setState({
+      crop_images: crop_items
     });
   }
 
   // 검수 완료 버튼
   handleClick = async e => {
     const crop_images = document.getElementsByClassName("crop_images");
-    let new_crop_images = Array.from(crop_images);
-    console.log(new_crop_images);
+    let crop_items = Array.from(crop_images);
+    console.log(crop_items);
 
     // 하나라도 unchecked 상태이 crop이 존재한다면 이를 확인하라고 알린다
     let check_result = true;
-    new_crop_images.some(el => {
+    crop_items.some(el => {
       // attributes는 0:id, 1: class, 2: status
       if (el.attributes[2].value === "unchecked") {
         alert("확인하지 않은 영역이 있습니다.");
@@ -336,48 +237,26 @@ class Body extends Component {
     if (!check_result) {
       return;
     }
-    // 이미지의 naturalWidth 가 640px 보다 크다면 resize 해준다
-    const image = document.getElementById("image");
-    if (image.naturalWidth > 640) {
-      console.log(image.naturalWidth);
-
-      const new_shape_attributes_promises = await this.state.data.payload.meta.crop_image.map(
-        crop => {
-          console.log(crop);
-          const new_shape_attributes = this.resizeCropLocation(
-            image.naturalWidth,
-            crop.shape_attributes,
-            "magnify" // 확대
-          );
-
-          return new Promise(resolve => resolve(new_shape_attributes));
-        }
-      );
-
-      const new_shape_attributes = await Promise.all(
-        new_shape_attributes_promises
-      );
-      const new_data = this.state.data;
-      new_data.payload.meta.crop_image.forEach((crop, index) => {
-        crop.shape_attributes = new_shape_attributes[index];
-      });
-
-      await this.setState({
-        data: new_data
-      });
-    }
 
     // 모든 영역이 확인되었다면 각각을 id 순서대로 반영해준다
     let crop_image = this.state.data.payload.meta.crop_image;
-    new_crop_images.forEach(el => {
+    console.log("crop_image: ", crop_image);
+    const new_crop_image_promises = await crop_items.map(el => {
       const id = Number(el.attributes[0].value);
       const status = el.dataset.status;
+      const crop = crop_image.filter(
+        crop => crop.shape_attributes.id === id
+      )[0];
+      console.log("crop: ", crop);
       if (status === "true") {
-        crop_image[id].correct.push(1);
-      } else crop_image[id].correct.push(0);
-    });
+        console.log("id: ", id);
+        crop.correct.push(1);
+      } else crop.correct.push(0);
 
-    console.log(crop_image);
+      return new Promise(resolve => resolve(crop));
+    });
+    const new_crop_image = await Promise.all(new_crop_image_promises);
+    console.log(new_crop_image);
 
     const url = "/api/mypage/creator/task/inspection";
     const option = {
@@ -386,7 +265,7 @@ class Body extends Component {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        new_crop_image: crop_image,
+        new_crop_image: new_crop_image,
         data_id: this.state.data.id
       })
     };
@@ -412,38 +291,9 @@ class Body extends Component {
       .catch(err => console.log(err));
   };
 
-  // handleNext() {
-  //   //setActiveStep(prevActiveStep => prevActiveStep + 1);
-  //   this.setState({
-  //     step: this.state.step + 1
-  //   });
-  // }
-
-  // handleBack() {
-  //   //setActiveStep(prevActiveStep => prevActiveStep - 1);
-  //   this.setState({
-  //     step: this.state.step - 1
-  //   });
-  // }
-
-  // handleReset() {
-  //   this.setState({
-  //     step: 0
-  //   });
-  // }
-
   render() {
-    const { data, loading, width, height, crop_images } = this.state;
+    const { data, loading, crop_images } = this.state;
     const info = this.props.info;
-
-    const t1 = moment();
-    const t2 = moment(info.due_date);
-
-    const days = moment.duration(t2.diff(t1)).days();
-    const hours = moment.duration(t2.diff(t1)).hours();
-    const minutes = moment.duration(t2.diff(t1)).minutes();
-
-    // const steps = ["STEP 1", "STEP 2", "STEP 3"];
 
     return (
       <BodyContainer>
@@ -460,24 +310,31 @@ class Body extends Component {
             <LeftTitle>{info.title}</LeftTitle>
           </LeftTitleContainer>
           <RightTitleContainer>
-            <RightTitle>DEADLINE</RightTitle>
-            <RightTitleDate>{`${days} DAYS : ${hours} HOURS : ${minutes} MINUTES`}</RightTitleDate>
+            <ButtonContainer id="export-button-container">
+              <StyledButton
+                variant="contained"
+                color="primary"
+                onClick={this.handleClick}
+                data-intro="완료 버튼을 누르면 검수한 데이터를 제출합니다."
+                data-step="3"
+                data-disable-interaction="true"
+                data-position="left"
+                disabled={this.state.loading}
+              >
+                완료
+              </StyledButton>
+            </ButtonContainer>
+            {/* <RightTitle>DEADLINE</RightTitle>
+            <RightTitleDate>
+              {info
+                ? `${days} DAYS : ${hours} HOURS : ${minutes} MINUTES`
+                : "UNLIMITED"}
+            </RightTitleDate> */}
           </RightTitleContainer>
         </EntireTitleContainer>
         <MainContainer>
           {/* Main Container 의 왼쪽 영역 */}
           <LeftMainContainer>
-            {/* <StepperContainer>
-                <StepperRoot>
-                  <StyledStepper activeStep={this.state.step}>
-                    {steps.map(label => (
-                      <Step key={label}>
-                        <StepLabel>{label}</StepLabel>
-                      </Step>
-                    ))}
-                  </StyledStepper>
-                </StepperRoot>
-              </StepperContainer> */}
             {/* 크롭할 이미지 영역 */}
             <ImageContainer
               data-intro="검수할 이미지가 화면에 나타나게 됩니다"
@@ -488,20 +345,21 @@ class Body extends Component {
                 <div
                   style={{
                     position: "relative",
-                    width: this.state.data ? `${width}px` : "0px",
-                    height: this.state.data ? `${height}px` : "0px"
+                    width: "100%",
+                    height: "100%"
                   }}
                 >
-                  <canvas id="canvas" style={{ position: "absolute" }}>
-                    <div style={{ display: "none" }}>
-                      <img
-                        id="image"
-                        src={data.payload.orig_image}
-                        alt=""
-                        onLoad={this.drawImage.bind(this)}
-                      />
-                    </div>
-                  </canvas>
+                  <img
+                    id="image"
+                    src={data.payload.orig_image}
+                    alt=""
+                    onLoad={this.drawCrop.bind(this)}
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "fill"
+                    }}
+                  />
                   <CropImageContainer id="crop_image_container">
                     {crop_images}
                   </CropImageContainer>
@@ -536,26 +394,7 @@ class Body extends Component {
             </DescriptionBoxContainer>
           </RightDescriptionContainer>
         </MainContainer>
-        <StepButtonContainer>
-          {/* <Button disabled={this.state.step === 0} onClick={this.handleBack}>
-              Back
-            </Button>
-            <Button
-              disabled={this.state.step > steps.length - 1}
-              variant="contained"
-              color="primary"
-              onClick={this.handleNext}
-            >
-              {this.state.step === steps.length - 1 ? "Finish" : "Next"}
-            </Button> */}
-          {/* {this.state.step === steps.length ? ( */}
-          <div>
-            <Button onClick={this.handleClick}>완료하기</Button>
-          </div>
-          {/* ) : (
-              ""
-            )} */}
-        </StepButtonContainer>
+        <StepButtonContainer></StepButtonContainer>
       </BodyContainer>
     );
   }

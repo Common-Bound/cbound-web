@@ -8,8 +8,8 @@ const Container = styled.div`
     props["data-status"] === "unchecked"
       ? "1px solid grey"
       : props["data-status"] === "true"
-        ? "2px solid lime"
-        : "2px solid red"}
+      ? "2px solid lime"
+      : "2px solid red"}
   background-color: rgba(0, 0, 0, 0.3);
   position: absolute;
   top: ${props => props.y}px;
@@ -59,6 +59,10 @@ class CropImage extends Component {
       : this.props.crop;
     const { status, labelComponent } = this.state;
 
+    const image = document.getElementById("image");
+    const scaleX = image ? image.naturalWidth / image.width : 1;
+    const scaleY = image ? image.naturalHeight / image.height : 1;
+
     return (
       <Container
         id={id}
@@ -68,10 +72,10 @@ class CropImage extends Component {
         onMouseEnter={this.handleMouseEnter.bind(this)}
         onMouseLeave={this.handleMouseLeave.bind(this)}
         onClick={this.toggleStatus.bind(this)}
-        x={x}
-        y={y}
-        width={width}
-        height={height}
+        x={x / scaleX}
+        y={y / scaleY}
+        width={width / scaleX}
+        height={height / scaleY}
       >
         {labelComponent}
       </Container>

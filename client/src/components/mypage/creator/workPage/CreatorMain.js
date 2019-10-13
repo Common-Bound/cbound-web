@@ -431,6 +431,9 @@ class CreatorMain extends Component {
       }
     });
     if (isCropped === false) {
+      await this.setState({
+        loading: false
+      });
       return alert("최소 1개 이상의 영역이 감지되어야 합니다!");
     }
     // 작업하고 있던 Body 걸린 시간 측정 필요
