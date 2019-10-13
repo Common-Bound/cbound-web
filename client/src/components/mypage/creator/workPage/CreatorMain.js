@@ -626,11 +626,12 @@ class CreatorMain extends Component {
         );
       });
       await Promise.all(bodyPromises);
-      await this.setState({
-        loading: false
-      });
+
       window.location.reload();
     }
+    await this.setState({
+      loading: false
+    });
 
     alert("작업이 완료되었습니다.");
   };

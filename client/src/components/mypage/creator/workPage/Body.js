@@ -9,7 +9,7 @@ import "react-image-crop/dist/ReactCrop.css";
 import "./Body.css";
 import { setTimeout } from "timers";
 import uuid from "uuid/v4";
-import AIServerEndpoint from "../../../../AIServerEndpoint";
+// import AIServerEndpoint from "../../../../AIServerEndpoint";
 
 const BodyContainer = styled.div`
   width: 100%;
