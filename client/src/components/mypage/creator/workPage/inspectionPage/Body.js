@@ -154,6 +154,7 @@ class Body extends Component {
       nowCropImgId: 0,
       is_crops_correct: [],
       step: 3,
+      timer: undefined,
       // width: 0,
       // height: 0,
       crop_images: []
@@ -191,7 +192,11 @@ class Body extends Component {
               this.setState({
                 data: data,
                 correct: Array(data.payload.meta.crop_image.length),
-                loading: false
+                loading: false,
+                // 데이터를 가져온 이후로 5분이 넘어가면 timeOut 함수를 호출한다
+                timer: setTimeout(() => {
+                  this.timeOut();
+                }, 300000)
               })
             )
           );
@@ -238,6 +243,9 @@ class Body extends Component {
       return;
     }
 
+    // timer 종료
+    clearTimeout(this.state.timer);
+
     // 모든 영역이 확인되었다면 각각을 id 순서대로 반영해준다
     let crop_image = this.state.data.payload.meta.crop_image;
     console.log("crop_image: ", crop_image);
@@ -247,9 +255,7 @@ class Body extends Component {
       const crop = crop_image.filter(
         crop => crop.shape_attributes.id === id
       )[0];
-      console.log("crop: ", crop);
       if (status === "true") {
-        console.log("id: ", id);
         crop.correct.push(1);
       } else crop.correct.push(0);
 
@@ -290,6 +296,11 @@ class Body extends Component {
       })
       .catch(err => console.log(err));
   };
+
+  timeOut() {
+    alert("검수 시간이 만료되었습니다. 다시 시작해 주세요.");
+    window.location.reload();
+  }
 
   render() {
     const { data, loading, crop_images } = this.state;

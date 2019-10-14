@@ -4,6 +4,20 @@ const db = require("../../../../../db/index");
 const moment = require("moment-timezone");
 const logger = require("../../../../../config/logger");
 
+// 검수 작업이 일정시간동안 제출되지 않으면
+const timeout = async data_id => {
+  const sql = `update data set schedule_state='queued' where id = $1`;
+  const result = await db
+    .query(sql, [data_id])
+    .then(res => console.log("검수 작업 타임아웃"))
+    .catch(err => {
+      logger.error(err);
+    });
+};
+
+// 타이머를 저장하는 오브젝트
+const timerObject = {};
+
 // path: ~/api/mypage/creator/task/inspection
 // 검수 큐에 있는 data를 시간이 빠른 순서대로 불러온다
 // 자신이 한번도 참여하지 않았고 상태가 'queued'인 data를 불러온다
@@ -46,34 +60,28 @@ router.get("/", (req, res, next) => {
         message: "참여 가능한 검수 작업이 존재하지 않습니다"
       });
     }
+
+    // 하나의 유저별로 타이머를 할당한다
+    // 하나의 작업 당 제한시간은 5분이다
+    const data_id = result[2].rows[0].id;
+    const timer = setTimeout(() => {
+      timeout(data_id);
+    }, 300000);
+    timerObject[req.user.id] = timer;
     return res.json({ result: result[2].rows[0] });
   });
 });
-
 // 작업 완료 요청 핸들링
 // reserved 상태 였던 data를 다시 queue로 되돌린다
 /**
  * @dev new_crop_image 필드를 받아서 data의 payload 부분을 업데이트 해준다
  */
 router.post("/", async (req, res, next) => {
+  // 타이머를 초기화해준다
+  clearTimeout(timerObject[req.user.id]);
+
   const data = req.body;
   console.log("data: ", data);
-
-  // if (data.reset == true) {
-  //   return db.query(
-  //     `
-  //     update data set schedule_state='queued', inspector='{}'
-  //     `,
-  //     [],
-  //     (err, result) => {
-  //       if (err) {
-  //         console.log(err);
-  //         return res.status(500).send(err);
-  //       }
-  //       return res.json({ result: true });
-  //     }
-  //   );
-  // }
 
   const new_crop_image = JSON.stringify(data.new_crop_image);
   const data_id = data.data_id;
