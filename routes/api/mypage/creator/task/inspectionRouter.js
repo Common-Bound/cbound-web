@@ -34,6 +34,8 @@ router.get("/", (req, res, next) => {
     select 
       id from data 
     where 
+      status='created'
+      and
       schedule_state='queued' 
       and 
       '${req.user.id}' != ALL(inspector)
