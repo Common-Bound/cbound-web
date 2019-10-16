@@ -30,7 +30,8 @@ router.get("/:project_id", (req, res, next) => {
     const creator_count = new Set(datas.map(data => data.creator_id)).size;
     console.log("creator_count: ", creator_count);
     // 검수된 데이터 수
-    const inspected_count = datas.filter(data => data.status === "done").length;
+    const inspected_count = datas.filter(data => data.status !== "created")
+      .length;
 
     return res.json({
       result: {

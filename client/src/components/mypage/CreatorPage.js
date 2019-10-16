@@ -163,7 +163,7 @@ class CreatorPage extends Component {
               <IconTitle>History</IconTitle>
             </HistoryButton>
             <StyledLink
-              to="/auth/signout"
+              to="/auth/creator/signout"
               pathname={this.props.location.pathname}
             >
               <Icon className="fas fa-sign-in-alt" />

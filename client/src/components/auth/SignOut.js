@@ -3,7 +3,7 @@ import { Redirect } from "react-router-dom";
 
 class SignOut extends Component {
   render() {
-    const url = `/api${this.props.match.path}`; // /auth/signout
+    const url = `/api${this.props.location.pathname}`; // /auth/signout
     fetch(url)
       .then(res => res.json())
       .then(data => {
