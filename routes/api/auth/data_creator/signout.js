@@ -6,7 +6,6 @@ const router = express.Router();
 router.get("/", (req, res, next) => {
   logger.info("로그아웃 user: " + req.user.id);
   req.logOut();
-  console.log("req.session: ", req.session);
   res.json({ result: true });
 });
 
