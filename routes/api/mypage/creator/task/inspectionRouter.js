@@ -85,22 +85,21 @@ router.post("/", async (req, res, next) => {
   const data = req.body;
   console.log("data: ", data);
 
-  const new_crop_image = JSON.stringify(data.new_crop_image);
+  const new_crop_image = data.new_crop_image;
+  console.log("new_crop_image: ", new_crop_image);
   const data_id = data.data_id;
+  console.log("data_id: ", data_id);
+  console.log("req.user.id: ", req.user.id);
   // data 테이블에 주어진 id의 data를 업데이트 시킨다
   const updated_data = await db
     .query(
-      `
-    update data
-    set schedule_state='queued', inspector = array_append(inspector, '${req.user.id}'),
-    payload = jsonb_set(payload, '{meta, crop_image}', jsonb '${new_crop_image}', true)
-    where id='${data_id}' returning *;
-    `,
-      []
+      "update data set schedule_state='queued', inspector = array_append(inspector, $1), payload = jsonb_set(payload, '{meta, crop_image}', $2, true) where id = $3 returning *;",
+      [req.user.id, JSON.stringify(new_crop_image), data_id]
     )
     .then(res => res.rows[0])
     .catch(err => {
       logger.error(err);
+      logger.error("data를 업데이트 하는 로직에서 에러 발생");
       return res.status(500).send(err);
     });
   // inspector_pool 에 검수자의 id와 data의 id를 추가한다
@@ -116,10 +115,11 @@ router.post("/", async (req, res, next) => {
     .then(res => res.rows)
     .catch(err => {
       logger.error(err);
+      logger.error("inspector_pool 업데이트 하는 로직에서 에러 발생");
       return res.status(500).send(err);
     });
 
-  console.log("updated_data: ", updated_data);
+  // console.log("updated_data: ", updated_data);
   const inspectors = updated_data.inspector;
   console.log("inspectors: ", inspectors);
   // 검수를 더 진행해야 된다면 그냥 true를 반환한다
@@ -207,5 +207,66 @@ router.post("/", async (req, res, next) => {
     return res.json({ result: true });
   });
 });
+
+// 검수 내역 초기화 하는 요청 핸들링
+// router.get("/reset", async (req, res, next) => {
+//   // 데이터를 가져온다
+//   const data_id_sql = `select id from data order by created_at asc limit 0`;
+//   const datas = await db
+//     .query(data_id_sql, [])
+//     .then(res => res.rows)
+//     .catch(err => {
+//       console.log(err);
+//     });
+//   console.log(datas);
+//   // 가져온 데이터 리스트를 순회하면서 요청을 보낸다
+//   datas.forEach(async data => {
+//     const data_id = data.id;
+//     console.log("data.id: ", data_id);
+//     const payload_sql = `select payload from data where id = $1`;
+//     const result = await db
+//       .query(payload_sql, [data_id])
+//       .then(res => res.rows[0])
+//       .catch(err => {
+//         console.log(err);
+//       });
+//     const crop_image = result.payload.meta.crop_image;
+//     console.log("crop_image[0]: ", crop_image[0]);
+
+//     // crop_image의 길이 만큼 반복문을 돌면서 각 crop_image의 correct 필드를 초기화해준다
+//     const new_crop_image_promises = await crop_image.map(async crop => {
+//       crop.correct = [];
+
+//       return new Promise(resolve => resolve(crop));
+//     });
+//     const new_crop_image = await Promise.all(new_crop_image_promises);
+//     console.log("new_crop_image[0]: ", new_crop_image[0]);
+
+//     // 수정된 new_crop_image 를 db에 반영한다
+//     const updated_data = await db
+//       .query(
+//         `
+//       update data set
+//       status = 'created', inspector = '{}', schedule_state = 'queued',
+//       payload = jsonb_set(payload, '{meta, crop_image}', jsonb '${JSON.stringify(
+//         new_crop_image
+//       )}', true)
+//       where id='${data_id}' returning *;
+//       `,
+//         []
+//       )
+//       .then(res => res.rows[0])
+//       .catch(err => {
+//         logger.error(err);
+//         return res.status(500).send(err);
+//       });
+//   });
+
+//   return res.json({ result: true });
+
+//   // 먼저 해당 데이터의 crop_image의 수를 가져온다
+//   // let i = 0;
+//   // const sql = `update data set payload = jsonb_set(payload, '{meta, crop_image, ${i}}')`
+// });
 
 module.exports = router;
