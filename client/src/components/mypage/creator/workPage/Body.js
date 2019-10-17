@@ -488,31 +488,31 @@ class Body extends Component {
       loading: true
     });
 
-    // const detectionEndpoint = `/api/mypage/creator/task/normal`;
-    // await fetch(detectionEndpoint, {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json"
-    //   },
-    //   body: JSON.stringify({
-    //     orig_image: this.props.orig_image_base64,
-    //     id: uuid()
-    //   })
-    // })
-    //   .then(res => res.json())
-    //   .then(async data => {
-    //     console.log(data);
-    //     const ai_total_size = data.data.meta[0].ai_total_size;
+    const detectionEndpoint = `/api/mypage/creator/task/normal`;
+    await fetch(detectionEndpoint, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        orig_image: this.props.orig_image_base64,
+        id: uuid()
+      })
+    })
+      .then(res => res.json())
+      .then(async data => {
+        console.log(data);
+        const ai_total_size = data.data.meta[0].ai_total_size;
 
-    //     await this.setState({
-    //       ai_total_size: ai_total_size
-    //     });
+        await this.setState({
+          ai_total_size: ai_total_size
+        });
 
-    //     return new Promise(resolve => resolve(ai_total_size));
-    //   })
-    //   .catch(err => {
-    //     console.log(err);
-    //   });
+        return new Promise(resolve => resolve(ai_total_size));
+      })
+      .catch(err => {
+        console.log(err);
+      });
 
     // STEP 2: recognition 정확도와 유사도를 가져와서 저장한다
     // 각 crop 이미지를 base64로 인코딩한 것을 배열로 가져온다

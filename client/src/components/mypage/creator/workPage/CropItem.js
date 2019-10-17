@@ -70,7 +70,7 @@ const DeleteButton = styled.div`
 `;
 
 const BlueInput = styled.input`
-  background-color: lightblue;
+  background-color: ${props => (props.value ? "lightblue" : "lightgrey")};
   width: 100%;
   height: 30%;
 
@@ -92,7 +92,7 @@ class CropItem extends Component {
   state = {
     imgSrc: "", // 지금 Crop 된 영역이 Base64 인코딩된 값
     editing: false,
-    label: "",
+    label: undefined,
     useAI: true
   };
 
@@ -159,12 +159,16 @@ class CropItem extends Component {
   };
 
   // 라벨값을 바꿈
-  handleLabelChange = e => {
+  handleLabelChange = async e => {
     e.preventDefault();
     e.stopPropagation();
-    this.setState({
+    await this.setState({
       label: e.target.value
     });
+    this.props.changeLabel(
+      this.props.crop.shape_attributes.id,
+      this.state.label
+    );
   };
 
   // 라벨값을 부모 컴포넌트로부터 바꿔준다.

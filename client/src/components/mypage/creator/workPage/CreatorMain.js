@@ -424,17 +424,29 @@ class CreatorMain extends Component {
     });
 
     let isCropped = true;
+    let isLabeled = true;
     // 작업 량이 최소 1개 이상이여야 함
+    // 또한 label이 모두 들어가 있어야 한다
     this.Refs.forEach(body => {
-      if (body.getCropImageData().length < 1) {
+      const crop_image = body.getCropImageData();
+      if (crop_image.length < 1) {
         isCropped = false;
       }
+      crop_image.forEach(crop => {
+        if (!crop.region_attributes.label) isLabeled = false;
+      });
     });
     if (isCropped === false) {
       await this.setState({
         loading: false
       });
       return alert("최소 1개 이상의 영역이 감지되어야 합니다!");
+    }
+    if (isLabeled === false) {
+      await this.setState({
+        loading: false
+      });
+      return alert("비어있는 label이 존재합니다.");
     }
     // 작업하고 있던 Body 걸린 시간 측정 필요
     await this.setState({
