@@ -39,7 +39,7 @@ app.use(
     extended: true
   })
 );
-app.use(bodyParser.urlencoded({ limit: "50mb", extended: false }));
+app.use(bodyParser.urlencoded({ limit: "100mb", extended: false }));
 app.use(
   session({
     store: new RedisStore({ client }),

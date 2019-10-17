@@ -3,6 +3,16 @@ const router = express.Router();
 const db = require("../../../../../db/index");
 const moment = require("moment-timezone");
 const logger = require("../../../../../config/logger");
+const axios = require("axios");
+const endpoint = require("../../../../AIserverEndpoint");
+const uuid = require("uuid/v4");
+const fs = require("fs");
+const util = require("util");
+const AWS = require("aws-sdk");
+const path = require("path");
+
+AWS.config.loadFromPath(__dirname + "/../../../../../config/awsConfig.json");
+let s3 = new AWS.S3();
 
 // 검수 작업이 일정시간동안 제출되지 않으면
 const timeout = async data_id => {
@@ -268,5 +278,178 @@ router.post("/", async (req, res, next) => {
 //   // let i = 0;
 //   // const sql = `update data set payload = jsonb_set(payload, '{meta, crop_image, ${i}}')`
 // });
+
+// 업데이트 합수
+const updateCompareSize = async datas => {
+  // 각 데이터의 orig_image와 필드, 즉 URL을 가져온다
+  const orig_image_URLs = datas.map(data => {
+    return data.payload.orig_image;
+  });
+  // url에서 key를 추출한다
+  const bucketName = "task-data-bucket";
+  const orig_image_keys = orig_image_URLs.map(url => {
+    const splitted_url = url.split("/");
+    let key = `${decodeURIComponent(splitted_url[3])}/${decodeURIComponent(
+      splitted_url[4]
+    )}/${decodeURIComponent(splitted_url[5])}`;
+    key = key.split("+").join(" ");
+
+    return key;
+  });
+  // 각 key별로 object를 가져온다
+  const orig_image_base64_promises = await orig_image_keys.map(async key => {
+    console.log("key: ", key);
+    const params = {
+      Bucket: bucketName,
+      Key: key
+    };
+    const orig_image_base64 = await s3
+      .getObject(params)
+      .promise()
+      .then(data => Buffer.from(data.Body).toString("base64"))
+      .catch(err => {
+        console.log(err);
+      });
+    return new Promise(resolve => resolve(orig_image_base64));
+  });
+  const orig_image_base64 = await Promise.all(orig_image_base64_promises);
+
+  // base64로 인코딩된 이미지들을 detection하는 엔드포인트로 전송한다
+  console.log("axios 요청 전송 시작");
+  const new_crop_images = await axios(`${endpoint.url}/ocr/detection/`, {
+    method: "POST",
+    maxContentLength: Infinity,
+    maxBodyLength: Infinity,
+    data: {
+      id: uuid(),
+      orig_image: orig_image_base64
+    }
+  });
+
+  console.log(new_crop_images.data);
+  // 각 image의 ai_total_size 필드를 가져온다
+  const ai_total_sizes = new_crop_images.data.meta.map(data => {
+    return data.ai_total_size;
+  });
+  console.log("ai_total_sizes: ", ai_total_sizes);
+
+  // data의 total_size와 ai_total_size를 비교한 값을 구한다
+  const compare_size_promises = await datas.map((data, index) => {
+    const total_size = data.payload.meta.total_size;
+    const ai_total_size = ai_total_sizes[index];
+    const compare_size = total_size / ai_total_size;
+
+    return new Promise(resolve => resolve(compare_size));
+  });
+  const compare_sizes = await Promise.all(compare_size_promises);
+  console.log("compare_sizes: ", compare_sizes);
+
+  // 이제 각 데이터의 ai_total_size와 compare_size 필드를 업데이트 시켜준다
+  const update_query_result_promises = await datas.map(async (data, index) => {
+    const update_sql = `update data set payload = jsonb_set(payload, '{meta}', payload->'meta' || '{"ai_total_size": ${ai_total_sizes[index]}, "compare_size": ${compare_sizes[index]} }') where id = $1 returning *;`;
+    const result = await db
+      .query(update_sql, [data.id])
+      .then(res => res.rows)
+      .catch(err => {
+        console.log(err);
+      });
+
+    return new Promise(resolve => resolve(result));
+  });
+
+  const update_query_results = await Promise.all(update_query_result_promises);
+  logger.info(update_query_results);
+
+  if (data_index >= 36) {
+    clearInterval(update_2_per_10_sec);
+    logger.info("compare_size 업데이트 완료");
+  }
+};
+
+// 업데이트 시킬 데이터의 인덱스
+let data_index = 0;
+// 10초마다 업뎃 함수를 호출하는 Interval 객체
+let update_2_per_10_sec;
+// data를 저장하는 배열
+let datas;
+
+// DB에 저장된 데이터의 compare_size를 계산하는 요청을 핸들링하는 라우터
+router.get("/update_compare_size", async (req, res, next) => {
+  // 먼저 데이터를 가져온다.
+  // const get_data_sql = `select * from data order by created_at asc;`;
+  // datas = await db
+  //   .query(get_data_sql, [])
+  //   .then(res => res.rows)
+  //   .catch(err => {
+  //     console.log(err);
+  //   });
+  // compare_size가 NaN인 데이터들만 뽑아온다
+  data_ids = [
+    // "2cf4b17c-e600-4515-8352-e43361d58fb7",
+    // "1d0839ad-7fe5-46d8-b74b-c5228bab4af0",
+    // "b847f150-5b6b-4eb9-9021-4e59a68569a8",
+    // "199854c1-02f9-4199-8ac8-9d914af852cb",
+    // "434d8939-c708-4cbb-922b-17c6f857a400",
+    // "8faddb01-ee46-4754-b6d1-4fe4c665f230",
+    // "de752c8e-08d0-4fe7-a6bb-bd95cd9c2b26",
+    // "d5686cb3-226f-4842-a1de-61751f434217",
+    // "f3aa61c7-6952-4152-87f4-c0227bff741b",
+    // "73d1cbb8-304f-47db-821f-3b661df4f06e",
+    // "42664c83-1c41-4c4c-bc21-99bf124d83ed",
+    // "8c595240-df86-4497-a25e-360ca013320c",
+    // "a0d44da8-4d8a-4775-b42f-2e96f47e140d",
+    // "bd94afaa-f426-4bd4-a2d8-55c4f848d10f",
+    // // "0f725183-13a3-4533-873f-a63bac2f5b5b",
+    // // "01917b2e-92ed-4a31-a611-e0e633dcfc07",
+    // // "cefe5f1e-59a2-4512-9d16-bf45a20b66aa",
+    // // "12090bc4-1000-471a-89f3-f22168e91813",
+    // // "23c5d42f-bf1b-4bc4-a16f-96b7a43aafc6",
+    // // "a9aa33a3-d379-41c3-bd33-f98aeed3756b",
+    // // "99a6d297-2434-4da5-80f9-573aef319cf6",
+    // // "c534f9a6-47e1-4f09-aaa4-e6493b5f6bcc",
+    // // "0c6ec2de-b27b-4c7f-a705-6b2070d90a40",
+    // // "ccf9ad3b-cd88-474c-814e-6fd41526d396",
+    // "7687463c-87d2-4af2-bbe6-65638e3403f2",
+    // "f276c964-9b9a-4cfe-97a5-78bd10f2290b",
+    // "4fcb5f6d-2709-4f07-8951-d14452776b91",
+    // "c15fcba4-9e15-4930-b11d-c08b9568db53",
+    // // "cd14a5e8-0e80-4821-844c-55dd92644bf8",
+    // // "30337f40-877f-4b8b-84bb-aa4c7b96e4ed",
+    // // "2f7acb92-1c1c-49a5-852e-794e9269d7c2",
+    // // "c70838f0-583c-4fe9-a882-3549a2384dc0",
+    // // "22860693-6832-465b-ab2c-722377ee32ad",
+    // "e3d5c010-17c1-4dbb-ad20-97465bb1f508",
+    // "d56aae03-7f72-4db6-b03a-aaf8cdac5fc6",
+    "550de449-cbb2-462a-b069-c730e7499401"
+  ];
+  const data_promises = await data_ids.map(async data_id => {
+    const data_query_sql = `select * from data where id = $1`;
+    const result = await db
+      .query(data_query_sql, [data_id])
+      .then(res => res.rows[0])
+      .catch(err => {
+        console.log(err);
+      });
+
+    return new Promise(resolve => resolve(result));
+  });
+
+  datas = await Promise.all(data_promises);
+
+  // 가져온 데이터에서 10초마다 2개씩 update하는 요청을 보낸다
+  update_2_per_10_sec = setInterval(() => {
+    console.log("data_index: ", data_index);
+    updateCompareSize([
+      datas[data_index]
+      //  datas[data_index + 1]
+    ]);
+    data_index += 2;
+  }, 20000);
+
+  return res.json({
+    result: "업데이트가 시작되었습니다."
+  });
+  // return res.send(datas);
+});
 
 module.exports = router;
