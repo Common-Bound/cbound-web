@@ -1,10 +1,10 @@
 import React, { Component } from "react";
-import { Route } from "react-router-dom";
+// import { Route } from "react-router-dom";
 // node.js library that concatenates classes (strings)
-import classnames from "classnames";
+// import classnames from "classnames";
 // react plugin used to create charts
 import Chart from "chart.js";
-import { Line, Bar } from "react-chartjs-2";
+// import { Line, Bar } from "react-chartjs-2";
 // reactstrap components
 import styled from "styled-components";
 import moment from "moment";
@@ -17,27 +17,28 @@ import Header from "../../../components/Headers/Header.js";
 import AdminFooter from "../../../components/Footers/AdminFooter.js";
 
 import {
-  Button,
-  Card,
-  CardHeader,
-  CardBody,
-  NavItem,
-  NavLink,
-  Nav,
-  Progress,
-  Table,
-  Container,
-  Row,
-  Col
+  //   Button,
+  //   Card,
+  //   CardHeader,
+  //   CardBody,
+  //   NavItem,
+  //   NavLink,
+  //   Nav,
+  //   Progress,
+  //   Table,
+  Container
+  //   Row,
+  //   Col
 } from "reactstrap";
+import { Athena } from "aws-sdk";
 
 // core components
-import {
-  chartOptions,
-  parseOptions,
-  chartExample1,
-  chartExample2
-} from "../../../variables/charts.jsx";
+// import {
+//   chartOptions,
+//   parseOptions,
+//   chartExample1,
+//   chartExample2
+// } from "../../../variables/charts.jsx";
 
 const EntireContainer = styled.div`
   width: 100%;
@@ -99,30 +100,51 @@ const LeftTitle = styled.div`
   }
 `;
 
+const MainChartContainer = styled.div`
+  width: 92%;
+  margin: 0 auto;
+
+  display: flex;
+`;
+
+const LineChartContainer = styled.div`
+  width: 60%;
+`;
+const PieChartContainer = styled.div`
+  width: 40%;
+`;
+
 class RequesterMain extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      activeNav: 1,
-      chartExample1Data: "data1",
-      data: undefined
+      // activeNav: 1,
+      // chartExample1Data: "data1",
+      data: undefined,
+      chartTerms: "month"
     };
   }
 
-  toggleNavs = (e, index) => {
-    e.preventDefault();
-    this.setState({
-      activeNav: index,
-      chartExample1Data:
-        this.state.chartExample1Data === "data1" ? "data2" : "data1"
-    });
-    let wow = () => {
-      console.log(this.state);
-    };
-    wow.bind(this);
-    setTimeout(() => wow(), 1000);
-    // this.chartReference.update();
-  };
+  // toggleNavs = (e, index) => {
+  //   e.preventDefault();
+  //   this.setState({
+  //     activeNav: index,
+  //     chartExample1Data:
+  //       this.state.chartExample1Data === "data1" ? "data2" : "data1"
+  //   });
+  //   let wow = () => {
+  //     console.log(this.state);
+  //   };
+  //   wow.bind(this);
+  //   setTimeout(() => wow(), 1000);
+  //   // this.chartReference.update();
+  // };
+
+  async componentDidMount() {
+    await this.fetchData();
+    this.drawLineChart();
+    this.drawPieChart();
+  }
 
   fetchData = async () => {
     const url = `/api${this.props.match.url}`;
@@ -142,30 +164,98 @@ class RequesterMain extends Component {
     await this.setState({
       data: result
     });
+    return new Promise(resolve => resolve(result));
   };
 
-  componentWillMount = async () => {
-    if (window.Chart) {
-      parseOptions(Chart, chartOptions());
-    }
-    await this.fetchData();
-  };
+  drawLineChart = () => {
+    var ctx = document.getElementById("line-chart").getContext("2d");
+    var chart = new Chart(ctx, {
+      // The type of chart we want to create
+      type: "line",
+      // The data for our dataset
+      data: {
+        labels:
+          this.state.chartTerms === "month"
+            ? [
+                "Jan",
+                "Feb",
+                "Mar",
+                "Apr",
+                "May",
+                "Jun",
+                "Jul",
+                "Aug",
+                "Sep",
+                "Oct",
+                "Nov",
+                "Dec"
+              ]
+            : ["week1", "week2", "week3", "week4"],
+        datasets: [
+          {
+            label: "생산된 데이터 수",
+            // backgroundColor: "rgb(255, 99, 132)",
+            backgroundColor: "#ff8787",
+            borderColor: "#ff8787",
+            data: [0, 10, 5, 2, 20, 30, 45, 30, 25, 49, 69, 80]
+          }
+        ]
+      },
 
-  getRoutes = routes => {
-    return routes.map((prop, key) => {
-      if (prop.layout === "/admin") {
-        return (
-          <Route
-            path={prop.layout + prop.path}
-            component={prop.component}
-            key={key}
-          />
-        );
-      } else {
-        return null;
-      }
+      // Configuration options go here
+      options: {}
     });
   };
+
+  drawPieChart = () => {
+    const data = this.state.data;
+    var ctx = document.getElementById("pie-chart").getContext("2d");
+    var chart = new Chart(ctx, {
+      // The type of chart we want to create
+      type: "pie",
+      // The data for our dataset
+      data: {
+        labels: ["검수 대기", "검수 완료"],
+        datasets: [
+          {
+            label: "데이터 검수율",
+            backgroundColor: ["#94d82d", "#4dabf7"],
+            borderColor: "white",
+            borderWidth: 1,
+            data: [
+              data.total_count - data.inspected_count,
+              data.inspected_count
+            ]
+          }
+        ]
+      },
+
+      // Configuration options go here
+      options: {}
+    });
+  };
+
+  // componentWillMount = async () => {
+  //   if (window.Chart) {
+  //     parseOptions(Chart, chartOptions());
+  //   }
+  // };
+
+  // getRoutes = routes => {
+  //   return routes.map((prop, key) => {
+  //     if (prop.layout === "/admin") {
+  //       return (
+  //         <Route
+  //           path={prop.layout + prop.path}
+  //           component={prop.component}
+  //           key={key}
+  //         />
+  //       );
+  //     } else {
+  //       return null;
+  //     }
+  //   });
+  // };
 
   render() {
     const info = this.props.info;
@@ -191,7 +281,16 @@ class RequesterMain extends Component {
         </EntireTitleBackground>
         <Header data={this.state.data} />
         {/* Page content */}
-        <Container className="mt--7" fluid>
+        <MainChartContainer>
+          <LineChartContainer>
+            <canvas id="line-chart"></canvas>
+          </LineChartContainer>
+          <PieChartContainer>
+            <canvas id="pie-chart"></canvas>
+          </PieChartContainer>
+        </MainChartContainer>
+
+        {/* <Container className="mt--7" fluid>
           <Row>
             <Col className="mb-5 mb-xl-0" xl="8">
               <Card className="bg-gradient-default shadow">
@@ -235,7 +334,7 @@ class RequesterMain extends Component {
                   </Row>
                 </CardHeader>
                 <CardBody>
-                  {/* Chart */}
+                  // Chart
                   <div className="chart">
                     <Line
                       data={chartExample1[this.state.chartExample1Data]}
@@ -259,7 +358,7 @@ class RequesterMain extends Component {
                   </Row>
                 </CardHeader>
                 <CardBody>
-                  {/* Chart */}
+                  // Chart
                   <div className="chart">
                     <Bar
                       data={chartExample2.data}
@@ -453,7 +552,7 @@ class RequesterMain extends Component {
               </Card>
             </Col>
           </Row>
-        </Container>
+        </Container> */}
         <Container fluid>
           <AdminFooter />
         </Container>

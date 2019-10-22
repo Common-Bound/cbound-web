@@ -10,7 +10,7 @@ const EntireContainer = styled.div`
 class Header extends React.Component {
   render() {
     return (
-      <EntireContainer className="header bg-gradient-dark pb-8 pt-md-10">
+      <EntireContainer className="header bg-gradient-dark pb-5 pt-md-10">
         <Container fluid>
           <div className="header-body">
             {/* Card stats */}

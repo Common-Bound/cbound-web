@@ -85,12 +85,14 @@ router.post(
       orig_image: file.location,
       meta: meta
     };
+    const reliability = 0;
+    const inspector_count = 1;
     // console.log("payload: ");
     // console.log(payload);
     // id, type, payload(json), created_at, status,
-    // creator_id, inspector, project_id, schedule_state
+    // creator_id, inspector, project_id, schedule_state, reliability, inspector_count
     db.query(
-      "insert into data values($1, $2, $3, $4, $5, $6, $7, $8, $9)",
+      "insert into data values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)",
       [
         id,
         "image",
@@ -100,7 +102,9 @@ router.post(
         user_id,
         [],
         project_id,
-        schedule_state
+        schedule_state,
+        reliability,
+        inspector_count
       ],
       (err, result) => {
         if (err) {

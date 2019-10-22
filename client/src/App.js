@@ -19,14 +19,14 @@ class App extends React.Component {
   render() {
     return (
       <AppContainer>
-        <Router >
+        <Router>
           <Switch>
             <Route path="/" exact component={Main} />
             <Route path="/mypage" component={MyPage} />
             <Route path="/signin/select" component={Select} />
             <Route path="/auth/:user_type/signup" component={SignUp} />
             <Route path="/auth/:user_type/signin" component={SignIn} />
-            <Route path="/auth/signout" component={SignOut} />
+            <Route path="/auth/:user_type/signout" component={SignOut} />
             <Route component={notFound} />
           </Switch>
         </Router>

@@ -47,7 +47,8 @@ router.get("/", (req, res, next) => {
 });
 
 router.get("/point", (req, res, next) => {
-  if (!req.user) {
+  console.log("req.user.id: ", req.user.id);
+  if (!req.user.id) {
     return res.status(401).json({
       result: false
     });
