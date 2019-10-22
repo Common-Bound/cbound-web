@@ -6,6 +6,7 @@ import AvailableProjects from "./creator/availableProjectsPage/AvailableProjects
 import CreatorHistoryPage from "./creator/historyPage/CreatorHistoryPage";
 import styled from "styled-components";
 import Header from "../main/Header";
+import HistoryPage from "./creator/historyPage/HistoryPage";
 
 const Container = styled.div`
   width: 100%;
@@ -182,12 +183,17 @@ class CreatorPage extends Component {
               component={CreatorProjectsPage}
             />
             <Route
+              exact
               path={`${this.props.match.url}/history`}
               component={CreatorHistoryPage}
             />
             <Route
               path={`${this.props.match.url}/task/:project_type/:project_id`}
               component={WorkPage}
+            />
+            <Route
+              path={`${this.props.match.url}/history/:data_type/:data_id`}
+              component={HistoryPage}
             />
           </Section>
         </MainContainer>

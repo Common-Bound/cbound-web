@@ -4,12 +4,18 @@ const db = require("../../../../db/index");
 const moment = require("moment");
 const logger = require("../../../../config/logger");
 
+// const normalRouter = require("./history/normalRouter");
+const inspectionRouter = require("./history/inspectionRouter");
+
+// router.use("/normal", normalRouter);
+router.use("/inspection", inspectionRouter);
+
 // path: ~/api/mypage/creator/history
 router.get("/", async (req, res, next) => {
   // 자신이 생성한 데이터 목록을 가져온다
   // 이 때 프로젝트 정보도 함께 가져오기 위해 join 된 결과를 가져온다
   // data.created_at(date), title, reward, status, project_type 정보를 가져온다
-  const sql1 = `select data.created_at as date, status, title, reward, project_type from data join project on data.project_id = project.id where creator_id = $1;`;
+  const sql1 = `select data.created_at as date, status, title, reward, project.project_type from data join project on data.project_id = project.id where creator_id = $1;`;
   const created_data = await db
     .query(sql1, [req.user.id])
     .then(res => res.rows)
@@ -23,7 +29,7 @@ router.get("/", async (req, res, next) => {
     .map(data => new Promise(resolve => resolve(data)));
   // 자신이 검수한 데이터 목록을 가져온다
   // inspected_at(date), title, reward 정보를 가져온다
-  const sql2 = `select inspected_at as date, title, reward from inspector_pool 
+  const sql2 = `select data.id, inspected_at as date, title, reward from inspector_pool 
   join data 
   on inspector_pool.data_id = data.id
   join project

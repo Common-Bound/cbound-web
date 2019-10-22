@@ -3,6 +3,7 @@ import styled from "styled-components";
 import TableCell from "@material-ui/core/TableCell";
 import TableRow from "@material-ui/core/TableRow";
 import moment from "moment";
+import { Redirect } from "react-router-dom";
 
 const StyledTableRow = styled(TableRow)`
   transition: 0.2s;
@@ -40,21 +41,51 @@ const StyledStatusTableCell = styled(StyledTableCell)`
 `;
 
 class CreatorHistoryOrig extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      clicked: false
+    };
+  }
+
+  handleClick() {
+    this.setState({
+      clicked: true
+    });
+  }
+
   render() {
     const created_time = moment(this.props.date, "YYYY-MM-DD").format(
       "YYYY-MM-DD"
     );
 
     return (
-      <StyledTableRow>
+      <StyledTableRow onClick={this.handleClick.bind(this)}>
         <StyledDateTableCell align="center">{created_time}</StyledDateTableCell>
-        <StyledTableCell align="center" project_type={this.props.project_type}>
-          {this.props.title}({this.props.project_type ? "생성" : "검수"})
+        <StyledTableCell align="center" data_type={this.props.data_type}>
+          {this.props.title}({this.props.data_type ? "생성" : "검수"})
         </StyledTableCell>
         <StyledTableCell align="center">{this.props.reward}</StyledTableCell>
         <StyledStatusTableCell align="center" status={this.props.status}>
           {this.props.status ? this.props.status : "-"}
         </StyledStatusTableCell>
+        {this.state.clicked ? (
+          <Redirect
+            to={{
+              pathname: `/mypage/creator/history/${
+                this.props.data_type ? "normal" : "inspection"
+              }/${this.props.data_id}`,
+              state: {
+                title: this.props.title,
+                created_at: this.props.created_at,
+                due_date: this.props.due_date
+              }
+            }}
+          />
+        ) : (
+          undefined
+        )}
       </StyledTableRow>
     );
   }

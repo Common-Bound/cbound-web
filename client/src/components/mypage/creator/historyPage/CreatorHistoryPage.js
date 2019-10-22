@@ -101,7 +101,7 @@ class CreatorHistoryPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      projects: []
+      data: []
     };
   }
 
@@ -125,7 +125,7 @@ class CreatorHistoryPage extends Component {
         }
         if (data.result) {
           console.log(data);
-          const new_projects = data.result.map(el => {
+          const new_datas = data.result.map(el => {
             return (
               <ProjectHistory
                 key={el.id}
@@ -133,13 +133,14 @@ class CreatorHistoryPage extends Component {
                 title={el.title}
                 date={el.date}
                 reward={el.reward}
-                project_type={el.project_type}
+                data_type={el.project_type}
+                data_id={el.id}
                 status={el.status}
               />
             );
           });
           this.setState({
-            projects: new_projects
+            data: new_datas
           });
         }
       });
@@ -169,7 +170,7 @@ class CreatorHistoryPage extends Component {
                 <StyledTableCell align="center">상태</StyledTableCell>
               </TableRow>
             </StyledTableHead>
-            <TableBody>{this.state.projects}</TableBody>
+            <TableBody>{this.state.data}</TableBody>
           </Table>
         </TableContainer>
       </Container>
