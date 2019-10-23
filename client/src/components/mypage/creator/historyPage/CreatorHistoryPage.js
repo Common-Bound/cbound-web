@@ -108,10 +108,10 @@ class CreatorHistoryPage extends Component {
       hasMoreNormalData: true,
       inspectionPage: 0,
       normalPage: 0,
-      isInspection: false
+      isInspection: true
     };
 
-    this.fetchMoreInsepctionData = this.fetchMoreInspectionData.bind(this);
+    this.fetchMoreInspectionData = this.fetchMoreInspectionData.bind(this);
     this.fetchMoreNormalData = this.fetchMoreNormalData.bind(this);
   }
 
@@ -121,12 +121,14 @@ class CreatorHistoryPage extends Component {
    * @memberof CreatorProjectsPage
    */
 
-  // async componentDidMount() {
-  //   await this.fetchMoreData();
-  // }
+  async componentDidMount() {
+    this.state.isInspection
+      ? await this.fetchMoreInspectionData()
+      : await this.fetchMoreNormalData();
+  }
 
   async fetchMoreInspectionData() {
-    const url = `/api${this.props.match.path}/page/inspection/${this.state.inpectionPage}`;
+    const url = `/api${this.props.match.path}/page/inspection/${this.state.inspectionPage}`;
     console.log(url);
     await fetch(url)
       .then(res => res.json())
@@ -191,7 +193,7 @@ class CreatorHistoryPage extends Component {
             </RightSemiTitle>
           </RightTitleContainer>
         </TitleContainer>
-        {this.isInspection ? (
+        {this.state.isInspection ? (
           <TableContainer id="inspectionScrollableDiv">
             <InfiniteScroll
               dataLength={this.state.inspectionData.length}

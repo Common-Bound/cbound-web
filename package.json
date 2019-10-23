@@ -27,7 +27,6 @@
     "passport-local": "^1.0.0",
     "pg": "^7.11.0",
     "pm2": "^3.5.1",
-    "react-infinite-scroll-component": "^4.5.3",
     "redis": "^2.8.0",
     "uuid": "^3.3.2",
     "winston": "^3.2.1",
