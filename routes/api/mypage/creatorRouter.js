@@ -47,13 +47,6 @@ router.get("/", (req, res, next) => {
 });
 
 router.get("/point", (req, res, next) => {
-  console.log("req.user.id: ", req.user.id);
-  if (!req.user.id) {
-    return res.status(401).json({
-      result: false
-    });
-  }
-  console.log("point 도착");
   const user_id = req.user.id;
   const sql = "select id, email, point from data_creator where id = $1";
   db.query(sql, [user_id], (err, result) => {
