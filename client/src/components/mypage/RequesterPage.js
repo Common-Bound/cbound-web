@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Link } from "react-router-dom";
+import { Redirect, Route, Link } from "react-router-dom";
 import RequesterProjectsPage from "./requester/RequesterProjectsPage";
 import CreateProjectPage from "./requester/CreateProjectPage";
 import InsightPage from "./requester/InsightPage";
@@ -103,10 +103,59 @@ const Section = styled.div`
 `;
 
 class RequesterPage extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      user_id: "",
+      email: "",
+      point: "",
+      redirect: false
+    };
+  }
+
+  componentDidMount = async () => {
+    if (this.props.page === "mypage") {
+      await this.fetchData();
+    }
+  };
+
+  fetchData = async () => {
+    const url = `/api/mypage/requester/point`;
+    console.log(this.props);
+
+    const result = await fetch(url)
+      .then(res => res.json())
+      .then(async data => {
+        console.log("data: ", data);
+        if (data.result === false) {
+          alert("로그인 해주세요");
+          await this.setState({
+            redirect: true
+          });
+        }
+        return new Promise(resolve => resolve(data.result));
+      })
+      .catch(err => {
+        console.log(err);
+      });
+
+    await this.setState({
+      user_id: result.id,
+      email: result.email,
+      point: result.point
+    });
+  };
+
   render() {
+    const { user_id, email, point } = this.state;
     return (
       <Container>
-        <Header page="requester" />
+        <Header
+          location={this.props.location}
+          user_id={user_id}
+          email={email}
+          point={point}
+        />
         <MainContainer>
           <LeftBanner>
             <MyProjectButton
@@ -117,7 +166,7 @@ class RequesterPage extends React.Component {
               <IconTitle>My Projects</IconTitle>
             </MyProjectButton>
             <StyledLink
-              to="/auth/signout"
+              to="/auth/requester/signout"
               pathname={this.props.location.pathname}
             >
               <Icon className="fas fa-sign-in-alt" />
@@ -140,6 +189,7 @@ class RequesterPage extends React.Component {
             />
           </Section>
         </MainContainer>
+        {this.state.redirect ? <Redirect to="/signin/select" /> : undefined}
       </Container>
     );
   }

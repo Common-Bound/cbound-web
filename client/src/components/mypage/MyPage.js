@@ -17,11 +17,11 @@ class MyPage extends Component {
         <Switch>
           <Route
             path={`${this.props.match.url}/creator`}
-            render={props => <CreatorPage {...props} />}
+            render={props => <CreatorPage {...props} page="mypage" />}
           />
           <Route
             path={`${this.props.match.url}/requester`}
-            render={props => <RequesterPage {...props} />}
+            render={props => <RequesterPage {...props} page="mypage" />}
           />
           <Route component={notFound} />
         </Switch>
