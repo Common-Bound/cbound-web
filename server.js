@@ -45,6 +45,11 @@ app.use(
     store: new RedisStore({ client }),
     secret: "myKey",
     resave: false,
+    rolling: true,
+    cookie: {
+      secure: process.env.NODE_ENV === "production" ? true : false,
+      maxAge: 3600 * 1000
+    },
     saveUninitialized: true
   })
 ); // 세션 활성화
