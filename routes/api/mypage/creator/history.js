@@ -11,13 +11,14 @@ const inspectionRouter = require("./history/inspectionRouter");
 router.use("/inspection", inspectionRouter);
 
 // path: ~/api/mypage/creator/history
-router.get("/", async (req, res, next) => {
+router.get("/:page", async (req, res, next) => {
+  const startPage = req.params.page;
   // 자신이 생성한 데이터 목록을 가져온다
   // 이 때 프로젝트 정보도 함께 가져오기 위해 join 된 결과를 가져온다
   // data.created_at(date), title, reward, status, project_type 정보를 가져온다
   const sql1 = `select data.created_at as date, status, title, reward, project.project_type from data join project on data.project_id = project.id where creator_id = $1;`;
   const created_data = await db
-    .query(sql1, [req.user.id])
+    .query(sql1, [req.user.id, startPage * 10 + 1, startPage * 10 + 20])
     .then(res => res.rows)
     .catch(err => {
       logger.error(err);
