@@ -13,8 +13,9 @@ import "../../../assets/vendor/nucleo/css/nucleo.css";
 import "../../../assets/vendor/@fortawesome/fontawesome-free/css/all.min.css";
 import "../../../assets/scss/argon-dashboard-react.scss";
 
-import Header from "../../../components/Headers/Header.js";
-import AdminFooter from "../../../components/Footers/AdminFooter.js";
+import Header from "../../Headers/Header.js";
+import AdminFooter from "../../Footers/AdminFooter.js";
+import Button from "@material-ui/core/Button";
 
 import {
   //   Button,
@@ -105,16 +106,54 @@ const MainChartContainer = styled.div`
   margin: 0 auto;
 
   display: flex;
+
+  @media (max-width: 810px) {
+    flex-direction: column;
+  }
 `;
 
 const LineChartContainer = styled.div`
-  width: 60%;
-`;
-const PieChartContainer = styled.div`
-  width: 40%;
+  width: 55%;
+  padding: 20px;
+
+  display: flex;
+  flex-direction: column;
+
+  @media (max-width: 810px) {
+    width: 100%;
+  }
 `;
 
-class RequesterMain extends Component {
+const LineChartButtonContaner = styled.div`
+  display: flex;
+`;
+
+const StyledButton = styled(Button)`
+  width: 80px !important;
+  height: 36px !important;
+  margin: 6px !important;
+`;
+
+const PieChartContainer = styled.div`
+  width: 45%;
+  height: auto;
+  padding-top: 68px;
+
+  @media (max-width: 810px) {
+    width: 100%;
+    padding-top: 40px;
+  }
+
+  @media (max-width: 500px) {
+    padding-top: 20px;
+  }
+`;
+
+const PieCanvas = styled.canvas`
+  height: 300px;
+`;
+
+class DashBoard extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -197,7 +236,12 @@ class RequesterMain extends Component {
             // backgroundColor: "rgb(255, 99, 132)",
             backgroundColor: "#ff8787",
             borderColor: "#ff8787",
-            data: [0, 10, 5, 2, 20, 30, 45, 30, 25, 49, 69, 80]
+            pointBorderWidth: 4,
+            pointHoverBorderWidth: 12,
+            data:
+              this.state.chartTerms === "month"
+                ? [0, 10, 5, 2, 20, 30, 45, 30, 25, 49, 69, 80]
+                : [10, 20, 30, 40]
           }
         ]
       },
@@ -231,8 +275,19 @@ class RequesterMain extends Component {
       },
 
       // Configuration options go here
-      options: {}
+      options: {
+        cutoutPercentage: 50
+      }
     });
+  };
+
+  toggleTerms = async e => {
+    console.log(e.target.innerHTML);
+    await this.setState({
+      chartTerms: e.target.innerHTML.toLowerCase()
+    });
+
+    this.drawLineChart();
   };
 
   // componentWillMount = async () => {
@@ -259,6 +314,7 @@ class RequesterMain extends Component {
 
   render() {
     const info = this.props.info;
+    const { chartTerms } = this.state;
 
     return (
       <EntireContainer className="main-content" ref="mainContent">
@@ -283,10 +339,26 @@ class RequesterMain extends Component {
         {/* Page content */}
         <MainChartContainer>
           <LineChartContainer>
+            <LineChartButtonContaner>
+              <StyledButton
+                onClick={this.toggleTerms.bind(this)}
+                variant={chartTerms === "month" ? "contained" : undefined}
+                color="secondary"
+              >
+                Month
+              </StyledButton>
+              <StyledButton
+                onClick={this.toggleTerms.bind(this)}
+                variant={chartTerms === "week" ? "contained" : undefined}
+                color="secondary"
+              >
+                Week
+              </StyledButton>
+            </LineChartButtonContaner>
             <canvas id="line-chart"></canvas>
           </LineChartContainer>
           <PieChartContainer>
-            <canvas id="pie-chart"></canvas>
+            <PieCanvas id="pie-chart"></PieCanvas>
           </PieChartContainer>
         </MainChartContainer>
 
@@ -561,4 +633,4 @@ class RequesterMain extends Component {
   }
 }
 
-export default RequesterMain;
+export default DashBoard;
