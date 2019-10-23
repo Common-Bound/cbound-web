@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 import moment from "moment";
-
 const Card = styled.div`
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   min-width: 300px;
@@ -62,12 +61,11 @@ const Image = styled.div`
 `;
 
 const Title = styled.div`
-  width: 100%;
-  height: auto;
   padding: 10px;
   font-size: 24px;
   font-weight: bold;
   color: black;
+  word-break: keep-all;
 
   @media (max-width: 1024px) {
     padding: 8px;
