@@ -10,12 +10,11 @@ const HistoryContainer = styled.div`
 class HistoryPage extends Component {
   render() {
     const info = this.props.location.state;
-    console.log(info);
 
     return (
       <HistoryContainer>
-        {this.props.match.params.project_type === "normal" ? (
-          <NormalPage info={info} data_id={this.props.match.params.data_id} />
+        {this.props.match.params.data_type === "normal" ? (
+          <NormalPage info={info} />
         ) : (
           <InspectionPage
             info={info}
