@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Route, Link } from "react-router-dom";
+import { Redirect, Route, Link } from "react-router-dom";
 import CreatorProjectsPage from "./creator/ongoingProjectsPage/CreatorProjectsPage";
 import WorkPage from "./creator/workPage/WorkPage";
 import AvailableProjects from "./creator/availableProjectsPage/AvailableProjects";
@@ -128,11 +128,60 @@ const Section = styled.div`
 `;
 
 class CreatorPage extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      user_id: "",
+      email: "",
+      point: "",
+      redirect: false
+    };
+  }
+
+  componentDidMount = async () => {
+    if (this.props.page === "mypage") {
+      await this.fetchData();
+    }
+  };
+
+  fetchData = async () => {
+    const url = `/api/mypage/creator/point`;
+    console.log(this.props);
+
+    const result = await fetch(url)
+      .then(res => res.json())
+      .then(async data => {
+        console.log("data: ", data);
+        if (data.result === false) {
+          alert("로그인 해주세요");
+          await this.setState({
+            redirect: true
+          });
+        }
+        return new Promise(resolve => resolve(data.result));
+      })
+      .catch(err => {
+        console.log(err);
+      });
+
+    await this.setState({
+      user_id: result.id,
+      email: result.email,
+      point: result.point
+    });
+  };
+
   render() {
     console.log(this.props.match.url);
+    const { user_id, email, point } = this.state;
     return (
       <Container>
-        <Header page="creator" location={this.props.location} />
+        <Header
+          location={this.props.location}
+          user_id={user_id}
+          email={email}
+          point={point}
+        />
         <MainContainer>
           <LeftBanner>
             <AllProjectButton
@@ -197,6 +246,7 @@ class CreatorPage extends Component {
             />
           </Section>
         </MainContainer>
+        {this.state.redirect ? <Redirect to="/signin/select" /> : undefined}
       </Container>
     );
   }
