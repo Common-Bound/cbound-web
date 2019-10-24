@@ -10,6 +10,7 @@ const fs = require("fs");
 const util = require("util");
 const AWS = require("aws-sdk");
 const path = require("path");
+const sharp = require("sharp");
 
 AWS.config.loadFromPath(__dirname + "/../../../../../config/awsConfig.json");
 let s3 = new AWS.S3();
@@ -366,10 +367,120 @@ const updateCompareSize = async datas => {
   }
 };
 
+// 하나의 데이터를 받아서 recognition_prob 를 업데이트하는 함수
+const updateRecognitionProb = async data => {
+  // 각 데이터의 orig_image와 필드, 즉 URL을 가져온다
+  const orig_image_URL = data.payload.orig_image;
+  // url에서 key를 추출한다
+  const bucketName = "task-data-bucket";
+
+  const splitted_url = orig_image_URL.split("/");
+  let key = `${decodeURIComponent(splitted_url[3])}/${decodeURIComponent(
+    splitted_url[4]
+  )}/${decodeURIComponent(splitted_url[5])}`;
+  const orig_image_key = key.split("+").join(" ");
+
+  // key로 object를 가져온다
+  console.log("key: ", orig_image_key);
+  const params = {
+    Bucket: bucketName,
+    Key: orig_image_key
+  };
+  const orig_image_buffer = await s3
+    .getObject(params)
+    .promise()
+    .then(data => Buffer.from(data.Body))
+    .catch(err => {
+      console.log(err);
+    });
+  console.log("orig_image_buffer length: ", orig_image_buffer.length);
+
+  // 하나의 이미지 buffer에 대해서 각 crop 영역을 base64로 변환한다
+  const crop_image_base64_promises = await data.payload.meta.crop_image.map(
+    async crop => {
+      const shape_attr = crop.shape_attributes;
+      const x = Number(shape_attr.x);
+      const y = Number(shape_attr.y);
+      const width = Number(shape_attr.width);
+      const height = Number(shape_attr.height);
+      const option = {
+        left: Math.round(x),
+        top: Math.round(y),
+        width: Math.round(width),
+        height: Math.round(height)
+      };
+      const base64 = await sharp(orig_image_buffer)
+        .extract(option)
+        .toBuffer()
+        .then(async data => {
+          const crop_image_base64 = await Buffer.from(data).toString("base64");
+          console.log(
+            "crop_image_base64[0:10]: ",
+            crop_image_base64.substring(0, 10)
+          );
+          return new Promise(resolve => resolve(crop_image_base64));
+        })
+        .catch(err => {
+          logger.error(err);
+        });
+
+      return new Promise(resolve => resolve(base64));
+    }
+  );
+  // 각 crop 영역의 base64 인코딩값을 저장한다
+  const crop_image_base64s = await Promise.all(crop_image_base64_promises);
+
+  // AI 서버로 요청을 전송한다
+  console.log("axios 요청 전송 시작");
+  const recog_result = await axios(`${endpoint.url}/ocr/recognition/`, {
+    method: "POST",
+    maxContentLength: Infinity,
+    maxBodyLength: Infinity,
+    data: {
+      id: uuid(),
+      crop_image: crop_image_base64s
+    }
+  })
+    .then(res => res.data)
+    .catch(err => {
+      console.log(err);
+    });
+  console.log("recog_result: ", recog_result);
+
+  // 확률 정보만 가져온다
+  const new_prob = recog_result.prob;
+  // 주어진 data의 region_attibutes 필드의 prob 값을 업데이트 시킨다
+  const update_query_result_promises = await new_prob.map(
+    async (prob, index) => {
+      const update_sql = `update data set payload = jsonb_set(payload, '{meta, crop_image, ${index}, region_attributes}', payload->'meta'->'crop_image'->${index}->'region_attributes' || '{ "prob": ${prob} }') where id = $1 returning *;`;
+      const result = await db
+        .query(update_sql, [data.id])
+        .then(res => res.rows)
+        .catch(err => {
+          logger.error(err);
+          return false;
+        });
+      return new Promise(resolve => resolve(result));
+    }
+  );
+
+  const update_query_results = await Promise.all(update_query_result_promises);
+  console.log(
+    `data ${data.id} result: ${update_query_results ? "true" : "false"}`
+  );
+
+  if (data_index >= 676) {
+    clearInterval(update_1_per_10_sec);
+    logger.info("recognition_prob 업데이트 완료");
+  }
+};
+
 // 업데이트 시킬 데이터의 인덱스
-let data_index = 0;
-// 10초마다 업뎃 함수를 호출하는 Interval 객체
+let data_index = 2;
+// 10초마다 업뎃 함수를 호출하는 Interval 객체(detection)
 let update_2_per_10_sec;
+// 10초마다 업뎃 함수를 호출하는 Interval 객체(recognition)
+let update_1_per_10_sec;
 // data를 저장하는 배열
 let datas;
 
@@ -409,6 +520,29 @@ router.get("/update_compare_size", async (req, res, next) => {
     result: "업데이트가 시작되었습니다."
   });
   // return res.send(datas);
+});
+
+// DB에 저장된 데이터의 prob 를 업데이트 하는 요청을 핸들링하는 라우터
+router.get("/update_recognition_prob", async (req, res, next) => {
+  // 먼저 데이터들을 가져온다
+  const sql = `select * from data order by created_at asc limit 676`;
+  const data_promises = await db
+    .query(sql, [])
+    .then(res => res.rows)
+    .catch(err => {
+      logger.info(err);
+    });
+
+  datas = await Promise.all(data_promises);
+
+  // 가져온 데이터에서 10초 마다 1개씩 업데이트 하는 요청을 보낸다
+  update_1_per_10_sec = setInterval(() => {
+    console.log("data index: ", data_index);
+    updateRecognitionProb(datas[data_index]);
+    data_index += 1;
+  }, 10 * 1000);
+
+  return res.json({ result: "업데이트가 시작됩니다." });
 });
 
 module.exports = router;
