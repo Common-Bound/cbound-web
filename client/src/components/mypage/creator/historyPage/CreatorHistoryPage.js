@@ -6,6 +6,7 @@ import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
+import ToggleButton from "@material-ui/lab/ToggleButton";
 import InfiniteScroll from "react-infinite-scroll-component";
 
 const Container = styled.div`
@@ -108,7 +109,7 @@ class CreatorHistoryPage extends Component {
       hasMoreNormalData: true,
       inspectionPage: 0,
       normalPage: 0,
-      isInspection: true
+      isInspection: false
     };
 
     this.fetchMoreInspectionData = this.fetchMoreInspectionData.bind(this);
@@ -122,9 +123,8 @@ class CreatorHistoryPage extends Component {
    */
 
   async componentDidMount() {
-    this.state.isInspection
-      ? await this.fetchMoreInspectionData()
-      : await this.fetchMoreNormalData();
+    await this.fetchMoreInspectionData();
+    await this.fetchMoreNormalData();
   }
 
   async fetchMoreInspectionData() {
@@ -185,7 +185,19 @@ class CreatorHistoryPage extends Component {
         <TitleContainer>
           <LeftTitleContainer>
             <Title>Work History</Title>
-            <SemiTitle>작업 참여 내역</SemiTitle>
+            <SemiTitle>
+              작업 참여 내역
+              <ToggleButton
+                value={this.state.isInspection}
+                onChange={() => {
+                  this.setState({
+                    isInspection: !this.state.isInspection
+                  });
+                }}
+              >
+                <strong>{this.state.isInspection ? "검수" : "생산"}</strong>
+              </ToggleButton>
+            </SemiTitle>
           </LeftTitleContainer>
           <RightTitleContainer>
             <RightSemiTitle>
