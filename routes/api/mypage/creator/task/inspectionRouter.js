@@ -476,7 +476,7 @@ const updateRecognitionProb = async data => {
 };
 
 // 업데이트 시킬 데이터의 인덱스
-let data_index = 2;
+let data_index = 18;
 // 10초마다 업뎃 함수를 호출하는 Interval 객체(detection)
 let update_2_per_10_sec;
 // 10초마다 업뎃 함수를 호출하는 Interval 객체(recognition)
@@ -485,64 +485,64 @@ let update_1_per_10_sec;
 let datas;
 
 // DB에 저장된 데이터의 compare_size를 계산하는 요청을 핸들링하는 라우터
-router.get("/update_compare_size", async (req, res, next) => {
-  // 먼저 데이터를 가져온다.
-  const get_data_sql = `select * from data order by created_at desc limit 84;`;
-  const data_promises = await db
-    .query(get_data_sql, [])
-    .then(res => res.rows)
-    .catch(err => {
-      console.log(err);
-    });
-  // compare_size가 NaN인 데이터들만 뽑아온다
-  // const data_promises = await datas.map(async data_id => {
-  //   const data_query_sql = `select * from data where id = $1`;
-  //   const result = await db
-  //     .query(data_query_sql, [data_id])
-  //     .then(res => res.rows[0])
-  //     .catch(err => {
-  //       console.log(err);
-  //     });
+// router.get("/update_compare_size", async (req, res, next) => {
+//   // 먼저 데이터를 가져온다.
+//   const get_data_sql = `select * from data order by created_at desc limit 84;`;
+//   const data_promises = await db
+//     .query(get_data_sql, [])
+//     .then(res => res.rows)
+//     .catch(err => {
+//       console.log(err);
+//     });
+//   // compare_size가 NaN인 데이터들만 뽑아온다
+//   // const data_promises = await datas.map(async data_id => {
+//   //   const data_query_sql = `select * from data where id = $1`;
+//   //   const result = await db
+//   //     .query(data_query_sql, [data_id])
+//   //     .then(res => res.rows[0])
+//   //     .catch(err => {
+//   //       console.log(err);
+//   //     });
 
-  //   return new Promise(resolve => resolve(result));
-  // });
+//   //   return new Promise(resolve => resolve(result));
+//   // });
 
-  datas = await Promise.all(data_promises);
+//   datas = await Promise.all(data_promises);
 
-  // 가져온 데이터에서 10초마다 2개씩 update하는 요청을 보낸다
-  update_2_per_10_sec = setInterval(() => {
-    console.log("data_index: ", data_index);
-    updateCompareSize([datas[data_index]]);
-    data_index += 1;
-  }, 20000);
+//   // 가져온 데이터에서 10초마다 2개씩 update하는 요청을 보낸다
+//   update_2_per_10_sec = setInterval(() => {
+//     console.log("data_index: ", data_index);
+//     updateCompareSize([datas[data_index]]);
+//     data_index += 1;
+//   }, 20000);
 
-  return res.json({
-    result: "업데이트가 시작되었습니다."
-  });
-  // return res.send(datas);
-});
+//   return res.json({
+//     result: "업데이트가 시작되었습니다."
+//   });
+//   // return res.send(datas);
+// });
 
 // DB에 저장된 데이터의 prob 를 업데이트 하는 요청을 핸들링하는 라우터
-router.get("/update_recognition_prob", async (req, res, next) => {
-  // 먼저 데이터들을 가져온다
-  const sql = `select * from data order by created_at asc limit 676`;
-  const data_promises = await db
-    .query(sql, [])
-    .then(res => res.rows)
-    .catch(err => {
-      logger.info(err);
-    });
+// router.get("/update_recognition_prob", async (req, res, next) => {
+//   // 먼저 데이터들을 가져온다
+//   const sql = `select * from data order by created_at asc limit 676`;
+//   const data_promises = await db
+//     .query(sql, [])
+//     .then(res => res.rows)
+//     .catch(err => {
+//       logger.info(err);
+//     });
 
-  datas = await Promise.all(data_promises);
+//   datas = await Promise.all(data_promises);
 
-  // 가져온 데이터에서 10초 마다 1개씩 업데이트 하는 요청을 보낸다
-  update_1_per_10_sec = setInterval(() => {
-    console.log("data index: ", data_index);
-    updateRecognitionProb(datas[data_index]);
-    data_index += 1;
-  }, 10 * 1000);
+//   // 가져온 데이터에서 10초 마다 1개씩 업데이트 하는 요청을 보낸다
+//   update_1_per_10_sec = setInterval(() => {
+//     console.log("data index: ", data_index);
+//     updateRecognitionProb(datas[data_index]);
+//     data_index += 1;
+//   }, 10 * 1000);
 
-  return res.json({ result: "업데이트가 시작됩니다." });
-});
+//   return res.json({ result: "업데이트가 시작됩니다." });
+// });
 
 module.exports = router;
