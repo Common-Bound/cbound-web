@@ -24,7 +24,12 @@ class InsightPage extends Component {
           exact
           path={`${this.props.location.pathname}`}
           render={props => (
-            <DashBoard {...props} info={info} project_id={project_id} />
+            <DashBoard
+              {...props}
+              info={info}
+              project_id={project_id}
+              email={this.props.email}
+            />
           )}
         />
       </WorkContainer>

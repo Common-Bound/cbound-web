@@ -185,7 +185,9 @@ class RequesterPage extends React.Component {
             />
             <Route
               path={`${this.props.match.url}/insight/:project_id`}
-              component={InsightPage}
+              render={props => (
+                <InsightPage {...props} email={email}></InsightPage>
+              )}
             />
           </Section>
         </MainContainer>

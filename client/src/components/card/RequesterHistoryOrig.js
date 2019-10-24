@@ -10,7 +10,13 @@ class RequesterHistoryOrig extends Component {
 
     return (
       <tr>
-        <th scope="row">{this.props.name}</th>
+        <th scope="row">
+          <img
+            src={this.props.name}
+            alt=""
+            style={{ width: "20%", height: "auto" }}
+          ></img>
+        </th>
         <td>{created_time}</td>
         <td>{this.props.credit}</td>
         {this.props.status === "failure" ? (

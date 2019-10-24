@@ -142,8 +142,11 @@ const PieCanvas = styled.canvas`
 `;
 
 const HistoryContainer = styled.div`
-  width: 100%;
-  left: 10%;
+  width: 80%;
+  height: 60vh;
+  margin: 0 auto;
+
+  overflow: scroll;
 `;
 
 class DashBoard extends Component {
@@ -386,11 +389,11 @@ class DashBoard extends Component {
             <PieCanvas id="pie-chart"></PieCanvas>
           </PieChartContainer>
         </MainChartContainer>
-        <HistoryContainer>
-          <Container className="mt--1" id="inspectionScrollableDiv" fluid>
+        <HistoryContainer id="inspectionScrollableDiv">
+          <Container className="mt--1" fluid>
             <InfiniteScroll
               dataLength={this.state.inspectionData.length}
-              next={this.fetchMoreInspectionData}
+              next={this.fetchMoreInspectionData.bind(this)}
               hasMore={this.state.hasMoreInspectionData}
               loader={<h4>검수 작업 내역을 가져오는 중...</h4>}
               scrollableTarget="inspectionScrollableDiv"
@@ -426,7 +429,7 @@ class DashBoard extends Component {
                     >
                       <thead className="thead-light">
                         <tr>
-                          <th scope="col">작업한 사람</th>
+                          <th scope="col">해당 이미지</th>
                           <th scope="col">날짜</th>
                           <th scope="col">신용도</th>
                           <th scope="col">상태</th>
@@ -437,9 +440,10 @@ class DashBoard extends Component {
                           return (
                             <RequesterHistoryOrig
                               key={index}
-                              name={el.name}
-                              date={el.date}
-                              credit={"yee"}
+                              data_id={el.data_id}
+                              name={el.orig_image}
+                              date={el.created_at}
+                              credit={"temp"}
                               status={el.status}
                             />
                           );
