@@ -6,8 +6,8 @@ import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
-import ToggleButton from "@material-ui/lab/ToggleButton";
 import InfiniteScroll from "react-infinite-scroll-component";
+import { Button } from "reactstrap";
 
 const Container = styled.div`
   width: 100%;
@@ -187,16 +187,18 @@ class CreatorHistoryPage extends Component {
             <Title>Work History</Title>
             <SemiTitle>
               작업 참여 내역
-              <ToggleButton
+              <Button
+                outline
+                color="primary"
                 value={this.state.isInspection}
-                onChange={() => {
+                onClick={() => {
                   this.setState({
                     isInspection: !this.state.isInspection
                   });
                 }}
               >
                 <strong>{this.state.isInspection ? "검수" : "생산"}</strong>
-              </ToggleButton>
+              </Button>
             </SemiTitle>
           </LeftTitleContainer>
           <RightTitleContainer>
@@ -205,14 +207,14 @@ class CreatorHistoryPage extends Component {
             </RightSemiTitle>
           </RightTitleContainer>
         </TitleContainer>
-        {this.state.isInspection ? (
-          <TableContainer id="inspectionScrollableDiv">
+        <TableContainer id="scrollableDiv">
+          {this.state.isInspection ? (
             <InfiniteScroll
               dataLength={this.state.inspectionData.length}
               next={this.fetchMoreInspectionData}
               hasMore={this.state.hasMoreInspectionData}
               loader={<h4>검수 작업 내역을 가져오는 중...</h4>}
-              scrollableTarget="inspectionScrollableDiv"
+              scrollableTarget="scrollableDiv"
               endMessage={
                 <p style={{ textAlign: "center" }}>
                   <b>더 이상 가져올 내역이 없습니다</b>
@@ -245,15 +247,13 @@ class CreatorHistoryPage extends Component {
                 </TableBody>
               </Table>
             </InfiniteScroll>
-          </TableContainer>
-        ) : (
-          <TableContainer id="normalScrollableDiv">
+          ) : (
             <InfiniteScroll
               dataLength={this.state.normalData.length}
               next={this.fetchMoreNormalData}
               hasMore={this.state.hasMoreNormalData}
               loader={<h4>생산 작업 내역을 가져오는 중...</h4>}
-              scrollableTarget="normalScrollableDiv"
+              scrollableTarget="scrollableDiv"
               endMessage={
                 <p style={{ textAlign: "center" }}>
                   <b>더 이상 가져올 내역이 없습니다</b>
@@ -287,8 +287,8 @@ class CreatorHistoryPage extends Component {
                 </TableBody>
               </Table>
             </InfiniteScroll>
-          </TableContainer>
-        )}
+          )}
+        </TableContainer>
       </Container>
     );
   }
