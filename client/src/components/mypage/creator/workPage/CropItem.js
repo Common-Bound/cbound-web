@@ -165,10 +165,7 @@ class CropItem extends Component {
     await this.setState({
       label: e.target.value
     });
-    this.props.changeLabel(
-      this.props.crop.shape_attributes.id,
-      this.state.label
-    );
+    this.changeLabel();
   };
 
   // 라벨값을 부모 컴포넌트로부터 바꿔준다.
@@ -283,16 +280,7 @@ class CropItem extends Component {
         );
       }
     }
-    document.getElementById(this.props.crop.shape_attributes.id).focus();
   }
-
-  handleKeyPress = e => {
-    if (e.charCode === 13) {
-      e.preventDefault();
-
-      this.changeLabel();
-    }
-  };
 
   render() {
     return (
@@ -337,7 +325,6 @@ class CropItem extends Component {
           id={this.props.crop.shape_attributes.id}
           value={this.state.label}
           onChange={this.handleLabelChange}
-          onKeyPress={this.handleKeyPress}
         />
       </CropItemContainer>
     );
