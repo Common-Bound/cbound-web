@@ -160,6 +160,14 @@ class DashBoard extends Component {
     };
   }
 
+  async componentDidMount() {
+    await this.fetchData();
+    this.drawLineChart();
+    this.drawPieChart();
+    await this.fetchMoreInspectionData();
+    console.log(this.props.location);
+  }
+
   async fetchMoreInspectionData() {
     const url = `/api${this.props.match.url}/${this.state.inspectionPage}`;
     console.log(url);
@@ -201,13 +209,6 @@ class DashBoard extends Component {
   //   setTimeout(() => wow(), 1000);
   //   // this.chartReference.update();
   // };
-
-  async componentDidMount() {
-    await this.fetchMoreInspectionData();
-    await this.fetchData();
-    this.drawLineChart();
-    this.drawPieChart();
-  }
 
   fetchData = async () => {
     const url = `/api${this.props.match.url}`;
