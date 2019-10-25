@@ -116,9 +116,10 @@ class RequesterProjectsPage extends Component {
     const result = await fetch(url)
       .then(res => res.json())
       .then(data => {
-        if (data.message) {
-          return alert(data.message);
-        }
+        if (data.result)
+          if (data.message) {
+            return alert(data.message);
+          }
         this.setState({ session: data.result, loading: false });
         return new Promise(resolve => {
           resolve(data.result);

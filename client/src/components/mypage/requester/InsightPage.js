@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Route } from "react-router-dom";
-import Main from "./RequesterMain";
+import DashBoard from "./DashBoard";
 import styled from "styled-components";
 
 const WorkContainer = styled.div`
@@ -24,7 +24,12 @@ class InsightPage extends Component {
           exact
           path={`${this.props.location.pathname}`}
           render={props => (
-            <Main {...props} info={info} project_id={project_id} />
+            <DashBoard
+              {...props}
+              info={info}
+              project_id={project_id}
+              email={this.props.email}
+            />
           )}
         />
       </WorkContainer>

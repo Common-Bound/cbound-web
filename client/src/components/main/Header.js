@@ -238,46 +238,9 @@ class Header extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      user_id: "",
-      email: "",
-      point: undefined,
-      showDropDown: false,
-      redirect: false
+      showDropDown: false
     };
   }
-
-  fetchData = async () => {
-    const url = `/api/mypage/creator/point`;
-    console.log(this.props);
-
-    const result = await fetch(url)
-      .then(res => res.json())
-      .then(async data => {
-        console.log("data: ", data);
-        if (data.result === false) {
-          alert("로그인 해주세요");
-          await this.setState({
-            redirect: true
-          });
-        }
-        return new Promise(resolve => resolve(data.result));
-      })
-      .catch(err => {
-        console.log(err);
-      });
-
-    await this.setState({
-      user_id: result.id,
-      email: result.email,
-      point: result.point
-    });
-  };
-
-  componentWillMount = async () => {
-    if (this.props.page === "creator") {
-      await this.fetchData();
-    }
-  };
 
   handleClick = () => {
     this.setState({
@@ -286,7 +249,8 @@ class Header extends Component {
   };
 
   render() {
-    const { user_id, email, point, showDropDown } = this.state;
+    const { user_id, email, point } = this.props;
+    const { showDropDown } = this.state;
     return (
       <HeaderContainer>
         <Logo
@@ -335,7 +299,6 @@ class Header extends Component {
             </MobileButtonContainer>
           </MobileMenuContainer>
         </MobileMenuBackground>
-        {this.state.redirect ? <Redirect to="/signin/select" /> : undefined}
       </HeaderContainer>
     );
   }

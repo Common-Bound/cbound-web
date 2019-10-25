@@ -15,6 +15,7 @@
     "react-dom": "^16.8.6",
     "react-dropzone": "^10.1.7",
     "react-image-crop": "git+https://github.com/eunsukimme/react-image-crop.git",
+    "react-infinite-scroll-component": "^4.5.3",
     "react-router-dom": "^5.0.1",
     "react-scripts": "3.0.1",
     "reactstrap": "^8.0.1",

@@ -6,6 +6,8 @@ import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
+import InfiniteScroll from "react-infinite-scroll-component";
+import { Button } from "reactstrap";
 
 const Container = styled.div`
   width: 100%;
@@ -101,12 +103,17 @@ class CreatorHistoryPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      projects: []
+      normalData: [],
+      inspectionData: [],
+      hasMoreInspectionData: true,
+      hasMoreNormalData: true,
+      inspectionPage: 0,
+      normalPage: 0,
+      isInspection: false
     };
-  }
 
-  componentDidMount() {
-    this.fetchProject();
+    this.fetchMoreInspectionData = this.fetchMoreInspectionData.bind(this);
+    this.fetchMoreNormalData = this.fetchMoreNormalData.bind(this);
   }
 
   /**
@@ -114,8 +121,14 @@ class CreatorHistoryPage extends Component {
    *
    * @memberof CreatorProjectsPage
    */
-  async fetchProject() {
-    const url = `/api${this.props.match.path}`;
+
+  async componentDidMount() {
+    await this.fetchMoreInspectionData();
+    await this.fetchMoreNormalData();
+  }
+
+  async fetchMoreInspectionData() {
+    const url = `/api${this.props.match.path}/page/inspection/${this.state.inspectionPage}`;
     console.log(url);
     await fetch(url)
       .then(res => res.json())
@@ -124,22 +137,43 @@ class CreatorHistoryPage extends Component {
           return alert(data.message);
         }
         if (data.result) {
+          // 데이터가 20개보다 적게 들어오면 더 이상 불러올 데이터가 없음
+          if (data.result.length < 20) {
+            this.setState({
+              hasMoreInspectionData: false
+            });
+          }
           console.log(data);
-          const new_projects = data.result.map(el => {
-            return (
-              <ProjectHistory
-                key={el.id}
-                id={el.id}
-                title={el.title}
-                date={el.date}
-                reward={el.reward}
-                project_type={el.project_type}
-                status={el.status}
-              />
-            );
-          });
+
           this.setState({
-            projects: new_projects
+            inspectionData: this.state.inspectionData.concat(data.result),
+            inspectionPage: this.state.inspectionPage + 1
+          });
+        }
+      });
+  }
+
+  async fetchMoreNormalData() {
+    const url = `/api${this.props.match.path}/page/normal/${this.state.normalPage}`;
+    console.log(url);
+    await fetch(url)
+      .then(res => res.json())
+      .then(data => {
+        if (data.message) {
+          return alert(data.message);
+        }
+        if (data.result) {
+          // 데이터가 20개보다 적게 들어오면 더 이상 불러올 데이터가 없음
+          if (data.result.length < 20) {
+            this.setState({
+              hasMoreNormalData: false
+            });
+          }
+          console.log(data);
+
+          this.setState({
+            normalData: this.state.normalData.concat(data.result),
+            normalPage: this.state.normalPage + 1
           });
         }
       });
@@ -151,7 +185,21 @@ class CreatorHistoryPage extends Component {
         <TitleContainer>
           <LeftTitleContainer>
             <Title>Work History</Title>
-            <SemiTitle>작업 참여 내역</SemiTitle>
+            <SemiTitle>
+              작업 참여 내역
+              <Button
+                outline
+                color="primary"
+                value={this.state.isInspection}
+                onClick={() => {
+                  this.setState({
+                    isInspection: !this.state.isInspection
+                  });
+                }}
+              >
+                <strong>{this.state.isInspection ? "검수" : "생산"}</strong>
+              </Button>
+            </SemiTitle>
           </LeftTitleContainer>
           <RightTitleContainer>
             <RightSemiTitle>
@@ -159,18 +207,87 @@ class CreatorHistoryPage extends Component {
             </RightSemiTitle>
           </RightTitleContainer>
         </TitleContainer>
-        <TableContainer>
-          <Table>
-            <StyledTableHead>
-              <TableRow>
-                <StyledTableCell align="center">날짜</StyledTableCell>
-                <StyledTableCell align="center">제목</StyledTableCell>
-                <StyledTableCell align="center">포인트</StyledTableCell>
-                <StyledTableCell align="center">상태</StyledTableCell>
-              </TableRow>
-            </StyledTableHead>
-            <TableBody>{this.state.projects}</TableBody>
-          </Table>
+        <TableContainer id="scrollableDiv">
+          {this.state.isInspection ? (
+            <InfiniteScroll
+              dataLength={this.state.inspectionData.length}
+              next={this.fetchMoreInspectionData}
+              hasMore={this.state.hasMoreInspectionData}
+              loader={<h4>검수 작업 내역을 가져오는 중...</h4>}
+              scrollableTarget="scrollableDiv"
+              endMessage={
+                <p style={{ textAlign: "center" }}>
+                  <b>더 이상 가져올 내역이 없습니다</b>
+                </p>
+              }
+            >
+              <Table>
+                <StyledTableHead>
+                  <TableRow>
+                    <StyledTableCell align="center">날짜</StyledTableCell>
+                    <StyledTableCell align="center">제목</StyledTableCell>
+                    <StyledTableCell align="center">포인트</StyledTableCell>
+                    <StyledTableCell align="center">상태</StyledTableCell>
+                  </TableRow>
+                </StyledTableHead>
+                <TableBody>
+                  {this.state.inspectionData.map((el, index) => {
+                    return (
+                      <ProjectHistory
+                        key={index}
+                        title={el.title}
+                        date={el.date}
+                        reward={el.reward}
+                        data_type={el.project_type}
+                        data_id={el.id}
+                        status={el.status}
+                      />
+                    );
+                  })}
+                </TableBody>
+              </Table>
+            </InfiniteScroll>
+          ) : (
+            <InfiniteScroll
+              dataLength={this.state.normalData.length}
+              next={this.fetchMoreNormalData}
+              hasMore={this.state.hasMoreNormalData}
+              loader={<h4>생산 작업 내역을 가져오는 중...</h4>}
+              scrollableTarget="scrollableDiv"
+              endMessage={
+                <p style={{ textAlign: "center" }}>
+                  <b>더 이상 가져올 내역이 없습니다</b>
+                </p>
+              }
+            >
+              <Table>
+                <StyledTableHead>
+                  <TableRow>
+                    <StyledTableCell align="center">날짜</StyledTableCell>
+                    <StyledTableCell align="center">제목</StyledTableCell>
+                    <StyledTableCell align="center">포인트</StyledTableCell>
+                    <StyledTableCell align="center">상태</StyledTableCell>
+                  </TableRow>
+                </StyledTableHead>
+                <TableBody>
+                  {this.state.normalData.map((el, index) => {
+                    return (
+                      <ProjectHistory
+                        key={index}
+                        id={el.id}
+                        title={el.title}
+                        date={el.date}
+                        reward={el.reward}
+                        data_type={el.project_type}
+                        data_id={el.id}
+                        status={el.status}
+                      />
+                    );
+                  })}
+                </TableBody>
+              </Table>
+            </InfiniteScroll>
+          )}
         </TableContainer>
       </Container>
     );

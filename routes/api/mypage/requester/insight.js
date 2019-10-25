@@ -4,6 +4,21 @@ const db = require("../../../../db/index");
 const moment = require("moment-timezone");
 const logger = require("../../../../config/logger");
 
+// 검수한 데이터를 페이지로 가져오는 라우터
+router.get("/:project_id/:page", async (req, res, next) => {
+  const project_id = req.params.project_id;
+  const page_num = req.params.page;
+  const sql = `select id, payload->'orig_image' as orig_image, status, created_at from data where project_id = $1 order by created_at desc limit $2 offset $3;`;
+  const results = await db
+    .query(sql, [project_id, 20, page_num * 20])
+    .then(res => res.rows)
+    .catch(err => {
+      logger.error(err);
+    });
+
+  return res.json({ result: results });
+});
+
 // path: ~/api/mypage/requester/insight
 router.get("/:project_id", (req, res, next) => {
   // 주어진 project_id 와 관련된 데이터를 가져온다
