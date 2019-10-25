@@ -261,7 +261,7 @@ class SignUp extends Component {
               <StyledForm onSubmit={this.handleSubmit}>
                 <StyledInput
                   required
-                  type="text"
+                  type="email"
                   value={email}
                   name="email"
                   onChange={this.handleChange}
