@@ -404,6 +404,9 @@ class Body extends Component {
                   y: cropData.y * scaleY,
                   width: cropData.width * scaleX,
                   height: cropData.height * scaleY
+                },
+                region_attributes: {
+                  label: crop.region_attributes.label
                 }
               };
             } else return crop;
