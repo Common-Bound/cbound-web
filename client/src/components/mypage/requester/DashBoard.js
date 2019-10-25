@@ -440,7 +440,7 @@ class DashBoard extends Component {
                           return (
                             <RequesterHistoryOrig
                               key={index}
-                              data_id={el.data_id}
+                              data_id={el.id}
                               name={el.orig_image}
                               date={el.created_at}
                               credit={"temp"}

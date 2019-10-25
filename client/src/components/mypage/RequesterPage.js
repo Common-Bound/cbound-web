@@ -6,6 +6,7 @@ import InsightPage from "./requester/InsightPage";
 
 import Header from "../main/Header";
 import styled from "styled-components";
+import InspectionPage from "./requester/InspectionPage";
 
 const Container = styled.div`
   width: 100%;
@@ -188,6 +189,10 @@ class RequesterPage extends React.Component {
               render={props => (
                 <InsightPage {...props} email={email}></InsightPage>
               )}
+            />
+            <Route
+              path={`${this.props.match.url}/history/:data_id`}
+              component={InspectionPage}
             />
           </Section>
         </MainContainer>
