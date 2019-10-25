@@ -238,7 +238,7 @@ class SignIn extends Component {
             <RightCard>
               <StyledForm onSubmit={this.handleSubmit}>
                 <StyledInput
-                  type="text"
+                  type="email"
                   name="email"
                   value={email}
                   onChange={this.handleChange}
