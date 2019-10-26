@@ -94,10 +94,8 @@ router.post("/", async (req, res, next) => {
   clearTimeout(timerObject[req.user.id]);
 
   const data = req.body;
-  console.log("data: ", data);
 
   const new_crop_image = data.new_crop_image;
-  console.log("new_crop_image: ", new_crop_image);
   const data_id = data.data_id;
   console.log("data_id: ", data_id);
   console.log("req.user.id: ", req.user.id);
@@ -191,10 +189,10 @@ router.post("/", async (req, res, next) => {
     // 계산된 correct 확률을 비교한다
     // 만약 correct 확률의 비율이 0.5 이상이라면 이는 통과
     // 그렇지 않으면 반려시킨다
-    console.log("# index : ", index);
-    console.log("crop label: ", crop_image[index].region_attributes.label);
-    console.log("correct_prob: ", correct_prob);
-    console.log("incorrect_prob: ", incorrect_prob);
+    // console.log("# index : ", index);
+    // console.log("crop label: ", crop_image[index].region_attributes.label);
+    // console.log("correct_prob: ", correct_prob);
+    // console.log("incorrect_prob: ", incorrect_prob);
     correct_prob / (correct_prob + incorrect_prob) > 0.5
       ? inspection_result.push("done")
       : inspection_result.push("failure");
@@ -475,12 +473,188 @@ const updateRecognitionProb = async data => {
   }
 };
 
+const InsertDataCreatedByAI = async data => {
+  // 각 데이터의 orig_image와 필드, 즉 URL을 가져온다
+  const orig_image_URLs = data.payload.orig_image;
+  // url에서 key를 추출한다
+  const bucketName = "task-data-bucket";
+  const splitted_url = orig_image_URLs.split("/");
+  let key = `${decodeURIComponent(splitted_url[3])}/${decodeURIComponent(
+    splitted_url[4]
+  )}/${decodeURIComponent(splitted_url[5])}`;
+  const orig_image_keys = key.split("+").join(" ");
+
+  // 각 key별로 object를 가져온다
+  console.log("key: ", orig_image_keys);
+  const params = {
+    Bucket: bucketName,
+    Key: orig_image_keys
+  };
+  // 원본 이미지를 Buffer로 저장하는 변수
+  let orig_image_buffer;
+  const orig_image_base64 = await s3
+    .getObject(params)
+    .promise()
+    .then(data => {
+      orig_image_buffer = Buffer.from(data.Body);
+      return Buffer.from(data.Body).toString("base64");
+    })
+    .catch(err => {
+      console.log(err);
+    });
+
+  // base64로 인코딩된 이미지들을 detection하는 엔드포인트로 전송한다
+  console.log("axios detection 요청 전송 시작");
+  let new_payload = await axios(`${endpoint.url}/ocr/detection/`, {
+    method: "POST",
+    maxContentLength: Infinity,
+    maxBodyLength: Infinity,
+    data: {
+      id: uuid(),
+      orig_image: orig_image_base64
+    }
+  })
+    .then(res => res.data)
+    .catch(err => {
+      logger.error(err);
+    });
+  console.log(new_payload);
+
+  // payload 에서 crop_image 내 각 crop 의 shape_attributes의 영역을 recognition 시킨다
+  new_payload.meta = new_payload.meta[0]; // meta 가 배열이므로 이를 object 로 변환함
+  new_payload.orig_image = orig_image_URLs;
+  // let new_meta = {};
+  // new_meta = Object.assign(new_meta, new_payload.meta[0]);
+  // new_payload = Object.assign(new_payload, { meta: new_meta });
+  // crop내 정보들을 다 shape_attributes 로 wrapping 해준다
+  const new_crop_promises = await new_payload.meta.crop_image.map(
+    async (crop, id) => {
+      let shape_attributes = {};
+      let new_crop = {};
+      shape_attributes = Object.assign(shape_attributes, crop);
+      shape_attributes.id = id;
+      new_crop.shape_attributes = shape_attributes;
+      new_crop.correct = [];
+
+      return new Promise(resolve => resolve(new_crop));
+    }
+  );
+  const new_crops = await Promise.all(new_crop_promises);
+  // shape_attributes로 wrapping 된 crop_image를 새롭게 저장한다
+  new_payload.meta.crop_image = new_crops;
+
+  const crop_image_base64_promises = await new_payload.meta.crop_image.map(
+    async crop => {
+      const shape_attr = crop.shape_attributes;
+      const x = Number(shape_attr.x);
+      const y = Number(shape_attr.y);
+      const width = Number(shape_attr.width);
+      const height = Number(shape_attr.height);
+      const option = {
+        left: Math.round(x),
+        top: Math.round(y),
+        width: Math.round(width),
+        height: Math.round(height)
+      };
+      const base64 = await sharp(orig_image_buffer)
+        .extract(option)
+        .toBuffer()
+        .then(async data => {
+          const crop_image_base64 = await Buffer.from(data).toString("base64");
+
+          return new Promise(resolve => resolve(crop_image_base64));
+        })
+        .catch(err => {
+          logger.error(err);
+        });
+
+      return new Promise(resolve => resolve(base64));
+    }
+  );
+
+  const crop_image_base64s = await Promise.all(crop_image_base64_promises);
+
+  // AI 서버로 요청을 전송한다
+  console.log("axios recognition 요청 전송 시작");
+  const recog_result = await axios(`${endpoint.url}/ocr/recognition/`, {
+    method: "POST",
+    maxContentLength: Infinity,
+    maxBodyLength: Infinity,
+    data: {
+      id: uuid(),
+      crop_image: crop_image_base64s
+    }
+  })
+    .then(res => res.data)
+    .catch(err => {
+      console.log(err);
+    });
+  console.log("recog_result.label[0]: ", recog_result.label[0]);
+  console.log("recog_result.prob[0]: ", recog_result.prob[0]);
+
+  // 각 crop_image 의 region_attributes 필드에 label, prob 값을 추가한다
+  const new_crop_image_promises = await new_payload.meta.crop_image.map(
+    (crop, index) => {
+      crop.region_attributes = {};
+      crop.region_attributes["label"] = recog_result.label[index];
+      crop.region_attributes["prob"] = recog_result.prob[index];
+
+      return new Promise(resolve => resolve(crop));
+    }
+  );
+  const new_crop_image = await Promise.all(new_crop_image_promises);
+  // region_attributes 필드를 추가한다
+  new_payload.meta.crop_image = new_crop_image;
+
+  // 새롭게 AI 가 생성한 데이터를 저장한다
+  const data_id = uuid();
+  const date = moment()
+    .tz("Asia/Seoul")
+    .format();
+  const reliability = 0;
+  const inspector_count = 1;
+  const schedule_state = "queued";
+  const project_id = "8eabb4e4-4129-4015-a2c3-b19040700326";
+  const user_id = "c3348be3-7035-4943-b15a-b381f991a63a";
+  const insert_query = `insert into data values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) returning *;`;
+  const update_query_results = await db
+    .query(insert_query, [
+      data_id,
+      "image",
+      new_payload,
+      date,
+      "created",
+      user_id,
+      [],
+      project_id,
+      schedule_state,
+      reliability,
+      inspector_count
+    ])
+    .then(res => res.rows)
+    .catch(err => {
+      logger.error(err);
+      return false;
+    });
+
+  console.log(
+    `data ${data.id} insert result: ${update_query_results ? "true" : "false"}`
+  );
+
+  if (data_index >= 873) {
+    clearInterval(update_1_per_20_sec);
+    logger.info("recognition_prob 업데이트 완료");
+  }
+};
+
 // 업데이트 시킬 데이터의 인덱스
-let data_index = 18;
+let data_index = 0;
 // 10초마다 업뎃 함수를 호출하는 Interval 객체(detection)
 let update_2_per_10_sec;
 // 10초마다 업뎃 함수를 호출하는 Interval 객체(recognition)
 let update_1_per_10_sec;
+// 20초마다 업뎃 함수를 호출하는 Interval 객체(recognition)
+let update_1_per_20_sec;
 // data를 저장하는 배열
 let datas;
 
@@ -544,5 +718,28 @@ let datas;
 
 //   return res.json({ result: "업데이트가 시작됩니다." });
 // });
+
+// DB에 저장된 데이터를 새롭게 detection 한 뒤 recognition 하고 이를 새로운 프로젝트에 저장하는 요청을 핸들링하는 라우트
+router.get("/create_data_with_ai", async (req, res, next) => {
+  // 먼저 저장된 데이터들을 가져온다
+  const sql = `select * from data where project_id = '4ff5f94d-694d-420e-b7d6-0ccad18eb1f1' order by created_at asc;`;
+  const data_promises = await db
+    .query(sql, [])
+    .then(res => res.rows)
+    .catch(err => {
+      logger.info(err);
+    });
+
+  datas = await Promise.all(data_promises);
+
+  // 가져온 데이터에서 10초 마다 1개씩 업데이트 하는 요청을 보낸다
+  update_1_per_10_sec = setInterval(() => {
+    console.log("data index: ", data_index);
+    InsertDataCreatedByAI(datas[data_index]);
+    data_index += 1;
+  }, 10 * 1000);
+
+  return res.json({ result: "업데이트가 시작됩니다." });
+});
 
 module.exports = router;
