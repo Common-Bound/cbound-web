@@ -159,7 +159,8 @@ class DashBoard extends Component {
       chartTerms: "month",
       inspectionData: [],
       hasMoreInspectionData: true,
-      inspectionPage: 0
+      inspectionPage: 0,
+      month_count: []
     };
   }
 
@@ -236,7 +237,7 @@ class DashBoard extends Component {
 
   drawLineChart = () => {
     var ctx = document.getElementById("line-chart").getContext("2d");
-    var chart = new Chart(ctx, {
+    new Chart(ctx, {
       // The type of chart we want to create
       type: "line",
       // The data for our dataset
@@ -268,8 +269,8 @@ class DashBoard extends Component {
             pointHoverBorderWidth: 12,
             data:
               this.state.chartTerms === "month"
-                ? [0, 10, 5, 2, 20, 30, 45, 30, 25, 49, 69, 80]
-                : [10, 20, 30, 40]
+                ? this.state.data.month_count
+                : this.state.data.weekly_count
           }
         ]
       },
@@ -282,7 +283,7 @@ class DashBoard extends Component {
   drawPieChart = () => {
     const data = this.state.data;
     var ctx = document.getElementById("pie-chart").getContext("2d");
-    var chart = new Chart(ctx, {
+    new Chart(ctx, {
       // The type of chart we want to create
       type: "pie",
       // The data for our dataset

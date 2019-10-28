@@ -39,6 +39,7 @@ class CreateProjectPage extends Component {
     cost: "",
     iamge: ""
   };
+
   handleSubmit = async e => {
     e.preventDefault();
 
