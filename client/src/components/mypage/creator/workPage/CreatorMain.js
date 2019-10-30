@@ -360,6 +360,7 @@ class CreatorMain extends Component {
               this.Refs[index] = ref;
             }}
             index={index}
+            classes={this.props.info.classes}
           />
         );
       });

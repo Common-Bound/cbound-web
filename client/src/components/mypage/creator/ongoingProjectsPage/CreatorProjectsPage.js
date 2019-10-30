@@ -106,6 +106,7 @@ class CreatorProjectsPage extends Component {
                 project_type={el.project_type}
                 guideline_url={el.guideline_url}
                 reward={el.reward}
+                classes={el.class}
               />
             );
           });

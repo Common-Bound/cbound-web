@@ -46,7 +46,8 @@ class CropInfoList extends Component {
       onChange,
       onRemove,
       showEdit,
-      changeLabel
+      changeLabel,
+      classes
     } = this.props;
 
     const cropList = crops.map(crop => (
@@ -59,6 +60,7 @@ class CropInfoList extends Component {
         onRemove={onRemove}
         showEdit={showEdit}
         changeLabel={changeLabel}
+        classes={classes}
       />
     ));
 

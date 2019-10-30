@@ -1,6 +1,10 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 import deleteImg from "../../../../images/close_button.webp";
+import InputLabel from "@material-ui/core/InputLabel";
+import MenuItem from "@material-ui/core/MenuItem";
+import FormControl from "@material-ui/core/FormControl";
+import Select from "@material-ui/core/Select";
 
 const CropItemContainer = styled.div`
   min-width: 140px;
@@ -283,6 +287,8 @@ class CropItem extends Component {
   }
 
   render() {
+    const classes = this.props.classes;
+
     return (
       <CropItemContainer>
         <ImageContainer onClick={this.handleChange}>
@@ -320,12 +326,29 @@ class CropItem extends Component {
             onClick={this.handleRemove}
           />
         </ImageContainer>
-        <BlueInput
-          type="text"
-          id={this.props.crop.shape_attributes.id}
-          value={this.state.label}
-          onChange={this.handleLabelChange}
-        />
+        {classes.length > 0 ? (
+          <FormControl>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={this.state.label}
+              onChange={this.handleLabelChange}
+            >
+              {classes.map((el, index) => (
+                <MenuItem key={index} value={el}>
+                  {el}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        ) : (
+          <BlueInput
+            type="text"
+            id={this.props.crop.shape_attributes.id}
+            value={this.state.label}
+            onChange={this.handleLabelChange}
+          />
+        )}
       </CropItemContainer>
     );
   }

@@ -53,7 +53,8 @@ CREATE TABLE "project" (
   "type" type,
   "project_type" project_type,
   "guideline_url" varchar,
-  "reward" int
+  "reward" int,
+  "class" varchar []
 );
 CREATE TABLE "data" (
   "id" varchar PRIMARY KEY,
@@ -68,35 +69,27 @@ CREATE TABLE "data" (
   "reliability" float,
   "inspector_count" int
 );
-ALTER TABLE
-  "creator_pool"
+ALTER TABLE "creator_pool"
 ADD
   FOREIGN KEY ("project_id") REFERENCES "project" ("id");
-ALTER TABLE
-  "creator_pool"
+ALTER TABLE "creator_pool"
 ADD
   FOREIGN KEY ("creator_id") REFERENCES "data_creator" ("id");
-ALTER TABLE
-  "requester_pool"
+ALTER TABLE "requester_pool"
 ADD
   FOREIGN KEY ("project_id") REFERENCES "project" ("id");
-ALTER TABLE
-  "requester_pool"
+ALTER TABLE "requester_pool"
 ADD
   FOREIGN KEY ("requester_id") REFERENCES "data_requester" ("id");
-ALTER TABLE
-  "inspector_pool"
+ALTER TABLE "inspector_pool"
 ADD
   FOREIGN KEY ("inspector_id") REFERENCES "data_creator" ("id");
-ALTER TABLE
-  "inspector_pool"
+ALTER TABLE "inspector_pool"
 ADD
   FOREIGN KEY ("data_id") REFERENCES "data" ("id");
-ALTER TABLE
-  "data"
+ALTER TABLE "data"
 ADD
   FOREIGN KEY ("creator_id") REFERENCES "data_creator" ("id");
-ALTER TABLE
-  "data"
+ALTER TABLE "data"
 ADD
   FOREIGN KEY ("project_id") REFERENCES "project" ("id");

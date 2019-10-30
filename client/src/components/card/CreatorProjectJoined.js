@@ -192,7 +192,8 @@ class CreatorProjectJoined extends Component {
               state: {
                 title: this.props.title,
                 created_at: this.props.created_at,
-                due_date: this.props.due_date
+                due_date: this.props.due_date,
+                classes: this.props.classes
               }
             }}
           />

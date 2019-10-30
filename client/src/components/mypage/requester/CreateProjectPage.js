@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Button, Form, FormGroup, Label, Input } from "reactstrap";
 import styled from "styled-components";
+import Class from "./Class";
 
 const Container = styled.div`
   width: 100%;
@@ -28,17 +29,44 @@ const ButtonContainer = styled.div`
   text-align: center;
 `;
 
+const ClassContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  margin: 20px 0px;
+`;
+
+const Classes = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+`;
+
+const Section = styled.div`
+  display: flex;
+`;
+
 class CreateProjectPage extends Component {
-  state = {
-    title: "",
-    simpleDesc: "",
-    detailDesc: "",
-    guidelineURL: "",
-    dueDate: "",
-    type: "image",
-    cost: "",
-    iamge: ""
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      title: "",
+      simpleDesc: "",
+      detailDesc: "",
+      guidelineURL: "",
+      dueDate: "",
+      type: "image",
+      cost: "",
+      iamge: "",
+      class: "",
+      classComponents: [],
+      classes: [],
+      id: 0
+    };
+
+    this.inputRef = React.createRef();
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+  }
 
   handleSubmit = async e => {
     e.preventDefault();
@@ -50,7 +78,11 @@ class CreateProjectPage extends Component {
       due_date: this.state.dueDate,
       type: this.state.type,
       guideline_url: this.state.guidelineURL,
-      reward: this.state.cost
+      reward: this.state.cost,
+      class:
+        this.state.type === "image"
+          ? this.state.classes.map(option => option.value)
+          : []
     };
 
     const formData = new FormData();
@@ -86,6 +118,58 @@ class CreateProjectPage extends Component {
       [e.target.name]: e.target.value
     });
   };
+
+  handleAddClass = async e => {
+    const newClassComponents = this.state.classComponents;
+    const newClasses = this.state.classes;
+
+    const input = this.inputRef.current.props.value;
+    const id = this.state.id;
+
+    const classOption = {
+      id: id,
+      value: input
+    };
+    if (input.length <= 0) {
+      return alert("클래스 이름을 입력하세요");
+    }
+    const ClassComponentOption = {
+      id: id,
+      component: (
+        <Class
+          key={id}
+          name={input}
+          id={id}
+          handleDeleteClass={this.handleDeleteClass.bind(this)}
+        />
+      )
+    };
+
+    newClassComponents.push(ClassComponentOption);
+    newClasses.push(classOption);
+
+    await this.setState({
+      classComponents: newClassComponents,
+      classes: newClasses,
+      id: id + 1
+    });
+  };
+
+  handleDeleteClass = async id => {
+    let newClassComponents = this.state.classComponents;
+    let newClasses = this.state.classes;
+
+    let index = newClassComponents.findIndex(component => component.id === id);
+    newClassComponents.splice(index, 1);
+    index = newClasses.findIndex(option => option.id === id);
+    newClasses.splice(index, 1);
+
+    await this.setState({
+      classComponents: newClassComponents,
+      classes: newClasses
+    });
+  };
+
   render() {
     return (
       <Container>
@@ -175,7 +259,38 @@ class CreateProjectPage extends Component {
               <option value="voice">음성</option>
               <option value="survey">설문 조사</option>
             </Input>
-          </FormGroup>{" "}
+            {this.state.type === "image" ? (
+              <ClassContainer>
+                <Section>
+                  <Input
+                    type="text"
+                    name="class"
+                    ref={this.inputRef}
+                    value={this.state.class}
+                    onChange={this.handleChange}
+                    style={{ width: "200px" }}
+                  />
+                  <Button onClick={this.handleAddClass.bind(this)}>
+                    클래스 추가
+                  </Button>
+                  {this.state.classes.length === 0 ? (
+                    <div style={{ padding: "10px", display: "inline-block" }}>
+                      클래스가 설정되지 않으면 라벨을 자유롭게 입력할 수
+                      있습니다
+                    </div>
+                  ) : (
+                    undefined
+                  )}
+                </Section>
+
+                <Classes>
+                  {this.state.classComponents.map(option => option.component)}
+                </Classes>
+              </ClassContainer>
+            ) : (
+              undefined
+            )}
+          </FormGroup>
           <FormGroup>
             <Label for="cost">데이터 가격</Label>
             <Input

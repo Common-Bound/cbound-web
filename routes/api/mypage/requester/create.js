@@ -52,6 +52,7 @@ router.post(
     const info = JSON.parse(req.body.info);
     const user_id = req.user.id;
     const title_image = req.file.location;
+    const classes = info.class;
 
     var created_at = moment()
       .tz("Asia/Seoul")
@@ -60,10 +61,10 @@ router.post(
       .tz("Asia/Seoul")
       .format();
     // id, ref_project, title, title_image, simple_description, detail_description,
-    // due_date, created_at, type, project_type, guideline_url, reward
+    // due_date, created_at, type, project_type, guideline_url, reward, class
 
     db.query(
-      "insert into project values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)",
+      "insert into project values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)",
       [
         normal_id,
         null,
@@ -76,7 +77,8 @@ router.post(
         info.type,
         "normal",
         info.guideline_url,
-        info.reward
+        info.reward,
+        classes
       ],
       (err, result) => {
         if (err) {
@@ -85,7 +87,7 @@ router.post(
         }
         // 검수 프로젝트 추가
         db.query(
-          "insert into project values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)",
+          "insert into project values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)",
           [
             inspection_id,
             normal_id,
@@ -98,7 +100,8 @@ router.post(
             info.type,
             "inspection",
             info.guideline_url,
-            info.reward
+            info.reward,
+            classes
           ],
           (err, result) => {
             if (err) {
