@@ -52,7 +52,7 @@ class CreateProjectPage extends Component {
       title: "",
       simpleDesc: "",
       detailDesc: "",
-      guidelineURL: "",
+      // guidelineURL: "",
       dueDate: "",
       type: "image",
       cost: "",
@@ -77,7 +77,7 @@ class CreateProjectPage extends Component {
       detail_description: this.state.detailDesc,
       due_date: this.state.dueDate,
       type: this.state.type,
-      guideline_url: this.state.guidelineURL,
+      // guideline_url: this.state.guidelineURL,
       reward: this.state.cost,
       class:
         this.state.type === "image"
@@ -223,7 +223,7 @@ class CreateProjectPage extends Component {
               accept="image/*"
             ></Input>
           </FormGroup>
-          <FormGroup>
+          {/* <FormGroup>
             <Label for="guidelineURL">가이드라인</Label>
             <Input
               type="url"
@@ -233,7 +233,7 @@ class CreateProjectPage extends Component {
               placeholder="가이드라인 URL"
               required
             />
-          </FormGroup>
+          </FormGroup> */}
           <FormGroup>
             <Label for="dueDate">만기일</Label>
             <Input

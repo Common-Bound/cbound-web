@@ -76,7 +76,7 @@ router.post(
         created_at,
         info.type,
         "normal",
-        info.guideline_url,
+        null, //info.guideline_url,
         info.reward,
         classes
       ],
