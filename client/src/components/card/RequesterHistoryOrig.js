@@ -31,6 +31,7 @@ class RequesterHistoryOrig extends Component {
           ></img>
         </th>
         <td>{created_time}</td>
+        <td>{this.props.data_id}</td>
         <td>{this.props.credit}</td>
         {this.props.status === "failure" ? (
           <td>

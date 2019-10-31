@@ -432,6 +432,7 @@ class DashBoard extends Component {
                         <tr>
                           <th scope="col">해당 이미지</th>
                           <th scope="col">날짜</th>
+                          <th scope="col">데이터 ID</th>
                           <th scope="col">신용도</th>
                           <th scope="col">상태</th>
                         </tr>
