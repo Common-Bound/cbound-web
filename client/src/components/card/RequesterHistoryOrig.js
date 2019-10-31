@@ -44,6 +44,7 @@ class RequesterHistoryOrig extends Component {
         )}
         {this.state.clicked ? (
           <Redirect
+            push
             to={{
               pathname: `/mypage/requester/history/${this.props.data_id}`,
               state: {
