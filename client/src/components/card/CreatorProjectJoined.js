@@ -30,17 +30,28 @@ const MainContainer = styled.div`
 
   @media (max-width: 500px) {
     flex-direction: row;
-    height: 120px;
+    height: 100px;
   }
 `;
 
 const SubContainer = styled.div`
   width: 100%;
+  height: 220px;
   padding: 10px;
-  overflow: scroll;
+  overflow: auto;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+
+  @media (max-width: 1024px) {
+    height: 200px;
+  }
 
   @media (max-width: 500px) {
     width: 60%;
+    height: 100%;
     padding: 4px;
   }
 `;
@@ -64,30 +75,30 @@ const Image = styled.div`
 
 const Title = styled.div`
   padding: 10px;
-  font-size: 24px;
+  font-size: 20px;
   font-weight: bold;
   color: black;
   word-break: keep-all;
 
   @media (max-width: 1024px) {
     padding: 8px;
-    font-size: 20px;
+    font-size: 18px;
   }
   @media (max-width: 500px) {
     padding: 4px;
-    font-size: 16px;
+    font-size: 14px;
   }
 `;
 
 const Description = styled.div`
   padding: 8px;
   color: grey;
-  font-size: 18px;
+  font-size: 16px;
   word-break: keep-all;
 
   @media (max-width: 1024px) {
     padding: 6px;
-    font-size: 16px;
+    font-size: 14px;
   }
   @media (max-width: 500px) {
     padding: 2px;
@@ -98,12 +109,13 @@ const Description = styled.div`
 const Info = styled.div`
   padding: 8px;
   color: ${props => (props.color === "red" ? "red" : "grey")};
-  font-size: 16px;
+  font-size: 14px;
+  font-weight: ${props => (props.weight === "bold" ? "bold" : "normal")}
   word-break: keep-all;
 
   @media (max-width: 1024px) {
     padding: 6px;
-    font-size: 14px;
+    font-size: 12px;
   }
   @media (max-width: 500px) {
     padding: 2px;
@@ -128,10 +140,11 @@ const Button = styled.div`
   }
 
   @media (max-width: 1024px) {
-    font-size: 16px;
+    font-size: 14px;
   }
   @media (max-width: 500px) {
-    font-size: 14px;
+    font-size: 12px;
+    padding: 6px;
   }
 `;
 
@@ -174,10 +187,12 @@ class CreatorProjectJoined extends Component {
               {this.props.project_type === "normal" ? "생성" : "검수"})
             </Title>
             <Description>{this.props.simple_description}</Description>
+            <Info color="red" weight="bold">
+              {this.props.reward} P
+            </Info>
             <Info>
               {created_time} ~ {due_date_time}
             </Info>
-            <Info color="red">{this.props.reward} P</Info>
           </SubContainer>
         </MainContainer>
         <ButtonContainer>
