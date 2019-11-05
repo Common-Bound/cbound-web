@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-import moment from "moment";
 import CropImage from "./CropImage";
 import "react-image-crop/dist/ReactCrop.css";
 
@@ -24,12 +23,12 @@ const EntireTitleContainer = styled.div`
   color: black !important;
 `;
 
-const LeftTitle = styled.div`
-  font-family: SpoqaHanSans;
-  text-align: left;
-  font-weight: bold;
-  font-size: 32px;
-`;
+// const LeftTitle = styled.div`
+//   font-family: SpoqaHanSans;
+//   text-align: left;
+//   font-weight: bold;
+//   font-size: 32px;
+// `;
 
 const RightTitleContainer = styled.div`
   font-family: Avenir;

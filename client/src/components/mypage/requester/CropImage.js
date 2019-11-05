@@ -45,7 +45,7 @@ class CropImage extends Component {
     const { id, x, y, width, height, label } = this.props.crop.shape_attributes
       ? this.props.crop.shape_attributes
       : this.props.crop;
-    const { status, labelComponent } = this.state;
+    const { labelComponent } = this.state;
 
     const image = document.getElementById("image");
     const scaleX = image ? image.naturalWidth / image.width : 1;
