@@ -119,13 +119,11 @@ const MainContainer = styled.div`
 const FileListContainer = styled.div`
   width: 64px;
   height: 48vh;
-
-  margin-right: 10px;
+  background-color: black;
 
   @media (max-width: 1024px) {
     height: 48px;
     width: 100%;
-    margin-bottom: 10px;
   }
   @media (max-width: 500px) {
     height: 36px;
@@ -144,7 +142,6 @@ const FileList = styled.div`
   align-items: center;
 
   overflow: scroll;
-  border: 1px solid lightgrey;
 
   @media (max-width: 1024px) {
     flex-direction: row;
@@ -774,7 +771,7 @@ class CreatorMain extends Component {
                   data-position="left"
                   disabled={this.state.loading}
                 >
-                  완료
+                  종료
                 </StyledButton>
               ) : (
                 ""
@@ -798,9 +795,9 @@ class CreatorMain extends Component {
                 data-step="2"
                 data-disable-interaction="true"
               >
+                {/* <FileThumbnail />
                 <FileThumbnail />
-                <FileThumbnail />
-                <FileThumbnail />
+                <FileThumbnail /> */}
               </FileList>
             ) : (
               <FileList>

@@ -63,6 +63,7 @@ const RightDescriptionContainer = styled.div`
     width: 100%;
 
     flex-direction: row;
+    justify-content: space-around;
     align-items: center;
   }
 `;
@@ -83,10 +84,21 @@ const ButtonContainer = styled.div`
   cursor: pointer;
 
   @media (max-width: 500px) {
-    width: 28px;
+    flex-direction: row;
+    justify-content: space-around;
+    width: 62px;
     height: 28px;
-    margin-left: 8px;
   }
+`;
+
+const AIButtonContainer = styled(ButtonContainer)`
+  background-color: ${props => (props.isAI ? "white" : "black")};
+  color: ${props => (props.isAI ? "black" : "white")};
+`;
+
+const ShowButtonContainer = styled(ButtonContainer)`
+  background-color: ${props => (props.isShow ? "black" : "white")};
+  color: ${props => (props.isShow ? "white" : "black")};
 `;
 
 const CropButtonContainer = styled(ButtonContainer)`
@@ -99,30 +111,17 @@ const CropButtonContainer = styled(ButtonContainer)`
   }
 `;
 
-const ShowButtonContainer = styled(ButtonContainer)`
-  background-color: ${props => (props.isShow ? "black" : "white")};
-  color: ${props => (props.isShow ? "white" : "black")};
-`;
-
-const AIButtonContainer = styled(ButtonContainer)`
-  background-color: ${props => (props.isAI ? "white" : "black")};
-  color: ${props => (props.isAI ? "black" : "white")};
-`;
-
 const Icon = styled.i`
-  transform: scale(1.4, 1.4);
+  transform: scale(1.1, 1.1);
 
   @media (max-width: 500px) {
-    transform: scale(1.3, 1.3);
+    margin-right: 10px;
+    transform: scale(1, 1);
   }
 `;
 
 const IconTitle = styled.div`
   font-family: Avenir;
-
-  @media (max-width: 810px) {
-    display: none;
-  }
 `;
 
 // const DescriptionBoxContainer = styled.div`
@@ -169,8 +168,6 @@ const ImageContainer = styled.div`
   width: 100%;
   height: 48vh;
   position: relative;
-
-  border: ${props => (props.show ? "5px solid lightgrey" : "none")};
 
   @media (max-width: 500px) {
     border: none;
@@ -935,7 +932,7 @@ class Body extends Component {
               data-disable-interaction="true"
             >
               <Icon className="far fa-eye"></Icon>
-              <IconTitle>SHOW</IconTitle>
+              <IconTitle>Show</IconTitle>
             </ShowButtonContainer>
             <CropButtonContainer
               id="crop_button"
@@ -950,7 +947,7 @@ class Body extends Component {
               data-disable-interaction="true"
             >
               <Icon className="fas fa-crop-alt"></Icon>
-              <IconTitle>CROP</IconTitle>
+              <IconTitle>Crop</IconTitle>
             </CropButtonContainer>
           </RightDescriptionContainer>
         </MainContainer>
