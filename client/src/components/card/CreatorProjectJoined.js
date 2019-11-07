@@ -4,7 +4,7 @@ import { Redirect } from "react-router-dom";
 import moment from "moment";
 
 const Card = styled.div`
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  box-shadow: 0px 8px 8px 2px rgba(0, 0, 0, 0.2);
   min-width: 300px;
   max-width: 300px;
   margin: 0px 30px 30px 0px;
@@ -22,6 +22,8 @@ const Card = styled.div`
     max-width: 100%;
     margin: 0px 0px 30px 0px;
   }
+
+  border: 1px solid lightgrey;
 `;
 
 const MainContainer = styled.div`
@@ -30,7 +32,7 @@ const MainContainer = styled.div`
 
   @media (max-width: 500px) {
     flex-direction: row;
-    height: 100px;
+    height: 130px;
   }
 `;
 

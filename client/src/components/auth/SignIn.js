@@ -12,7 +12,7 @@ const Container = styled.div`
 
 const SignInContainer = styled.div`
   position: relative;
-  top: 8vh;
+  top: 7vh;
 
   width: 100%;
   height: 600px;

@@ -14,7 +14,7 @@ const Container = styled.div`
 
 const MainContainer = styled.div`
   position: relative;
-  top: 8vh;
+  top: 7vh;
 
   width: 100%;
 
@@ -41,7 +41,7 @@ const LeftBanner = styled.div`
   @media (max-width: 1024px) {
     position: relative;
     width: 100%;
-    height: 8vh;
+    height: 7vh;
     bottom: 0px;
 
     z-index: 0;
@@ -123,7 +123,7 @@ const Section = styled.div`
   height: 92vh;
 
   @media (max-width: 1024px) {
-    height: 84vh;
+    height: 86vh;
   }
 `;
 

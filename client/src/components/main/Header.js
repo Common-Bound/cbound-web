@@ -14,7 +14,7 @@ const HeaderContainer = styled.div`
   align-items: center;
   background-color: #000000;
   width: 100%;
-  height: 8vh;
+  height: 7vh;
 
   z-index: 1;
 
@@ -33,9 +33,7 @@ const Logo = styled(Link)`
   background-size: cover;
 
   @media (max-width: 500px) {
-    margin: 0;
-    width: 36px;
-    height: 36px;
+    display: none;
   }
 `;
 
@@ -47,7 +45,9 @@ const Title = styled(Link)`
   background-repeat: no-repeat;
 
   @media (max-width: 500px) {
-    display: none;
+    margin: 0;
+    width: 200px;
+    height: 22px;
   }
 `;
 
@@ -145,7 +145,7 @@ const DropDownContent = styled.div`
 
 const MobileProfileButtonContainer = styled.div`
   width: 36px;
-  height: 36px;
+  height: 4vh;
   display: none;
 
   @media (max-width: 500px) {
@@ -157,7 +157,7 @@ const MobileProfileButton = styled.div`
   width: 28px;
   height: 2px;
   background-color: white;
-  margin: 8px 0;
+  margin: 1vh 0;
 `;
 
 const MobileMenuBackground = styled.div`

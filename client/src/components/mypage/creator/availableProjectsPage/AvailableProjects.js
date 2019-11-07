@@ -53,11 +53,13 @@ const TableContainer = styled.div`
   flex-wrap: wrap;
 
   margin: 0 auto;
+  padding: 0 12px;
   overflow: scroll;
 
   @media (max-width: 500px) {
     flex-direction: column;
     flex-wrap: nowrap;
+    padding: 0px;
   }
 `;
 
