@@ -1,6 +1,27 @@
 import React, { Component } from "react";
 import moment from "moment";
 import { Redirect } from "react-router-dom";
+import TableCell from "@material-ui/core/TableCell";
+import TableRow from "@material-ui/core/TableRow";
+import styled from "styled-components";
+
+const ThumbnailImage = styled.img`
+  width: 100px;
+
+  @media (max-width: 500px) {
+    width: 50px;
+  }
+`;
+
+const StyledTableCell = styled(TableCell)`
+  word-break: keep-all;
+`;
+
+const DataIDTableCell = styled(TableCell)`
+  @media (max-width: 500px) {
+    display: none !important;
+  }
+`;
 
 class RequesterHistoryOrig extends Component {
   constructor(props) {
@@ -22,25 +43,21 @@ class RequesterHistoryOrig extends Component {
     );
 
     return (
-      <tr onClick={this.handleClick.bind(this)}>
-        <th scope="row">
-          <img
-            src={this.props.name}
-            alt=""
-            style={{ width: "20%", height: "auto" }}
-          ></img>
-        </th>
-        <td>{created_time}</td>
-        <td>{this.props.data_id}</td>
-        <td>{this.props.credit}</td>
+      <TableRow onClick={this.handleClick.bind(this)}>
+        <StyledTableCell align="center">
+          <ThumbnailImage src={this.props.name} alt=""></ThumbnailImage>
+        </StyledTableCell>
+        <StyledTableCell align="center">{created_time}</StyledTableCell>
+        <DataIDTableCell align="center">{this.props.data_id}</DataIDTableCell>
+        <StyledTableCell align="center">{this.props.credit}</StyledTableCell>
         {this.props.status === "failure" ? (
-          <td>
+          <StyledTableCell align="center">
             <i className="fas fa-check text-warning mr-3" /> 반려
-          </td>
+          </StyledTableCell>
         ) : (
-          <td>
+          <StyledTableCell align="center">
             <i className="fas fa-plus text-success mr-3" /> 생산
-          </td>
+          </StyledTableCell>
         )}
         {this.state.clicked ? (
           <Redirect
@@ -57,7 +74,7 @@ class RequesterHistoryOrig extends Component {
         ) : (
           undefined
         )}
-      </tr>
+      </TableRow>
     );
   }
 }

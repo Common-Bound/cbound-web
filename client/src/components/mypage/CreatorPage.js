@@ -27,7 +27,7 @@ const MainContainer = styled.div`
 
 const LeftBanner = styled.div`
   min-width: 240px;
-  height: 92vh;
+  height: 93vh;
 
   display: flex;
   flex-direction: column;
@@ -120,7 +120,7 @@ const IconTitle = styled.div`
 
 const Section = styled.div`
   width: 100%;
-  height: 92vh;
+  height: 93vh;
 
   @media (max-width: 1024px) {
     height: 86vh;

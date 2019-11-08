@@ -19,7 +19,13 @@ import Button from "@material-ui/core/Button";
 import InfiniteScroll from "react-infinite-scroll-component";
 import RequesterHistoryOrig from "../../card/RequesterHistoryOrig";
 
-import { Card, CardHeader, Table, Container, Row, Col } from "reactstrap";
+import { Container } from "reactstrap";
+import Paper from "@material-ui/core/Paper";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
 
 // core components
 // import {
@@ -91,7 +97,7 @@ const LeftTitle = styled.div`
 
 const MainChartContainer = styled.div`
   width: 92%;
-  margin: 0 auto;
+  margin: 10px auto;
 
   display: flex;
 
@@ -142,11 +148,40 @@ const PieCanvas = styled.canvas`
 `;
 
 const HistoryContainer = styled.div`
-  width: 80%;
+  width: 90%;
   height: 60vh;
-  margin: 0 auto;
+  margin: 10px auto;
 
+  display: flex;
+  flex-direction: column;
+`;
+
+const HistoryContainerTitle = styled.div`
+  font-family: SpoqaHanSans;
+  text-align: left;
+  font-weight: bold;
+  font-size: 28px;
+  color: black;
+  margin: 10px 0px;
+
+  @media (max-width: 500px) {
+    font-size: 24px;
+  }
+`;
+
+const TableWrapper = styled.div`
+  height: 50vh;
   overflow: scroll;
+`;
+
+const StyledTableCell = styled(TableCell)`
+  word-break: keep-all;
+`;
+
+const DataIDTableCell = styled(TableCell)`
+  @media (max-width: 500px) {
+    display: none !important;
+  }
 `;
 
 class DashBoard extends Component {
@@ -390,73 +425,51 @@ class DashBoard extends Component {
             <PieCanvas id="pie-chart"></PieCanvas>
           </PieChartContainer>
         </MainChartContainer>
-        <HistoryContainer id="inspectionScrollableDiv">
-          <Container className="mt--1" fluid>
-            <InfiniteScroll
-              dataLength={this.state.inspectionData.length}
-              next={this.fetchMoreInspectionData.bind(this)}
-              hasMore={this.state.hasMoreInspectionData}
-              loader={<h4>검수 작업 내역을 가져오는 중...</h4>}
-              scrollableTarget="inspectionScrollableDiv"
-              endMessage={
-                <p style={{ textAlign: "center" }}>
-                  <b>더 이상 가져올 내역이 없습니다</b>
-                </p>
-              }
-            >
-              <Row className="mt-5">
-                <Col className="mb-5 mb-xl-0" xl="8">
-                  <Card className="shadow">
-                    <CardHeader className="border-0">
-                      <Row className="align-items-center">
-                        <div className="col">
-                          <h3 className="mb-0">Recent activity</h3>
-                        </div>
-                        {/*<div className="col text-right">
-                          <Button
-                            color="primary"
-                            href="#pablo"
-                            onClick={e => e.preventDefault()}
-                            size="sm"
-                          >
-                            See all
-                          </Button> 
-                        </div>*/}
-                      </Row>
-                    </CardHeader>
-                    <Table
-                      className="align-items-center table-flush"
-                      responsive
-                    >
-                      <thead className="thead-light">
-                        <tr>
-                          <th scope="col">해당 이미지</th>
-                          <th scope="col">날짜</th>
-                          <th scope="col">데이터 ID</th>
-                          <th scope="col">신용도</th>
-                          <th scope="col">상태</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {this.state.inspectionData.map((el, index) => {
-                          return (
-                            <RequesterHistoryOrig
-                              key={index}
-                              data_id={el.id}
-                              name={el.orig_image}
-                              date={el.created_at}
-                              credit={"temp"}
-                              status={el.status}
-                            />
-                          );
-                        })}
-                      </tbody>
-                    </Table>
-                  </Card>
-                </Col>
-              </Row>
-            </InfiniteScroll>
-          </Container>{" "}
+        <HistoryContainer>
+          <HistoryContainerTitle>검수 데이터 현황</HistoryContainerTitle>
+          <Paper>
+            <TableWrapper id="inspectionScrollableDiv">
+              <Table className="align-items-center table-flush" stickyHeader>
+                <TableHead className="thead-light">
+                  <TableRow>
+                    <StyledTableCell align="center">
+                      해당 이미지
+                    </StyledTableCell>
+                    <StyledTableCell align="center">날짜</StyledTableCell>
+                    <DataIDTableCell align="center">데이터 ID</DataIDTableCell>
+                    <StyledTableCell align="center">신용도</StyledTableCell>
+                    <StyledTableCell align="center">상태</StyledTableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {this.state.inspectionData.map((el, index) => {
+                    return (
+                      <RequesterHistoryOrig
+                        key={index}
+                        data_id={el.id}
+                        name={el.orig_image}
+                        date={el.created_at}
+                        credit={"temp"}
+                        status={el.status}
+                      />
+                    );
+                  })}
+                  <InfiniteScroll
+                    dataLength={this.state.inspectionData.length}
+                    next={this.fetchMoreInspectionData.bind(this)}
+                    hasMore={this.state.hasMoreInspectionData}
+                    loader={<h4>검수 작업 내역을 가져오는 중...</h4>}
+                    scrollableTarget="inspectionScrollableDiv"
+                    endMessage={
+                      <p style={{ textAlign: "center" }}>
+                        <b>더 이상 가져올 내역이 없습니다</b>
+                      </p>
+                    }
+                  ></InfiniteScroll>
+                </TableBody>
+              </Table>
+            </TableWrapper>
+          </Paper>
         </HistoryContainer>
         <Container fluid>
           <AdminFooter />
