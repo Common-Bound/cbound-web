@@ -190,7 +190,7 @@ class SignUp extends Component {
       this.state.password,
       this.state.passwordCheck
     );
-    if (this.state.agreeTerm) {
+    if (!this.state.agreeTerm) {
       return alert("개인정보 수집 및 이용에 동의해주세요");
     }
 
