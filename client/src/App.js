@@ -9,6 +9,7 @@ import SignOut from "./components/auth/SignOut";
 import Main from "./components/main/Main";
 import Select from "./components/auth/Select";
 import notFound from "./components/notFound";
+import Terms from "./components/terms";
 
 const AppContainer = styled.div`
   width: 100%;
@@ -23,6 +24,7 @@ class App extends React.Component {
           <Switch>
             <Route path="/" exact component={Main} />
             <Route path="/mypage" component={MyPage} />
+            <Route path="/terms" component={Terms} />
             <Route path="/signin/select" component={Select} />
             <Route path="/auth/:user_type/signup" component={SignUp} />
             <Route path="/auth/:user_type/signin" component={SignIn} />

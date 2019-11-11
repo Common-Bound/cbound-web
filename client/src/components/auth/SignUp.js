@@ -97,7 +97,7 @@ const StyledForm = styled.form`
   background-color: rgba(255, 255, 255, 0.9);
 
   width: 400px;
-  height: 260px;
+  height: 295px;
   padding: 20px;
   margin-top: 24px;
 
@@ -140,7 +140,6 @@ const StyledInput = styled.input`
 
 const StyledButtonContainer = styled.div`
   display: flex;
-  justify-content: space-between;
   align-items: flex-end;
   width: 80%;
   margin-top: 10px;
@@ -175,7 +174,8 @@ class SignUp extends Component {
       password: "",
       passwordCheck: "",
       passwordError: "",
-      result: false
+      result: false,
+      agreeTerm: false
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -230,6 +230,12 @@ class SignUp extends Component {
   handleChange = e => {
     this.setState({
       [e.target.name]: e.target.value
+    });
+  };
+
+  handleAgreeTerm = e => {
+    this.setState({
+      agreeTerm: !this.state.agreeTerm
     });
   };
 
@@ -295,6 +301,16 @@ class SignUp extends Component {
                     value="가입"
                     style={{ display: "none" }}
                   />
+                </StyledButtonContainer>
+
+                <StyledButtonContainer>
+                  <a href={`/terms`}>개인정보 수집 및 이용 동의</a>
+                  <input
+                    type="checkbox"
+                    name="agreeTerm"
+                    onChange={this.handleAgreeTerm}
+                    checked={this.state.agreeTerm}
+                  ></input>
                 </StyledButtonContainer>
               </StyledForm>
               <div>
