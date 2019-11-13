@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import ProjectHistory from "../../../card/CreatorHistoryOrig";
 import styled from "styled-components";
+import Paper from "@material-ui/core/Paper";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -69,6 +70,11 @@ const RightSemiTitle = styled.div`
   }
 `;
 
+const TableWrapper = styled.div`
+  height: 50vh;
+  overflow: scroll;
+`;
+
 const TableContainer = styled.div`
   width: 80%;
   height: 60vh;
@@ -84,6 +90,7 @@ const TableContainer = styled.div`
 `;
 
 const StyledTableHead = styled(TableHead)`
+  word-break: keep-all;
   background-color: black;
 `;
 
@@ -92,6 +99,7 @@ const StyledTableCell = styled(TableCell)`
   font-family: Avenir;
   word-break: keep-all;
   font-size: 14px !important;
+  background-color: black !important;
 
   @media (max-width: 500px) {
     padding: 8px !important;
@@ -207,86 +215,80 @@ class CreatorHistoryPage extends Component {
             </RightSemiTitle>
           </RightTitleContainer>
         </TitleContainer>
-        <TableContainer id="scrollableDiv">
+        <TableContainer>
           {this.state.isInspection ? (
-            <InfiniteScroll
-              dataLength={this.state.inspectionData.length}
-              next={this.fetchMoreInspectionData}
-              hasMore={this.state.hasMoreInspectionData}
-              loader={<h4>검수 작업 내역을 가져오는 중...</h4>}
-              scrollableTarget="scrollableDiv"
-              endMessage={
-                <p style={{ textAlign: "center" }}>
-                  <b>더 이상 가져올 내역이 없습니다</b>
-                </p>
-              }
-            >
-              <Table>
-                <StyledTableHead>
-                  <TableRow>
-                    <StyledTableCell align="center">날짜</StyledTableCell>
-                    <StyledTableCell align="center">제목</StyledTableCell>
-                    <StyledTableCell align="center">포인트</StyledTableCell>
-                    <StyledTableCell align="center">상태</StyledTableCell>
-                  </TableRow>
-                </StyledTableHead>
-                <TableBody>
-                  {this.state.inspectionData.map((el, index) => {
-                    return (
-                      <ProjectHistory
-                        key={index}
-                        title={el.title}
-                        date={el.date}
-                        reward={el.reward}
-                        data_type={el.project_type}
-                        data_id={el.id}
-                        status={el.status}
-                      />
-                    );
-                  })}
-                </TableBody>
-              </Table>
-            </InfiniteScroll>
+            <Paper>
+              <TableWrapper id="scrollableDiv">
+                <Table stickyHeader>
+                  <StyledTableHead>
+                    <TableRow>
+                      <StyledTableCell align="center">날짜</StyledTableCell>
+                      <StyledTableCell align="center">제목</StyledTableCell>
+                      <StyledTableCell align="center">포인트</StyledTableCell>
+                      <StyledTableCell align="center">상태</StyledTableCell>
+                    </TableRow>
+                  </StyledTableHead>
+                  <TableBody>
+                    {this.state.inspectionData.map((el, index) => {
+                      return (
+                        <ProjectHistory
+                          key={index}
+                          title={el.title}
+                          date={el.date}
+                          reward={el.reward}
+                          data_type={el.project_type}
+                          data_id={el.id}
+                          status={el.status}
+                        />
+                      );
+                    })}
+                    <InfiniteScroll
+                      dataLength={this.state.inspectionData.length}
+                      next={this.fetchMoreInspectionData}
+                      hasMore={this.state.hasMoreInspectionData}
+                      scrollableTarget="scrollableDiv"
+                    ></InfiniteScroll>
+                  </TableBody>
+                </Table>
+              </TableWrapper>
+            </Paper>
           ) : (
-            <InfiniteScroll
-              dataLength={this.state.normalData.length}
-              next={this.fetchMoreNormalData}
-              hasMore={this.state.hasMoreNormalData}
-              loader={<h4>생산 작업 내역을 가져오는 중...</h4>}
-              scrollableTarget="scrollableDiv"
-              endMessage={
-                <p style={{ textAlign: "center" }}>
-                  <b>더 이상 가져올 내역이 없습니다</b>
-                </p>
-              }
-            >
-              <Table>
-                <StyledTableHead>
-                  <TableRow>
-                    <StyledTableCell align="center">날짜</StyledTableCell>
-                    <StyledTableCell align="center">제목</StyledTableCell>
-                    <StyledTableCell align="center">포인트</StyledTableCell>
-                    <StyledTableCell align="center">상태</StyledTableCell>
-                  </TableRow>
-                </StyledTableHead>
-                <TableBody>
-                  {this.state.normalData.map((el, index) => {
-                    return (
-                      <ProjectHistory
-                        key={index}
-                        id={el.id}
-                        title={el.title}
-                        date={el.date}
-                        reward={el.reward}
-                        data_type={el.project_type}
-                        data_id={el.id}
-                        status={el.status}
-                      />
-                    );
-                  })}
-                </TableBody>
-              </Table>
-            </InfiniteScroll>
+            <Paper>
+              <TableWrapper id="scrollableDiv">
+                <Table stickyHeader>
+                  <StyledTableHead>
+                    <TableRow>
+                      <StyledTableCell align="center">날짜</StyledTableCell>
+                      <StyledTableCell align="center">제목</StyledTableCell>
+                      <StyledTableCell align="center">포인트</StyledTableCell>
+                      <StyledTableCell align="center">상태</StyledTableCell>
+                    </TableRow>
+                  </StyledTableHead>
+                  <TableBody>
+                    {this.state.normalData.map((el, index) => {
+                      return (
+                        <ProjectHistory
+                          key={index}
+                          id={el.id}
+                          title={el.title}
+                          date={el.date}
+                          reward={el.reward}
+                          data_type={el.project_type}
+                          data_id={el.id}
+                          status={el.status}
+                        />
+                      );
+                    })}
+                    <InfiniteScroll
+                      dataLength={this.state.normalData.length}
+                      next={this.fetchMoreNormalData}
+                      hasMore={this.state.hasMoreNormalData}
+                      scrollableTarget="scrollableDiv"
+                    ></InfiniteScroll>
+                  </TableBody>
+                </Table>
+              </TableWrapper>
+            </Paper>
           )}
         </TableContainer>
       </Container>
