@@ -72,6 +72,7 @@ class CreatorHistoryOrig extends Component {
         </StyledStatusTableCell>
         {this.state.clicked ? (
           <Redirect
+            push
             to={{
               pathname: `/mypage/creator/history/${
                 this.props.data_type ? "normal" : "inspection"

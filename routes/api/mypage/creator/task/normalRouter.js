@@ -1,87 +1,14 @@
 const express = require("express");
 const router = express.Router();
-const uuid = require("uuid/v4");
-const axios = require("axios");
-const multer = require("multer");
-const memory = multer.memoryStorage();
-const endpoint = require("../../../../AIserverEndpoint");
-const logger = require("../../../../../config/logger");
-
 const completeRouter = require("./normal/complete");
+const textRouter = require("./normal/text");
+const objectRouter = require("./normal/object");
 
-const upload_mem = multer({
-  storage: memory,
-  limits: { fieldSize: 10 * 2048 * 2048 }
-});
-
+router.use("/text", textRouter);
+router.use("/object", objectRouter);
 router.use("/complete", completeRouter);
 
 // path: ~/api/mypage/creator/task/normal
 // 파일 최초 업로드 요청 핸들링
-router.post("/", upload_mem.single("orig_image"), (req, res, next) => {
-  console.log("body: ", req.body);
-  const imageSrc = req.body.orig_image;
-  const id = uuid();
-  const url = `${endpoint.url}/ocr/detection/`;
-  axios
-    .post(url, {
-      id: id,
-      method: "post",
-      orig_image: imageSrc
-    })
-    .then(res => res.data)
-    .then(data => {
-      console.log(data);
-      return res.json({ data: data });
-    })
-    .catch(err => {
-      logger.error(err);
-      return res.status(500).json({ error: err });
-    });
-});
-
-router.post("/recognition", (req, res, next) => {
-  const imageSrc = req.body.crop_image;
-  const id = req.body.id;
-  const url = `${endpoint.url}/ocr/recognition/`;
-
-  axios
-    .post(url, {
-      id: id,
-      crop_image: imageSrc,
-      method: "post"
-    })
-    .then(res => res.data)
-    .then(data => {
-      console.log(data);
-      return res.json({ data: data });
-    })
-    .catch(err => {
-      logger.error(err);
-      return res.status(500).json({ error: err });
-    });
-});
-
-router.post("/compare_string", (req, res, next) => {
-  const label = req.body.label;
-  const ai_label = req.body.ai_label;
-  const url = `${endpoint.url}/ocr/compare_string/`;
-
-  axios
-    .post(url, {
-      method: "post",
-      label: label,
-      ai_label: ai_label
-    })
-    .then(res => res.data)
-    .then(data => {
-      console.log(data);
-      return res.json({ data: data });
-    })
-    .catch(err => {
-      logger.error(err);
-      return res.status(500).json({ error: err });
-    });
-});
 
 module.exports = router;

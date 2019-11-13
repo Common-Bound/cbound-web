@@ -91,6 +91,8 @@ const BlueInput = styled.input`
   }
 `;
 
+const objectEndpoint = `/api/mypage/creator/task/normal/object`;
+const textRecognitionEndpoint = `/api/mypage/creator/task/normal/text/recognition`;
 class CropItem extends Component {
   state = {
     imgSrc: "", // 지금 Crop 된 영역이 Base64 인코딩된 값
@@ -145,6 +147,11 @@ class CropItem extends Component {
         console.log("Data received");
         console.log(data);
         console.log("label: ", data.data.label[0]);
+        if (!this.props.classes.includes(data.data.label[0])) {
+          return this.setState({
+            label: "기타"
+          });
+        }
         // 경로별 받은 데이터를 다르게 핸들링함
         this.setState({
           label: data.data.label[0]
@@ -243,7 +250,7 @@ class CropItem extends Component {
       });
       await this.sendData(
         bodyData,
-        `/api/mypage/creator/task/normal/recognition`
+        this.props.classes.length > 0 ? objectEndpoint : textRecognitionEndpoint
       );
     }
   }
@@ -279,7 +286,9 @@ class CropItem extends Component {
         });
         await this.sendData(
           bodyData,
-          `/api/mypage/creator/task/normal/recognition`
+          this.props.classes.length > 0
+            ? objectEndpoint
+            : textRecognitionEndpoint
         );
       }
     }

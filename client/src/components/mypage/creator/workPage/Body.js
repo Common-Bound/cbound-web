@@ -200,6 +200,11 @@ const CropListContainer = styled.div`
   }
 `;
 
+const objectEndpoint = `/api/mypage/creator/task/normal/object`;
+const textDetectionEndpoint = `/api/mypage/creator/task/normal/text`;
+const textRecognitionEndpoint = `/api/mypage/creator/task/normal/text/recogntion`;
+const completeEndpoint = `/api/mypage/creator/task/complete`;
+
 class Body extends Component {
   // Body Component 생성
   constructor(props) {
@@ -244,7 +249,10 @@ class Body extends Component {
       );
       console.log(this.props.orig_image_file);
 
-      await this.sendData(formData, `/api/mypage/creator/task/normal`);
+      await this.sendData(
+        formData,
+        this.props.classes.length > 0 ? objectEndpoint : textDetectionEndpoint
+      );
     }
   }
 
@@ -265,7 +273,7 @@ class Body extends Component {
         console.log(data);
 
         // 경로별 받은 데이터를 다르게 핸들링함
-        if (sendTo === "/api/mypage/creator/task/normal") {
+        if (sendTo === objectEndpoint || sendTo === textRecognitionEndpoint) {
           var counter = 0; // Crop.id 생성을 위한 임시 변수
 
           this.setState({
@@ -604,7 +612,7 @@ class Body extends Component {
     );
     bodyData.append("ai_total_size", this.state.ai_total_size);
 
-    await this.sendData(bodyData, "/api/mypage/creator/task/normal/complete"); // 서버로 전송( /mypage/task/complete)
+    await this.sendData(bodyData, completeEndpoint); // 서버로 전송( /mypage/task/complete)
 
     return new Promise(resolve => resolve(true));
   };
