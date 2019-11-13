@@ -210,6 +210,7 @@ const MobileButtonContainer = styled.div`
 
   background-color: white;
   color: black;
+  z-index: 4 !important;
 `;
 
 const MobileButton = styled.div`

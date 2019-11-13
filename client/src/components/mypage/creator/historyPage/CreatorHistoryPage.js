@@ -22,19 +22,22 @@ const TitleContainer = styled.div`
   margin: 0 auto;
   display: flex;
   justify-content: space-between;
+  align-items: flex-end;
 
   color: black; !important;
 
   @media(max-width: 810px){
-    flex-direction: column;
     padding-top: 24px;
     padding-bottom: 24px;
   }
 `;
 
-const LeftTitleContainer = styled.div``;
+const LeftTitleContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
 
-const Title = styled.div`
+const SemiTitle = styled.div`
   font-family: Avenir;
   font-size: 20px;
   font-weight: bold;
@@ -44,7 +47,7 @@ const Title = styled.div`
   }
 `;
 
-const SemiTitle = styled.div`
+const Title = styled.div`
   font-family: SpoqaHanSans;
   font-size: 32px;
   font-weight: bold;
@@ -54,21 +57,22 @@ const SemiTitle = styled.div`
   }
 `;
 
-const RightTitleContainer = styled.div``;
-
-const RightSemiTitle = styled.div`
-  padding-top: 52px;
+const SmallTitle = styled.div`
+  padding-top: 20px;
   font-family: SpoqaHanSans;
   font-size: 18px;
   color: grey;
 
   @media (max-width: 810px) {
+    font-size: 16px;
     padding-top: 10px;
   }
   @media (max-width: 500px) {
-    font-size: 14px;
+    font-size: 12px;
   }
 `;
+
+const RightTitleContainer = styled.div``;
 
 const TableWrapper = styled.div`
   height: 50vh;
@@ -90,6 +94,7 @@ const TableContainer = styled.div`
 `;
 
 const StyledTableHead = styled(TableHead)`
+  position: relative;
   word-break: keep-all;
   background-color: black;
 `;
@@ -104,6 +109,16 @@ const StyledTableCell = styled(TableCell)`
   @media (max-width: 500px) {
     padding: 8px !important;
     font-size: 12px !important;
+  }
+`;
+
+const StyledButton = styled(Button)`
+  height: 60px;
+  @media (max-width: 1024px) {
+    height: 46px;
+  }
+  @media (max-width: 500px) {
+    font-size: 10px;
   }
 `;
 
@@ -192,27 +207,23 @@ class CreatorHistoryPage extends Component {
       <Container>
         <TitleContainer>
           <LeftTitleContainer>
-            <Title>Work History</Title>
-            <SemiTitle>
-              작업 참여 내역
-              <Button
-                outline
-                color="primary"
-                value={this.state.isInspection}
-                onClick={() => {
-                  this.setState({
-                    isInspection: !this.state.isInspection
-                  });
-                }}
-              >
-                <strong>{this.state.isInspection ? "검수" : "생산"}</strong>
-              </Button>
-            </SemiTitle>
+            <SemiTitle>Work History</SemiTitle>
+            <Title>작업 참여 내역</Title>
+            <SmallTitle>최근 30일 동안 작업한 내역이 보여집니다</SmallTitle>
           </LeftTitleContainer>
           <RightTitleContainer>
-            <RightSemiTitle>
-              최근 30일 동안 작업한 내역이 보여집니다
-            </RightSemiTitle>
+            <StyledButton
+              outline
+              color="primary"
+              value={this.state.isInspection}
+              onClick={() => {
+                this.setState({
+                  isInspection: !this.state.isInspection
+                });
+              }}
+            >
+              <strong>{this.state.isInspection ? "검수" : "생산"}</strong>
+            </StyledButton>
           </RightTitleContainer>
         </TitleContainer>
         <TableContainer>
