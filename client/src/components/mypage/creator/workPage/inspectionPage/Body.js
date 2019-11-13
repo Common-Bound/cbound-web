@@ -15,6 +15,13 @@ const BodyContainer = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   align-items: cneter;
+
+  @media (max-width: 1024px) {
+    width: 85%;
+  }
+  @media (max-width: 500px) {
+    width: 90%;
+  }
 `;
 
 const EntireTitleContainer = styled.div`
@@ -25,6 +32,10 @@ const EntireTitleContainer = styled.div`
   padding: 40px 0px 10px 10px;
 
   color: black !important;
+
+  @media (max-width: 500px) {
+    padding-top: 24px;
+  }
 `;
 
 const LeftTitleContainer = styled.div`
@@ -37,6 +48,10 @@ const LeftTitleDate = styled.div`
   text-align: left;
   color: #8d8d8d;
   font-size: 16px;
+
+  @media (max-width: 500px) {
+    font-size: 10px;
+  }
 `;
 
 const LeftTitle = styled.div`
@@ -44,6 +59,10 @@ const LeftTitle = styled.div`
   text-align: left;
   font-weight: bold;
   font-size: 32px;
+
+  @media (max-width: 500px) {
+    font-size: 24px;
+  }
 `;
 
 const RightTitleContainer = styled.div`
@@ -91,31 +110,31 @@ const LeftMainContainer = styled.div`
   justify-content: flex-start;
 `;
 
-const RightDescriptionContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex-basis: auto;
-  align-items: flex-start;
-  padding: 40px 20px;
+// const RightDescriptionContainer = styled.div`
+//   display: flex;
+//   flex-direction: column;
+//   flex-basis: auto;
+//   align-items: flex-start;
+//   padding: 40px 20px;
 
-  min-width: 440px;
-  height: 100%;
-  background-color: #f0f0f0;
-`;
+//   min-width: 440px;
+//   height: 100%;
+//   background-color: #f0f0f0;
+// `;
 
-const DescriptionBoxContainer = styled.div`
-  width: 100%;
+// const DescriptionBoxContainer = styled.div`
+//   width: 100%;
 
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-`;
+//   display: flex;
+//   flex-direction: column;
+//   justify-content: space-around;
+// `;
 
-const DescriptionBox = styled.div`
-  font-family: SpoqaHanSans;
-  font-size: 16px;
-  padding: 10px;
-`;
+// const DescriptionBox = styled.div`
+//   font-family: SpoqaHanSans;
+//   font-size: 16px;
+//   padding: 10px;
+// `;
 
 const ImageContainer = styled.div`
   width: 100%;
@@ -129,7 +148,7 @@ const ImageContainer = styled.div`
   border: 5px solid lightgrey;
 
   @media (max-width: 500px) {
-    border: none;
+    border: 2px solid lightgrey;
   }
 `;
 
@@ -157,13 +176,56 @@ class Body extends Component {
       timer: undefined,
       // width: 0,
       // height: 0,
-      crop_images: []
+      crop_images: [],
+      message: "검수 할 이미지를 가져오는 중..."
     };
     this.handleClick = this.handleClick.bind(this);
   }
 
   async componentDidMount() {
-    introJS().start();
+    const introjs = introJS();
+    introjs.setOptions({
+      steps: [
+        {
+          element: ".image-container",
+          steps: "1",
+          intro: "검수할 이미지가 화면에 나타나게 됩니다.",
+          position: "bottom",
+          disableInteraction: "true"
+        },
+        {
+          element: ".image-container",
+          steps: "2",
+          intro:
+            "어두운 네모 박스가 사물에 적절히 위치하고 있는지 확인해 주세요.",
+          position: "bottom",
+          disableInteraction: "true"
+        },
+        {
+          element: ".image-container",
+          steps: "3",
+          intro: "박스를 클릭하면 테두리 색깔이 바뀝니다.",
+          position: "bottom",
+          disableInteraction: "true"
+        },
+        {
+          element: ".image-container",
+          steps: "4",
+          intro:
+            "사물이 네모 박스를 벗어나 있거나 박스가 너무 크다면 빨간 테두리로, 박스가 사물을 잘 둘러싸고 있다면 초록 테두리로 표시해 주세요.",
+          position: "bottom",
+          disableInteraction: "true"
+        },
+        {
+          element: ".complete-button",
+          steps: "5",
+          intro: "완료 버튼을 누르면 검수 작업을 제출합니다.",
+          position: "bottom",
+          disableInteraction: "true"
+        }
+      ]
+    });
+    introjs.start();
     await this.fetchData();
   }
 
@@ -182,6 +244,9 @@ class Body extends Component {
       .then(res => res.json())
       .then(result => {
         if (result.message) {
+          this.setState({
+            message: result.message
+          });
           return alert(result.message);
         } else {
           const data = result.result;
@@ -303,7 +368,7 @@ class Body extends Component {
   }
 
   render() {
-    const { data, loading, crop_images } = this.state;
+    const { data, loading, crop_images, message } = this.state;
     const info = this.props.info;
 
     return (
@@ -323,12 +388,10 @@ class Body extends Component {
           <RightTitleContainer>
             <ButtonContainer id="export-button-container">
               <StyledButton
+                className="complete-button"
                 variant="contained"
                 color="primary"
                 onClick={this.handleClick}
-                data-intro="완료 버튼을 누르면 검수한 데이터를 제출합니다."
-                data-step="3"
-                data-disable-interaction="true"
                 data-position="left"
                 disabled={this.state.loading}
               >
@@ -347,11 +410,7 @@ class Body extends Component {
           {/* Main Container 의 왼쪽 영역 */}
           <LeftMainContainer>
             {/* 크롭할 이미지 영역 */}
-            <ImageContainer
-              data-intro="검수할 이미지가 화면에 나타나게 됩니다"
-              data-step="1"
-              data-disable-interaction="true"
-            >
+            <ImageContainer className="image-container">
               {!loading ? (
                 <div
                   style={{
@@ -376,16 +435,12 @@ class Body extends Component {
                   </CropImageContainer>
                 </div>
               ) : (
-                "검수 할 작업을 가져오는 중..."
+                message
               )}
             </ImageContainer>
           </LeftMainContainer>
           {/* Main Container 의 오른쪽 영역 */}
-          <RightDescriptionContainer
-            data-intro="가이드를 읽고 검수를 진행하시면 됩니다"
-            data-step="2"
-            data-disable-interaction="true"
-          >
+          {/* <RightDescriptionContainer>
             <DescriptionBoxContainer>
               <DescriptionBox>
                 - <span style={{ fontWeight: "bold" }}>어두운 네모 박스</span>가
@@ -403,7 +458,7 @@ class Body extends Component {
                 주세요.
               </DescriptionBox>
             </DescriptionBoxContainer>
-          </RightDescriptionContainer>
+          </RightDescriptionContainer> */}
         </MainContainer>
         <StepButtonContainer></StepButtonContainer>
       </BodyContainer>

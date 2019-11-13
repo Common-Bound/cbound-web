@@ -203,7 +203,7 @@ const CropListContainer = styled.div`
 const objectEndpoint = `/api/mypage/creator/task/normal/object`;
 const textDetectionEndpoint = `/api/mypage/creator/task/normal/text`;
 const textRecognitionEndpoint = `/api/mypage/creator/task/normal/text/recogntion`;
-const completeEndpoint = `/api/mypage/creator/task/complete`;
+const completeEndpoint = `/api/mypage/creator/task/normal/complete`;
 
 class Body extends Component {
   // Body Component 생성
