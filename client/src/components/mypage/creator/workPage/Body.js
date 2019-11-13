@@ -402,7 +402,7 @@ class Body extends Component {
                   height: cropData.height * scaleY
                 },
                 region_attributes: {
-                  label: crop.region_attributes.label
+                  label: this.state.useAI ? "" : crop.region_attributes.label
                 }
               };
             } else return crop;
@@ -434,7 +434,7 @@ class Body extends Component {
                 height: cropData.height * scaleY
               },
               region_attributes: {
-                label: this.state.label
+                label: ""
               }
             }),
             label: "",
