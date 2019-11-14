@@ -156,6 +156,16 @@ const HistoryContainer = styled.div`
   flex-direction: column;
 `;
 
+const HistoryTitleContainer = styled.div`
+  width: 100%;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+
+  border: 2px solid red;
+`;
+
 const HistoryContainerTitle = styled.div`
   font-family: SpoqaHanSans;
   text-align: left;
@@ -167,6 +177,10 @@ const HistoryContainerTitle = styled.div`
   @media (max-width: 500px) {
     font-size: 24px;
   }
+`;
+
+const DownloadButton = styled(StyledButton)`
+  width: 100px !important;
 `;
 
 const TableWrapper = styled.div`
@@ -426,7 +440,16 @@ class DashBoard extends Component {
           </PieChartContainer>
         </MainChartContainer>
         <HistoryContainer>
-          <HistoryContainerTitle>검수 데이터 현황</HistoryContainerTitle>
+          <HistoryTitleContainer>
+            <HistoryContainerTitle>검수 데이터 현황</HistoryContainerTitle>
+            <DownloadButton
+              onClick={this.toggleTerms.bind(this)}
+              variant={chartTerms === "month" ? "contained" : undefined}
+              color="secondary"
+            >
+              다운로드
+            </DownloadButton>
+          </HistoryTitleContainer>
           <Paper>
             <TableWrapper id="inspectionScrollableDiv">
               <Table className="align-items-center table-flush" stickyHeader>
