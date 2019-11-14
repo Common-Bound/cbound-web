@@ -37,10 +37,6 @@ router.get("/:project_id", async (req, res, next) => {
     const now_day = moment().tz("Asia/Seoul");
     // 현재 요일 (0: 일요일, 1: 월요일, ... 6: 토요일)
     const today_count = datas.filter(data => {
-      // 오늘 생산된 총 데이터 수
-      console.log(
-        Number(moment.duration(now_day.diff(moment(data.created_at))).asDays())
-      );
       return (
         parseInt(
           Number(
@@ -82,7 +78,6 @@ router.get("/:project_id", async (req, res, next) => {
     });
     await Promise.all(promises);
     const creator_count = new Set(datas.map(data => data.creator_id)).size;
-    console.log("creator_count: ", creator_count);
     // 검수된 데이터 수
     const inspected_count = datas.filter(data => data.status !== "created")
       .length;

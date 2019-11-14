@@ -26,6 +26,10 @@ import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
+import InputLabel from "@material-ui/core/InputLabel";
+import MenuItem from "@material-ui/core/MenuItem";
+import FormControl from "@material-ui/core/FormControl";
+import Select from "@material-ui/core/Select";
 
 // core components
 // import {
@@ -124,8 +128,12 @@ const LineChartButtonContaner = styled.div`
 
 const StyledButton = styled(Button)`
   width: 80px !important;
-  height: 36px !important;
-  margin: 6px !important;
+  height: 50px !important;
+
+  @media (max-width: 500px) {
+    width: 60px !important;
+    height: 36px !important;
+  }
 `;
 
 const PieChartContainer = styled.div`
@@ -162,8 +170,6 @@ const HistoryTitleContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-
-  border: 2px solid red;
 `;
 
 const HistoryContainerTitle = styled.div`
@@ -174,13 +180,44 @@ const HistoryContainerTitle = styled.div`
   color: black;
   margin: 10px 0px;
 
-  @media (max-width: 500px) {
+  @media (max-width: 1024px) {
     font-size: 24px;
+  }
+  @media (max-width: 500px) {
+    font-size: 18px;
+  }
+`;
+
+const DownloadContainer = styled.div``;
+
+const StyledFormControl = styled(FormControl)`
+  width: 160px;
+
+  @media (max-width: 1024px) {
+    width: 120px;
+  }
+  @media (max-width: 500px) {
+    width: 80px;
+    font-size: 10px;
+  }
+`;
+
+const StyledInputLabel = styled(InputLabel)`
+  word-break: keep-all;
+
+  @media (max-width: 500px) {
+    font-size: 12px !important;
+    padding-right: 16px !important;
   }
 `;
 
 const DownloadButton = styled(StyledButton)`
   width: 100px !important;
+
+  @media (max-width: 500px) {
+    width: 100px !important;
+    height: 50px !important;
+  }
 `;
 
 const TableWrapper = styled.div`
@@ -209,7 +246,8 @@ class DashBoard extends Component {
       inspectionData: [],
       hasMoreInspectionData: true,
       inspectionPage: 0,
-      month_count: []
+      month_count: [],
+      format: ""
     };
   }
 
@@ -218,7 +256,7 @@ class DashBoard extends Component {
     this.drawLineChart();
     this.drawPieChart();
     await this.fetchMoreInspectionData();
-    console.log(this.props.location);
+    console.log("props", this.props);
   }
 
   async fetchMoreInspectionData() {
@@ -368,6 +406,24 @@ class DashBoard extends Component {
     this.drawLineChart();
   };
 
+  handleFormatChange = e => {
+    this.setState({
+      format: e.target.value
+    });
+  };
+
+  handleDownload = async e => {
+    if (this.state.format === "") {
+      return alert("추출할 데이터 포맷을 지정해주세요");
+    }
+    const url = `/api/mypage/requester/download/${this.props.project_id}`;
+    await fetch(url)
+      .then(res => res.json())
+      .then(data => {
+        console.log(data);
+      });
+  };
+
   // componentWillMount = async () => {
   //   if (window.Chart) {
   //     parseOptions(Chart, chartOptions());
@@ -392,7 +448,7 @@ class DashBoard extends Component {
 
   render() {
     const info = this.props.info;
-    const { chartTerms } = this.state;
+    const { chartTerms, format } = this.state;
 
     return (
       <EntireContainer className="main-content" ref="mainContent">
@@ -442,13 +498,29 @@ class DashBoard extends Component {
         <HistoryContainer>
           <HistoryTitleContainer>
             <HistoryContainerTitle>검수 데이터 현황</HistoryContainerTitle>
-            <DownloadButton
-              onClick={this.toggleTerms.bind(this)}
-              variant={chartTerms === "month" ? "contained" : undefined}
-              color="secondary"
-            >
-              다운로드
-            </DownloadButton>
+            <DownloadContainer>
+              <StyledFormControl>
+                <StyledInputLabel>Export as</StyledInputLabel>
+                <Select
+                  value={format}
+                  onChange={this.handleFormatChange.bind(this)}
+                >
+                  <MenuItem value="">
+                    <em>None</em>
+                  </MenuItem>
+                  <MenuItem value="json">JSON</MenuItem>
+                  <MenuItem value="csv">CSV</MenuItem>
+                </Select>
+              </StyledFormControl>
+
+              <DownloadButton
+                onClick={this.handleDownload.bind(this)}
+                variant="contained"
+                color="secondary"
+              >
+                다운로드
+              </DownloadButton>
+            </DownloadContainer>
           </HistoryTitleContainer>
           <Paper>
             <TableWrapper id="inspectionScrollableDiv">

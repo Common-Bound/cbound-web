@@ -3,11 +3,13 @@ const router = express.Router();
 const db = require("../../../db/index");
 const createRouter = require("./requester/create");
 const insightRouter = require("./requester/insight");
+const downloadRouter = require("./requester/download");
 const logger = require("../../../config/logger");
 // path: ~/api/mypage/requester
 
 router.use("/create", createRouter);
 router.use("/insight", insightRouter);
+router.use("/download", downloadRouter);
 
 // 내가 생성한 프로젝트 목록들을 보여준다
 router.get("/", (req, res, next) => {
