@@ -416,12 +416,159 @@ class DashBoard extends Component {
     if (this.state.format === "") {
       return alert("추출할 데이터 포맷을 지정해주세요");
     }
+    const format = this.state.format;
     const url = `/api/mypage/requester/download/${this.props.project_id}`;
-    await fetch(url)
+    const datas = await fetch(url)
       .then(res => res.json())
       .then(data => {
-        console.log(data);
+        return data;
       });
+
+    // Export 형식이 'csv' 인 경우
+    if (format === "csv") {
+      let content =
+        "data:text/csv;charset=utf-8,file_name,file_URL,region_count,region_id,shape_attributes,region_attributes\n";
+
+      const bodyRowsPromises = await datas.map(async (data, index) => {
+        let rowArray = [];
+
+        function replaceAll(str, searchStr, replaceStr) {
+          return str.split(searchStr).join(replaceStr);
+        }
+
+        const crop_image = data.payload.meta.crop_image;
+        // file 이름을 가져오기 위해 orig_image 를 참조한다
+        const splitted_url = data.payload.orig_image.split("/");
+        const file_name = `${decodeURIComponent(splitted_url[5])}`;
+        const file_URL = data.payload.orig_image;
+        const region_count = crop_image.length;
+
+        const cropPromises = await crop_image.map(async crop => {
+          const crop_id = crop.shape_attributes.id;
+          let shape_attributes = crop.shape_attributes;
+          let region_attributes = JSON.stringify({
+            label: crop.region_attributes.label
+          });
+
+          // const naturalWidth = await this.checkImageSize(index);
+
+          // // 계산된 naturalWidth 가 숫자라면(640 보다 큰 경우) 좌표를 재조정해준다
+          // if (isNumber(naturalWidth)) {
+          //   shape_attributes = await this.resizeCropLocation(
+          //     naturalWidth,
+          //     shape_attributes
+          //   );
+          // }
+          shape_attributes = await JSON.stringify(shape_attributes);
+
+          shape_attributes = replaceAll(shape_attributes, '"', '""');
+          shape_attributes = '"' + shape_attributes + '"';
+
+          region_attributes = replaceAll(region_attributes, '"', '""');
+          region_attributes = '"' + region_attributes + '"';
+          let row = [];
+
+          row.push(file_name);
+          row.push(file_URL);
+          row.push(region_count);
+          row.push(crop_id);
+          row.push(shape_attributes);
+          row.push(region_attributes);
+
+          row = row.join(",");
+          return new Promise(resolve => {
+            resolve(row);
+          });
+        });
+
+        let rows = await Promise.all(cropPromises);
+        rows = rows.join("\n");
+
+        rowArray.push(rows);
+
+        return new Promise(resolve => {
+          resolve(rowArray);
+        });
+      });
+
+      const rows = await Promise.all(bodyRowsPromises);
+
+      content += rows.join("\n");
+
+      var encodedURI = encodeURI(content);
+      const downloadCSV = document.createElement("a");
+      downloadCSV.setAttribute("href", encodedURI);
+      downloadCSV.setAttribute("download", "dataset.csv");
+      document.body.appendChild(downloadCSV); // required for firefox
+      downloadCSV.click();
+      downloadCSV.remove();
+    }
+
+    // Export 형식이 'json' 인 경우
+    else if (format === "json") {
+      // let content = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(storageObj))
+      let JSONobj = {};
+      const promises = await datas.map(async (data, index) => {
+        var crop_images = data.payload.meta.crop_image;
+        let crop_image = crop_images.map(crop => {
+          return {
+            shape_attributes: crop.shape_attributes,
+            region_attributes: {
+              label: crop.region_attributes.label
+            }
+          };
+        });
+        const splitted_url = data.payload.orig_image.split("/");
+        const file_name = `${decodeURIComponent(splitted_url[5])}`;
+        const file_URL = data.payload.orig_image;
+        const region_count = crop_image.length;
+
+        // const naturalWidth = await this.checkImageSize(index);
+
+        // // 계산된 naturalWidth 가 숫자라면(640 보다 큰 경우) 좌표를 재조정해준다
+        // if (isNumber(naturalWidth)) {
+        //   // 각 crop 에 포함된 shape_attributes 를 resize 해준다
+        //   const resizedShapeAttributesPromises = await crop_image.map(
+        //     async crop => {
+        //       let new_shape = await this.resizeCropLocation(
+        //         naturalWidth,
+        //         crop.shape_attributes
+        //       );
+        //       return new Promise(resolve => resolve(new_shape));
+        //     }
+        //   );
+
+        //   const new_shape_attributes = await Promise.all(
+        //     resizedShapeAttributesPromises
+        //   );
+
+        //   crop_image.forEach((crop, index) => {
+        //     crop_image[index].shape_attributes = new_shape_attributes[index];
+        //   });
+        // }
+
+        JSONobj[file_name] = {};
+        JSONobj[file_name]["file_name"] = file_name;
+        JSONobj[file_name]["file_URL"] = file_URL;
+        JSONobj[file_name]["region_count"] = region_count;
+        JSONobj[file_name]["regions"] = crop_image;
+
+        return new Promise(resolve => resolve(true));
+      });
+
+      await Promise.all(promises);
+
+      let content =
+        "data:text/json;charset=utf-8," +
+        encodeURIComponent(JSON.stringify(JSONobj));
+
+      const downloadJSON = document.createElement("a");
+      downloadJSON.setAttribute("href", content);
+      downloadJSON.setAttribute("download", "dataset.json");
+      document.body.appendChild(downloadJSON); // required for firefox
+      downloadJSON.click();
+      downloadJSON.remove();
+    }
   };
 
   // componentWillMount = async () => {
