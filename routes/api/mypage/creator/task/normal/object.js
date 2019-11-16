@@ -14,7 +14,7 @@ const upload_mem = multer({
 
 // path: ~/api/mypage/creator/task/normal/object
 router.post("/", upload_mem.single("orig_image"), (req, res, next) => {
-  const imageSrc = req.body.crop_image;
+  const imageSrc = req.body.orig_image;
   const id = uuid();
   const url = `${endpoint.url}/object/detection/`;
   axios

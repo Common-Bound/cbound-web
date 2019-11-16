@@ -91,7 +91,7 @@ const BlueInput = styled.input`
   }
 `;
 
-const objectEndpoint = `/api/mypage/creator/task/normal/object`;
+const objectRecognitionEndpoint = `/api/mypage/creator/task/normal/object/recognition`;
 const textRecognitionEndpoint = `/api/mypage/creator/task/normal/text/recognition`;
 class CropItem extends Component {
   state = {
@@ -147,15 +147,22 @@ class CropItem extends Component {
         console.log("Data received");
         console.log(data);
         console.log("label: ", data.data.label[0]);
-        if (!this.props.classes.includes(data.data.label[0])) {
+        if (sendTo === objectRecognitionEndpoint) {
+          if (this.props.classes.includes(data.data.label[0])) {
+            return this.setState({
+              label: data.data.label[0]
+            });
+          }
           return this.setState({
-            label: "기타"
+            label: "etc"
           });
         }
         // 경로별 받은 데이터를 다르게 핸들링함
-        this.setState({
-          label: data.data.label[0]
-        });
+        else if (sendTo === textRecognitionEndpoint) {
+          return this.setState({
+            label: data.data.label[0]
+          });
+        }
       })
       .catch(function(ex) {
         console.log("error occured");
@@ -250,7 +257,9 @@ class CropItem extends Component {
       });
       await this.sendData(
         bodyData,
-        this.props.classes.length > 0 ? objectEndpoint : textRecognitionEndpoint
+        this.props.classes.length > 0
+          ? objectRecognitionEndpoint
+          : textRecognitionEndpoint
       );
     }
   }
@@ -287,7 +296,7 @@ class CropItem extends Component {
         await this.sendData(
           bodyData,
           this.props.classes.length > 0
-            ? objectEndpoint
+            ? objectRecognitionEndpoint
             : textRecognitionEndpoint
         );
       }

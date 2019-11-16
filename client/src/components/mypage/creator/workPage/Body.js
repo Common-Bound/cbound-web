@@ -200,7 +200,8 @@ const CropListContainer = styled.div`
   }
 `;
 
-const objectEndpoint = `/api/mypage/creator/task/normal/object`;
+const objectDetectionEndpoint = `/api/mypage/creator/task/normal/object`;
+const objectRecognitionEndpoint = `/api/mypage/creator/task/normal/object/recognition`;
 const textDetectionEndpoint = `/api/mypage/creator/task/normal/text`;
 const textRecognitionEndpoint = `/api/mypage/creator/task/normal/text/recogntion`;
 const completeEndpoint = `/api/mypage/creator/task/normal/complete`;
@@ -221,7 +222,7 @@ class Body extends Component {
       changeMode: false, // 현재 크롭된 이미지를 추가해야 할지 수정해야 할지 결정하는 Flag
       preId: "", // ChangeMode 가 true 라면 변경할 이미지의 id
       showEdit: true, // 한 개의 크롭 영역을 변경할 수 있는 이미지를 줄지 크롭된 영역 리스트를 캔버스에 그려줄 지
-      useAI: false, // AI를 사용할지 말지 스위치 할 때 변경할 값
+      useAI: true, // AI를 사용할지 말지 스위치 할 때 변경할 값
       loading: false,
       time_counter: [], // 각 크롭 영역을 지정하는데 걸리는 시간
       timer: 0,
@@ -251,7 +252,9 @@ class Body extends Component {
 
       await this.sendData(
         formData,
-        this.props.classes.length > 0 ? objectEndpoint : textDetectionEndpoint
+        this.props.classes.length > 0
+          ? objectDetectionEndpoint
+          : textDetectionEndpoint
       );
     }
   }
@@ -273,7 +276,10 @@ class Body extends Component {
         console.log(data);
 
         // 경로별 받은 데이터를 다르게 핸들링함
-        if (sendTo === objectEndpoint || sendTo === textRecognitionEndpoint) {
+        if (
+          sendTo === objectDetectionEndpoint ||
+          sendTo === textDetectionEndpoint
+        ) {
           var counter = 0; // Crop.id 생성을 위한 임시 변수
 
           this.setState({
@@ -311,7 +317,10 @@ class Body extends Component {
             time_counter: tempTimeCounterArray,
             timer: new Date().getTime()
           });
-        } else if (sendTo.startsWith("http://")) {
+        } else if (
+          sendTo === textRecognitionEndpoint ||
+          sendTo === objectRecognitionEndpoint
+        ) {
           this.setState({
             label: data.label
           });
