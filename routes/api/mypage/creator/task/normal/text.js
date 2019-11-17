@@ -78,4 +78,24 @@ router.post("/compare_string", (req, res, next) => {
     });
 });
 
+router.post("/predict", (req, res, next) => {
+  const crop_image = req.body.crop_image;
+  const url = `${endpoint.url}/inspection/predict/`;
+
+  axios
+    .post(url, {
+      method: "post",
+      crop_image: crop_image
+    })
+    .then(res => res.data)
+    .then(data => {
+      console.log(data);
+      return res.json({ data: data });
+    })
+    .catch(err => {
+      logger.error(err);
+      return res.status(500).json({ error: err });
+    });
+});
+
 module.exports = router;

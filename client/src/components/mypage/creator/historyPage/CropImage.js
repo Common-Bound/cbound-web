@@ -9,8 +9,13 @@ const Container = styled.div`
       ? "1px solid grey"
       : props["data-status"] === "true"
       ? "2px solid lime"
-      : "2px solid red"}
-  background-color: rgba(0, 0, 0, 0.3);
+      : "2px solid red"};
+  background-color: ${props =>
+    "rgb(" +
+    255 * props.reliability +
+    ", " +
+    255 * (1 - props.reliability) +
+    ", 0, 0.3)"};
   position: absolute;
   top: ${props => props.y}px;
   left: ${props => props.x}px;
@@ -46,6 +51,8 @@ class CropImage extends Component {
       ? this.props.crop.shape_attributes
       : this.props.crop;
     const { labelComponent } = this.state;
+    const { reliability } = this.props.crop.region_attributes;
+    console.log(reliability);
 
     const image = document.getElementById("image");
     const scaleX = image ? image.naturalWidth / image.width : 1;
@@ -63,6 +70,7 @@ class CropImage extends Component {
         y={y / scaleY}
         width={width / scaleX}
         height={height / scaleY}
+        reliability={reliability}
       >
         {labelComponent}
       </Container>

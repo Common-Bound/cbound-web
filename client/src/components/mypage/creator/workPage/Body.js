@@ -8,6 +8,7 @@ import "intro.js/introjs.css";
 import "react-image-crop/dist/ReactCrop.css";
 import "./Body.css";
 import { setTimeout } from "timers";
+import uuid from "uuid/v4";
 // import AIServerEndpoint from "../../../../AIServerEndpoint";
 
 const BodyContainer = styled.div`
@@ -203,7 +204,9 @@ const CropListContainer = styled.div`
 const objectDetectionEndpoint = `/api/mypage/creator/task/normal/object`;
 const objectRecognitionEndpoint = `/api/mypage/creator/task/normal/object/recognition`;
 const textDetectionEndpoint = `/api/mypage/creator/task/normal/text`;
-const textRecognitionEndpoint = `/api/mypage/creator/task/normal/text/recogntion`;
+const textRecognitionEndpoint = `/api/mypage/creator/task/normal/text/recognition`;
+const compareStringEndpoint = `/api/mypage/creator/task/normal/text/compare_string`;
+const textPredictEndpoint = `/api/mypage/creator/task/normal/text/predict`;
 const completeEndpoint = `/api/mypage/creator/task/normal/complete`;
 
 class Body extends Component {
@@ -222,7 +225,7 @@ class Body extends Component {
       changeMode: false, // 현재 크롭된 이미지를 추가해야 할지 수정해야 할지 결정하는 Flag
       preId: "", // ChangeMode 가 true 라면 변경할 이미지의 id
       showEdit: true, // 한 개의 크롭 영역을 변경할 수 있는 이미지를 줄지 크롭된 영역 리스트를 캔버스에 그려줄 지
-      useAI: true, // AI를 사용할지 말지 스위치 할 때 변경할 값
+      useAI: false, // AI를 사용할지 말지 스위치 할 때 변경할 값
       loading: false,
       time_counter: [], // 각 크롭 영역을 지정하는데 걸리는 시간
       timer: 0,
@@ -265,7 +268,7 @@ class Body extends Component {
       loading: true
     });
 
-    await fetch(sendTo, {
+    const result = await fetch(sendTo, {
       method: "post",
       body: bodyData
     })
@@ -328,7 +331,7 @@ class Body extends Component {
         }
 
         return new Promise(resolve => {
-          resolve(true);
+          resolve(data);
         });
       })
       .catch(function(ex) {
@@ -338,6 +341,8 @@ class Body extends Component {
     await this.setState({
       loading: false
     });
+
+    return new Promise(resolve => resolve(result));
   };
 
   // 업로드된 이미지를 출력하기 위해 Base64로 바꿀 때 호출됨
@@ -527,89 +532,113 @@ class Body extends Component {
     //     console.log(err);
     //   });
 
-    // STEP 2: recognition 정확도와 유사도를 가져와서 저장한다
-    // 각 crop 이미지를 base64로 인코딩한 것을 배열로 가져온다
-    // const crop_image_base64_encodings_promises = await this.state.crop_image.map(
-    //   crop => {
-    //     return new Promise(async resolve =>
-    //       resolve(await this.getCroppedImg(crop))
-    //     );
-    //   }
-    // );
-    // let crop_image_base64_encodings = await Promise.all(
-    //   crop_image_base64_encodings_promises
-    // );
-    // console.log(crop_image_base64_encodings);
+    if (this.props.classes.length === 0) {
+      // STEP 2: recognition 정확도와 유사도를 가져와서 저장한다
+      // 각 crop 이미지를 base64로 인코딩한 것을 배열로 가져온다
+      const crop_image_base64_encodings_promises = await this.state.crop_image.map(
+        crop => {
+          return new Promise(async resolve =>
+            resolve(await this.getCroppedImg(crop))
+          );
+        }
+      );
+      let crop_image_base64_encodings = await Promise.all(
+        crop_image_base64_encodings_promises
+      );
+      console.log(crop_image_base64_encodings);
 
-    // const recognitionEndpoint = `/api/mypage/creator/task/normal/recognition`;
-    // const recognitionResult = await fetch(recognitionEndpoint, {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json"
-    //   },
-    //   body: JSON.stringify({
-    //     id: uuid(),
-    //     crop_image: crop_image_base64_encodings
-    //   })
-    // })
-    //   .then(res => res.json())
-    //   .then(data => {
-    //     console.log(data);
+      const recognitionResult = await fetch(textRecognitionEndpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          id: uuid(),
+          crop_image: crop_image_base64_encodings
+        })
+      })
+        .then(res => res.json())
+        .then(data => {
+          console.log(data);
 
-    //     return new Promise(resolve => resolve(data.data));
-    //   })
-    //   .catch(err => {
-    //     console.log(err);
-    //   });
+          return new Promise(resolve => resolve(data.data));
+        })
+        .catch(err => {
+          console.log(err);
+        });
 
-    // new_crop_image = this.state.crop_image;
-    // new_crop_image_promises = await new_crop_image.map((crop, index) => {
-    //   crop.region_attributes.ai_label = recognitionResult.label[index];
-    //   crop.region_attributes.prob = recognitionResult.prob[index];
+      new_crop_image = this.state.crop_image;
+      new_crop_image_promises = await new_crop_image.map((crop, index) => {
+        crop.region_attributes.ai_label = recognitionResult.label[index];
+        crop.region_attributes.prob = recognitionResult.prob[index];
 
-    //   return new Promise(resolve => resolve(crop));
-    // });
-    // new_crop_image = await Promise.all(new_crop_image_promises);
-    // await this.setState({
-    //   crop_image: new_crop_image
-    // });
+        return new Promise(resolve => resolve(crop));
+      });
+      new_crop_image = await Promise.all(new_crop_image_promises);
+      await this.setState({
+        crop_image: new_crop_image
+      });
 
-    // // STEP 3: label값과 ai_label값의 유사도를 가져온다
-    // const compareStringEndpoint = `/api/mypage/creator/task/normal/compare_string`;
-    // await fetch(compareStringEndpoint, {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json"
-    //   },
-    //   body: JSON.stringify({
-    //     label: this.state.crop_image.map(crop => crop.region_attributes.label),
-    //     ai_label: this.state.crop_image.map(
-    //       crop => crop.region_attributes.ai_label
-    //     )
-    //   })
-    // })
-    //   .then(res => res.json())
-    //   .then(async data => {
-    //     console.log("data: ", data);
-    //     new_crop_image = this.state.crop_image;
-    //     let new_crop_image_promises = await new_crop_image.map(
-    //       (crop, index) => {
-    //         crop.region_attributes.similarity = data.data.similarity[index];
-    //         return new Promise(resolve => resolve(crop));
-    //       }
-    //     );
+      // STEP 3: label값과 ai_label값의 유사도를 가져온다
+      await fetch(compareStringEndpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          label: this.state.crop_image.map(
+            crop => crop.region_attributes.label
+          ),
+          ai_label: this.state.crop_image.map(
+            crop => crop.region_attributes.ai_label
+          )
+        })
+      })
+        .then(res => res.json())
+        .then(async data => {
+          console.log("data: ", data);
+          new_crop_image = this.state.crop_image;
+          let new_crop_image_promises = await new_crop_image.map(
+            (crop, index) => {
+              crop.region_attributes.similarity = data.data.similarity[index];
+              return new Promise(resolve => resolve(crop));
+            }
+          );
 
-    //     new_crop_image = await Promise.all(new_crop_image_promises);
+          new_crop_image = await Promise.all(new_crop_image_promises);
 
-    //     await this.setState({
-    //       crop_image: new_crop_image
-    //     });
+          await this.setState({
+            crop_image: new_crop_image
+          });
 
-    //     return new Promise(resolve => resolve(data));
-    //   })
-    //   .catch(err => {
-    //     console.log(err);
-    //   });
+          return new Promise(resolve => resolve(data));
+        })
+        .catch(err => {
+          console.log(err);
+        });
+
+      // STEP 4: 신뢰도를 예측하는 요청을 보낸다
+      await fetch(textPredictEndpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          crop_image: this.state.crop_image
+        })
+      })
+        .then(res => res.json())
+        .then(data => {
+          console.log(data.data.crop_image);
+
+          this.setState({
+            crop_image: data.data.crop_image
+          });
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
 
     console.log("new_crop_image: ", this.state.crop_image);
     bodyData.append("project_id", this.props.project_id);
