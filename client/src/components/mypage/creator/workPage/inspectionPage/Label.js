@@ -9,7 +9,7 @@ const Container = styled.div`
   position: absolute;
   top: -30px;
   left: 0px;
-  width: ${props => props.label.length * 14}px;
+  width: ${props => props.label.length * 14 + 160}px;
   height: 30px;
   z-index: 2;
 `;
@@ -19,14 +19,14 @@ class Label extends Component {
     const { id } = this.props.crop.shape_attributes
       ? this.props.crop.shape_attributes
       : this.props.crop;
-    const { label } = this.props.crop.region_attributes
+    const { label, reliability } = this.props.crop.region_attributes
       ? this.props.crop.region_attributes
       : this.props.crop;
 
     console.log(label);
     return (
       <Container id={id} label={label}>
-        {label}
+        {label} 신뢰도 {((1 - reliability.toFixed(2)) * 100).toFixed(0)}%
       </Container>
     );
   }

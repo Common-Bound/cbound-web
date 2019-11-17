@@ -35,7 +35,12 @@ class CropImage extends Component {
 
   handleMouseEnter = e => {
     this.setState({
-      labelComponent: <Label crop={this.props.crop} />
+      labelComponent: (
+        <Label
+          crop={this.props.crop}
+          reliability={this.props.crop.region_attributes.reliability}
+        />
+      )
     });
   };
 
