@@ -48,7 +48,7 @@ cd p1021_dal
 npm install && npm build
 ```
 
-패키지 매니저로 `yarn`을 사용한다면 다음고 같이 입력합니다.
+패키지 매니저로 `yarn`을 사용한다면 다음과 같이 입력합니다.
 
 ```
 yarn && yarn build
