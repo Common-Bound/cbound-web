@@ -62,27 +62,31 @@ yarn && yarn build
 
 ## Features
 
-커먼바운드에서 제공하는 기능에는 어떤 것들이 있는지 영상으로 확인해봅시다.
+커먼바운드가 사용자별로 제공하는 기능에는 다음과 같은 것들이 있습니다.
 
 ### 데이터 요청자
 
+**데이터 요청자**는 인공지능 학습에 필요한 데이털 필요로하는 개인이나 단체(기업, 연구소)를 지칭합니다. 데이터 요청자는 커먼바운드에 얻고자 하는 데이터를 요청하는 **프로젝트**를 등록할 수 있습니다. 프로젝트를 등록한 뒤 해당 프로젝트의 데이터 생산 현황을 모니터링 할 수 있고, 원하는 형식(JSON, CSV)으로 다운로드 받을 수 있습니다.
+
 - 프로젝트 등록
 
-  <iframe width="640" height="360" src="https://youtu.be/6Fy8BQG-aao" frameborder="0" gesture="media" allowfullscreen=""></iframe>
+  <img src="https://pukyongackr-my.sharepoint.com/personal/bnm6377_pukyong_ac_kr/Documents/DEMO/cbound_create_project.gif" alt="" style="width: 640px"/>
 
 - 데이터 생산 현황 모니터링 및 데이터 다운로드
 
-  <iframe width="640" height="360" src="https://youtu.be/lekKsAoIDbs" frameborder="0" gesture="media" allowfullscreen=""></iframe>
+  <img width="640" height="360" src="https://pukyongackr-my.sharepoint.com/personal/bnm6377_pukyong_ac_kr/Documents/DEMO/cbound_requester_dashboard.gif" />
 
 ### 데이터 생산자
 
+**데이터 생산자**는 인공지능 학습에 필요한 데이터를 생산하는 개인들을 지칭합니다. 데이터 요청자가 요구하는 데이터를 생산 및 전처리하고, 그에 대한 보상으로 포인트를 지급받습니다. 또한 일부 생산자들은 데이터 검수에도 참여할 수 있습니다. 자신이 생산 및 검수한 이력을 확인하고 포인트가 일정 이상 모였다면 이를 현금화할 수 있습니다.
+
 - 프로젝트 참여 및 데이터 생산
 
-  <iframe width="640" height="360" src="https://youtu.be/dqD9EVYWJ8c" frameborder="0" gesture="media" allowfullscreen=""></iframe>
+  <img width="640" height="360" src="https://pukyongackr-my.sharepoint.com/personal/bnm6377_pukyong_ac_kr/Documents/DEMO/cbound_join_project_make_data.gif"  />
 
-- 데이터 검수
+- 데이터 검수 및 포인트 내역 확인
 
-  <iframe width="640" height="360" src="https://youtu.be/2nyWImAy4cI" frameborder="0" gesture="media" allowfullscreen=""></iframe>
+  <img width="640" height="360" src="https://pukyongackr-my.sharepoint.com/personal/bnm6377_pukyong_ac_kr/Documents/DEMO/data_inspection_and_history.gif" />
 
 <!-- - **이미지 크롭**
 
@@ -134,6 +138,14 @@ yarn && yarn build
 
     ![noname08](https://user-images.githubusercontent.com/39645522/63343176-4dd0aa00-c388-11e9-9069-6aad81b2e28b.jpg) -->
 
+## Running the tests
+
+커먼바운드의 테스트 코드를 실행하는 명령은 다음과 같습니다.
+
+```
+yarn test
+```
+
 ## Team
 
 - **김은수**
@@ -144,28 +156,32 @@ yarn && yarn build
     - 웹 서버 개발
     - 클라이언트 & 서버 연동
     - 데이터베이스 설계 및 관리
+    - AI 어시스턴트 개발
 
 * **최현서**
   - **Github**: [HyunSeoChoi](https://github.com/HyunSeoChoi)
   - **Role**: _Front end 담당, 이미지 크롭 기능 개발_
-    - 이미지 위의 ROI 영역을 크롭하는 BOUND 기능 개발
-    - ROI 영역 수정, 삭제 인터페이스 개발
+    - 이미지 위의 텍스트 및 사물 영역을 크롭하는 CROP 기능 개발
+    - 크롭한 영역 수정, 삭제 인터페이스 개발
     - 이미지 업로드, 크롭 완료 등의 이벤트 발생 체크 & 서버로 데이터 전송 기능 개발
     - 캔버스 좌표계와 크롭 영역 좌표계 실제 비율로 동기화
     - 캔버스에 모든 크롭 영역을 그려주는 SHOW 기능 개발
+    - 모바일 어플리케이션 개발
 
 - **김광호**
   - **Github**: [FKgk](https://github.com/FKgk)
   - **Role**: _Back end 담당, AI 어시스턴트 개발_
-    - AI 어시스턴트 개발
+    - 생산 및 검수 AI 어시스턴트 개발
     - AI 어시스턴트 서버 개발
     - Text Detection 논문 및 오픈소스 비교 분석
     - Text Recognition 논문 및 오픈소스 비교 분석
+    - Object Detection 논문 및 오픈소스 비교 분석
+    - Object Recognition 논문 및 오픈소스 비교 분석
     - AWS DevOps 담당
 
 ## Acknowledgment
 
-커먼바운드를 기획하게 된 모든 과정을 확인하시려면, [Documentation](https://git.swmgit.org/root/p1021_dal/wikis/idea/%EC%95%84%EC%9D%B4%EB%94%94%EC%96%B4)
+커먼바운드는 _SW마에스트로_ 의 지원을 받아 만들어진 서비스 입니다. 커먼바운드를 기획하게 된 모든 과정을 확인하시려면, [Documentation](https://git.swmgit.org/root/p1021_dal/wikis/idea/%EC%95%84%EC%9D%B4%EB%94%94%EC%96%B4)
 페이지를 참고하세요.
 
 ## Code Convention
