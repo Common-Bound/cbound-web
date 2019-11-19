@@ -60,9 +60,31 @@ yarn && yarn build
 
 ![Landing Page](https://user-images.githubusercontent.com/39645522/63000194-86194980-beab-11e9-8e08-75721bef0427.PNG)
 
-### Feature
+## Features
 
-- **이미지 크롭**
+커먼바운드에서 제공하는 기능에는 어떤 것들이 있는지 영상으로 확인해봅시다.
+
+### 데이터 요청자
+
+- 프로젝트 등록
+
+  <iframe width="640" height="360" src="https://youtu.be/6Fy8BQG-aao" frameborder="0" gesture="media" allowfullscreen=""></iframe>
+
+- 데이터 생산 현황 모니터링 및 데이터 다운로드
+
+  <iframe width="640" height="360" src="https://youtu.be/lekKsAoIDbs" frameborder="0" gesture="media" allowfullscreen=""></iframe>
+
+### 데이터 생산자
+
+- 프로젝트 참여 및 데이터 생산
+
+  <iframe width="640" height="360" src="https://youtu.be/dqD9EVYWJ8c" frameborder="0" gesture="media" allowfullscreen=""></iframe>
+
+- 데이터 검수
+
+  <iframe width="640" height="360" src="https://youtu.be/2nyWImAy4cI" frameborder="0" gesture="media" allowfullscreen=""></iframe>
+
+<!-- - **이미지 크롭**
 
   - 이미지 업로드
 
@@ -110,7 +132,7 @@ yarn && yarn build
 
   - AI 어시스턴트 협력 결과
 
-    ![noname08](https://user-images.githubusercontent.com/39645522/63343176-4dd0aa00-c388-11e9-9069-6aad81b2e28b.jpg)
+    ![noname08](https://user-images.githubusercontent.com/39645522/63343176-4dd0aa00-c388-11e9-9069-6aad81b2e28b.jpg) -->
 
 ## Team
 
