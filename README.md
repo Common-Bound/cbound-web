@@ -5,25 +5,62 @@
 # Common Bound
 
 커먼바운드는 인공지능으로 기존의 문제를 새롭게 해결하고자 하는 개인이나 기업이 인공지능 학습에 필요한 데이터를 생산하는 작업을 크라우드소싱할 수 있도록 도와주는 플랫폼입니다.
-커먼바운드는 인공지능 학습 데이터를 생산하는데 필요한 온라인 작업 환경을 제공하고, 데이터를 생산하는 데에 기여한 사람들이 그에 대한 정당한 보상을 지급받을 수 있도록 합니다.
+커먼바운드는 인공지능 학습 데이터를 생산하는데 필요한 온라인 작업 환경을 제공하고, 인공지능 검수 시스템으로 높은 품질의 데이터를 빠르게 제공합니다.
 
 ![Version](https://img.shields.io/badge/version-1.0.0-red)
 ![Node Version](https://img.shields.io/node/v/@material-ui/core)
 ![NPM Version](https://img.shields.io/npm/v/pg)
-![Commit Activity](https://img.shields.io/github/commit-activity/m/eunsukimme/Common-Bound)
-![License](https://img.shields.io/github/license/eunsukimme/Common-Bound)
 [![HitCount](http://hits.dwyl.io/eunsukimme/Common-Bound.svg)](http://hits.dwyl.io/eunsukimme/Common-Bound)
 
-## Documentation
-
-커먼바운드를 기획하게 된 모든 과정을 확인하시려면, [Documentation](https://git.swmgit.org/root/p1021_dal/wikis/idea/%EC%95%84%EC%9D%B4%EB%94%94%EC%96%B4)
-페이지를 참고하세요.
+<!-- ![Commit Activity](https://img.shields.io/github/commit-activity/m/eunsukimme/Common-Bound)
+![License](https://img.shields.io/github/license/eunsukimme/Common-Bound) -->
 
 ## How To Install
 
-자세한 설치 방법은 [How to Install](https://github.com/eunsukimme/Common-Bound/blob/master/How%20to%20Install.md)에서 확인하실 수 있습니다.
+커먼바운드 클라이언트, 서버 개발 환경을 구축하는 방법은 다음과 같습니다.
 
-## Feature
+### Prerequisites
+
+먼저 다음 프로그램을 설치해야 합니다.
+
+- [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/lang/en/) - Node.js 패키지 매니저
+- [node](https://nodejs.org/ko/) - 자바스크립트 런타임
+- [redis](https://redis.io/) - In Memory 데이터 스토리지
+
+### Installing
+
+1. 커맨드(cmd) 창을 띄웁니다. VScode IDE를 사용한다면 빌트인 커맨드 창을 띄워도 됩니다.
+2. 커먼바운드 레포지토리를 클롭합니다.
+
+```
+git clone https://git.swmgit.org/root/p1021_dal.git
+```
+
+3. 클론한 디렉터리로 이동합니다.
+
+```
+cd p1021_dal
+```
+
+4. `package.json`에 명시된 `dependencies`를 다운받고, 클라이언트 코드를 `build` 합니다.
+
+```
+npm install && npm build
+```
+
+패키지 매니저로 `yarn`을 사용한다면 다음고 같이 입력합니다.
+
+```
+yarn && yarn build
+```
+
+## Usage
+
+커맨드 창에 `yarn dev`를 입력하여 development 서버를 실행합니다. 브러우저 주소창에 http://localhost:3000을 입력하면 다음과 같은 커먼바운드 홈페이지를 볼 수 있습니다.
+
+![Landing Page](https://user-images.githubusercontent.com/39645522/63000194-86194980-beab-11e9-8e08-75721bef0427.PNG)
+
+### Feature
 
 - **이미지 크롭**
 
@@ -103,6 +140,11 @@
     - Text Detection 논문 및 오픈소스 비교 분석
     - Text Recognition 논문 및 오픈소스 비교 분석
     - AWS DevOps 담당
+
+## Acknowledgment
+
+커먼바운드를 기획하게 된 모든 과정을 확인하시려면, [Documentation](https://git.swmgit.org/root/p1021_dal/wikis/idea/%EC%95%84%EC%9D%B4%EB%94%94%EC%96%B4)
+페이지를 참고하세요.
 
 ## Code Convention
 
