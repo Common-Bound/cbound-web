@@ -70,11 +70,11 @@ yarn && yarn build
 
 - 프로젝트 등록
 
-  <img width="640" height="360" src="https://pukyongackr-my.sharepoint.com/personal/bnm6377_pukyong_ac_kr/Documents/DEMO/cbound_create_project.gif" alt="" />
+  <img width="640" height="360" src="https://s5.gifyu.com/images/cbound_create_project.gif" alt="" />
 
 - 데이터 생산 현황 모니터링 및 데이터 다운로드
 
-  <img width="640" height="360" src="https://pukyongackr-my.sharepoint.com/personal/bnm6377_pukyong_ac_kr/Documents/DEMO/cbound_requester_dashboard.gif" />
+  <img width="640" height="360" src="https://s5.gifyu.com/images/cbound_requester_dashboard.gif" />
 
 ### 데이터 생산자
 
