@@ -82,11 +82,11 @@ yarn && yarn build
 
 - 프로젝트 참여 및 데이터 생산
 
-  <img width="640" height="360" src="https://pukyongackr-my.sharepoint.com/personal/bnm6377_pukyong_ac_kr/Documents/DEMO/cbound_join_project_make_data.gif"  />
+  <img width="640" height="360" src="https://s5.gifyu.com/images/cbound_join_project_make_data.gif"  />
 
 - 데이터 검수 및 포인트 내역 확인
 
-  <img width="640" height="360" src="https://pukyongackr-my.sharepoint.com/personal/bnm6377_pukyong_ac_kr/Documents/DEMO/data_inspection_and_history.gif" />
+  <img width="640" height="360" src="https://s5.gifyu.com/images/data_inspection_and_history.gif" />
 
 <!-- - **이미지 크롭**
 
