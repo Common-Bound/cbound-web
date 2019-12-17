@@ -70,11 +70,11 @@ yarn && yarn build
 
 - 프로젝트 등록
 
-  <img width="640" height="360" src="https://gifyu.com/image/vdZQ" alt="" />
+  <img width="640" height="360" src="https://github.com/Common-Bound/cbound-web/blob/master/DEMO/cbound_create_project.gif?raw=true" alt="" />
 
 - 데이터 생산 현황 모니터링 및 데이터 다운로드
 
-  <img width="640" height="360" src="https://gifyu.com/image/vdZ4" />
+  <img width="640" height="360" src="https://github.com/Common-Bound/cbound-web/blob/master/DEMO/cbound_requester_dashboard.gif?raw=true" />
 
 ### 데이터 생산자
 
@@ -82,11 +82,11 @@ yarn && yarn build
 
 - 프로젝트 참여 및 데이터 생산
 
-  <img width="640" height="360" src="https://gifyu.com/image/vdZF"  />
+  <img width="640" height="360" src="https://github.com/Common-Bound/cbound-web/blob/master/DEMO/cbound_join_project_make_data.gif?raw=true"  />
 
 - 데이터 검수 및 포인트 내역 확인
 
-  <img width="640" height="360" src="https://gifyu.com/image/vdaw" />
+  <img width="640" height="360" src="https://github.com/Common-Bound/cbound-web/blob/master/DEMO/data_inspection_and_history.gif?raw=true" />
 
 <!-- - **이미지 크롭**
 
