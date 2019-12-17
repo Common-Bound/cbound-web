@@ -9,7 +9,7 @@ const http = require("http");
 const https = require("https");
 const fs = require("fs");
 const cors = require("cors");
-let client = redis.createClient();
+let client = redis.createClient(process.env.REDIS_URL);
 
 const PORT = process.env.PORT || 4000;
 
