@@ -257,13 +257,13 @@ class Header extends Component {
         <Logo
           to="/"
           img={
-            "https://task-data-bucket.s3.ap-northeast-2.amazonaws.com/logo_2.webp"
+            "https://task-data-bucket-copied.s3.ap-northeast-2.amazonaws.com/logo_2.webp"
           }
         />
         <Title
           to="/"
           img={
-            "https://task-data-bucket.s3.ap-northeast-2.amazonaws.com/COMMONBOUND.webp"
+            "https://task-data-bucket-copied.s3.ap-northeast-2.amazonaws.com/COMMONBOUND.webp"
           }
         />
         {this.props.page === "main" ? (

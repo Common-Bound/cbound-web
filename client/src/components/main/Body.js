@@ -19,7 +19,7 @@ const MainSlideContainer = styled.div`
   justify-content: center;
   align-items: center;
 
-  background-image: url("https://task-data-bucket.s3.ap-northeast-2.amazonaws.com/BackGround.webp");
+  background-image: url("https://task-data-bucket-copied.s3.ap-northeast-2.amazonaws.com/BackGround.webp");
   background-repeat: no-repeat;
   width: 100%;
   height: 600px;
