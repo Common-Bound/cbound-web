@@ -72,37 +72,41 @@ app.get("/*", (req, res, next) => {
   });
 });
 /* SSL option */
-const option =
-  process.env.NODE_ENV === "production"
-    ? {
-        key: fs.readFileSync(
-          __dirname + "/ssl/c-bound.io_2019091776EJ.key.pem"
-        ),
-        cert: fs.readFileSync(
-          __dirname + "/ssl/c-bound.io_2019091776EJ.crt.pem"
-        ),
-        ca: fs.readFileSync(__dirname + "/ssl/ca-chain-bundle.pem")
-      }
-    : undefined;
+// const option =
+//   process.env.NODE_ENV === "production"
+//     ? {
+//         key: fs.readFileSync(
+//           __dirname + "/ssl/c-bound.io_2019091776EJ.key.pem"
+//         ),
+//         cert: fs.readFileSync(
+//           __dirname + "/ssl/c-bound.io_2019091776EJ.crt.pem"
+//         ),
+//         ca: fs.readFileSync(__dirname + "/ssl/ca-chain-bundle.pem")
+//       }
+//     : undefined;
 
-// proudction 에서는 HTTPS 서버를, development 에서는 HTTP 서버를 사용한다.
-option
-  ? https.createServer(option, app).listen(PORT, () => {
-      logger.info(`HTTPS Server is running at port ${PORT}`);
-    })
-  : http.createServer(app).listen(PORT, () => {
-      logger.info(`HTTP Server is running at port ${PORT}`);
-    });
+// // proudction 에서는 HTTPS 서버를, development 에서는 HTTP 서버를 사용한다.
+// option
+//   ? https.createServer(option, app).listen(PORT, () => {
+//       logger.info(`HTTPS Server is running at port ${PORT}`);
+//     })
+//   : http.createServer(app).listen(PORT, () => {
+//       logger.info(`HTTP Server is running at port ${PORT}`);
+//     });
 
-// HTTPS 서버로 요청을 전달하여 자동으로 SSL 연결을 해주는 HTTP 서버
-// SSL option 이 존재하지 않는 development 단계에서는 그냥 HTTP 서버만이 존재하게 됩니다.
-option
-  ? http
-      .createServer(function(req, res) {
-        res.writeHead(301, {
-          Location: "https://" + req.headers["host"] + req.url
-        });
-        res.end();
-      })
-      .listen(80)
-  : undefined;
+// // HTTPS 서버로 요청을 전달하여 자동으로 SSL 연결을 해주는 HTTP 서버
+// // SSL option 이 존재하지 않는 development 단계에서는 그냥 HTTP 서버만이 존재하게 됩니다.
+// option
+//   ? http
+//       .createServer(function(req, res) {
+//         res.writeHead(301, {
+//           Location: "https://" + req.headers["host"] + req.url
+//         });
+//         res.end();
+//       })
+//       .listen(80)
+//   : undefined;
+
+http.createServer(app).listen(PORT, () => {
+  logger.info(`HTTP Server is running at port ${PORT}`);
+});

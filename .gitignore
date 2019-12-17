@@ -63,4 +63,6 @@ typings/
 # redis dump file
 dump.rdb
 
+# ssl files
+ssl/
 .well-known/
