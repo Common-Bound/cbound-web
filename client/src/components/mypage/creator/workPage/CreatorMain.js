@@ -357,7 +357,11 @@ class CreatorMain extends Component {
               this.Refs[index] = ref;
             }}
             index={index}
-            classes={this.props.info.classes}
+            classes={
+              this.props.info && this.props.info.classes
+                ? this.props.info.classes
+                : undefined
+            }
           />
         );
       });

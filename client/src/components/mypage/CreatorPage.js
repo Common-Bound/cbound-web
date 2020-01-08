@@ -198,13 +198,13 @@ class CreatorPage extends Component {
               <Icon className="fas fa-list" />
               <IconTitle>My Projects</IconTitle>
             </MyProjectButton>
-            <TaskButton
+            {/* <TaskButton
               to={`${this.props.match.url}/task/standalone/none`}
               pathname={this.props.location.pathname}
             >
               <Icon className="fas fa-crop-alt"></Icon>
               <IconTitle>Workspace</IconTitle>
-            </TaskButton>
+            </TaskButton> */}
             <HistoryButton
               to={`${this.props.match.url}/history`}
               pathname={this.props.location.pathname}
