@@ -86,7 +86,9 @@ class AvailableProjects extends Component {
     console.log(`/api${this.props.match.path}`);
     const url = `/api${this.props.match.path}`;
 
-    const result = await fetch(url)
+    const result = await fetch(url, {
+      credentials: "include"
+    })
       .then(res => res.json())
       .then(data => {
         console.log(data);

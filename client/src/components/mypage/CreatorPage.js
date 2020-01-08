@@ -148,7 +148,9 @@ class CreatorPage extends Component {
     const url = `/api/mypage/creator/point`;
     console.log(this.props);
 
-    const result = await fetch(url)
+    const result = await fetch(url, {
+      credentials: "include"
+    })
       .then(res => res.json())
       .then(async data => {
         console.log("data: ", data);
