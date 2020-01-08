@@ -9,23 +9,28 @@ const moment = require("moment-timezone");
 const logger = require("../../../../../../config/logger");
 
 // AWS config 파일 불러오기
-AWS.config.loadFromPath(__dirname + "/../../../../../../config/awsConfig.json");
+// AWS.config.loadFromPath(__dirname + "/../../../../../../config/awsConfig.json");
+AWS.config.update({
+  secretAccessKey: process.env.CLOUDCUBE_SECRET_ACCESS_KEY,
+  accessKeyId: process.env.CLOUDCUBE_ACCESS_KEY_ID,
+  region: "us-east-1"
+});
 let s3 = new AWS.S3();
 
 // S3에 올리는 모듈
 const upload_s3 = multer({
   storage: multerS3({
     s3: s3,
-    bucket: "task-data-bucket",
+    bucket: "cloud-cube",
     metadata: function(req, file, cb) {
       cb(null, { fieldName: file.fieldname });
     },
     key: function(req, file, cb) {
       cb(
         null,
-        `${req.body.title}_${req.body.project_id}/${
-          req.user.id
-        }/${Date.now().toString()}-${file.originalname}`
+        `rspayzankl2p/public/task-data-bucket/${req.body.title}_${
+          req.body.project_id
+        }/${req.user.id}/${Date.now().toString()}-${file.originalname}`
       );
     },
     acl: "public-read-write"
@@ -72,7 +77,7 @@ router.post(
     // meta.total_height = total_height;
     meta.total_size = total_size;
     meta.ai_total_size = ai_total_size;
-    meta.compare_size = total_size / ai_total_size;
+    meta.compare_size = ai_total_size != 0 ? total_size / ai_total_size : 0;
     const id = uuid();
     const date = moment()
       .tz("Asia/Seoul")

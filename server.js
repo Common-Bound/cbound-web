@@ -47,7 +47,7 @@ app.use(
     secret: "myKey",
     resave: false,
     rolling: true,
-    proxy: true, // add this line
+    proxy: true, // add this line Heroku에 deploy하려면 이걸 설정해 줘야함. 안그럼 passport가 req.isAuthenticated를 모름
     cookie: {
       secure: process.env.NODE_ENV === "production" ? true : false,
       maxAge: 3600 * 1000
@@ -108,6 +108,11 @@ app.get("/*", (req, res, next) => {
 //       })
 //       .listen(80)
 //   : undefined;
+
+// heroku dyno를 5분 주기로 계속 깨우는 Interval 설정
+setInterval(function() {
+  http.get("http://cbound.herokuapp.com");
+}, 1000 * 60 * 5);
 
 http.createServer(app).listen(PORT, () => {
   logger.info(`HTTP Server is running at port ${PORT}`);

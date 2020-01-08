@@ -13,7 +13,7 @@ class Footer extends React.Component {
               {" "}
               <a
                 className="font-weight-bold ml-1"
-                href="http://c-bound.io"
+                href="https://cbound.herokuapp.com"
                 rel="noopener noreferrer"
                 target="_blank"
               >
@@ -26,7 +26,7 @@ class Footer extends React.Component {
             <Nav className="nav-footer justify-content-center justify-content-xl-end">
               <NavItem>
                 <NavLink
-                  href="http://c-bound.io"
+                  href="https://cbound.herokuapp.com"
                   rel="noopener noreferrer"
                   target="_blank"
                 >
