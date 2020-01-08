@@ -40,7 +40,7 @@
     "dev": "concurrently -k \"yarn server \" \"yarn client \"",
     "build": "cd client && yarn && yarn build",
     "test": "mocha --recursive",
-    "start": "yarn build && node server.js"
+    "start": "node server.js"
   },
   "devDependencies": {
     "browserify-css": "^0.15.0",
