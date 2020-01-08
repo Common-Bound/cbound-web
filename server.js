@@ -40,12 +40,14 @@ app.use(
   })
 );
 app.use(bodyParser.urlencoded({ limit: "100mb", extended: false }));
+app.enable("trust proxy"); // add this line
 app.use(
   session({
     store: new RedisStore({ client }),
     secret: "myKey",
     resave: false,
     rolling: true,
+    proxy: true, // add this line
     cookie: {
       secure: process.env.NODE_ENV === "production" ? true : false,
       maxAge: 3600 * 1000
