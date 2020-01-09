@@ -65,7 +65,7 @@ const Image = styled.div`
 
   border-radius: 2% 2% 0% 0%;
   background-image: url(${props => props.src});
-  background-size: 100% 100%;
+  background-size: 102% 100%;
   background-repeat: no-repeat;
   border: 1px solid black;
 `;
@@ -97,7 +97,7 @@ const DescriptionSubTitle = styled.div`
 class About extends Component {
   render() {
     return (
-      <AboutContainer>
+      <AboutContainer id="about">
         <TitleContainer data-aos="fade-up">
           <Line></Line>
           <Title>About Us</Title>
@@ -113,7 +113,7 @@ class About extends Component {
             <Description>
               <DescriptionTitle>
                 일상 속 순간들이 <br />
-                인공지능의 지식입니다
+                인공지능의 지식이됩니다
               </DescriptionTitle>
               <DescriptionSubTitle>
                 커먼바운드는 우리 일상 속 순간을 포착하여 그 안의 새로운 의미를

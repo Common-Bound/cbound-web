@@ -35,7 +35,7 @@ const Title = styled(Link)`
   }
 `;
 
-const StyledLinks = styled(Link)`
+const StyledLinks = styled.a`
   color: lightgrey;
   font-family: Avenir;
   text-decoration: none;
@@ -72,17 +72,17 @@ class Footer extends Component {
           />
         </TitleContainer>
         <Navigation>
-          <StyledLinks>About Us</StyledLinks>
-          <StyledLinks>Our Services</StyledLinks>
-          <StyledLinks>Contact</StyledLinks>
+          <StyledLinks href="#about">About Us</StyledLinks>
+          <StyledLinks href="#services">Our Services</StyledLinks>
+          <StyledLinks href="#">Contact</StyledLinks>
         </Navigation>
         <IconContainer>
-          <a
+          <StyledLinks
             style={{ color: "grey", textDecoration: "none" }}
             href="https://play.google.com/store/apps/details?id=com.wCommonBound_9688117"
           >
-            <i class="fab fa-google-play"></i>
-          </a>
+            <i className="fab fa-google-play"></i>
+          </StyledLinks>
         </IconContainer>
       </FooterContainer>
     );

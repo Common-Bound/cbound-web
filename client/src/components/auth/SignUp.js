@@ -254,7 +254,7 @@ class SignUp extends Component {
       <Container>
         <Header page="main" />
         <SignUpContainer>
-          <SignUpMain className="animated fadeInUp ">
+          <SignUpMain data-aos="fade-up" data-aos-duration="1000">
             <LeftCard>
               <MainTitle>
                 Sign <span style={{ color: "#00d8ff" }}>Up</span>

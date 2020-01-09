@@ -150,11 +150,7 @@ class Body extends Component {
     return (
       <BodyContainer>
         <MainSlideContainer>
-          <MainSlide
-            data-aos="fade-up"
-            data-aos-delay="200"
-            data-aos-duration="1000"
-          >
+          <MainSlide data-aos="fade-up" data-aos-duration="1000">
             <MainTitle>
               Ima<span style={{ color: "#389eff" }}>ge</span> Knowled
               <span style={{ color: "#00d8ff" }}>ge</span>
@@ -167,7 +163,7 @@ class Body extends Component {
           </MainSlide>
           <TestButton
             data-aos="fade-up"
-            data-aos-delay="1200"
+            data-aos-delay="1000"
             data-aos-duration="1000"
             to="/signin/select"
           >

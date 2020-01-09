@@ -223,7 +223,7 @@ class SignIn extends Component {
       <Container>
         <Header page="main" />
         <SignInContainer>
-          <SignInMain className="animated fadeInUp ">
+          <SignInMain data-aos="fade-up" data-aos-duration="1000">
             <LeftCard>
               <MainTitle>
                 Sign <span style={{ color: "#00d8ff" }}>In</span>
