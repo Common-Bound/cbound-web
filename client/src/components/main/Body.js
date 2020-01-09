@@ -124,13 +124,11 @@ const TestButtonText = styled.div`
 const AboutSection = styled.div`
   background-color: black;
   width: 100%;
-  height: 600px;
 `;
 
 const OurServicesSection = styled.div`
   background-color: black;
   width: 100%;
-  height: 600px;
 `;
 
 // const ContactSection = styled.div`

@@ -35,7 +35,15 @@ const Title = styled(Link)`
   }
 `;
 
+const Navigation = styled.div`
+  width: 80%;
+
+  display: flex;
+  justify-content: center;
+`;
+
 const StyledLinks = styled.a`
+  margin: 0px 20px;
   color: lightgrey;
   font-family: Avenir;
   text-decoration: none;
@@ -43,13 +51,6 @@ const StyledLinks = styled.a`
   :hover {
     color: lightgrey;
   }
-`;
-
-const Navigation = styled.div`
-  width: 30%;
-
-  display: flex;
-  justify-content: space-around;
 `;
 
 const IconContainer = styled.div`
@@ -72,8 +73,8 @@ class Footer extends Component {
           />
         </TitleContainer>
         <Navigation>
-          <StyledLinks href="#about">About Us</StyledLinks>
-          <StyledLinks href="#services">Our Services</StyledLinks>
+          <StyledLinks href="#about">About</StyledLinks>
+          <StyledLinks href="#services">Services</StyledLinks>
           <StyledLinks href="#">Contact</StyledLinks>
         </Navigation>
         <IconContainer>

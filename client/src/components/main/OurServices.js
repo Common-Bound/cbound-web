@@ -7,7 +7,7 @@ import survey from "../../assets/img/homepage/survey.jpg";
 
 const OurServicesContainer = styled.div`
   width: 100%;
-  height: 600px;
+  min-height: 600px;
 
   display: flex;
   flex-direction: column;
@@ -17,15 +17,19 @@ const OurServicesContainer = styled.div`
 
 const TitleContainer = styled.div`
   width: 60%;
-  padding-bottom: 40px;
+  padding: 40px;
 
   display: flex;
   align-items: center;
   justify-content: space-around;
+
+  @media (max-width: 500px) {
+    width: 80%;
+  }
 `;
 
 const Line = styled.div`
-  width: 30%;
+  width: 24%;
   height: 1px;
   background-color: grey;
 `;
@@ -40,12 +44,15 @@ const CardContainer = styled.div`
 
   display: flex;
   justify-content: space-around;
+  flex-wrap: wrap;
 `;
 
 const Card = styled.div`
   width: 23%;
+  min-width: 240px;
   height: 360px;
 
+  margin: 20px 0px;
   border-radius: 2%;
   background-color: black;
   border: 1px solid black;
@@ -96,7 +103,7 @@ const DescriptionSubTitle = styled.div`
 class OurServices extends Component {
   render() {
     return (
-      <OurServicesContainer>
+      <OurServicesContainer id="services">
         <TitleContainer data-aos="fade-up">
           <Line></Line>
           <Title>Our Services</Title>

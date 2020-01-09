@@ -6,7 +6,7 @@ import worker from "../../assets/img/homepage/worker.jpg";
 
 const AboutContainer = styled.div`
   width: 100%;
-  height: 600px;
+  min-height: 600px;
 
   display: flex;
   flex-direction: column;
@@ -16,11 +16,15 @@ const AboutContainer = styled.div`
 
 const TitleContainer = styled.div`
   width: 60%;
-  padding-bottom: 40px;
+  padding: 40px;
 
   display: flex;
   align-items: center;
   justify-content: space-around;
+
+  @media (max-width: 500px) {
+    width: 80%;
+  }
 `;
 
 const Line = styled.div`
@@ -38,12 +42,16 @@ const CardContainer = styled.div`
   width: 80%;
 
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-around;
 `;
 
 const Card = styled.div`
   width: 30%;
+  min-width: 300px;
   height: 330px;
+
+  margin: 20px 0px;
 
   border-radius: 2%;
   background-color: white;
