@@ -2,9 +2,14 @@ import React, { Component } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 //import background from "../../images/BackGround.webp";
+import About from "./About";
+import OurServices from "./OurServices";
+import Footer from "./Footer";
 
 const BodyContainer = styled.div`
   width: 100%;
+  position: relative;
+  top: 7vh;
 
   display: flex;
   flex-direction: column;
@@ -12,7 +17,6 @@ const BodyContainer = styled.div`
 
 const MainSlideContainer = styled.div`
   position: relative;
-  top: 7vh;
 
   display: flex;
   flex-direction: column;
@@ -24,7 +28,6 @@ const MainSlideContainer = styled.div`
   width: 100%;
   height: 600px;
 
-  background-size: 100% 100%;
   background-position: center;
 
   @media (max-width: 500px) {
@@ -124,22 +127,22 @@ const AboutSection = styled.div`
   height: 600px;
 `;
 
-const UsecaseSection = styled.div`
+const OurServicesSection = styled.div`
   background-color: black;
   width: 100%;
   height: 600px;
 `;
 
-const ContactSection = styled.div`
-  background-color: black;
-  width: 100%;
-  height: 600px;
-`;
+// const ContactSection = styled.div`
+//   background-color: black;
+//   width: 100%;
+//   height: 600px;
+// `;
 
-const Footer = styled.div`
+const FooterSection = styled.div`
   background-color: black;
   width: 100%;
-  height: 600px;
+  height: 200px;
 `;
 
 class Body extends Component {
@@ -147,7 +150,11 @@ class Body extends Component {
     return (
       <BodyContainer>
         <MainSlideContainer>
-          <MainSlide className="animated fadeInUp ">
+          <MainSlide
+            data-aos="fade-up"
+            data-aos-delay="200"
+            data-aos-duration="1000"
+          >
             <MainTitle>
               Ima<span style={{ color: "#389eff" }}>ge</span> Knowled
               <span style={{ color: "#00d8ff" }}>ge</span>
@@ -159,16 +166,23 @@ class Body extends Component {
             </SubTitle>
           </MainSlide>
           <TestButton
-            className="animated fadeInUp  delay-1s"
+            data-aos="fade-up"
+            data-aos-delay="1200"
+            data-aos-duration="1000"
             to="/signin/select"
           >
             <TestButtonText>체험하기</TestButtonText>
           </TestButton>
         </MainSlideContainer>
-        <AboutSection />
-        <UsecaseSection />
-        <ContactSection />
-        <Footer />
+        <AboutSection>
+          <About />
+        </AboutSection>
+        <OurServicesSection>
+          <OurServices />
+        </OurServicesSection>
+        <FooterSection>
+          <Footer />
+        </FooterSection>
       </BodyContainer>
     );
   }

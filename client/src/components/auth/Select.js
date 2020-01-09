@@ -175,19 +175,35 @@ class Select extends Component {
       <Container>
         <SelectContainer>
           <Header page="main" />
-          <SelectMain className="animated fadeInUp ">
+          <SelectMain
+            data-aos="fade-up"
+            data-aos-delay="200"
+            data-aos-duration="1000"
+          >
             <LeftCard>
               <MainTitle>Data</MainTitle>
               <MainTitle color={"#389eff"}>Requester</MainTitle>
               <StyledLink to="/auth/requester/signin">
-                <Button className="animated fadeInUp  delay-1s">
+                <Button
+                  data-aos="fade-up"
+                  data-aos-delay="1200"
+                  data-aos-duration="1000"
+                >
                   데이터 요청자(기업)
                 </Button>
               </StyledLink>
-              <LeftDescription className="animated fadeInUp  delay-1s">
+              <LeftDescription
+                data-aos="fade-up"
+                data-aos-delay="1200"
+                data-aos-duration="1000"
+              >
                 이미지 판별이 필요한 사업을 운영하는
               </LeftDescription>
-              <LeftDescription className="animated fadeInUp  delay-1s">
+              <LeftDescription
+                data-aos="fade-up"
+                data-aos-delay="1200"
+                data-aos-duration="1000"
+              >
                 사람이 하는 일을 자동으로 효율적으로 해결하고 싶은 기업
               </LeftDescription>
             </LeftCard>
@@ -196,14 +212,26 @@ class Select extends Component {
               <MainTitle>Data</MainTitle>
               <MainTitle color={"#00d8ff"}>Generator</MainTitle>
               <StyledLink to="/auth/creator/signin">
-                <Button className="animated fadeInUp  delay-1s">
+                <Button
+                  data-aos="fade-up"
+                  data-aos-delay="1200"
+                  data-aos-duration="1000"
+                >
                   데이터 생산자(개인)
                 </Button>
               </StyledLink>
-              <RightDescription className="animated fadeInUp  delay-1s">
+              <RightDescription
+                data-aos="fade-up"
+                data-aos-delay="1200"
+                data-aos-duration="1000"
+              >
                 일상을 관찰하는 것에 흥미가 있는
               </RightDescription>
-              <RightDescription className="animated fadeInUp  delay-1s">
+              <RightDescription
+                data-aos="fade-up"
+                data-aos-delay="1200"
+                data-aos-duration="1000"
+              >
                 사진을 찍고, 올리면서 보상을 받기를 원하는 모든 사람
               </RightDescription>
             </RightCard>
