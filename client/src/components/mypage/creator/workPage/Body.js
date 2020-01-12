@@ -205,8 +205,8 @@ const objectDetectionEndpoint = `/api/mypage/creator/task/normal/object`;
 const objectRecognitionEndpoint = `/api/mypage/creator/task/normal/object/recognition`;
 const textDetectionEndpoint = `/api/mypage/creator/task/normal/text`;
 const textRecognitionEndpoint = `/api/mypage/creator/task/normal/text/recognition`;
-const compareStringEndpoint = `/api/mypage/creator/task/normal/text/compare_string`;
-const textPredictEndpoint = `/api/mypage/creator/task/normal/text/predict`;
+// const compareStringEndpoint = `/api/mypage/creator/task/normal/text/compare_string`;
+// const textPredictEndpoint = `/api/mypage/creator/task/normal/text/predict`;
 const completeEndpoint = `/api/mypage/creator/task/normal/complete`;
 
 class Body extends Component {
@@ -225,7 +225,8 @@ class Body extends Component {
       changeMode: false, // 현재 크롭된 이미지를 추가해야 할지 수정해야 할지 결정하는 Flag
       preId: "", // ChangeMode 가 true 라면 변경할 이미지의 id
       showEdit: true, // 한 개의 크롭 영역을 변경할 수 있는 이미지를 줄지 크롭된 영역 리스트를 캔버스에 그려줄 지
-      useAI: this.props.classes && this.props.classes.length > 0 ? true : false, // AI를 사용할지 말지 스위치 할 때 변경할 값
+      // useAI: this.props.classes && this.props.classes.length > 0 ? true : false, // AI를 사용할지 말지 스위치 할 때 변경할 값
+      useAI: false,
       loading: false,
       time_counter: [], // 각 크롭 영역을 지정하는데 걸리는 시간
       timer: 0,
