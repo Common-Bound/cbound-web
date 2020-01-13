@@ -12,9 +12,9 @@ const multerS3 = require("multer-s3");
 // AWS config 파일 불러오기
 // AWS.config.loadFromPath(__dirname + "/../../../../config/awsConfig.json");
 AWS.config.update({
-  secretAccessKey: process.env.CLOUDCUBE_SECRET_ACCESS_KEY,
-  accessKeyId: process.env.CLOUDCUBE_ACCESS_KEY_ID,
-  region: "us-east-1"
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  region: "ap-northeast-2"
 });
 let s3 = new AWS.S3();
 
@@ -22,17 +22,12 @@ let s3 = new AWS.S3();
 const upload_s3 = multer({
   storage: multerS3({
     s3: s3,
-    bucket: "cloud-cube",
+    bucket: "proj-data-bucket",
     metadata: function(req, file, cb) {
       cb(null, { fieldName: file.fieldname });
     },
     key: function(req, file, cb) {
-      cb(
-        null,
-        `rspayzankl2p/public/proj-data-bucket/${
-          req.user.id
-        }/${Date.now().toString()}-${file.originalname}`
-      );
+      cb(null, `${req.user.id}/${Date.now().toString()}-${file.originalname}`);
     },
     acl: "public-read-write"
   })

@@ -14,9 +14,9 @@ const sharp = require("sharp");
 
 // AWS.config.loadFromPath(__dirname + "/../../../../../config/awsConfig.json");
 AWS.config.update({
-  secretAccessKey: process.env.CLOUDCUBE_SECRET_ACCESS_KEY,
-  accessKeyId: process.env.CLOUDCUBE_ACCESS_KEY_ID,
-  region: "us-east-1"
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  region: "ap-northeast-2"
 });
 let s3 = new AWS.S3();
 
@@ -290,7 +290,7 @@ const updateCompareSize = async datas => {
     return data.payload.orig_image;
   });
   // url에서 key를 추출한다
-  const bucketName = "cloud-cube";
+  const bucketName = "task-data-bucket";
   const orig_image_keys = orig_image_URLs.map(url => {
     const splitted_url = url.split("/");
     let key = `${decodeURIComponent(splitted_url[3])}/${decodeURIComponent(
@@ -375,7 +375,7 @@ const updateRecognitionProb = async data => {
   // 각 데이터의 orig_image와 필드, 즉 URL을 가져온다
   const orig_image_URL = data.payload.orig_image;
   // url에서 key를 추출한다
-  const bucketName = "cloud-cube";
+  const bucketName = "task-data-bucket";
 
   const splitted_url = orig_image_URL.split("/");
   let key = `${decodeURIComponent(splitted_url[3])}/${decodeURIComponent(
@@ -482,7 +482,7 @@ const InsertDataCreatedByAI = async data => {
   // 각 데이터의 orig_image와 필드, 즉 URL을 가져온다
   const orig_image_URLs = data.payload.orig_image;
   // url에서 key를 추출한다
-  const bucketName = "cloud-cube";
+  const bucketName = "task-data-bucket";
   const splitted_url = orig_image_URLs.split("/");
   let key = `${decodeURIComponent(splitted_url[3])}/${decodeURIComponent(
     splitted_url[4]
