@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { Button, Form, FormGroup, Label, Input } from "reactstrap";
 import styled from "styled-components";
 import Class from "./Class";
 
@@ -8,7 +7,7 @@ const Container = styled.div`
   height: 100%;
 `;
 
-const CreateProjectForm = styled(Form)`
+const CreateProjectForm = styled.form`
   width: 80%;
   height: 100%;
 
@@ -16,13 +15,6 @@ const CreateProjectForm = styled(Form)`
   overflow: scroll;
   padding: 40px 0px;
   font-family: Avenir;
-`;
-
-const SubmitButton = styled(Button)`
-  margin: 0 auto;
-  width: 30%
-  padding: 5px;
-  font-size: 18px;
 `;
 
 const ButtonContainer = styled.div`
@@ -43,6 +35,43 @@ const Classes = styled.div`
 
 const Section = styled.div`
   display: flex;
+  flex-wrap: wrap;
+`;
+
+const StyledFormGroup = styled.div`
+  margin-bottom: 1.5rem;
+`;
+const StyledInput = styled.input`
+  width: 100%;
+
+  font-size: 0.875rem;
+  height: calc(2.75rem + 2px);
+  color: #8898aa;
+
+  padding: 0.625rem 0.75rem
+  border: 1px solid #cad1d7;
+  border-radius: 0.375rem;
+`;
+const StyledLabel = styled.label`
+  margin-bottom: 0.5rem;
+`;
+const StyledButton = styled.button`
+  background-color: #5e72e4 !important;
+  color: white;
+  border-radius: 0.375rem;
+  font-weight: 600;
+  padding: 0.625rem 1.25rem;
+  font-size: 0.875rem;
+
+  cursor: pointer;
+  @media (max-width: 500px) {
+    padding: 0.5rem 1rem !important;
+    font-size: 12px !important;
+  }
+`;
+const SubmitButton = styled(StyledButton)`
+  margin: 0 auto;
+  width: 30%;
 `;
 
 class CreateProjectPage extends Component {
@@ -123,7 +152,7 @@ class CreateProjectPage extends Component {
     const newClassComponents = this.state.classComponents;
     const newClasses = this.state.classes;
 
-    const input = this.inputRef.current.props.value;
+    const input = this.inputRef.current.value;
     const id = this.state.id;
 
     const classOption = {
@@ -174,14 +203,14 @@ class CreateProjectPage extends Component {
     return (
       <Container>
         <CreateProjectForm onSubmit={this.handleSubmit}>
-          <FormGroup>
+          <StyledFormGroup>
             <h1>
-              <Label>프로젝트 생성</Label>
+              <StyledLabel>프로젝트 생성</StyledLabel>
             </h1>
-          </FormGroup>
-          <FormGroup>
-            <Label for="title">제목</Label>
-            <Input
+          </StyledFormGroup>
+          <StyledFormGroup>
+            <StyledLabel for="title">제목</StyledLabel>
+            <StyledInput
               type="text"
               name="title"
               value={this.state.title}
@@ -189,10 +218,10 @@ class CreateProjectPage extends Component {
               placeholder="제목"
               required
             />
-          </FormGroup>
-          <FormGroup>
-            <Label for="simpleDesc">간단한 설명</Label>
-            <Input
+          </StyledFormGroup>
+          <StyledFormGroup>
+            <StyledLabel for="simpleDesc">간단한 설명</StyledLabel>
+            <StyledInput
               type="text"
               name="simpleDesc"
               value={this.state.simpleDesc}
@@ -200,10 +229,10 @@ class CreateProjectPage extends Component {
               placeholder="간단한 설명"
               required
             />
-          </FormGroup>
-          <FormGroup>
-            <Label for="detailDesc">자세한 설명</Label>
-            <Input
+          </StyledFormGroup>
+          <StyledFormGroup>
+            <StyledLabel for="detailDesc">자세한 설명</StyledLabel>
+            <StyledInput
               type="textarea"
               name="detailDesc"
               value={this.state.detailDesc}
@@ -211,21 +240,21 @@ class CreateProjectPage extends Component {
               placeholder="자세한 설명"
               required
             />
-          </FormGroup>
-          <FormGroup for="image">
-            <Label for="image">대표 이미지</Label>
-            <Input
+          </StyledFormGroup>
+          <StyledFormGroup for="image">
+            <StyledLabel for="image">대표 이미지</StyledLabel>
+            <StyledInput
               type="file"
               onChange={this.onFileUpload}
               name="image"
               id="image"
               required
               accept="image/*"
-            ></Input>
-          </FormGroup>
-          {/* <FormGroup>
-            <Label for="guidelineURL">가이드라인</Label>
-            <Input
+            />
+          </StyledFormGroup>
+          {/* <StyledFormGroup>
+            <StyledLabel for="guidelineURL">가이드라인</StyledLabel>
+            <StyledInput
               type="url"
               name="guidelineURL"
               value={this.state.guidelineURL}
@@ -233,10 +262,10 @@ class CreateProjectPage extends Component {
               placeholder="가이드라인 URL"
               required
             />
-          </FormGroup> */}
-          <FormGroup>
-            <Label for="dueDate">만기일</Label>
-            <Input
+          </StyledFormGroup> */}
+          <StyledFormGroup>
+            <StyledLabel for="dueDate">만기일</StyledLabel>
+            <StyledInput
               type="date"
               name="dueDate"
               value={this.state.dueDate}
@@ -244,10 +273,10 @@ class CreateProjectPage extends Component {
               placeholder="만기일을 설정하세요"
               required
             />
-          </FormGroup>
-          <FormGroup>
-            <Label for="type">프로젝트 타입</Label>
-            <Input
+          </StyledFormGroup>
+          <StyledFormGroup>
+            <StyledLabel for="type">프로젝트 타입</StyledLabel>
+            <select
               type="select"
               name="type"
               value={this.state.type}
@@ -258,11 +287,11 @@ class CreateProjectPage extends Component {
               <option value="text">텍스트</option>
               <option value="voice">음성</option>
               <option value="survey">설문 조사</option>
-            </Input>
+            </select>
             {this.state.type === "image" ? (
               <ClassContainer>
                 <Section>
-                  <Input
+                  <StyledInput
                     type="text"
                     name="class"
                     ref={this.inputRef}
@@ -270,9 +299,9 @@ class CreateProjectPage extends Component {
                     onChange={this.handleChange}
                     style={{ width: "200px" }}
                   />
-                  <Button onClick={this.handleAddClass.bind(this)}>
+                  <StyledButton onClick={this.handleAddClass.bind(this)}>
                     클래스 추가
-                  </Button>
+                  </StyledButton>
                   {this.state.classes.length === 0 ? (
                     <div style={{ padding: "10px", display: "inline-block" }}>
                       클래스가 설정되지 않으면 라벨을 자유롭게 입력할 수
@@ -290,10 +319,10 @@ class CreateProjectPage extends Component {
             ) : (
               undefined
             )}
-          </FormGroup>
-          <FormGroup>
-            <Label for="cost">데이터 가격</Label>
-            <Input
+          </StyledFormGroup>
+          <StyledFormGroup>
+            <StyledLabel for="cost">데이터 가격</StyledLabel>
+            <StyledInput
               type="number"
               name="cost"
               value={this.state.cost}
@@ -301,11 +330,9 @@ class CreateProjectPage extends Component {
               placeholder="데이터 가격"
               required
             />
-          </FormGroup>
+          </StyledFormGroup>
           <ButtonContainer>
-            <SubmitButton color="primary" type="submit">
-              생성
-            </SubmitButton>
+            <SubmitButton type="submit">생성</SubmitButton>
           </ButtonContainer>
         </CreateProjectForm>
       </Container>

@@ -1,72 +1,71 @@
 import React from "react";
+import styled from "styled-components";
 
-// reactstrap components
-import { Row, Col, Nav, NavItem, NavLink } from "reactstrap";
+const Container = styled.div`
+  width: 100%;
+  display: flex;
+
+  justify-content: space-between;
+  align-items: center;
+
+  @media (max-width: 500px) {
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+`;
+
+const MainLink = styled.a`
+  color: #5e72e4 !important;
+  text-decoration: none;
+`;
+
+const Navigation = styled.div`
+  @media (max-width: 500px) {
+    padding: 20px 0px;
+  }
+`;
+
+const StyledLink = styled.a`
+  padding: 0px 10px;
+  color: #8898aa !important
+  text-decoration: none;
+`;
 
 class Footer extends React.Component {
   render() {
     return (
-      <footer className="footer">
-        <Row className="align-items-center justify-content-xl-between">
-          <Col xl="6">
-            <div className="copyright text-center text-xl-left text-muted">
-              {" "}
-              <a
-                className="font-weight-bold ml-1"
-                href="https://cbound.herokuapp.com"
-                rel="noopener noreferrer"
-                target="_blank"
-              >
-                Common-Bound
-              </a>
-            </div>
-          </Col>
-
-          <Col xl="6">
-            <Nav className="nav-footer justify-content-center justify-content-xl-end">
-              <NavItem>
-                <NavLink
-                  href="https://cbound.herokuapp.com"
-                  rel="noopener noreferrer"
-                  target="_blank"
-                >
-                  Common-Bound
-                </NavLink>
-              </NavItem>
-
-              <NavItem>
-                <NavLink
-                  href="https://blog.naver.com/sw_maestro/221632296913"
-                  rel="noopener noreferrer"
-                  target="_blank"
-                >
-                  About Us
-                </NavLink>
-              </NavItem>
-
-              <NavItem>
-                <NavLink
-                  href="https://github.com/eunsukimme/Common-Bound"
-                  rel="noopener noreferrer"
-                  target="_blank"
-                >
-                  Github
-                </NavLink>
-              </NavItem>
-
-              <NavItem>
-                <NavLink
-                  href="https://github.com/creativetimofficial/argon-dashboard/blob/master/LICENSE.md?ref=adr-admin-footer"
-                  rel="noopener noreferrer"
-                  target="_blank"
-                >
-                  LiCENSE
-                </NavLink>
-              </NavItem>
-            </Nav>
-          </Col>
-        </Row>
-      </footer>
+      <Container className="footer">
+        <MainLink
+          href="https://cbound.herokuapp.com"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          Common-Bound
+        </MainLink>
+        <Navigation>
+          <StyledLink
+            href="https://blog.naver.com/sw_maestro/221632296913"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            About Us
+          </StyledLink>
+          <StyledLink
+            href="https://github.com/Common-Bound"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            GitHub
+          </StyledLink>
+          <StyledLink
+            href="https://github.com/Common-Bound/cbound-web"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            License
+          </StyledLink>
+        </Navigation>
+      </Container>
     );
   }
 }

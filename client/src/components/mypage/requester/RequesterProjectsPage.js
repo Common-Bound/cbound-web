@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { Button } from "reactstrap";
 import ProjectOrig from "../../card/RequesterProjectOrig";
 import styled from "styled-components";
 import Table from "@material-ui/core/Table";
@@ -85,7 +84,15 @@ const StyledTableCell = styled(TableCell)`
   }
 `;
 
-const CreateProjectButton = styled(Button)`
+const CreateProjectButton = styled.div`
+  background-color: #5e72e4;
+  color: white;
+  border-radius: 0.375rem;
+  font-weight: 600;
+  padding: 0.625rem 1.25rem;
+  font-size: 0.875rem;
+
+  cursor: pointer;
   @media (max-width: 500px) {
     padding: 0.5rem 1rem !important;
     font-size: 12px !important;

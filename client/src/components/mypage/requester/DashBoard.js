@@ -1,17 +1,11 @@
 import React, { Component } from "react";
-// import { Route } from "react-router-dom";
-// node.js library that concatenates classes (strings)
-// import classnames from "classnames";
-// react plugin used to create charts
 import Chart from "chart.js";
-// import { Line, Bar } from "react-chartjs-2";
-// reactstrap components
 import styled from "styled-components";
 import moment from "moment";
 
-import "../../../assets/vendor/nucleo/css/nucleo.css";
-import "../../../assets/vendor/@fortawesome/fontawesome-free/css/all.min.css";
-import "../../../assets/scss/argon-dashboard-react.scss";
+// import "../../../assets/vendor/nucleo/css/nucleo.css";
+// import "../../../assets/vendor/@fortawesome/fontawesome-free/css/all.min.css";
+// import "../../../assets/scss/argon-dashboard-react.scss";
 
 import Header from "../../Headers/Header.js";
 import AdminFooter from "../../Footers/AdminFooter.js";
@@ -19,7 +13,6 @@ import Button from "@material-ui/core/Button";
 import InfiniteScroll from "react-infinite-scroll-component";
 import RequesterHistoryOrig from "../../card/RequesterHistoryOrig";
 
-import { Container } from "reactstrap";
 import Paper from "@material-ui/core/Paper";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -30,14 +23,6 @@ import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
-
-// core components
-// import {
-//   chartOptions,
-//   parseOptions,
-//   chartExample1,
-//   chartExample2
-// } from "../../../variables/charts.jsx";
 
 const EntireContainer = styled.div`
   width: 100%;
@@ -233,6 +218,10 @@ const DataIDTableCell = styled(TableCell)`
   @media (max-width: 500px) {
     display: none !important;
   }
+`;
+const FooterContainer = styled.div`
+  width: 100%;
+  padding: 0px 40px;
 `;
 
 class DashBoard extends Component {
@@ -713,9 +702,9 @@ class DashBoard extends Component {
             </TableWrapper>
           </Paper>
         </HistoryContainer>
-        <Container fluid>
+        <FooterContainer>
           <AdminFooter />
-        </Container>
+        </FooterContainer>
       </EntireContainer>
     );
   }

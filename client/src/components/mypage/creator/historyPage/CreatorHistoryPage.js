@@ -8,7 +8,6 @@ import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { Button } from "reactstrap";
 
 const Container = styled.div`
   width: 100%;
@@ -112,11 +111,13 @@ const StyledTableCell = styled(TableCell)`
   }
 `;
 
-const StyledButton = styled(Button)`
-  height: 60px;
-  @media (max-width: 1024px) {
-    height: 46px;
-  }
+const StyledButton = styled.div`
+  background-color: #5e72e4 !important;
+  color: white;
+  border-radius: 0.375rem;
+  font-weight: 600;
+  padding: 0.625rem 1.25rem;
+  font-size: 0.875rem;
   @media (max-width: 500px) {
     font-size: 10px;
   }
