@@ -3,6 +3,8 @@ import styled from "styled-components";
 
 const EntireContainer = styled.div`
   width: 100%;
+  background-color: #212529 !important;
+  padding-bottom: 40px;
 `;
 
 const FluidContainer = styled.div`
