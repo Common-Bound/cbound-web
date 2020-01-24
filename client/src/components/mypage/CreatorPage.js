@@ -90,12 +90,12 @@ const MyProjectButton = styled(StyledLink)`
       : "rgba(255, 255, 255, 0.3)"};
 `;
 
-const TaskButton = styled(StyledLink)`
-  color: ${props =>
-    props.pathname.includes("/mypage/creator/task")
-      ? "white"
-      : "rgba(255, 255, 255, 0.3)"};
-`;
+// const TaskButton = styled(StyledLink)`
+//   color: ${props =>
+//     props.pathname.includes("/mypage/creator/task")
+//       ? "white"
+//       : "rgba(255, 255, 255, 0.3)"};
+// `;
 
 const HistoryButton = styled(StyledLink)`
   color: ${props =>
